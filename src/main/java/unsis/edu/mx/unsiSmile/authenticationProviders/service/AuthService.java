@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import unsis.edu.mx.unsiSmile.authenticationProviders.dtos.AuthResponse;
@@ -24,8 +25,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     public AuthResponse login(LoginRequest request) {
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        UserDetails user=userRepository.findByUsername(request.getUsername()).orElseThrow();
+        UserDetails user=userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
+                new UsernameNotFoundException("El usuario no encontrado"));
+
         String token=jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
