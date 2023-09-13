@@ -21,15 +21,16 @@ import java.util.List;
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue
-    private Integer id;
+    private Long id;
     @Column(nullable = false)
     String username;
     String password;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     RoleModel role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.getRole().name()));
     }
 
     @Override

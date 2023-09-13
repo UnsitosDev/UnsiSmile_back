@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import unsis.edu.mx.unsiSmile.authenticationProviders.dtos.AuthResponse;
 import unsis.edu.mx.unsiSmile.authenticationProviders.dtos.LoginRequest;
 import unsis.edu.mx.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import unsis.edu.mx.unsiSmile.authenticationProviders.model.ERole;
 import unsis.edu.mx.unsiSmile.authenticationProviders.model.RoleModel;
 import unsis.edu.mx.unsiSmile.authenticationProviders.model.UserModel;
 import unsis.edu.mx.unsiSmile.authenticationProviders.repositories.UserRepository;
@@ -34,10 +35,15 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
 
+        RoleModel role;
+        role = new RoleModel();
+
+        role.setRole(ERole.valueOf(request.getRole()));
+
         UserModel user = UserModel.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode( request.getPassword()))
-                .role(RoleModel.valueOf(request.getRole()))
+                .role(role)
                 .build();
 
         userRepository.save(user);
