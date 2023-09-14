@@ -30,6 +30,8 @@ public class AuthService {
         UserDetails user=userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
                 new UsernameNotFoundException("El usuario no encontrado"));
 
+        System.out.println("siu" + user.getAuthorities().toString());
+
         String token=jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)
