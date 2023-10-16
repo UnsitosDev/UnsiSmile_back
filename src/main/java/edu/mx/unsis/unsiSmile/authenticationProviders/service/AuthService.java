@@ -22,11 +22,10 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     public AuthResponse login(LoginRequest request) {
 
-        UserDetails user=userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
+        UserModel user=userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
                 new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
         if(passwordEncoder.matches(request.getPassword(),user.getPassword())){

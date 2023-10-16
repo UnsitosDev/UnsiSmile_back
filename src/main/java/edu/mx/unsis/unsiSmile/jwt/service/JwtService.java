@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.jwt.service;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,11 +23,14 @@ public class JwtService {
     @Value("${jwt.time.expiration}")
     private String timeExpiration;
 
-    public String getToken(UserDetails user) {
+    public String getToken(UserModel user) {
         return getToken(new HashMap<>(), user);
     }
 
-    private String getToken(HashMap<String, Object> extraClaims, UserDetails user){
+    private String getToken(HashMap<String, Object> extraClaims, UserModel user){
+
+        extraClaims.put("role", user.getAuthorities());
+        extraClaims.put("uuid", user.getIdAsString());
 
         return Jwts.builder()
                 .setClaims(extraClaims)
