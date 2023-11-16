@@ -17,27 +17,22 @@ import java.util.UUID;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user_App", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class UserModel implements UserDetails {
     @Id
-    @Column(columnDefinition = "BINARY(16)")
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private UUID id;
+
     @Column(nullable = false)
-    String username;
-    String password;
+    private String username;
+
+    private String password;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    RoleModel role;
-
-    public UserModel(){
-        this.id = UUID.randomUUID();
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    private RoleModel role;
 
     public String getIdAsString() {
         return id.toString();
@@ -46,6 +41,8 @@ public class UserModel implements UserDetails {
     public void setIdFromString(String id) {
         this.id = UUID.fromString(id);
     }
+
+    // Other methods...
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
