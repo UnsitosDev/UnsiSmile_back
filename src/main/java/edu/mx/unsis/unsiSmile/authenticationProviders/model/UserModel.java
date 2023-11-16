@@ -23,7 +23,7 @@ import java.util.UUID;
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid2")
     private UUID id;
 
     @Column(nullable = false)
@@ -41,8 +41,6 @@ public class UserModel implements UserDetails {
     public void setIdFromString(String id) {
         this.id = UUID.fromString(id);
     }
-
-    // Other methods...
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
