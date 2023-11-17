@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/unsismile/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
