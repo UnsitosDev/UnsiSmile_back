@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.jwt.service;
+package edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import io.jsonwebtoken.Claims;

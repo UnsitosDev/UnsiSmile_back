@@ -1,5 +1,6 @@
-package edu.mx.unsis.unsiSmile.jwt;
+package edu.mx.unsis.unsiSmile.authenticationProviders.jwt;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import edu.mx.unsis.unsiSmile.jwt.service.JwtService;
 
 import java.io.IOException;
 

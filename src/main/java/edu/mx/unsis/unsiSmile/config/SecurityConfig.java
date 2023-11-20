@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.config;
 
-import edu.mx.unsis.unsiSmile.jwt.JwtAuthenticationFilter;
+import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
