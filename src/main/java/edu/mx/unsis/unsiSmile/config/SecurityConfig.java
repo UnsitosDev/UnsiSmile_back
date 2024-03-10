@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/"+name+"/api/"+version+"/auth/**").permitAll()
+                                .requestMatchers("/v3/api-docs/**","/swagger-ui/**").permitAll() // Excluye la ruta de Swagger UI
                                 //.requestMatchers("/"+name+"/api/"+version+"/auth/login").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
