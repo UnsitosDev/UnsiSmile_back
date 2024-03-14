@@ -11,15 +11,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "careers")
-public class Career {
+@Table(name = "genders")
+public class Gender {
+
+    public enum GenderType {
+        MALE, FEMALE
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_career")
-    private String idCareer;
-    @Column(name = "career", nullable = false, unique = true)
-    private String career;
+    @Column(name = "id_gender")
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", unique = true, length = 100)
+    private GenderType gender;
 
 }
 

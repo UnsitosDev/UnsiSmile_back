@@ -1,53 +1,26 @@
 package edu.mx.unsis.unsiSmile.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
+@Table(name = "students_semesters")
 public class StudentSemester {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idStudentSemester;
-
     @ManyToOne
     @JoinColumn(name = "fk_student")
+    @Column(nullable = false)
     private Student student;
-
+    @Id
     @ManyToOne
     @JoinColumn(name = "fk_semester")
+    @Column(nullable = false)
     private Semester semester;
-
-    // Constructores, getters y setters
-
-    public StudentSemester() {
-    }
-
-    public StudentSemester(Student student, Semester semester) {
-        this.student = student;
-        this.semester = semester;
-    }
-
-    public int getIdStudentSemester() {
-        return idStudentSemester;
-    }
-
-    public void setIdStudentSemester(int idStudentSemester) {
-        this.idStudentSemester = idStudentSemester;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Semester getSemester() {
-        return semester;
-    }
-
-    public void setSemester(Semester semester) {
-        this.semester = semester;
-    }
 }
