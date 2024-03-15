@@ -13,20 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "students")
-public class Student {
+public class Student extends Person{
 
     @Id
     @Column(name = "enrollment", nullable = false, unique = true)
     private String enrollment;
 
     @ManyToOne
-    @JoinColumn(name = "fk_user")
-    @Column(nullable = false)
+    @JoinColumn(name = "fk_user", nullable = false)
     private UserModel user;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_person")
-    @Column(nullable = false)
-    private Person person;
 }
-
