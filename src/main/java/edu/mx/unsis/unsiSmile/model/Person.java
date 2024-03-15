@@ -15,7 +15,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "people")
-public class Person {
+public abstract class Person {
 
     @Id
     @Column(name = "curp", length = 20)
