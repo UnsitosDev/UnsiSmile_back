@@ -7,19 +7,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "semesters")
-public class Semester {
+@Table(name = "genders")
+public class GenderModel {
+
+    public enum GenderType {
+        MALE, FEMALE
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_semester")
-    private Long idSemester;
-    @Column(nullable = false, unique = true)
-    private String semester;
+    @Column(name = "id_gender")
+    private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", unique = true, length = 100)
+    private GenderType gender;
 
 }
+

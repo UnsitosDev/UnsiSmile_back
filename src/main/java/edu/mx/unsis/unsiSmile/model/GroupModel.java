@@ -14,7 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "groups")
-public class Group {
+public class GroupModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +30,5 @@ public class Group {
             joinColumns = @JoinColumn(name = "id_group"),
             inverseJoinColumns = @JoinColumn(name = "id_semester")
     )
-    private Set<Semester> semesters;
+    private Set<SemesterModel> semesters;
 }
