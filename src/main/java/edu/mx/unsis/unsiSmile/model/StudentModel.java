@@ -10,14 +10,17 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "students")
-@EqualsAndHashCode(callSuper=true)
-public class StudentModel extends PersonModel {
+public class StudentModel {
 
     @Id
     @Column(name = "enrollment", nullable = false, unique = true)
     private String enrollment;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "fk_user", nullable = false)
     private UserModel user;
+
+    @OneToOne
+    @JoinColumn(name = "fk_person")
+    private PersonModel person;
 }

@@ -11,9 +11,10 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "people")
-public abstract class PersonModel {
+public class PersonModel {
 
     @Id
     @Column(name = "curp", length = 20)
