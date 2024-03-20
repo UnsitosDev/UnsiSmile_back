@@ -17,7 +17,7 @@ public class CareerModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_career")
-    private String idCareer;
+    private Long idCareer;
     @Column(name = "career", nullable = false, unique = true)
     private String career;
 
