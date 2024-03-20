@@ -1,18 +1,19 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.service;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
+import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
