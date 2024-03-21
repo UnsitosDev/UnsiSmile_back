@@ -17,7 +17,7 @@ public class GenderModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_gender")
-    private Long id;
+    private Long idGender;
 
     @Column(name = "gender", unique = true, length = 100)
     private String gender;
