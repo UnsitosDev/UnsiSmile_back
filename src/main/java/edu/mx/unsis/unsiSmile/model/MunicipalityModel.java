@@ -2,8 +2,6 @@ package edu.mx.unsis.unsiSmile.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,22 +12,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "groups")
-public class GroupModel {
+@Table(name = "municipalities")
+public class MunicipalityModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_group")
-    private Long idGroup;
+    @Column(name = "id_municipality", length = 4)
+    private String idMunicipality;
 
-    @Column(name = "group_name", nullable = false, unique = true)
-    private String groupName;
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "fk_career")
-    private CareerModel career;
+    @JoinColumn(name = "fk_state", referencedColumnName = "id_state", nullable = false)
+    private StateModel state;
+
 }
