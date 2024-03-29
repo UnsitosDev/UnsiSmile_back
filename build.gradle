@@ -38,6 +38,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
+bootBuildImage {
+    imageName = 'unsismile-app'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
