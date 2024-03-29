@@ -3,13 +3,14 @@ package edu.mx.unsis.unsiSmile.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.model.CareerModel;
 import edu.mx.unsis.unsiSmile.service.CareerService;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.GroupResponse;
 import edu.mx.unsis.unsiSmile.model.GroupModel;
-import edu.mx.unsis.unsiSmile.repository.CareerRepository;
+
 
 @Component
 public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, GroupModel> {
@@ -25,12 +26,12 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         if (dto == null) {
             return null;
         }
-        System.out.println("mapper");
+        CareerModel career = careerService.getCareerByCareer(dto.getCareer().getCareer());
 
         return GroupModel.builder()
                 .idGroup(dto.getIdGroup())
                 .groupName(dto.getGroupName())
-                .career(careerService.getCareerByCareer(String.valueOf(dto.getCareer())))
+                .career(career)
                 .build();
     }
 
@@ -42,7 +43,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
                 .groupName(entity.getGroupName())
-                .career(careerService.getCareerByCareer(String.valueOf(entity.getCareer())))
+                .career(entity.getCareer())
                 .build();
     }
 
@@ -61,7 +62,8 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         if (request == null || entity == null) {
             return;
         }
+        CareerModel career = careerService.getCareerByCareer(request.getCareer().getCareer());
         entity.setGroupName(request.getGroupName());
-        entity.setCareer(careerService.getCareerByCareer(String.valueOf(entity.getCareer())));
+        entity.setCareer(career);
     }
 }

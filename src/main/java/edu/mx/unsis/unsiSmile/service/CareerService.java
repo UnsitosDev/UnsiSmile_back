@@ -14,14 +14,14 @@ import edu.mx.unsis.unsiSmile.dtos.response.CareerResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.CareerMapper;
 import edu.mx.unsis.unsiSmile.model.CareerModel;
-import edu.mx.unsis.unsiSmile.repository.CareerRepository;
+import edu.mx.unsis.unsiSmile.repository.ICareerRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CareerService {
 
-    private final CareerRepository careerRepository;
+    private final ICareerRepository careerRepository;
     private final CareerMapper careerMapper;
 
     @Transactional
@@ -112,14 +112,11 @@ public class CareerService {
     @Transactional(readOnly = true)
     public CareerModel getCareerByCareer(@NonNull String career) {
         try {
-
             // Find the career in the database
             CareerModel careerModel = careerRepository.findByCareer(career)
                     .orElseThrow(() -> new AppException("Career not found with name: " + career, HttpStatus.NOT_FOUND));
 
-
             // Map the entity to a response DTO
-            System.out.println("carrera es"+ careerModel.toString());
             return careerModel;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR);

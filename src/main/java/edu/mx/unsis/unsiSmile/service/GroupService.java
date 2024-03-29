@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.GroupMapper;
 import edu.mx.unsis.unsiSmile.model.GroupModel;
 import edu.mx.unsis.unsiSmile.repository.IGroupRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +25,12 @@ public class GroupService {
     private final GroupMapper groupMapper;
 
     @Transactional
-    public GroupResponse createGroup(GroupRequest request) {
+    public GroupResponse createGroup(@NonNull GroupRequest request) {
         try {
             Assert.notNull(request, "GroupRequest cannot be null");
 
             GroupModel groupModel = groupMapper.toEntity(request);
-
             GroupModel savedGroup = groupRepository.save(groupModel);
-
             return groupMapper.toDto(savedGroup);
         } catch (Exception ex) {
             throw new AppException("Failed to create group", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -39,7 +38,7 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public GroupResponse getGroupById(Long id) {
+    public GroupResponse getGroupById(@NonNull Long id) {
         try {
             GroupModel groupModel = groupRepository.findById(id)
                     .orElseThrow(() -> new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND));
@@ -60,7 +59,7 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupResponse updateGroup(Long id, GroupRequest updatedGroupRequest) {
+    public GroupResponse updateGroup(@NonNull Long id,@NonNull GroupRequest updatedGroupRequest) {
         try {
             Assert.notNull(updatedGroupRequest, "Updated GroupRequest cannot be null");
 
