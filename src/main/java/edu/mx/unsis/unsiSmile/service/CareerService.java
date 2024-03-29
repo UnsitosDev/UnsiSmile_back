@@ -108,4 +108,21 @@ public class CareerService {
             throw new AppException("Failed to delete career", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Transactional(readOnly = true)
+    public CareerModel getCareerByCareer(@NonNull String career) {
+        try {
+
+            // Find the career in the database
+            CareerModel careerModel = careerRepository.findByCareer(career)
+                    .orElseThrow(() -> new AppException("Career not found with name: " + career, HttpStatus.NOT_FOUND));
+
+
+            // Map the entity to a response DTO
+            System.out.println("carrera es"+ careerModel.toString());
+            return careerModel;
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
