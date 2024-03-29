@@ -24,11 +24,7 @@ public class GroupModel {
     @Column(name = "group_name", nullable = false, unique = true)
     private String groupName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "semester_groups",
-            joinColumns = @JoinColumn(name = "id_group"),
-            inverseJoinColumns = @JoinColumn(name = "id_semester")
-    )
-    private Set<SemesterModel> semesters;
+    @ManyToOne
+    @JoinColumn(name = "fk_career")
+    private CareerModel career;
 }
