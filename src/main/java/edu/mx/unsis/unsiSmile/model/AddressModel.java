@@ -14,23 +14,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "groups")
-public class GroupModel {
+@Table(name = "addresses")
+public class AddressModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_group")
-    private Long idGroup;
+    @Column(name = "id_address")
+    private Long idAddress;
 
-    @Column(name = "group_name", nullable = false, unique = true)
-    private String groupName;
+    @Column(name = "street_number", length = 2)
+    private String streetNumber;
+
+    @Column(name = "interior_number", length = 2)
+    private String interiorNumber;
 
     @ManyToOne
-    @JoinColumn(name = "fk_career")
-    private CareerModel career;
+    @JoinColumn(name = "fk_housing", referencedColumnName = "id_housing", nullable = false)
+    private HousingModel housing;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_street", referencedColumnName = "id_street", nullable = false)
+    private StreetModel street;
 
 }
