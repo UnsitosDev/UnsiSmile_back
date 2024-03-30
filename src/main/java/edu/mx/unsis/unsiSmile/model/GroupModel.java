@@ -32,4 +32,5 @@ public class GroupModel {
     @ManyToOne
     @JoinColumn(name = "fk_career")
     private CareerModel career;
+
 }
