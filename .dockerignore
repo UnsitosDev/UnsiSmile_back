@@ -1,0 +1,9 @@
+.git
+.gitignore
+.gradle
+.idea
+.vscode
+build/
+*.bat
+.vscode
+bin/
