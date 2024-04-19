@@ -68,10 +68,14 @@ public class CycleService {
     public CycleResponse updateCycle(@NonNull Long id, @NonNull CycleRequest updateCycleRequest){
         try {
             Assert.notNull(updateCycleRequest, "Update CycleRequest cannot be null");
+
             CycleModel cycleModel = cycleRepository.findById(id)
                     .orElseThrow(() -> new AppException("Cycle not found with ID: " + id, HttpStatus.NOT_FOUND));
+
             cycleMapper.updateEntity(updateCycleRequest, cycleModel);
+
             CycleModel updatedCycle = cycleRepository.save(cycleModel);
+
             return cycleMapper.toDto(updatedCycle);
         } catch (Exception ex) {
             throw new AppException("Failed to update cycle", HttpStatus.INTERNAL_SERVER_ERROR);

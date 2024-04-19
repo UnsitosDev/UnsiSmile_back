@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, CycleModel>{
     @Override
     public CycleModel toEntity(CycleRequest dto) {
-        System.out.println("Request aqui toy");
         return CycleModel.builder()
                 .idCycle(dto.getIdCycle())
                 .cycleName(dto.getCycleName())
@@ -37,7 +36,7 @@ public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, Cycl
 
     @Override
     public void updateEntity(CycleRequest request, CycleModel entity) {
-        entity.setCycle(request.getCycle());
         entity.setCycleName(request.getCycleName());
+        entity.setStatus(request.getStatus());
     }
 }
