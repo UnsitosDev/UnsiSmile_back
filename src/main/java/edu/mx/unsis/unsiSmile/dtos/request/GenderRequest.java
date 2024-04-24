@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class GenderRequest {
 
     private Long idGender;
-    @NotNull(message = "The field career can't be null")
-    @NotBlank(message = "The field career can't be blank")
+    @NotNull(message = "The field gender can't be null")
+    @NotBlank(message = "The field gender can't be blank")
     private String gender;
 }

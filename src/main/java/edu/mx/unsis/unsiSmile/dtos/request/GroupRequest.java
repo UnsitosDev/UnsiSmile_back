@@ -16,9 +16,9 @@ public class GroupRequest {
 
     private Long idGroup;
 
-    @NotNull(message = "The field career can't be null")
-    @NotBlank(message = "The field career can't be blank")
+    @NotNull(message = "The field group can't be null")
+    @NotBlank(message = "The field group can't be blank")
     private String groupName;
-    @NotNull(message = "The field career can't be null")
+    @NotNull(message = "The field group can't be null")
     private CareerModel career;
 }
