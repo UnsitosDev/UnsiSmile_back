@@ -15,7 +15,6 @@ public class GenderMapper implements BaseMapper<GenderResponse, GenderRequest, G
     @Override
     public GenderModel toEntity(GenderRequest dto) {
         return GenderModel.builder()
-                .idGender(dto.getIdGender())
                 .gender(dto.getGender())
                 .build();
     }

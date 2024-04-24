@@ -48,7 +48,7 @@ public class CareerController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CareerResponse> updateCareer(@Valid @PathVariable Long id,
-    @Valid @RequestBody CareerRequest updatedCareerRequest) {
+            @Valid @RequestBody CareerRequest updatedCareerRequest) {
         CareerResponse updatedCareer = careerService.updateCareer(id, updatedCareerRequest);
         return ResponseEntity.ok(updatedCareer);
     }
