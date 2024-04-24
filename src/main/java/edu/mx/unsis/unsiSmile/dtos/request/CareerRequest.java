@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CareerRequest {
     
-    private Long idCareer;
     @NotNull(message = "The field career can't be null")
     @NotBlank(message = "The field career can't be blank")
     private String career;

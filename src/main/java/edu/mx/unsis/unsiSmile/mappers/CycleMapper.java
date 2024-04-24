@@ -13,7 +13,6 @@ public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, Cycl
     @Override
     public CycleModel toEntity(CycleRequest dto) {
         return CycleModel.builder()
-                .idCycle(dto.getIdCycle())
                 .cycleName(dto.getCycleName())
                 .status(dto.getStatus())
                 .build();

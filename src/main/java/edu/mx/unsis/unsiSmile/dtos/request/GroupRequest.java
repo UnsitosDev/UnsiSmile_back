@@ -14,8 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GroupRequest {
 
-    private Long idGroup;
-
     @NotNull(message = "The field group can't be null")
     @NotBlank(message = "The field group can't be blank")
     private String groupName;

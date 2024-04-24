@@ -29,7 +29,6 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         CareerModel career = careerService.getCareerByCareer(dto.getCareer().getCareer());
 
         return GroupModel.builder()
-                .idGroup(dto.getIdGroup())
                 .groupName(dto.getGroupName())
                 .career(career)
                 .build();
