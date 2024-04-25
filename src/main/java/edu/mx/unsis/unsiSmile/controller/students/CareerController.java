@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.students;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.CareerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CareerResponse;
-import edu.mx.unsis.unsiSmile.service.CareerService;
+import edu.mx.unsis.unsiSmile.dtos.request.students.CareerRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.CareerResponse;
+import edu.mx.unsis.unsiSmile.service.students.CareerService;
 import jakarta.validation.Valid;
 
 @RestController

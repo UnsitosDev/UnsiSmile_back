@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.students;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

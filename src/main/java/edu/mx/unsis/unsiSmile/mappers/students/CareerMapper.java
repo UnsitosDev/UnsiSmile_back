@@ -1,13 +1,14 @@
-package edu.mx.unsis.unsiSmile.mappers;
+package edu.mx.unsis.unsiSmile.mappers.students;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.CareerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CareerResponse;
-import edu.mx.unsis.unsiSmile.model.CareerModel;
+import edu.mx.unsis.unsiSmile.dtos.request.students.CareerRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.CareerResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 
 @Component
 public class CareerMapper implements BaseMapper<CareerResponse, CareerRequest, CareerModel> {

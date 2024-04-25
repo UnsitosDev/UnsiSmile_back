@@ -1,15 +1,16 @@
-package edu.mx.unsis.unsiSmile.mappers;
+package edu.mx.unsis.unsiSmile.mappers.students;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.mx.unsis.unsiSmile.model.CareerModel;
-import edu.mx.unsis.unsiSmile.service.CareerService;
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.GroupRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.GroupResponse;
-import edu.mx.unsis.unsiSmile.model.GroupModel;
+import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
+import edu.mx.unsis.unsiSmile.model.students.GroupModel;
+import edu.mx.unsis.unsiSmile.service.students.CareerService;
 
 
 @Component

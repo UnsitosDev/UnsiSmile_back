@@ -1,6 +1,6 @@
-package edu.mx.unsis.unsiSmile.dtos.request;
+package edu.mx.unsis.unsiSmile.dtos.request.students;
 
-import edu.mx.unsis.unsiSmile.model.CareerModel;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

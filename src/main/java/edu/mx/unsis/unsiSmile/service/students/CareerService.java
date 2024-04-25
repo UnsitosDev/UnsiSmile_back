@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.service;
+package edu.mx.unsis.unsiSmile.service.students;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.CareerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CareerResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.students.CareerRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.CareerResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.CareerMapper;
-import edu.mx.unsis.unsiSmile.model.CareerModel;
-import edu.mx.unsis.unsiSmile.repository.ICareerRepository;
+import edu.mx.unsis.unsiSmile.mappers.students.CareerMapper;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
+import edu.mx.unsis.unsiSmile.repository.students.ICareerRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

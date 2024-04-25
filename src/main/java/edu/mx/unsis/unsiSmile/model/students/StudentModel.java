@@ -1,8 +1,17 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.students;
 
-import jakarta.persistence.*;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import lombok.*;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor

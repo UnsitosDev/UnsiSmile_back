@@ -1,21 +1,20 @@
-package edu.mx.unsis.unsiSmile.service;
+package edu.mx.unsis.unsiSmile.service.students;
 
-import edu.mx.unsis.unsiSmile.dtos.request.GroupRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.GroupResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.GroupMapper;
-import edu.mx.unsis.unsiSmile.model.GroupModel;
-import edu.mx.unsis.unsiSmile.repository.IGroupRepository;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
+import edu.mx.unsis.unsiSmile.model.students.GroupModel;
+import edu.mx.unsis.unsiSmile.repository.students.IGroupRepository;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

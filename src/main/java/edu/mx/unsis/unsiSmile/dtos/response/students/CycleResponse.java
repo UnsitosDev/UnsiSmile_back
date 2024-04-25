@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.dtos.response;
+package edu.mx.unsis.unsiSmile.dtos.response.students;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CareerResponse {
-    private Long idCareer;
-    private String career;
+public class CycleResponse {
+    private Long idCycle;
+    private String cycleName;
+    private Boolean status;
 }

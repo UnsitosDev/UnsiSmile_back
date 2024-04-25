@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.dtos.request;
+package edu.mx.unsis.unsiSmile.dtos.request.students;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
