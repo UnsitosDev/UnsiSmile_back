@@ -1,20 +1,21 @@
-package edu.mx.unsis.unsiSmile.service;
-
-import edu.mx.unsis.unsiSmile.dtos.request.CycleRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CycleResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.CycleMapper;
-import edu.mx.unsis.unsiSmile.model.CycleModel;
-import edu.mx.unsis.unsiSmile.repository.ICycleRepository;
-import io.jsonwebtoken.lang.Assert;
-import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.lang.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+package edu.mx.unsis.unsiSmile.service.students;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import edu.mx.unsis.unsiSmile.dtos.request.students.CycleRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.CycleResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.students.CycleMapper;
+import edu.mx.unsis.unsiSmile.model.students.CycleModel;
+import edu.mx.unsis.unsiSmile.repository.students.ICycleRepository;
+import io.jsonwebtoken.lang.Assert;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

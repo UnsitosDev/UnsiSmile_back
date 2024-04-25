@@ -1,8 +1,10 @@
-package edu.mx.unsis.unsiSmile.mappers;
+package edu.mx.unsis.unsiSmile.mappers.students;
 
-import edu.mx.unsis.unsiSmile.dtos.request.CycleRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CycleResponse;
-import edu.mx.unsis.unsiSmile.model.CycleModel;
+import edu.mx.unsis.unsiSmile.dtos.request.students.CycleRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.CycleResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.students.CycleModel;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;

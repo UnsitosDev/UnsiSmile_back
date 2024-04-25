@@ -1,6 +1,6 @@
-package edu.mx.unsis.unsiSmile.dtos.response;
+package edu.mx.unsis.unsiSmile.dtos.response.students;
 
-import edu.mx.unsis.unsiSmile.model.CareerModel;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

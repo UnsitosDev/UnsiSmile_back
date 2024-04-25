@@ -1,7 +1,8 @@
-package edu.mx.unsis.unsiSmile.repository;
+package edu.mx.unsis.unsiSmile.repository.students;
 
-import edu.mx.unsis.unsiSmile.model.GroupModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 
 public interface IGroupRepository extends JpaRepository<GroupModel, Long> {
 }

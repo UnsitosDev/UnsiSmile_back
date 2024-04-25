@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.students;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.GroupRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.GroupResponse;
-import edu.mx.unsis.unsiSmile.service.GroupService;
+import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
+import edu.mx.unsis.unsiSmile.service.students.GroupService;
 import jakarta.validation.Valid;
 
 @RestController
