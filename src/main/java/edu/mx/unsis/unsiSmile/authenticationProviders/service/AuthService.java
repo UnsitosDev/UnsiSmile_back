@@ -61,7 +61,7 @@ public class AuthService {
                     .token(jwtService.getToken(user))
                     .build();
         }catch (Exception e){
-            throw new AppException("User already exists", HttpStatus.CONFLICT);
+            throw new AppException("User already exists", HttpStatus.CONFLICT, e);
         }
 
 
