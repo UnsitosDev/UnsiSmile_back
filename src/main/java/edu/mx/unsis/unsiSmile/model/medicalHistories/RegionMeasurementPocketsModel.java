@@ -16,14 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_regions_periodontogram")
-public class ToothRegionPeriodontogramModel {
+@Table(name = "regions_measurement_pockets")
+public class RegionMeasurementPocketsModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_regions_periodontogram")
-    private Long idToothRegionsPeriodontogram;
+    @Column(name = "id_regions_measurement_pockets")
+    private Long idRegionsMeasurementPockets;
 
-    @Column(name = "region", length = 2, nullable = false)
+    @Column(name = "region", length = 100, nullable = false)
     private String region;
 }

@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,14 +18,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_regions_periodontogram")
-public class ToothRegionPeriodontogramModel {
+@Table(name = "periodontogram")
+public class PeriodontogramModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_regions_periodontogram")
-    private Long idToothRegionsPeriodontogram;
+    @Column(name = "id_periodontogram")
+    private Long idPeriodontogram;
 
-    @Column(name = "region", length = 2, nullable = false)
-    private String region;
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "date")
+    private LocalDate date;
 }
