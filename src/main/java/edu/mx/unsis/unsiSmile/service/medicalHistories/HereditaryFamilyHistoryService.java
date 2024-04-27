@@ -14,14 +14,14 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.HereditaryFamilyHis
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.HereditaryFamilyHistoryMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.HereditaryFamilyHistoryModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFamilyHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IHereditaryFamilyHistoryRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class HereditaryFamilyHistoryService {
 
-    private final IFamilyHistoryRepository familyHistoryRepository;
+    private final IHereditaryFamilyHistoryRepository familyHistoryRepository;
     private final HereditaryFamilyHistoryMapper familyHistoryMapper;
 
     @Transactional
