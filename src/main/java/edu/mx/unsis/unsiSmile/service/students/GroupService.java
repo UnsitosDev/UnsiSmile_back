@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.service.students;
 
 import java.util.List;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,7 @@ public class GroupService {
             GroupModel savedGroup = groupRepository.save(groupModel);
             return groupMapper.toDto(savedGroup);
         } catch (Exception ex) {
-            throw new AppException("Failed to create group", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -42,8 +43,10 @@ public class GroupService {
             GroupModel groupModel = groupRepository.findById(id)
                     .orElseThrow(() -> new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND));
             return groupMapper.toDto(groupModel);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch group", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -53,12 +56,12 @@ public class GroupService {
             List<GroupModel> allGroups = groupRepository.findAll();
             return groupMapper.toDtos(allGroups);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch groups", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch groups", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public GroupResponse updateGroup(@NonNull Long id,@NonNull GroupRequest updatedGroupRequest) {
+    public GroupResponse updateGroup(@NonNull Long id, @NonNull GroupRequest updatedGroupRequest) {
         try {
             Assert.notNull(updatedGroupRequest, "Updated GroupRequest cannot be null");
 
@@ -71,19 +74,21 @@ public class GroupService {
 
             return groupMapper.toDto(updatedGroup);
         } catch (Exception ex) {
-            throw new AppException("Failed to update group", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public void deleteGroupById(Long id) {
+    public void deleteGroupById(@NonNull Long id) {
         try {
             if (!groupRepository.existsById(id)) {
                 throw new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND);
             }
             groupRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to delete group", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

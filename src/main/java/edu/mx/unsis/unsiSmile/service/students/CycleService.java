@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.students;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CycleService {
     private final CycleMapper cycleMapper;
 
     @Transactional
-    public CycleResponse createCycle(@NonNull CycleRequest cycleRequest){
+    public CycleResponse createCycle(@NonNull CycleRequest cycleRequest) {
         try {
             Assert.notNull(cycleRequest, "CycleRequest cannot be null");
 
@@ -37,36 +38,38 @@ public class CycleService {
             // Map the saved entity back to a response DTO
             return cycleMapper.toDto(savedCycle);
         } catch (Exception ex) {
-            throw new AppException("Failed to create cycle", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create cycle", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public CycleResponse getCycleById(@NonNull Long id){
+    public CycleResponse getCycleById(@NonNull Long id) {
         try {
             CycleModel cycleModel = cycleRepository.findById(id)
                     .orElseThrow(() -> new AppException("Cycle not found with ID: " + id, HttpStatus.NOT_FOUND));
 
             return cycleMapper.toDto(cycleModel);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Cycle not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<CycleResponse> getAllCycles(){
+    public List<CycleResponse> getAllCycles() {
         try {
             List<CycleModel> allCycles = cycleRepository.findAll();
             return allCycles.stream()
                     .map(cycleMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch cycles", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch cycles", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public CycleResponse updateCycle(@NonNull Long id, @NonNull CycleRequest updateCycleRequest){
+    public CycleResponse updateCycle(@NonNull Long id, @NonNull CycleRequest updateCycleRequest) {
         try {
             Assert.notNull(updateCycleRequest, "Update CycleRequest cannot be null");
 
@@ -79,20 +82,22 @@ public class CycleService {
 
             return cycleMapper.toDto(updatedCycle);
         } catch (Exception ex) {
-            throw new AppException("Failed to update cycle", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update cycle", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public void deleteCycleById(@NonNull Long id){
+    public void deleteCycleById(@NonNull Long id) {
         try {
             if (!cycleRepository.existsById(id)) {
                 throw new AppException("Cycle not found with ID: " + id, HttpStatus.NOT_FOUND);
             }
 
             cycleRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Cycle not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to delete cycle", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete cycle", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
