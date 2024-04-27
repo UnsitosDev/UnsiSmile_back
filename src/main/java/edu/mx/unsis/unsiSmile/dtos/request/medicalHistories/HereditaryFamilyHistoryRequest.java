@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
-import io.micrometer.common.lang.NonNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
