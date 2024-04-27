@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CycleRequest {
+    private Long idCycle;
     @NotNull(message = "The field cycle can't be null")
     @NotBlank(message = "The field cycle can't be blank")
     private String cycleName;
