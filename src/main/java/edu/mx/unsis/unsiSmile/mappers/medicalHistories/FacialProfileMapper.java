@@ -16,6 +16,7 @@ public class FacialProfileMapper implements BaseMapper<FacialProfileResponse, Fa
     @Override
     public FacialProfileModel toEntity(FacialProfileRequest dto) {
         return FacialProfileModel.builder()
+                .idFacialProfile(dto.getIdFacialProfile())
                 .facialProfile(dto.getFacialProfile())
                 .build();
     }
