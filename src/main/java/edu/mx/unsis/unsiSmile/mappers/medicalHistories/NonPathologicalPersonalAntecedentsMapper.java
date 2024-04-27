@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.NonPathologicalPersonalAntecedentsRequest;
