@@ -34,7 +34,7 @@ public class ToothRegionPeriodontogramService {
 
             return toothRegionPeriodontogramMapper.toDto(savedModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to create tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -46,7 +46,7 @@ public class ToothRegionPeriodontogramService {
 
             return toothRegionPeriodontogramMapper.toDto(model);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -58,7 +58,7 @@ public class ToothRegionPeriodontogramService {
                     .map(toothRegionPeriodontogramMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch all tooth region periodontograms", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch all tooth region periodontograms", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -77,7 +77,7 @@ public class ToothRegionPeriodontogramService {
 
             return toothRegionPeriodontogramMapper.toDto(savedModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to update tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -89,7 +89,7 @@ public class ToothRegionPeriodontogramService {
             }
             toothRegionPeriodontogramRepository.deleteById(id);
         } catch (Exception ex) {
-            throw new AppException("Failed to delete tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete tooth region periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
