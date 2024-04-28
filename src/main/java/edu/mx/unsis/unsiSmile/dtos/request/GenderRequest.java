@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenderRequest {
-
+    private Long idGender;
     @NotNull(message = "The field gender can't be null")
     @NotBlank(message = "The field gender can't be blank")
     private String gender;
