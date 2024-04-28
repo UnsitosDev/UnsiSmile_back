@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class HereditaryFamilyHistoryService {
+public class HereditaryFamilyHistoryService { //cambiar a hereditary *** question
 
     private final IHereditaryFamilyHistoryRepository familyHistoryRepository;
     private final HereditaryFamilyHistoryMapper familyHistoryMapper;
