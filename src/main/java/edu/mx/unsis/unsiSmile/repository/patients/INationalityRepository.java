@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.repository.addresses;
+package edu.mx.unsis.unsiSmile.repository.patients;
 
 import java.util.Optional;
 
