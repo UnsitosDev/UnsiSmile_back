@@ -10,28 +10,25 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
-import edu.mx.unsis.unsiSmile.service.students.CareerService;
-
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, GroupModel> {
 
-    private final CareerService careerService;
-
-    public GroupMapper(CareerService careerService) {
-        this.careerService = careerService;
-    }
+    private final CareerMapper careerMapper;
 
     @Override
     public GroupModel toEntity(GroupRequest dto) {
         if (dto == null) {
             return null;
         }
-        CareerModel career = careerService.getCareerByCareer(dto.getCareer().getCareer());
-
+        // mapear carrera
+        CareerModel careerMaped = careerMapper.toEntity(dto.getCareer());
         return GroupModel.builder()
+                .idGroup(dto.getId())
                 .groupName(dto.getGroupName())
-                .career(career)
+                .career(careerMaped)
                 .build();
     }
 
@@ -43,7 +40,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
                 .groupName(entity.getGroupName())
-                .career(entity.getCareer())
+                .career(careerMapper.toDto(entity.getCareer()))
                 .build();
     }
 
@@ -62,8 +59,6 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         if (request == null || entity == null) {
             return;
         }
-        CareerModel career = careerService.getCareerByCareer(request.getCareer().getCareer());
         entity.setGroupName(request.getGroupName());
-        entity.setCareer(career);
     }
 }

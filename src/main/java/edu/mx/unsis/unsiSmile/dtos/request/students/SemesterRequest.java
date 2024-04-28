@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.request.students;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CareerRequest {
-    private Long idCareer;
-    @NotNull(message = "The field career can't be null")
-    @NotBlank(message = "The field career can't be blank")
-    private String career;
+public class SemesterRequest {
+    private Long idSemester;
+
+    @NotNull(message = "The field Group can't be null")
+    private GroupRequest group;
+
+    @NotNull(message = "The field Cycle can't be null")
+    private CycleRequest cycle;
 }

@@ -16,6 +16,7 @@ public class CareerMapper implements BaseMapper<CareerResponse, CareerRequest, C
     @Override
     public CareerModel toEntity(CareerRequest dto) {
         return CareerModel.builder()
+                .idCareer(dto.getIdCareer())
                 .career(dto.getCareer())
                 .build();
     }
@@ -37,7 +38,7 @@ public class CareerMapper implements BaseMapper<CareerResponse, CareerRequest, C
 
     @Override
     public void updateEntity(CareerRequest request, CareerModel entity) {
-        
+
         entity.setCareer(request.getCareer());
 
     }

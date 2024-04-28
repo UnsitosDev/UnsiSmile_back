@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.students;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class CareerService {
             // Map the saved entity back to a response DTO
             return careerMapper.toDto(savedCareer);
         } catch (Exception ex) {
-            throw new AppException("Failed to create career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -52,8 +53,10 @@ public class CareerService {
 
             // Map the entity to a response DTO
             return careerMapper.toDto(careerModel);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Career not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -65,14 +68,14 @@ public class CareerService {
                     .map(careerMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch careers", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch careers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
     public CareerResponse updateCareer(@NonNull Long id, @NonNull CareerRequest updatedCareerRequest) {
         try {
-            //Assert.hasText(id, "Career ID cannot be null or empty");
+            // Assert.hasText(id, "Career ID cannot be null or empty");
             Assert.notNull(updatedCareerRequest, "Updated CareerRequest cannot be null");
 
             // Find the career in the database
@@ -88,14 +91,14 @@ public class CareerService {
             // Map the updated entity back to a response DTO
             return careerMapper.toDto(updatedCareer);
         } catch (Exception ex) {
-            throw new AppException("Failed to update career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
     public void deleteCareerById(@NonNull Long id) {
         try {
-            //Assert.hasText(id, "Career ID cannot be null or empty");
+            // Assert.hasText(id, "Career ID cannot be null or empty");
 
             // Check if the career exists
             if (!careerRepository.existsById(id)) {
@@ -105,7 +108,7 @@ public class CareerService {
             // Delete the career
             careerRepository.deleteById(id);
         } catch (Exception ex) {
-            throw new AppException("Failed to delete career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -118,8 +121,10 @@ public class CareerService {
 
             // Map the entity to a response DTO
             return careerModel;
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Career not found with NAME: " + career, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

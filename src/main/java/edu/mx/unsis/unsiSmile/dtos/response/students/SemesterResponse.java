@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupResponse {
-    private Long idGroup;
-    private String groupName;
-    private CareerResponse career;
+public class SemesterResponse {
+    private Long idSemester;
+    private GroupResponse group;
+    private CycleResponse cycle;
 }

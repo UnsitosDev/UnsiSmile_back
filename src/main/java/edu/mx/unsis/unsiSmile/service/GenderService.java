@@ -1,6 +1,10 @@
 
 package edu.mx.unsis.unsiSmile.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -14,9 +18,6 @@ import edu.mx.unsis.unsiSmile.mappers.GenderMapper;
 import edu.mx.unsis.unsiSmile.model.GenderModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,7 @@ public class GenderService {
             // Map the saved entity back to a response DTO
             return genderMapper.toDto(savedGender);
         } catch (Exception ex) {
-            throw new AppException("Failed to create gender", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to create gender", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -53,8 +54,10 @@ public class GenderService {
 
             // Map the entity to a response DTO
             return genderMapper.toDto(genderModel);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Gender not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch gender", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch gender", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -66,14 +69,14 @@ public class GenderService {
                     .map(genderMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch genders", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to fetch genders", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
     public GenderResponse updateGender(@NonNull Long id, @NonNull GenderRequest updatedGenderRequest) {
         try {
-            //Assert.hasText(id, "Gender ID cannot be null or empty");
+            // Assert.hasText(id, "Gender ID cannot be null or empty");
             Assert.notNull(updatedGenderRequest, "Updated GenderRequest cannot be null");
 
             // Find the gender in the database
@@ -89,14 +92,14 @@ public class GenderService {
             // Map the updated entity back to a response DTO
             return genderMapper.toDto(updatedGender);
         } catch (Exception ex) {
-            throw new AppException("Failed to update gender", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to update gender", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
     public void deleteGenderById(@NonNull Long id) {
         try {
-            //Assert.hasText(id, "Gender ID cannot be null or empty");
+            // Assert.hasText(id, "Gender ID cannot be null or empty");
 
             // Check if the gender exists
             if (!genderRepository.existsById(id)) {
@@ -105,9 +108,10 @@ public class GenderService {
 
             // Delete the gender
             genderRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new AppException("Gender not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
-            throw new AppException("Failed to delete gender", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to delete gender", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
-
