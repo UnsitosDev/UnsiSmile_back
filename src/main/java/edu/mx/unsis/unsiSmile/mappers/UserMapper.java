@@ -58,4 +58,6 @@ public class UserMapper implements BaseMapper<UserResponse, UserRequest, UserMod
          * entity.setUsername(request.getUsername());
          */
     }
+
+    
 }

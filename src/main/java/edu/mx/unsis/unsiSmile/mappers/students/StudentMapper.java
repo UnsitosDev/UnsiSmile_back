@@ -26,7 +26,6 @@ public class StudentMapper implements BaseMapper<StudentResponse, StudentRequest
         }
         return StudentModel.builder()
                 .enrollment(dto.getEnrollment())
-                .user(userMapper.toEntity(dto.getUser()))
                 .person(personMapper.toEntity(dto.getPerson()))
                 .build();
     }
