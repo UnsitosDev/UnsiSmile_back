@@ -1,14 +1,19 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.addresses;
 
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
 import edu.mx.unsis.unsiSmile.model.HousingModel;
 import edu.mx.unsis.unsiSmile.model.StreetModel;
@@ -16,13 +21,19 @@ import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/addresses/address")
+@RequestMapping("/unsismile/api/v1/addresses")
 public class AddressController {
 
     private final AddressService addressService;
 
     public AddressController(AddressService addressService) {
         this.addressService = addressService;
+    }
+
+    @PostMapping
+    public ResponseEntity<AddressResponse> createAddress(@Valid @RequestBody AddressRequest addressRequest) {
+        AddressResponse createdAddress = addressService.createAddress(addressRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAddress);
     }
 
     @GetMapping("/{id}")
@@ -63,6 +74,18 @@ public class AddressController {
     public ResponseEntity<List<AddressResponse>> getAllAddresses() {
         List<AddressResponse> allAddresses = addressService.getAllAddresses();
         return ResponseEntity.ok(allAddresses);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponse> updateAddress(@Valid @PathVariable Long id, @Valid @RequestBody AddressRequest updatedAddressRequest) {
+        AddressResponse updatedAddress = addressService.updateAddress(id, updatedAddressRequest);
+        return ResponseEntity.ok(updatedAddress);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAddressById(@Valid @PathVariable Long id) {
+        addressService.deleteAddressById(id);
+        return ResponseEntity.noContent().build();
     }
 
     private HousingModel getHousingById(String housingId) {

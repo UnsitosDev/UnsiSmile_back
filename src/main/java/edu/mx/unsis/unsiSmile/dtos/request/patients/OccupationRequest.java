@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class OccupationRequest {
-    @NotBlank(message = "Occupation ID cannot be blank")
+    
     private Long idOccupation;
 
     @NotBlank(message = "Occupation description cannot be blank")

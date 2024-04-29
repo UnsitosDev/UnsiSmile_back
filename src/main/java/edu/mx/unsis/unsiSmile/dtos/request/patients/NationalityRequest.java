@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class NationalityRequest {
-    @NotBlank(message = "Nationality ID cannot be blank")
     private Long idNationality;
 
     @NotBlank(message = "Nationality description cannot be blank")
