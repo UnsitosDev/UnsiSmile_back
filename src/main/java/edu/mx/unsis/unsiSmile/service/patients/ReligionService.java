@@ -1,0 +1,115 @@
+package edu.mx.unsis.unsiSmile.service.patients;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.patients.ReligionMapper;
+import edu.mx.unsis.unsiSmile.model.ReligionModel;
+import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ReligionService {
+
+    private final IReligionRepository religionRepository;
+    private final ReligionMapper religionMapper;
+
+    @Transactional
+    public ReligionResponse createReligion(@NonNull ReligionRequest religionRequest) {
+        try {
+            Assert.notNull(religionRequest, "ReligionRequest cannot be null");
+
+            // Map the DTO request to the entity
+            ReligionModel religionModel = religionMapper.toEntity(religionRequest);
+
+            // Save the entity to the database
+            ReligionModel savedReligion = religionRepository.save(religionModel);
+
+            // Map the saved entity back to a response DTO
+            return religionMapper.toDto(savedReligion);
+        } catch (Exception ex) {
+            throw new AppException("Failed to create religion", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ReligionResponse getReligionById(@NonNull Long idReligion) {
+        try {
+            ReligionModel religionModel = religionRepository.findByIdReligion(idReligion)
+                    .orElseThrow(() -> new AppException("Religion not found with ID: " + idReligion, HttpStatus.NOT_FOUND));
+
+            return religionMapper.toDto(religionModel);
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch religion by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ReligionResponse getReligionByName(@NonNull String religion) {
+        try {
+            ReligionModel religionModel = religionRepository.findByReligion(religion)
+                    .orElseThrow(() -> new AppException("Religion not found with name: " + religion, HttpStatus.NOT_FOUND));
+
+            return religionMapper.toDto(religionModel);
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch religion by name", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReligionResponse> getAllReligions() {
+        try {
+            List<ReligionModel> allReligions = religionRepository.findAll();
+            return allReligions.stream()
+                    .map(religionMapper::toDto)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch all religions", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public ReligionResponse updateReligion(@NonNull Long idReligion, @NonNull ReligionRequest updatedReligionRequest) {
+        try {
+            Assert.notNull(updatedReligionRequest, "Updated ReligionRequest cannot be null");
+
+            // Find the religion in the database
+            ReligionModel religionModel = religionRepository.findByIdReligion(idReligion)
+                    .orElseThrow(() -> new AppException("Religion not found with ID: " + idReligion, HttpStatus.NOT_FOUND));
+
+            // Update the religion entity with the new data
+            religionMapper.updateEntity(updatedReligionRequest, religionModel);
+
+            // Save the updated entity
+            ReligionModel updatedReligion = religionRepository.save(religionModel);
+
+            // Map the updated entity back to a response DTO
+            return religionMapper.toDto(updatedReligion);
+        } catch (Exception ex) {
+            throw new AppException("Failed to update religion", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public void deleteReligionById(@NonNull Long idReligion) {
+        try {
+            // Check if the religion exists
+            if (!religionRepository.existsById(idReligion)) {
+                throw new AppException("Religion not found with ID: " + idReligion, HttpStatus.NOT_FOUND);
+            }
+            religionRepository.deleteById(idReligion);
+        } catch (Exception ex) {
+            throw new AppException("Failed to delete religion", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+}

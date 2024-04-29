@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class NeighborhoodRequest {
-    @NotBlank(message = "Neighborhood ID cannot be blank")
+    
     private Long idNeighborhood;
 
     @NotBlank(message = "Neighborhood name cannot be blank")

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EthnicGroupRequest {
-    @NotBlank(message = "Ethnic Group ID cannot be blank")
     private Long idEthnicGroup;
 
     @NotBlank(message = "Ethnic Group description cannot be blank")
