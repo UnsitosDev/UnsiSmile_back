@@ -23,10 +23,12 @@ import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import jakarta.validation.Valid;
@@ -44,6 +46,7 @@ public class PatientService {
     private final GuardianMapper guardianMapper;
     private final IAddressRepository addressRepository;
     private final AddressMapper addressMapper;
+    private final IMedicalHistoryRepository medicalHistoryRepository;
 
     @Transactional
     public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
@@ -65,6 +68,10 @@ public class PatientService {
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
 
+            //create the medical history
+            MedicalHistoryModel medicalHistory = createEmptyMedicalHistory();
+            patientModel.setMedicalHistory(medicalHistory);
+
             // Save the entity to the database
             PatientModel savedPatient = patientRepository.save(patientModel);
 
@@ -73,6 +80,11 @@ public class PatientService {
         } catch (DataAccessException ex) {
             throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    // Method to create a medical history entity
+    private MedicalHistoryModel createEmptyMedicalHistory(){
+        return medicalHistoryRepository.save(new MedicalHistoryModel());
     }
 
     // Method to create a address entity
