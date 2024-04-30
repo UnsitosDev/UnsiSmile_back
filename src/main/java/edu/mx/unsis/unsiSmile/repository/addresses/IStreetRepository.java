@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.NeighborhoodModel;
-import edu.mx.unsis.unsiSmile.model.StreetModel;
+import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 
 @Repository
 public interface IStreetRepository extends JpaRepository<StreetModel, Long> {

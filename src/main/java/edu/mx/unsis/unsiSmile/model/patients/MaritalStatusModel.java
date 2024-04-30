@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.patients;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,14 +14,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "occupations")
-public class OccupationModel {
+@Table(name = "marital_statuses")
+public class MaritalStatusModel {
 
     @Id
-    @Column(name = "id_occupation")
-    private Long idOccupation;
+    @Column(name = "id_marital_status")
+    private Long idMaritalStatus;
 
-    @Column(name = "occupation", length = 100, unique = true)
-    private String occupation;
-
+    @Column(name = "marital_status", length = 100, unique = true)
+    private String maritalStatus;
 }

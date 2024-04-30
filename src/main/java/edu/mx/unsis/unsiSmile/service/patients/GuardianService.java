@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
-import edu.mx.unsis.unsiSmile.model.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import lombok.RequiredArgsConstructor;
 

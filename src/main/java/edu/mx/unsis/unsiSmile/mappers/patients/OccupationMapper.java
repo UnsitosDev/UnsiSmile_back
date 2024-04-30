@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.OccupationResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.OccupationModel;
+import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 
 @Component
 public class OccupationMapper implements BaseMapper<OccupationResponse, OccupationRequest, OccupationModel> {

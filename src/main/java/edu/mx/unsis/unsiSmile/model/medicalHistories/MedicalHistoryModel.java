@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.PatientModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

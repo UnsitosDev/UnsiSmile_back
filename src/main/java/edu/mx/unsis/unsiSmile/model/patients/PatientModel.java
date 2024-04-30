@@ -1,7 +1,10 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.patients;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
+import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +32,7 @@ public class PatientModel {
     private Long idPatient;
 
     @Column(name = "admission_date")
-    private Date admissionDate;
+    private LocalDate admissionDate;
 
 
     @Column(name = "is_minor")

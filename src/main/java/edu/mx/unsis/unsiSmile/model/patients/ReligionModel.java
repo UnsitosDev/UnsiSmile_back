@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.patients;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

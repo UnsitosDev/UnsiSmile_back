@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 
 @Component
 public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequest, GuardianModel> {

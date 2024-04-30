@@ -13,8 +13,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.NeighborhoodMapper;
-import edu.mx.unsis.unsiSmile.model.LocalityModel;
-import edu.mx.unsis.unsiSmile.model.NeighborhoodModel;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.patients;
 
 import java.util.List;
 

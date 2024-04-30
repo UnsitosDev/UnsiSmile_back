@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.LocalityModel;
-import edu.mx.unsis.unsiSmile.model.MunicipalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
 
 @Repository
 public interface ILocalityRepository extends JpaRepository<LocalityModel, String> {

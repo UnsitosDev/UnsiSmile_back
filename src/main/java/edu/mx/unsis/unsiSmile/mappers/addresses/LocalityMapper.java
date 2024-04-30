@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.LocalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 
 @Component
 public class LocalityMapper implements BaseMapper<LocalityResponse, LocalityRequest, LocalityModel> {
