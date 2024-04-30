@@ -57,7 +57,6 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         if (request == null || entity == null) {
             return;
         }
-        entity.setIdSemester(request.getIdSemester());
         entity.setGroup(groupMapper.toEntity(request.getGroup()));
         entity.setCycle(cycleMapper.toEntity(request.getCycle()));
     }

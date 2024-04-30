@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
@@ -32,16 +31,11 @@ public class StudentService {
     @Transactional
     public StudentResponse createStudent(StudentRequest request) {
         try {
-            // First create an user with the dates from student
-            
-            System.out.println(request.getUser());
             //Create user
             UserModel userModel= userService.createUser(setCredentials(request));
 
-            System.out.println("creó el usuario***********************************");
             StudentModel studentModel = studentMapper.toEntity(request);
             studentModel.setUser(userModel);
-            System.out.println(studentModel);
             StudentModel savedStudent = studentRepository.save(studentModel);
 
             return studentMapper.toDto(savedStudent);

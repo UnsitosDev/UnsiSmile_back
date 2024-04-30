@@ -16,7 +16,6 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
@@ -39,7 +38,6 @@ public class UserService {
             }
             // seteamos valores a un tipo request
             UserModel savedUser = userRepository.save(setValuesModel(request));
-            System.out.println(savedUser);
             return savedUser;
         } catch (ConstraintViolationException e) {
             throw new AppException("User data is invalid: " + e.getMessage(), HttpStatus.BAD_REQUEST, e);
