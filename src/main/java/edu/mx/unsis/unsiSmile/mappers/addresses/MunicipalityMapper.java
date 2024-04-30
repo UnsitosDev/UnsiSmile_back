@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.MunicipalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
 
 @Component
 public class MunicipalityMapper implements BaseMapper<MunicipalityResponse, MunicipalityRequest, MunicipalityModel> {

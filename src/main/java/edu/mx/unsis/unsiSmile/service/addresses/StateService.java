@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.StateMapper;
-import edu.mx.unsis.unsiSmile.model.StateModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.IStateRepository;
 import lombok.RequiredArgsConstructor;
 

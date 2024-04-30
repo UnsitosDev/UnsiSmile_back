@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.addresses;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,19 +18,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "streets")
-public class StreetModel {
+@Table(name = "neighborhoods")
+public class NeighborhoodModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_street")
-    private Long idStreet;
+    @Column(name = "id_neighborhood")
+    private Long idNeighborhood;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "fk_neighborhood", referencedColumnName = "id_neighborhood", nullable = false)
-    private NeighborhoodModel neighborhood;
+    @JoinColumn(name = "fk_locality", referencedColumnName = "id_locality", nullable = false)
+    private LocalityModel locality;
 
 }

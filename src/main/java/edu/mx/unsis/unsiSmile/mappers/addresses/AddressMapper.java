@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.AddressModel;
+import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 
 @Component
 public class AddressMapper implements BaseMapper<AddressResponse, AddressRequest, AddressModel> {

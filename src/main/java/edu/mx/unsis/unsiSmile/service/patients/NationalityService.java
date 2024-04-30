@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.NationalityMapper;
-import edu.mx.unsis.unsiSmile.model.NationalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.repository.patients.INationalityRepository;
 import lombok.RequiredArgsConstructor;
 

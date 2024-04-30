@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.MaritalStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.MaritalStatusModel;
 
 @Repository
 public interface IMaritalStatusRepository extends JpaRepository<MaritalStatusModel, Long> {

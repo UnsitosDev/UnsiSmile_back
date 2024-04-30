@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MedicalHistoryResponse {
     private Long idMedicalHistory;
+    
     private Long patientId;
     private Long facialExamId;
     private Long familyHistoryId;

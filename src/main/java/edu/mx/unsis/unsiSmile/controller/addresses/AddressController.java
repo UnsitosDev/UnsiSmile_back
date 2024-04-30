@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
 import edu.mx.unsis.unsiSmile.model.HousingModel;
-import edu.mx.unsis.unsiSmile.model.StreetModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import jakarta.validation.Valid;
 

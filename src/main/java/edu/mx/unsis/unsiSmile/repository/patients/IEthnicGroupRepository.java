@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.EthnicGroupModel;
+import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
 
 @Repository
 public interface IEthnicGroupRepository extends JpaRepository<EthnicGroupModel, Long> {

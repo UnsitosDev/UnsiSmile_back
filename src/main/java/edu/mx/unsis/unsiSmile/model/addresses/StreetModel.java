@@ -1,7 +1,9 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.addresses;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,18 +18,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "municipalities")
-public class MunicipalityModel {
+@Table(name = "streets")
+public class StreetModel {
 
     @Id
-    @Column(name = "id_municipality", length = 4)
-    private String idMunicipality;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_street")
+    private Long idStreet;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "fk_state", referencedColumnName = "id_state", nullable = false)
-    private StateModel state;
+    @JoinColumn(name = "fk_neighborhood", referencedColumnName = "id_neighborhood", nullable = false)
+    private NeighborhoodModel neighborhood;
 
 }

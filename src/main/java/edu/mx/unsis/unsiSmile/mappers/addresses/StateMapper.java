@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.StateModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 
 @Component
 public class StateMapper implements BaseMapper<StateResponse, StateRequest, StateModel> {

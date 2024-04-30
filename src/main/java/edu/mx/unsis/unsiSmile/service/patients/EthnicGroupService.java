@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.EthnicGroupMapper;
-import edu.mx.unsis.unsiSmile.model.EthnicGroupModel;
+import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
 import lombok.RequiredArgsConstructor;
 

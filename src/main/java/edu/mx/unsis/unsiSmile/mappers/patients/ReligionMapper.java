@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.ReligionModel;
+import edu.mx.unsis.unsiSmile.model.patients.ReligionModel;
 
 @Component
 public class ReligionMapper implements BaseMapper<ReligionResponse, ReligionRequest, ReligionModel> {

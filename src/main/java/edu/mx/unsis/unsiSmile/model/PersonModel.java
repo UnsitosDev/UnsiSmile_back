@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.model;
 
 import java.time.LocalDate;
 
+import edu.mx.unsis.unsiSmile.model.patients.GenderModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
