@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.GenderResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.GenderMapper;
-import edu.mx.unsis.unsiSmile.model.patients.GenderModel;
+import edu.mx.unsis.unsiSmile.model.GenderModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
 import lombok.RequiredArgsConstructor;
 

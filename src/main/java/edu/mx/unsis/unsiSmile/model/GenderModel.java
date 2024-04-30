@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.patients;
+package edu.mx.unsis.unsiSmile.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

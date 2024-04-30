@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.GenderResponse;
-import edu.mx.unsis.unsiSmile.model.patients.GenderModel;
+import edu.mx.unsis.unsiSmile.model.GenderModel;
 
 @Component
 public class GenderMapper implements BaseMapper<GenderResponse, GenderRequest, GenderModel> {
