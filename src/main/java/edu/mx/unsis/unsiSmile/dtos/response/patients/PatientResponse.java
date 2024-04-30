@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalHistoryResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +27,5 @@ public class PatientResponse {
     private EthnicGroupResponse ethnicGroup;
     private ReligionResponse religion;
     private GuardianResponse guardian;
+    private MedicalHistoryResponse medicalHistoryResponse;
 }

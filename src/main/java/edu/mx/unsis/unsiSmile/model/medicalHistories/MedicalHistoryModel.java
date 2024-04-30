@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,10 +25,6 @@ public class MedicalHistoryModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_medical_history")
     private Long idMedicalHistory;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
-    private PatientModel patient;
 
     @ManyToOne
     @JoinColumn(name = "fk_facial_exam", referencedColumnName = "id_facial_exam")
