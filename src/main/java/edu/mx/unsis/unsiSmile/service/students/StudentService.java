@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
@@ -46,7 +45,7 @@ public class StudentService {
             //create person
             PersonResponse personResponse = personService.createPerson(request.getPerson());
             //set the created person
-            request.setPerson(PersonRequest.builder().curp(personResponse.getCurp()).build());
+            request.getPerson().setCurp(personResponse.getCurp());
             
             //set user
             StudentModel studentModel = studentMapper.toEntity(request);
@@ -54,6 +53,7 @@ public class StudentService {
             StudentModel savedStudent = studentRepository.save(studentModel);
 
             return studentMapper.toDto(savedStudent);
+            
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

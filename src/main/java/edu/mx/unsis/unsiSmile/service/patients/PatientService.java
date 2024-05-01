@@ -96,16 +96,23 @@ public class PatientService {
     }
 
     private void relateStudentPatient(PatientModel savedPatient) {
+
+        //serach the user
         UserResponse user = userService.getCurrentUser();
+
         UserRequest userRequest = UserRequest.builder()
                 .idUser(user.getId())
                 .build();
+
         StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
+
+        System.out.println(studentResponse);
 
         StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
                 .patientId(savedPatient.getIdPatient())
                 .studentId(studentResponse.getEnrollment())
                 .build();
+                
         studentPatientService.createStudentPatient(studentPatientRequest);
     }
 
