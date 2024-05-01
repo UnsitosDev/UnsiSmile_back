@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,8 @@ public class MedicalHistoryModel {
     @ManyToOne
     @JoinColumn(name = "fk_final_odontogram", referencedColumnName = "id_odontogram")
     private OdontogramModel finalOdontogram;
+
+    @OneToOne
+    @JoinColumn(name = "fk_vital_signs", referencedColumnName = "id_vital_signs")
+    private VitalSignsModel vitalSigns;
 }

@@ -23,4 +23,6 @@ public class MedicalHistoryRequest {
     private OdontogramRequest initialOdontogram;
 
     private OdontogramRequest finalOdontogram;
+
+    private VitalSignsRequest vitalSigns;
 }

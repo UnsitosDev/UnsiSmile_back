@@ -17,4 +17,5 @@ public class MedicalHistoryResponse {
     private Long nonPathologicalPersonalAntecedentsId;
     private Long initialOdontogramId;
     private Long finalOdontogramId;
+    private Long vitalSignsId;
 }

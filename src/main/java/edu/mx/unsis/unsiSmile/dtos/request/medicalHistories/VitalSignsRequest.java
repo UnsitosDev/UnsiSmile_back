@@ -40,4 +40,7 @@ public class VitalSignsRequest {
 
     @NotNull(message = "Pulse cannot be null")
     private Float pulse;
+
+    @NotNull(message = "Patientid can´t be null")
+    private Long patientId;
 }
