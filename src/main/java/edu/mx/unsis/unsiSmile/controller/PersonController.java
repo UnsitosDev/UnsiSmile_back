@@ -19,7 +19,7 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/persons")
+@RequestMapping("/unsismile/api/v1/people")
 public class PersonController {
 
     private final PersonService personService;

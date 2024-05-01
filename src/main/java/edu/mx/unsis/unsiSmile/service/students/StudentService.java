@@ -10,13 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
+import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,6 +31,9 @@ public class StudentService {
 
     private final IStudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final UserMapper userMapper;
+    private final PersonService personService;
+    private final PersonMapper personMapper;
 
     private final UserService userService;
 
@@ -34,6 +43,12 @@ public class StudentService {
             //Create user
             UserModel userModel= userService.createUser(setCredentials(request));
 
+            //create person
+            PersonResponse personResponse = personService.createPerson(request.getPerson());
+            //set the created person
+            request.setPerson(PersonRequest.builder().curp(personResponse.getCurp()).build());
+            
+            //set user
             StudentModel studentModel = studentMapper.toEntity(request);
             studentModel.setUser(userModel);
             StudentModel savedStudent = studentRepository.save(studentModel);
@@ -49,6 +64,20 @@ public class StudentService {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
+                            HttpStatus.NOT_FOUND));
+            return studentMapper.toDto(studentModel);
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public StudentResponse getStudentByUser(UserRequest userRequest) {
+        try {
+            UserModel userModel = userMapper.toEntity(userRequest);
+
+            StudentModel studentModel = studentRepository.findByUser(userModel)
+                    .orElseThrow(() -> new AppException("Student not found with enrollment: " + userRequest,
                             HttpStatus.NOT_FOUND));
             return studentMapper.toDto(studentModel);
         } catch (Exception ex) {

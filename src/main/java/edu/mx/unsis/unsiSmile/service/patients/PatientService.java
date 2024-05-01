@@ -12,10 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
@@ -31,6 +35,9 @@ import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
+import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +54,10 @@ public class PatientService {
     private final IAddressRepository addressRepository;
     private final AddressMapper addressMapper;
     private final IMedicalHistoryRepository medicalHistoryRepository;
-
+    private final UserService userService;
+    private final StudentPatientService studentPatientService;
+    private final StudentService studentService;
+ 
     @Transactional
     public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
@@ -64,16 +74,19 @@ public class PatientService {
                 patientModel.setGuardian(guardianModel);
             }
 
-            //create the address
+            // create the address
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
 
-            //create the medical history
+            // create the medical history
             MedicalHistoryModel medicalHistory = createEmptyMedicalHistory();
             patientModel.setMedicalHistory(medicalHistory);
 
             // Save the entity to the database
             PatientModel savedPatient = patientRepository.save(patientModel);
+
+            // relate student with patient
+            relateStudentPatient(savedPatient);
 
             // Map the saved entity back to a response DTO
             return patientMapper.toDto(savedPatient);
@@ -82,13 +95,27 @@ public class PatientService {
         }
     }
 
+    private void relateStudentPatient(PatientModel savedPatient) {
+        UserResponse user = userService.getCurrentUser();
+        UserRequest userRequest = UserRequest.builder()
+                .idUser(user.getId())
+                .build();
+        StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
+
+        StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
+                .patientId(savedPatient.getIdPatient())
+                .studentId(studentResponse.getEnrollment())
+                .build();
+        studentPatientService.createStudentPatient(studentPatientRequest);
+    }
+
     // Method to create a medical history entity
-    private MedicalHistoryModel createEmptyMedicalHistory(){
+    private MedicalHistoryModel createEmptyMedicalHistory() {
         return medicalHistoryRepository.save(new MedicalHistoryModel());
     }
 
     // Method to create a address entity
-    private AddressModel createAddressModel(AddressRequest addressRequest){
+    private AddressModel createAddressModel(AddressRequest addressRequest) {
         Assert.notNull(addressRequest, "AddressRequest cannot be null");
         return addressRepository.save(addressMapper.toEntity(addressRequest));
     }
