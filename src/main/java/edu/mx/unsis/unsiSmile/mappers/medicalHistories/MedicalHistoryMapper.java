@@ -19,6 +19,7 @@ public class MedicalHistoryMapper
     private FacialExamMapper facialExamMapper;
     private NonPathologicalPersonalAntecedentsMapper nonPathologicalPersonalAntecedentsMapper;
     private OdontogramMapper odontogramMapper;
+    private VitalSignsMapper vitalSignsMapper;
 
     @Override
     public MedicalHistoryModel toEntity(MedicalHistoryRequest dto) {
@@ -33,6 +34,8 @@ public class MedicalHistoryMapper
                                 : null)
                 .finalOdontogram(
                         dto.getFinalOdontogram() != null ? odontogramMapper.toEntity(dto.getFinalOdontogram()) : null)
+                .vitalSigns(
+                        dto.getVitalSigns() != null ? vitalSignsMapper.toEntity(dto.getVitalSigns()) : null)
                 .build();
     }
 
@@ -53,6 +56,9 @@ public class MedicalHistoryMapper
                         : null)
                 .finalOdontogramId(entity.getFinalOdontogram() != null
                         ? entity.getFinalOdontogram().getIdOdontogram()
+                        : null)
+                .vitalSignsId(entity.getVitalSigns() != null
+                        ? entity.getVitalSigns().getIdVitalSigns()
                         : null)
                 .build();
     }

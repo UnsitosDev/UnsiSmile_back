@@ -13,8 +13,12 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.VitalSignsRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.VitalSignsResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.VitalSignsMapper;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.VitalSignsModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IVitalSignsRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,17 +27,31 @@ public class VitalSignsService {
 
     private final IVitalSignsRepository vitalSignsRepository;
     private final VitalSignsMapper vitalSignsMapper;
+    private final IPatientRepository patientRepository;
+    private final IMedicalHistoryRepository medicalHistoryRepository;
 
     @Transactional
     public VitalSignsResponse createVitalSigns(@NonNull VitalSignsRequest vitalSignsRequest) {
         try {
             Assert.notNull(vitalSignsRequest, "VitalSignsRequest cannot be null");
+            Assert.notNull(vitalSignsRequest.getPatientId(), "PatientId can't be null");
+            VitalSignsModel savedVitalSigns=null;
+            // search medical history and asign this VitalSignsModel
+            try {
+                MedicalHistoryModel medicalHistoryModel = getMedicalHistoryModel(vitalSignsRequest.getPatientId());
+                if (medicalHistoryModel != null && medicalHistoryModel.getVitalSigns()==null) {
+                    // Map the DTO request to the entity
+                    VitalSignsModel vitalSignsModel = vitalSignsMapper.toEntity(vitalSignsRequest);
 
-            // Map the DTO request to the entity
-            VitalSignsModel vitalSignsModel = vitalSignsMapper.toEntity(vitalSignsRequest);
-
-            // Save the entity to the database
-            VitalSignsModel savedVitalSigns = vitalSignsRepository.save(vitalSignsModel);
+                    // Save the entity to the database
+                    savedVitalSigns = vitalSignsRepository.save(vitalSignsModel);
+                    medicalHistoryModel.setVitalSigns(savedVitalSigns);
+                }
+            }catch (AppException ex) {
+                throw ex;
+            } catch (Exception ex) {
+                throw new AppException("Failed to assign vitals signs", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            }
 
             // Map the saved entity back to a response DTO
             return vitalSignsMapper.toDto(savedVitalSigns);
@@ -47,7 +65,8 @@ public class VitalSignsService {
         try {
             // Find the vital signs in the database
             VitalSignsModel vitalSignsModel = vitalSignsRepository.findById(vitalSignsId)
-                    .orElseThrow(() -> new AppException("Vital signs not found with ID: " + vitalSignsId, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException("Vital signs not found with ID: " + vitalSignsId,
+                            HttpStatus.NOT_FOUND));
 
             // Map the entity to a response DTO
             return vitalSignsMapper.toDto(vitalSignsModel);
@@ -69,13 +88,15 @@ public class VitalSignsService {
     }
 
     @Transactional
-    public VitalSignsResponse updateVitalSigns(@NonNull Long vitalSignsId, @NonNull VitalSignsRequest updatedVitalSignsRequest) {
+    public VitalSignsResponse updateVitalSigns(@NonNull Long vitalSignsId,
+            @NonNull VitalSignsRequest updatedVitalSignsRequest) {
         try {
             Assert.notNull(updatedVitalSignsRequest, "Updated VitalSignsRequest cannot be null");
 
             // Find the vital signs in the database
             VitalSignsModel vitalSignsModel = vitalSignsRepository.findById(vitalSignsId)
-                    .orElseThrow(() -> new AppException("Vital signs not found with ID: " + vitalSignsId, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException("Vital signs not found with ID: " + vitalSignsId,
+                            HttpStatus.NOT_FOUND));
 
             // Update the vital signs entity with the new data
             vitalSignsMapper.updateEntity(updatedVitalSignsRequest, vitalSignsModel);
@@ -102,4 +123,27 @@ public class VitalSignsService {
             throw new AppException("Failed to delete vital signs", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    private PatientModel getPatientModel(Long id) {
+        try {
+            return patientRepository.findByIdPatient(id)
+                    .orElseThrow(() -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch patient by ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private MedicalHistoryModel getMedicalHistoryModel(Long idPatient) {
+        PatientModel patientModel = getPatientModel(idPatient);
+
+        try {
+            return medicalHistoryRepository.findById(patientModel.getMedicalHistory().getIdMedicalHistory())
+                    .orElseThrow(() -> new AppException("Medical history not found for patient with ID: " + idPatient,
+                            HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch medical history for patient with ID: " + idPatient,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

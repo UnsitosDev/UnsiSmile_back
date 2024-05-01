@@ -27,10 +27,10 @@ public class AddressModel {
     @Column(name = "id_address")
     private Long idAddress;
 
-    @Column(name = "street_number", length = 2)
+    @Column(name = "street_number", length = 4)
     private String streetNumber;
 
-    @Column(name = "interior_number", length = 2)
+    @Column(name = "interior_number", length = 4)
     private String interiorNumber;
 
     @ManyToOne
