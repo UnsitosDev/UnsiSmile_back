@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +20,9 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,6 +32,8 @@ public class UserService {
     private final IUserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final IStudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -41,7 +46,7 @@ public class UserService {
             return savedUser;
         } catch (ConstraintViolationException e) {
             throw new AppException("User data is invalid: " + e.getMessage(), HttpStatus.BAD_REQUEST, e);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new AppException("User already exists", HttpStatus.CONFLICT, ex);
         }
     }
@@ -74,8 +79,6 @@ public class UserService {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String username = userDetails.getUsername();
 
-            // Aquí puedes implementar la lógica para obtener el usuario actual basado en el
-            // nombre de usuario
             UserModel currentUser = userRepository.findByUsername(username);
 
             if (currentUser != null) {
@@ -101,6 +104,35 @@ public class UserService {
 
     }
 
-   
+    public ResponseEntity<?> getInformationUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+
+            UserModel currentUser = userRepository.findByUsername(username);
+            ResponseEntity<?> owner = null;
+            if (currentUser == null) {
+                throw new AppException("Current user not found", HttpStatus.NOT_FOUND);
+            }
+
+            switch (currentUser.getRole().getRole()) {
+                case ERole.ROLE_ADMIN:
+                    break;
+                case ERole.ROLE_STUDENT:
+                    owner = ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(currentUser.getUsername())
+                            .orElseThrow(() -> new AppException(
+                                    "Student not found with enrollment: " + currentUser.getUsername(),
+                                    HttpStatus.NOT_FOUND))));
+                    break;
+                default:
+                    break;
+            }
+            return owner;
+        } else {
+            throw new AppException("No user authenticated", HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 }

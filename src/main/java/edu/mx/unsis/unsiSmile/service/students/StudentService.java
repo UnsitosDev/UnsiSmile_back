@@ -15,7 +15,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
@@ -32,7 +31,6 @@ public class StudentService {
     private final StudentMapper studentMapper;
     private final UserMapper userMapper;
     private final PersonService personService;
-    private final PersonMapper personMapper;
 
     private final UserService userService;
 

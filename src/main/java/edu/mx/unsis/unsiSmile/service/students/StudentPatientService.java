@@ -31,7 +31,6 @@ public class StudentPatientService {
     public StudentPatientResponse createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
         try {
             Assert.notNull(studentPatientRequest, "StudentPatientRequest cannot be null");
-            System.out.println("student patient " + studentPatientRequest);
 
             StudentPatientModel studentPatientModel = studentPatientMapper.toEntity(studentPatientRequest);
             StudentPatientModel savedStudentPatient = studentPatientRepository.save(studentPatientModel);
