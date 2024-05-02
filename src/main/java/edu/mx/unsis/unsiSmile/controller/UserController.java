@@ -36,5 +36,10 @@ public class UserController {
     public UserResponse getProfile() {
         return userService.getCurrentUser();
     }
+
+    @GetMapping("/userInformation")
+    public ResponseEntity<?> getInformationUser() {
+        return userService.getInformationUser();
+    }
 }
 

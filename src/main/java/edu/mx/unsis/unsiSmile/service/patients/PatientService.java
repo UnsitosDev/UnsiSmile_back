@@ -106,8 +106,6 @@ public class PatientService {
 
         StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
 
-        System.out.println(studentResponse);
-
         StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
                 .patientId(savedPatient.getIdPatient())
                 .studentId(studentResponse.getEnrollment())
