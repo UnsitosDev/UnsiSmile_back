@@ -152,9 +152,7 @@ public class PatientService {
     @Transactional(readOnly = true)
     public PatientResponse getPatientById(@NonNull Long idPatient) {
         try {
-            PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
-                    .orElseThrow(
-                            () -> new AppException("Patient not found with ID: " + idPatient, HttpStatus.NOT_FOUND));
+            PatientModel patientModel = getPatientModel(idPatient);
 
             return patientMapper.toDto(patientModel);
         } catch (Exception ex) {
@@ -235,6 +233,19 @@ public class PatientService {
             patientRepository.deleteById(idPatient);
         } catch (Exception ex) {
             throw new AppException("Failed to delete patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public PatientModel getPatientModel(@NonNull Long id){
+        try {
+            PatientModel patientModel = patientRepository.findByIdPatient(id)
+                    .orElseThrow(
+                            () -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
+
+            return patientModel;
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

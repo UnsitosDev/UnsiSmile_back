@@ -14,7 +14,9 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalHistoryRespo
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalHistoryMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +25,7 @@ public class MedicalHistoryService {
 
     private final IMedicalHistoryRepository medicalHistoryRepository;
     private final MedicalHistoryMapper medicalHistoryMapper;
+    private final PatientService patientService;
 
     @Transactional
     public MedicalHistoryResponse createMedicalHistory(@NonNull MedicalHistoryRequest request) {
@@ -90,6 +93,19 @@ public class MedicalHistoryService {
             medicalHistoryRepository.deleteById(id);
         } catch (Exception ex) {
             throw new AppException("Failed to delete medical history", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public MedicalHistoryModel getMedicalHistoryModel(Long idPatient) {
+        PatientModel patientModel = patientService.getPatientModel(idPatient);
+        try {
+            return medicalHistoryRepository.findById(patientModel.getMedicalHistory().getIdMedicalHistory())
+                    .orElseThrow(() -> new AppException("Medical history not found for patient with ID: " + idPatient,
+                            HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch medical history for patient with ID: " + idPatient,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

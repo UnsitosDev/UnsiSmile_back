@@ -14,6 +14,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FacialExamResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FacialExamMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.FacialExamModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFacialExamRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -23,20 +24,34 @@ public class FacialExamService {
 
     private final IFacialExamRepository facialExamRepository;
     private final FacialExamMapper facialExamMapper;
+    private final MedicalHistoryService medicalHistoryService;
 
     @Transactional
     public FacialExamResponse createFacialExam(@NonNull FacialExamRequest facialExamRequest) {
         try {
             Assert.notNull(facialExamRequest, "FacialExamRequest cannot be null");
+            Assert.notNull(facialExamRequest.getPatientId(), "PatientId can't be null");
+            FacialExamModel savedFacialExam = null;
+            try {
 
-            // Map the DTO request to the entity
-            FacialExamModel facialExamModel = facialExamMapper.toEntity(facialExamRequest);
+                MedicalHistoryModel medicalHistoryModel = medicalHistoryService
+                        .getMedicalHistoryModel(facialExamRequest.getPatientId());
+                if (medicalHistoryModel != null && medicalHistoryModel.getFacialExam() == null) {
+                    // Map the DTO request to the entity
+                    FacialExamModel facialExamModel = facialExamMapper.toEntity(facialExamRequest);
 
-            // Save the entity to the database
-            FacialExamModel savedFacialExam = facialExamRepository.save(facialExamModel);
-
+                    // Save the entity to the database
+                    savedFacialExam = facialExamRepository.save(facialExamModel);
+                    // Assign VitalSigns to medicalHistory
+                    medicalHistoryModel.setFacialExam(savedFacialExam);
+                }
+            } catch (Exception e) {
+                throw new AppException("Failed to create facial exam", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
             // Map the saved entity back to a response DTO
+
             return facialExamMapper.toDto(savedFacialExam);
+
         } catch (Exception ex) {
             throw new AppException("Failed to create facial exam", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -47,7 +62,8 @@ public class FacialExamService {
         try {
             // Find the facial exam in the database
             FacialExamModel facialExamModel = facialExamRepository.findById(facialExamId)
-                    .orElseThrow(() -> new AppException("Facial exam not found with ID: " + facialExamId, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException("Facial exam not found with ID: " + facialExamId,
+                            HttpStatus.NOT_FOUND));
 
             // Map the entity to a response DTO
             return facialExamMapper.toDto(facialExamModel);
@@ -69,13 +85,15 @@ public class FacialExamService {
     }
 
     @Transactional
-    public FacialExamResponse updateFacialExam(@NonNull Long facialExamId, @NonNull FacialExamRequest updatedFacialExamRequest) {
+    public FacialExamResponse updateFacialExam(@NonNull Long facialExamId,
+            @NonNull FacialExamRequest updatedFacialExamRequest) {
         try {
             Assert.notNull(updatedFacialExamRequest, "Updated FacialExamRequest cannot be null");
 
             // Find the facial exam in the database
             FacialExamModel facialExamModel = facialExamRepository.findById(facialExamId)
-                    .orElseThrow(() -> new AppException("Facial exam not found with ID: " + facialExamId, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException("Facial exam not found with ID: " + facialExamId,
+                            HttpStatus.NOT_FOUND));
 
             // Update the facial exam entity with the new data
             facialExamMapper.updateEntity(updatedFacialExamRequest, facialExamModel);
