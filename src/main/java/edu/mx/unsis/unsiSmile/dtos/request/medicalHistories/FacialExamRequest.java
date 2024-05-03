@@ -22,4 +22,7 @@ public class FacialExamRequest {
     
     @NotNull(message = "The field facialFront can't be null")
     private FacialFrontRequest facialFront;
+
+    @NotNull(message = "Patientid can´t be null")
+    private Long patientId;
 }

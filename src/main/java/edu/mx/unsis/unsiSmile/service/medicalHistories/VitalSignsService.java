@@ -15,10 +15,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.VitalSignsMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.VitalSignsModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IVitalSignsRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,8 +24,7 @@ public class VitalSignsService {
 
     private final IVitalSignsRepository vitalSignsRepository;
     private final VitalSignsMapper vitalSignsMapper;
-    private final IPatientRepository patientRepository;
-    private final IMedicalHistoryRepository medicalHistoryRepository;
+    private final MedicalHistoryService medicalHistoryService;
 
     @Transactional
     public VitalSignsResponse createVitalSigns(@NonNull VitalSignsRequest vitalSignsRequest) {
@@ -38,13 +34,14 @@ public class VitalSignsService {
             VitalSignsModel savedVitalSigns=null;
             // search medical history and asign this VitalSignsModel
             try {
-                MedicalHistoryModel medicalHistoryModel = getMedicalHistoryModel(vitalSignsRequest.getPatientId());
+                MedicalHistoryModel medicalHistoryModel = medicalHistoryService.getMedicalHistoryModel(vitalSignsRequest.getPatientId());
                 if (medicalHistoryModel != null && medicalHistoryModel.getVitalSigns()==null) {
                     // Map the DTO request to the entity
                     VitalSignsModel vitalSignsModel = vitalSignsMapper.toEntity(vitalSignsRequest);
 
                     // Save the entity to the database
                     savedVitalSigns = vitalSignsRepository.save(vitalSignsModel);
+                    // Assign VitalSigns to medicalHistory
                     medicalHistoryModel.setVitalSigns(savedVitalSigns);
                 }
             }catch (AppException ex) {
@@ -124,26 +121,5 @@ public class VitalSignsService {
         }
     }
 
-    private PatientModel getPatientModel(Long id) {
-        try {
-            return patientRepository.findByIdPatient(id)
-                    .orElseThrow(() -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch patient by ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    private MedicalHistoryModel getMedicalHistoryModel(Long idPatient) {
-        PatientModel patientModel = getPatientModel(idPatient);
-
-        try {
-            return medicalHistoryRepository.findById(patientModel.getMedicalHistory().getIdMedicalHistory())
-                    .orElseThrow(() -> new AppException("Medical history not found for patient with ID: " + idPatient,
-                            HttpStatus.NOT_FOUND));
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch medical history for patient with ID: " + idPatient,
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
 
 }
