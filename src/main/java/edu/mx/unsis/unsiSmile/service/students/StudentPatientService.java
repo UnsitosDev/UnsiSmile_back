@@ -37,14 +37,17 @@ public class StudentPatientService {
 
             return studentPatientMapper.toDto(savedStudentPatient);
         } catch (Exception ex) {
-            throw new AppException("Failed to create student-patient relationship", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to create student-patient relationship", HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
     @Transactional(readOnly = true)
     public StudentPatientResponse getStudentPatientById(@NonNull Long idStudentPatient) {
-        Optional<StudentPatientModel> studentPatientOptional = studentPatientRepository.findByIdStudentPatient(idStudentPatient);
-        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(() -> new AppException("Student-patient relationship not found with ID: " + idStudentPatient, HttpStatus.NOT_FOUND));
+        Optional<StudentPatientModel> studentPatientOptional = studentPatientRepository
+                .findByIdStudentPatient(idStudentPatient);
+        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(() -> new AppException(
+                "Student-patient relationship not found with ID: " + idStudentPatient, HttpStatus.NOT_FOUND));
 
         return studentPatientMapper.toDto(studentPatientModel);
     }
@@ -52,7 +55,8 @@ public class StudentPatientService {
     @Transactional(readOnly = true)
     public StudentPatientResponse getStudentPatientByPatient(@NonNull PatientModel patient) {
         Optional<StudentPatientModel> studentPatientOptional = studentPatientRepository.findByPatient(patient);
-        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(() -> new AppException("Student-patient relationship not found for patient", HttpStatus.NOT_FOUND));
+        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(
+                () -> new AppException("Student-patient relationship not found for patient", HttpStatus.NOT_FOUND));
 
         return studentPatientMapper.toDto(studentPatientModel);
     }
@@ -60,25 +64,35 @@ public class StudentPatientService {
     @Transactional(readOnly = true)
     public StudentPatientResponse getStudentPatientByStudent(@NonNull StudentModel student) {
         Optional<StudentPatientModel> studentPatientOptional = studentPatientRepository.findByStudent(student);
-        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(() -> new AppException("Student-patient relationship not found for student", HttpStatus.NOT_FOUND));
+        StudentPatientModel studentPatientModel = studentPatientOptional.orElseThrow(
+                () -> new AppException("Student-patient relationship not found for student", HttpStatus.NOT_FOUND));
 
         return studentPatientMapper.toDto(studentPatientModel);
     }
 
     @Transactional(readOnly = true)
-    public List<StudentPatientResponse> getAllStudentPatients() {
-        List<StudentPatientModel> allStudentPatients = studentPatientRepository.findAll();
-        return allStudentPatients.stream()
-                .map(studentPatientMapper::toDto)
-                .collect(Collectors.toList());
+    public List<StudentPatientResponse> getAllStudentPatients(String enrollment) {
+        if (enrollment != null) {
+            List<StudentPatientModel> studentPatients = studentPatientRepository.findAllByStudentEnrollment(enrollment);
+            return studentPatients.stream()
+                    .map(studentPatientMapper::toDto)
+                    .collect(Collectors.toList());
+        } else {
+            List<StudentPatientModel> allStudentPatients = studentPatientRepository.findAll();
+            return allStudentPatients.stream()
+                    .map(studentPatientMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Transactional
-    public StudentPatientResponse updateStudentPatient(@NonNull Long idStudentPatient, @NonNull StudentPatientRequest updatedStudentPatientRequest) {
+    public StudentPatientResponse updateStudentPatient(@NonNull Long idStudentPatient,
+            @NonNull StudentPatientRequest updatedStudentPatientRequest) {
         Assert.notNull(updatedStudentPatientRequest, "Updated StudentPatientRequest cannot be null");
 
         StudentPatientModel studentPatientModel = studentPatientRepository.findByIdStudentPatient(idStudentPatient)
-                .orElseThrow(() -> new AppException("Student-patient relationship not found with ID: " + idStudentPatient, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(
+                        "Student-patient relationship not found with ID: " + idStudentPatient, HttpStatus.NOT_FOUND));
 
         studentPatientMapper.updateEntity(updatedStudentPatientRequest, studentPatientModel);
         StudentPatientModel updatedStudentPatient = studentPatientRepository.save(studentPatientModel);
@@ -89,7 +103,8 @@ public class StudentPatientService {
     @Transactional
     public void deleteStudentPatientById(@NonNull Long idStudentPatient) {
         if (!studentPatientRepository.existsById(idStudentPatient)) {
-            throw new AppException("Student-patient relationship not found with ID: " + idStudentPatient, HttpStatus.NOT_FOUND);
+            throw new AppException("Student-patient relationship not found with ID: " + idStudentPatient,
+                    HttpStatus.NOT_FOUND);
         }
         studentPatientRepository.deleteById(idStudentPatient);
     }

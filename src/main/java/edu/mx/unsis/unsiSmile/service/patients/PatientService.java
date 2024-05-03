@@ -1,7 +1,9 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessException;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
@@ -19,6 +22,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
@@ -57,7 +61,7 @@ public class PatientService {
     private final UserService userService;
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
- 
+
     @Transactional
     public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
@@ -97,12 +101,10 @@ public class PatientService {
 
     private void relateStudentPatient(PatientModel savedPatient) {
 
-        //serach the user
+        // serach the user
         UserResponse user = userService.getCurrentUser();
 
-        UserRequest userRequest = UserRequest.builder()
-                .idUser(user.getId())
-                .build();
+        UserRequest userRequest = buildUserRequest(user);
 
         StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
 
@@ -110,7 +112,7 @@ public class PatientService {
                 .patientId(savedPatient.getIdPatient())
                 .studentId(studentResponse.getEnrollment())
                 .build();
-                
+
         studentPatientService.createStudentPatient(studentPatientRequest);
     }
 
@@ -140,10 +142,35 @@ public class PatientService {
     @Transactional(readOnly = true)
     public List<PatientResponse> getAllPatients() {
         try {
-            List<PatientModel> allPatients = patientRepository.findAll();
-            return allPatients.stream()
-                    .map(patientMapper::toDto)
-                    .collect(Collectors.toList());
+            UserResponse user = userService.getCurrentUser();
+            if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
+                StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
+                List<StudentPatientResponse> studentPatientResponses = studentPatientService
+                        .getAllStudentPatients(studentResponse.getEnrollment());
+
+                Set<Long> patientIds = studentPatientResponses.stream()
+                        .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
+                        .collect(Collectors.toSet());
+                List<PatientModel> filteredPatients = patientRepository.findAllById(patientIds);
+
+                if (filteredPatients.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                return filteredPatients.stream()
+                        .map(patientMapper::toDto)
+                        .collect(Collectors.toList());
+            } else {
+                List<PatientModel> allPatients = patientRepository.findAll();
+
+                if (allPatients.isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                return allPatients.stream()
+                        .map(patientMapper::toDto)
+                        .collect(Collectors.toList());
+            }
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -237,7 +264,7 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public PatientModel getPatientModel(@NonNull Long id){
+    public PatientModel getPatientModel(@NonNull Long id) {
         try {
             PatientModel patientModel = patientRepository.findByIdPatient(id)
                     .orElseThrow(
@@ -247,5 +274,11 @@ public class PatientService {
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private UserRequest buildUserRequest(UserResponse user) {
+        return UserRequest.builder()
+                .idUser(user.getId())
+                .build();
     }
 }

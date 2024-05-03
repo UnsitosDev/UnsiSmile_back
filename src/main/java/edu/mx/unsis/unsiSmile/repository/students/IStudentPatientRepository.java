@@ -1,4 +1,5 @@
 package edu.mx.unsis.unsiSmile.repository.students;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,5 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
 
     Optional<StudentPatientModel> findByStudent(StudentModel student);
 
+    List<StudentPatientModel> findAllByStudentEnrollment(String studentId);
 }
