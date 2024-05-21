@@ -145,31 +145,10 @@ public class PatientService {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                List<StudentPatientResponse> studentPatientResponses = studentPatientService
-                        .getAllStudentPatients(studentResponse.getEnrollment());
-
-                Set<Long> patientIds = studentPatientResponses.stream()
-                        .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
-                        .collect(Collectors.toSet());
-                List<PatientModel> filteredPatients = patientRepository.findAllById(patientIds);
-
-                if (filteredPatients.isEmpty()) {
-                    return Collections.emptyList();
-                }
-
-                return filteredPatients.stream()
-                        .map(patientMapper::toDto)
-                        .collect(Collectors.toList());
+                return patientsMapped(getPatientsByStudents(studentResponse));
             } else {
                 List<PatientModel> allPatients = patientRepository.findAll();
-
-                if (allPatients.isEmpty()) {
-                    return Collections.emptyList();
-                }
-
-                return allPatients.stream()
-                        .map(patientMapper::toDto)
-                        .collect(Collectors.toList());
+                return patientsMapped(allPatients);
             }
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -280,5 +259,25 @@ public class PatientService {
         return UserRequest.builder()
                 .idUser(user.getId())
                 .build();
+    }
+
+    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse) {
+        List<StudentPatientResponse> studentPatientResponses = studentPatientService
+                .getAllStudentPatients(studentResponse.getEnrollment());
+
+        Set<Long> patientIds = studentPatientResponses.stream()
+                .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
+                .collect(Collectors.toSet());
+        List<PatientModel> filteredPatients = patientRepository.findAllById(patientIds);
+        return filteredPatients;
+    }
+
+    private List<PatientResponse> patientsMapped(List<PatientModel> patientes) {
+        if (patientes.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return patientes.stream()
+                .map(patientMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
