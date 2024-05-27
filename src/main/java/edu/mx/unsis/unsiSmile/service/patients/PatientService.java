@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -158,9 +159,16 @@ public class PatientService {
     @Transactional(readOnly = true)
     public PatientResponse getPatientById(@NonNull Long idPatient) {
         try {
-            PatientModel patientModel = getPatientModel(idPatient);
+            UserResponse user = userService.getCurrentUser();
+            if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
+                StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
+                List<PatientModel> patients = getPatientsByStudents(studentResponse);
+                return getPatientByIdByStudent(patients, idPatient);
+            } else {
+                PatientModel patientModel = getPatientModel(idPatient);
+                return patientMapper.toDto(patientModel);
+            }
 
-            return patientMapper.toDto(patientModel);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -279,5 +287,17 @@ public class PatientService {
         return patientes.stream()
                 .map(patientMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private PatientResponse getPatientByIdByStudent(List<PatientModel> patients, Long idPatient) {
+        Optional<PatientModel> optionalPatient = patients.stream()
+                .filter(patient -> patient.getIdPatient().equals(idPatient))
+                .findFirst();
+
+        if (optionalPatient.isPresent()) {
+            return patientMapper.toDto(optionalPatient.get());
+        } else {
+            throw new AppException("Student does not have access to this patient", HttpStatus.FORBIDDEN);
+        }
     }
 }
