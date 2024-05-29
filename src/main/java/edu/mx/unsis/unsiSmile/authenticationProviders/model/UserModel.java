@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_App", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user_App", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -34,8 +37,9 @@ public class UserModel implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private RoleModel role;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean status;
+    private boolean status = true;
 
     public String getIdAsString() {
         return id.toString();
