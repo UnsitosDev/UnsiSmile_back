@@ -22,14 +22,19 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+
     public AuthResponse login(LoginRequest request) {
 
-        UserModel user=userRepository.findByUsername(request.getUsername()).orElseThrow(() ->
-                new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        UserModel user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
-        if(passwordEncoder.matches(request.getPassword(),user.getPassword())){
+        if (!user.isEnabled()) {
+            throw new AppException("User is inactive", HttpStatus.UNAUTHORIZED);
+        }
+        
+        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 
-            String token=jwtService.getToken(user);
+            String token = jwtService.getToken(user);
 
             return AuthResponse.builder()
                     .token(token)
@@ -37,7 +42,6 @@ public class AuthService {
         }
 
         throw new AppException("Bad password", HttpStatus.BAD_REQUEST);
-
 
     }
 
@@ -50,20 +54,19 @@ public class AuthService {
 
         UserModel user = UserModel.builder()
                 .username(request.getUsername())
-                .password(passwordEncoder.encode( request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
                 .build();
 
-        try{
+        try {
             userRepository.save(user);
 
             return AuthResponse.builder()
                     .token(jwtService.getToken(user))
                     .build();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new AppException("User already exists", HttpStatus.CONFLICT, e);
         }
-
 
     }
 }
