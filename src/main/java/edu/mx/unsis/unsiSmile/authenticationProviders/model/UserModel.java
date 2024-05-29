@@ -34,6 +34,9 @@ public class UserModel implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private RoleModel role;
 
+    @Column(nullable = false)
+    private boolean status;
+
     public String getIdAsString() {
         return id.toString();
     }
@@ -64,6 +67,6 @@ public class UserModel implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.status;
     }
 }

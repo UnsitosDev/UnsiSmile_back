@@ -100,6 +100,7 @@ public class UserService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
+                .status(true)
                 .build();
 
     }
