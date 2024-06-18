@@ -142,22 +142,30 @@ public class PatientService {
         Assert.notNull(guardianRequest, "GuardianRequest cannot be null");
         return guardianRepository.save(guardianMapper.toEntity(guardianRequest));
     }
-    
+
     @Transactional(readOnly = true)
     public Page<PatientResponse> getAllPatients(Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
-                StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                List<PatientModel> patients = getPatientsByStudents(studentResponse);
-                return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
+                return getPatientsForStudent(user, pageable);
             } else {
-                Page<PatientModel> allPatients = patientRepository.findAll(pageable);
-                return allPatients.map(patientMapper::toDto);
+                return getAllPatientsPage(pageable);
             }
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patients", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable) {
+        StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
+        List<PatientModel> patients = getPatientsByStudents(studentResponse);
+        return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
+    }
+
+    private Page<PatientResponse> getAllPatientsPage(Pageable pageable) {
+        Page<PatientModel> allPatients = patientRepository.findAll(pageable);
+        return allPatients.map(patientMapper::toDto);
     }
 
     @Transactional(readOnly = true)
