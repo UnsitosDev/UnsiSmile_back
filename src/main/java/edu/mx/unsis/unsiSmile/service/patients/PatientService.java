@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -141,19 +144,28 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientResponse> getAllPatients() {
+    public Page<PatientResponse> getAllPatients(Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
-                StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                return patientsMapped(getPatientsByStudents(studentResponse));
+                return getPatientsForStudent(user, pageable);
             } else {
-                List<PatientModel> allPatients = patientRepository.findAll();
-                return patientsMapped(allPatients);
+                return getAllPatientsPage(pageable);
             }
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch patients", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable) {
+        StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
+        List<PatientModel> patients = getPatientsByStudents(studentResponse);
+        return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
+    }
+
+    private Page<PatientResponse> getAllPatientsPage(Pageable pageable) {
+        Page<PatientModel> allPatients = patientRepository.findAll(pageable);
+        return allPatients.map(patientMapper::toDto);
     }
 
     @Transactional(readOnly = true)
