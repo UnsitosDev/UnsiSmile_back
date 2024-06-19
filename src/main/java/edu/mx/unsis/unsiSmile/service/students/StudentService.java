@@ -37,21 +37,21 @@ public class StudentService {
     @Transactional
     public StudentResponse createStudent(StudentRequest request) {
         try {
-            //Create user
-            UserModel userModel= userService.createUser(setCredentials(request));
+            // Create user
+            UserModel userModel = userService.createUser(setCredentials(request));
 
-            //create person
+            // create person
             PersonResponse personResponse = personService.createPerson(request.getPerson());
-            //set the created person
+            // set the created person
             request.getPerson().setCurp(personResponse.getCurp());
-            
-            //set user
+
+            // set user
             StudentModel studentModel = studentMapper.toEntity(request);
             studentModel.setUser(userModel);
             StudentModel savedStudent = studentRepository.save(studentModel);
 
             return studentMapper.toDto(savedStudent);
-            
+
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -124,8 +124,8 @@ public class StudentService {
         }
     }
 
-    private RegisterRequest setCredentials(StudentRequest request){
-              
+    private RegisterRequest setCredentials(StudentRequest request) {
+
         return RegisterRequest.builder()
                 .password(request.getPerson().getCurp())
                 .username(request.getEnrollment())
