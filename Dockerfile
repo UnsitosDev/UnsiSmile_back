@@ -1,10 +1,8 @@
 FROM gradle:jdk21-jammy
 
 # Variables de entorno para la versión de Gradle
-ENV GRADLE_HOME /opt/gradle
-ENV PATH ${GRADLE_HOME}/bin:${PATH}
-ENV GRADLE_HOME /opt/gradle
-ENV PATH ${GRADLE_HOME}/bin:${PATH}
+ENV GRADLE_HOME=/opt/gradle
+ENV PATH=${GRADLE_HOME}/bin:${PATH}
 ENV UNSISMILE_DATABASE=jdbc:mariadb://db:3306/unsis_smile?useSSL=false&serverTimezone=UTC
 ENV DATABASE_USERNAME=root
 ENV DATABASE_PASSWORD=password
