@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,25 +20,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_detail")
-public class ToothDetailModel {
+@Table(name = "tooth")
+public class ToothModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_detail")
-    private Long idToothDetail;
+    @Column(name = "id_tooth")
+    private Long idTooth;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_id_dental_code")
-    private DentalCodeModel dentalCode;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_tooth_condition")
-    private ToothConditionModel toothCondition;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_tooth_region")
-    private ToothRegionModel toothRegion;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDate creationDate;
 
     @ManyToOne
     @JoinColumn(name = "fk_odontogram")

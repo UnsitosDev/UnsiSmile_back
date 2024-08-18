@@ -5,25 +5,33 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_region")
-public class ToothRegionModel {
-
+@Table(name = "tooth_face")
+public class ToothFaceModel {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_region")
-    private Long idToothRegion;
+    @Column(name = "id_tooth_face")
+    private Long idTooth;
 
-    @Column(name = "description", length = 50, nullable = false)
-    private String description;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDate creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_tooth")
+    private ToothModel tooth;
+
 }
