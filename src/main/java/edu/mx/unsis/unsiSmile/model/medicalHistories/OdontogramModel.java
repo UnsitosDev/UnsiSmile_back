@@ -1,16 +1,13 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +27,8 @@ public class OdontogramModel {
 
     @Column(name = "creation_date", nullable = false)
     private LocalDate date;
+
+    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToothModel> teeth;
+
 }

@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "odontogram")
+@Table(name = "tooth_condition_rel")
 public class ToothConditionRel {
     
     @Id
@@ -35,7 +35,7 @@ public class ToothConditionRel {
     private ToothModel tooth;
 
     @ManyToOne
-    @JoinColumn(name = "fk_toothCondition")
+    @JoinColumn(name = "fk_tooth_condition")
     private ToothConditionModel toothCondition;
 
 }

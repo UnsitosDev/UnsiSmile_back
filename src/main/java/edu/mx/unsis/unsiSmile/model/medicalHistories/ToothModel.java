@@ -1,15 +1,9 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +28,10 @@ public class ToothModel {
     @ManyToOne
     @JoinColumn(name = "fk_odontogram")
     private OdontogramModel odontogram;
+
+    @OneToMany(mappedBy = "tooth", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToothConditionRel> toothConditions;
+
+    @OneToMany(mappedBy = "tooth", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToothFaceModel> toothFaces;
 }
