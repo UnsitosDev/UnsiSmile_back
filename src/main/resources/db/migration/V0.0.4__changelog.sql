@@ -1,0 +1,11 @@
+ALTER TABLE `user_app` DISABLE KEYS;
+INSERT IGNORE INTO `user_app` VALUES (_binary 'w~2��NB�\�','$2a$10$FsfHswsodA.7t8.tJKuvgef3NR/ar3VZEXgAxEIv.kIYH19//l0kq',1,'string',1),(_binary '�n;/��K�','$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',1,'2019060310',2);
+ALTER TABLE `user_app` ENABLE KEYS;
+
+INSERT IGNORE INTO `students` VALUES ('2019060310','FIMJ011004HOCGRLA8',_binary '�n;/��K�');
+
+INSERT IGNORE INTO `tooth_condition` VALUES (1,'Diente presente'),(2,'Diente parcialmente erupcionado'),(3,'Diente obturado'),(4,'Diente con corona'),(5,'Mantenedor de espacio con corona'),(6,'Mantenedor de espacio con banda'),(7,'Prótesis removible'),(8,'Puente'),(9,'Diente cariado'),(10,'Diente extraido'),(12,'Diente con fractura'),(13,'Fístula'),(14,'Diente con fluorosis'),(15,'Diente con hipoplasia'),(16,'Diente obturado con caries'),(17,'Diente en mal posición derecha'),(18,'Diente en mal posición izquierda');
+
+ALTER TABLE `dental_code` DISABLE KEYS;
+INSERT IGNORE INTO `dental_code` VALUES (1,_binary '','18'),(2,_binary '','17'),(3,_binary '','16'),(4,_binary '','15'),(5,_binary '','14'),(6,_binary '','13'),(7,_binary '','12'),(8,_binary '','11'),(9,_binary '','28'),(10,_binary '','27'),(11,_binary '','26'),(12,_binary '','25'),(13,_binary '','24'),(14,_binary '','23'),(15,_binary '','22'),(16,_binary '','21'),(17,_binary '','38'),(18,_binary '','37'),(19,_binary '','36'),(20,_binary '','35'),(21,_binary '','34'),(22,_binary '','33'),(23,_binary '','32'),(24,_binary '','31'),(25,_binary '','48'),(26,_binary '','47'),(27,_binary '','46'),(28,_binary '','45'),(29,_binary '','44'),(30,_binary '','43'),(31,_binary '','42'),(32,_binary '','41'),(33,_binary '\0','55'),(34,_binary '\0','54'),(35,_binary '\0','53'),(36,_binary '\0','52'),(37,_binary '\0','51'),(38,_binary '\0','65'),(39,_binary '\0','64'),(40,_binary '\0','63'),(41,_binary '\0','62'),(42,_binary '\0','61'),(43,_binary '\0','75'),(44,_binary '\0','74'),(45,_binary '\0','73'),(46,_binary '\0','72'),(47,_binary '\0','71'),(48,_binary '\0','85'),(49,_binary '\0','84'),(50,_binary '\0','83'),(51,_binary '\0','82'),(52,_binary '\0','81');
+ALTER TABLE `dental_code` ENABLE KEYS;
