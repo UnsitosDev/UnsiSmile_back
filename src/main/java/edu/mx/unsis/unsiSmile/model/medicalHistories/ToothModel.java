@@ -21,7 +21,7 @@ public class ToothModel {
     @Column(name = "id_tooth", length = 3)
     private String idTooth;
 
-    @Column(name = "isAdult")
+    @Column(name = "is_adult")
     private boolean isAdult;
 
     @Column(name = "description", nullable = false)
