@@ -18,20 +18,12 @@ import lombok.NoArgsConstructor;
 public class ToothModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth")
-    private Long idTooth;
+    @Column(name = "id_tooth", length = 3)
+    private String idTooth;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
+    @Column(name = "isAdult")
+    private boolean isAdult;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_odontogram")
-    private OdontogramModel odontogram;
-
-    @OneToMany(mappedBy = "tooth", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothConditionRel> toothConditions;
-
-    @OneToMany(mappedBy = "tooth", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothFaceModel> toothFaces;
+    @Column(name = "description", nullable = false)
+    private String description;
 }

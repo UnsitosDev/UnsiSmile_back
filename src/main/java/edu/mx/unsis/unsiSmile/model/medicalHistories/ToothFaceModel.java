@@ -15,20 +15,11 @@ import java.util.List;
 @Entity
 @Table(name = "tooth_face")
 public class ToothFaceModel {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_face")
-    private Long idTooth;
+    @Column(name = "id_tooth_face", length = 3)
+    private String idToothFace;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_tooth")
-    private ToothModel tooth;
-
-    @OneToMany(mappedBy = "toothFace", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothfaceConditionRel> toothFaceConditions;
-
+    @Column(name = "description", nullable = false)
+    private String description;
 }

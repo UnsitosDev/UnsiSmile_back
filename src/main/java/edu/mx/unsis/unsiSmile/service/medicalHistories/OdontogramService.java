@@ -31,7 +31,7 @@ public class OdontogramService {
             Assert.notNull(odontogramRequest, "OdontogramRequest cannot be null");
 
             OdontogramModel odontogramModel = odontogramMapper.toEntity(odontogramRequest);
-            odontogramModel.setDate(LocalDate.now());
+            odontogramModel.setCreationDate(LocalDate.now());
             OdontogramModel savedOdontogram = odontogramRepository.save(odontogramModel);
 
             return odontogramMapper.toDto(savedOdontogram);
@@ -93,5 +93,10 @@ public class OdontogramService {
         } catch (Exception ex) {
             throw new AppException("Failed to delete odontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional
+    public OdontogramModel saveOdontogram(OdontogramModel odontogram) {
+        return odontogramRepository.save(odontogram);
     }
 }

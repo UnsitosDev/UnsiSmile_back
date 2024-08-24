@@ -22,13 +22,12 @@ public class OdontogramModel {
     @Column(name = "id_odontogram")
     private Long idOdontogram;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
     @Column(name = "creation_date", nullable = false)
-    private LocalDate date;
+    private LocalDate creationDate;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothModel> teeth;
+    private List<ToothConditionAssignmentModel> toothConditionAssignments;
 
+    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ToothFaceConditionModel> toothFaceConditions;
 }
