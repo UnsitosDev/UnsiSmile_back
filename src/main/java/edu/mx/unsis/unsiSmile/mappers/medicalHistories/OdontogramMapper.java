@@ -17,7 +17,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     public OdontogramModel toEntity(OdontogramRequest dto) {
         return OdontogramModel.builder()
                 .idOdontogram(dto.getIdOdontogram())
-                .description(dto.getDescription())
                 .build();
     }
 
@@ -25,8 +24,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     public OdontogramResponse toDto(OdontogramModel entity) {
         return OdontogramResponse.builder()
                 .idOdontogram(entity.getIdOdontogram())
-                .description(entity.getDescription())
-                .date(entity.getDate().toString())
+                .date(entity.getCreationDate().toString())
                 .build();
     }
 
@@ -39,6 +37,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
     @Override
     public void updateEntity(OdontogramRequest request, OdontogramModel entity) {
-        entity.setDescription(request.getDescription());
+
     }
 }

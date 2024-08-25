@@ -1,15 +1,9 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,14 +18,13 @@ import lombok.NoArgsConstructor;
 public class ToothModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth")
-    private Long idTooth;
+    @Column(name = "id_tooth", length = 3)
+    private String idTooth;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
+    @Column(name = "is_adult")
+    private boolean isAdult;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_odontogram")
-    private OdontogramModel odontogram;
+    @Column(name = "description", nullable = false)
+    private String description;
+
 }

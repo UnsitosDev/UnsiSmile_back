@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,9 +30,9 @@ public class OdontogramController {
     }
 
     @PostMapping
-    public ResponseEntity<OdontogramResponse> createOdontogram(@Valid @RequestBody OdontogramRequest request) {
-        OdontogramResponse createdOdontogramResponse = odontogramService.createOdontogram(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOdontogramResponse);
+    public ResponseEntity<OdontogramModel> createOdontogram(@Valid @RequestBody OdontogramRequest request) {
+        OdontogramModel savedOdontogram = odontogramService.saveOdontogram(request);
+        return new ResponseEntity<>(savedOdontogram, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -57,5 +58,11 @@ public class OdontogramController {
     public ResponseEntity<?> deleteOdontogram(@Valid @PathVariable Long id) {
         odontogramService.deleteOdontogram(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<OdontogramModel> createOdontogram(@RequestBody OdontogramModel odontogram) {
+        OdontogramModel savedOdontogram = odontogramService.saveOdontogram(odontogram);
+        return new ResponseEntity<>(savedOdontogram, HttpStatus.CREATED);
     }
 }
