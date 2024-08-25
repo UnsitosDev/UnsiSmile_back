@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +17,10 @@ import lombok.NoArgsConstructor;
 public class OdontogramRequest {
     private Long idOdontogram;
 
-    @NotNull(message = "The description can't be null")
-    @NotBlank(message = "The description can't be blank")
-    private String description;
+    private LocalDate creationDate;
+    @NotNull(message = "The ToothConditionAssignmentDTO can't be null")
+    private List<ToothConditionAssignmentRequest> toothConditionAssignments;
+    @NotNull(message = "The ToothFaceConditionDTO can't be null")
+    private List<ToothFaceConditionRequest> toothFaceConditions;private String description;
 
 }

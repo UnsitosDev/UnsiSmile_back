@@ -30,9 +30,9 @@ public class OdontogramController {
     }
 
     @PostMapping
-    public ResponseEntity<OdontogramResponse> createOdontogram(@Valid @RequestBody OdontogramRequest request) {
-        OdontogramResponse createdOdontogramResponse = odontogramService.createOdontogram(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOdontogramResponse);
+    public ResponseEntity<OdontogramModel> createOdontogram(@Valid @RequestBody OdontogramRequest request) {
+        OdontogramModel savedOdontogram = odontogramService.saveOdontogram(request);
+        return new ResponseEntity<>(savedOdontogram, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

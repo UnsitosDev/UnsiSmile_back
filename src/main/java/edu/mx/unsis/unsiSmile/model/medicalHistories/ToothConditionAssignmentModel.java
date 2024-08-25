@@ -20,17 +20,17 @@ public class ToothConditionAssignmentModel {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "tooth_id")
+    @JoinColumn(name = "tooth_id", nullable = false)
     private ToothModel tooth;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "tooth_condition_id")
+    @JoinColumn(name = "tooth_condition_id", nullable = false)
     private ToothConditionModel toothCondition;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "odontogram_id")
+    @JoinColumn(name = "odontogram_id", nullable = false)
     private OdontogramModel odontogram;
 
     @Column(name = "creation_date", nullable = false)

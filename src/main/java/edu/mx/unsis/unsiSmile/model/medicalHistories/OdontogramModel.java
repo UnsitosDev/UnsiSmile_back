@@ -25,9 +25,9 @@ public class OdontogramModel {
     @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ToothConditionAssignmentModel> toothConditionAssignments;
 
-    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ToothFaceConditionModel> toothFaceConditions;
 }

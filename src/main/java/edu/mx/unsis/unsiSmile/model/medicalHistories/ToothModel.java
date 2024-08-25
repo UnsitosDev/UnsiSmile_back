@@ -26,4 +26,5 @@ public class ToothModel {
 
     @Column(name = "description", nullable = false)
     private String description;
+
 }

@@ -1,10 +1,13 @@
 package edu.mx.unsis.unsiSmile.model.utils;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ToothConditionAssignmentId implements Serializable {
     private String tooth;
     private Long toothCondition;
