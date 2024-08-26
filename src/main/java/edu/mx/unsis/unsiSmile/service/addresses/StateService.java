@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -67,12 +69,10 @@ public class StateService {
     }
 
     @Transactional(readOnly = true)
-    public List<StateResponse> getAllStates() {
+    public Page<StateResponse> getAllStates(Pageable pageable) {
         try {
-            List<StateModel> allStates = stateRepository.findAll();
-            return allStates.stream()
-                    .map(stateMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<StateModel> allStates = stateRepository.findAll(pageable);
+            return allStates.map(stateMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all states", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

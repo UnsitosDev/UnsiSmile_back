@@ -89,11 +89,6 @@ public class StudentService {
     public Page<StudentResponse> getAllStudents(Pageable pageable) {
         try {
             Page<StudentModel> allStudents = studentRepository.findAll(pageable);
-
-            if (allStudents.isEmpty()) {
-                return Page.empty();
-            }
-
             return allStudents.map(studentMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch students", HttpStatus.INTERNAL_SERVER_ERROR, ex);
