@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.students;
 import java.util.List;
 
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,10 +86,10 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudentResponse> getAllStudents() {
+    public Page<StudentResponse> getAllStudents(Pageable pageable) {
         try {
-            List<StudentModel> allStudents = studentRepository.findAll();
-            return studentMapper.toDtos(allStudents);
+            Page<StudentModel> allStudents = studentRepository.findAll(pageable);
+            return allStudents.map(studentMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch students", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
