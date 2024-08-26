@@ -36,7 +36,7 @@ public class PatientController {
     public ResponseEntity<Page<PatientResponse>> getPatients(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "idPatient") String order,
+            @RequestParam(defaultValue = "person.firstName") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);

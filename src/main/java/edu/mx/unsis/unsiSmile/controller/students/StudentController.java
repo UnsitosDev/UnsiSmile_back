@@ -2,6 +2,8 @@ package edu.mx.unsis.unsiSmile.controller.students;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,11 +35,13 @@ public class StudentController {
         return studentService.getStudentByEnrollment(enrollment);
     }
 
+    @Operation(summary = "Obtener una lista de estudiantes de manera paginada")
     @GetMapping
     public ResponseEntity<Page<StudentResponse>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "enrollment") String order,
+            @Parameter(description = "Catalog key for filter", example = "person.email, enrollment")
+            @RequestParam(defaultValue = "person.firstName") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
