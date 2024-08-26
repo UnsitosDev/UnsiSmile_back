@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -80,12 +82,10 @@ public class MunicipalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<MunicipalityResponse> getAllMunicipalities() {
+    public Page<MunicipalityResponse> getAllMunicipalities(Pageable pageable) {
         try {
-            List<MunicipalityModel> allMunicipalities = municipalityRepository.findAll();
-            return allMunicipalities.stream()
-                    .map(municipalityMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<MunicipalityModel> allMunicipalities = municipalityRepository.findAll(pageable);
+            return allMunicipalities.map(municipalityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all municipalities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
