@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.OccupationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.patients.OccupationMapper;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IOccupationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class OccupationService {
     }
 
     @Transactional(readOnly = true)
-    public List<OccupationResponse> getAllOccupations() {
+    public Page<OccupationResponse> getAllOccupations(Pageable pageable) {
         try {
-            List<OccupationModel> allOccupations = occupationRepository.findAll();
-            return allOccupations.stream()
-                    .map(occupationMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<OccupationModel> allOccupations = occupationRepository.findAll(pageable);
+            return allOccupations.map(occupationMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all occupations", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
