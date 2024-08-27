@@ -1,25 +1,20 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.service.patients.ReligionService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/religion")
+@RequestMapping("/unsismile/api/v1/patients/religions")
 public class ReligionController {
 
     private final ReligionService religionService;
@@ -46,10 +41,18 @@ public class ReligionController {
         return ResponseEntity.ok(religionResponse);
     }
 
+    @Operation(summary = "Obtener una lista paginada de religiones")
     @GetMapping
-    public ResponseEntity<List<ReligionResponse>> getAllReligions() {
-        List<ReligionResponse> allReligions = religionService.getAllReligions();
-        return ResponseEntity.ok(allReligions);
+    public ResponseEntity<Page<ReligionResponse>> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "religion") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<ReligionResponse> religionResponses = religionService.getAllReligions(pageable);
+
+        return ResponseEntity.ok(religionResponses);
     }
 
     @PutMapping("/{id}")

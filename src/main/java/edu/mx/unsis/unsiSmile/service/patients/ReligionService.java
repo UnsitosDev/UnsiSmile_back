@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.patients.ReligionMapper;
 import edu.mx.unsis.unsiSmile.model.patients.ReligionModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class ReligionService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReligionResponse> getAllReligions() {
+    public Page<ReligionResponse> getAllReligions(Pageable pageable) {
         try {
-            List<ReligionModel> allReligions = religionRepository.findAll();
-            return allReligions.stream()
-                    .map(religionMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<ReligionModel> allReligions = religionRepository.findAll(pageable);
+            return allReligions.map(religionMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all religions", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
