@@ -46,7 +46,7 @@ public class StateController {
         return ResponseEntity.ok(stateResponse);
     }
 
-    @Operation(summary = "Obtener una lista de estados de manera paginada")
+    @Operation(summary = "Obtener una lista paginada de estados")
     @GetMapping
     public ResponseEntity<Page<StateResponse>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
