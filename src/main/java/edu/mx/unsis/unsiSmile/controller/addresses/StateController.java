@@ -1,10 +1,10 @@
 package edu.mx.unsis.unsiSmile.controller.addresses;
 
-import java.util.List;
-
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
+import edu.mx.unsis.unsiSmile.service.addresses.StateService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
-import edu.mx.unsis.unsiSmile.service.addresses.StateService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/address/states")

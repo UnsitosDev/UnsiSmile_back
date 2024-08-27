@@ -1,9 +1,11 @@
 package edu.mx.unsis.unsiSmile.controller.students;
 
-import java.util.List;
-
+import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
-import edu.mx.unsis.unsiSmile.service.students.StudentService;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/students")

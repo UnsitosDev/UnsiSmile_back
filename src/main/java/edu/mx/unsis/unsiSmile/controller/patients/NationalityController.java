@@ -1,9 +1,10 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import java.util.List;
-
-import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
+import edu.mx.unsis.unsiSmile.service.patients.NationalityService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
-import edu.mx.unsis.unsiSmile.service.patients.NationalityService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/patients/nationalities")
