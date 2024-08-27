@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -67,12 +69,10 @@ public class NationalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<NationalityResponse> getAllNationalities() {
+    public Page<NationalityResponse> getAllNationalities(Pageable pageable) {
         try {
-            List<NationalityModel> allNationalities = nationalityRepository.findAll();
-            return allNationalities.stream()
-                    .map(nationalityMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<NationalityModel> allNationalities = nationalityRepository.findAll(pageable);
+            return allNationalities.map(nationalityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all nationalities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

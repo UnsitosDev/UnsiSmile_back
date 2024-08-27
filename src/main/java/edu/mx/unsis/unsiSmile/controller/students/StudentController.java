@@ -35,7 +35,7 @@ public class StudentController {
         return studentService.getStudentByEnrollment(enrollment);
     }
 
-    @Operation(summary = "Obtener una lista de estudiantes de manera paginada")
+    @Operation(summary = "Obtener una lista paginada de estudiantes")
     @GetMapping
     public ResponseEntity<Page<StudentResponse>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
