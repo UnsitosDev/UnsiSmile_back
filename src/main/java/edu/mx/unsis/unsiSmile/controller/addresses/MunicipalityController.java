@@ -56,7 +56,7 @@ public class MunicipalityController {
     public ResponseEntity<Page<MunicipalityResponse>> getAllMunicipalities(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "idMunicipality") String order,
+            @RequestParam(defaultValue = "name") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();

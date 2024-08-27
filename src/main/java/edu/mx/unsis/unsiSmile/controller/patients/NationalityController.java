@@ -2,16 +2,15 @@ package edu.mx.unsis.unsiSmile.controller.patients;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
@@ -19,7 +18,7 @@ import edu.mx.unsis.unsiSmile.service.patients.NationalityService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/nationality")
+@RequestMapping("/unsismile/api/v1/patients/nationalities")
 public class NationalityController {
 
     private final NationalityService nationalityService;
@@ -46,10 +45,18 @@ public class NationalityController {
         return ResponseEntity.ok(nationalityResponse);
     }
 
+    @Operation(summary = "Obtener una lista paginada de nacionalidades")
     @GetMapping
-    public ResponseEntity<List<NationalityResponse>> getAllNationalities() {
-        List<NationalityResponse> allNationalities = nationalityService.getAllNationalities();
-        return ResponseEntity.ok(allNationalities);
+    public ResponseEntity<Page<NationalityResponse>> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "nationality") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<NationalityResponse> nationalityResponses = nationalityService.getAllNationalities(pageable);
+
+        return ResponseEntity.ok(nationalityResponses);
     }
 
     @PutMapping("/{id}")
