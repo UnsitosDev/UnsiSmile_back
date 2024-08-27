@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.MaritalStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.MaritalStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.patients.MaritalStatusMapper;
 import edu.mx.unsis.unsiSmile.model.patients.MaritalStatusModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class MaritalStatusService {
     }
 
     @Transactional(readOnly = true)
-    public List<MaritalStatusResponse> getAllMaritalStatus() {
+    public Page<MaritalStatusResponse> getAllMaritalStatus(Pageable pageable) {
         try {
-            List<MaritalStatusModel> allMaritalStatus = maritalStatusRepository.findAll();
-            return allMaritalStatus.stream()
-                    .map(maritalStatusMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<MaritalStatusModel> allMaritalStatus = maritalStatusRepository.findAll(pageable);
+            return allMaritalStatus.map(maritalStatusMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all marital status", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
