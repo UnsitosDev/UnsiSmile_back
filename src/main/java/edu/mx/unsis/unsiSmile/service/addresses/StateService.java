@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.addresses.StateMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.IStateRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class StateService {
     }
 
     @Transactional(readOnly = true)
-    public List<StateResponse> getAllStates() {
+    public Page<StateResponse> getAllStates(Pageable pageable) {
         try {
-            List<StateModel> allStates = stateRepository.findAll();
-            return allStates.stream()
-                    .map(stateMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<StateModel> allStates = stateRepository.findAll(pageable);
+            return allStates.map(stateMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all states", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

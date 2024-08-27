@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.patients.NationalityMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.repository.patients.INationalityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class NationalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<NationalityResponse> getAllNationalities() {
+    public Page<NationalityResponse> getAllNationalities(Pageable pageable) {
         try {
-            List<NationalityModel> allNationalities = nationalityRepository.findAll();
-            return allNationalities.stream()
-                    .map(nationalityMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<NationalityModel> allNationalities = nationalityRepository.findAll(pageable);
+            return allNationalities.map(nationalityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all nationalities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

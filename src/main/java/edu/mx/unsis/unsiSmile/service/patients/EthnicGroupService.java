@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,13 @@ import edu.mx.unsis.unsiSmile.mappers.patients.EthnicGroupMapper;
 import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +65,10 @@ public class EthnicGroupService {
     }
 
     @Transactional(readOnly = true)
-    public List<EthnicGroupResponse> getAllEthnicGroups() {
+    public Page<EthnicGroupResponse> getAllEthnicGroups(Pageable pageable) {
         try {
-            List<EthnicGroupModel> allEthnicGroups = ethnicGroupRepository.findAll();
-            return allEthnicGroups.stream()
-                    .map(ethnicGroupMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<EthnicGroupModel> allEthnicGroups = ethnicGroupRepository.findAll(pageable);
+            return allEthnicGroups.map(ethnicGroupMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all ethnic groups", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

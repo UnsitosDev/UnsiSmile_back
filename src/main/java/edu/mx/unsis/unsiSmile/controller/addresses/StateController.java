@@ -1,22 +1,17 @@
 package edu.mx.unsis.unsiSmile.controller.addresses;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.service.addresses.StateService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/address/states")
@@ -46,10 +41,18 @@ public class StateController {
         return ResponseEntity.ok(stateResponse);
     }
 
+    @Operation(summary = "Obtener una lista paginada de estados")
     @GetMapping
-    public ResponseEntity<List<StateResponse>> getAllStates() {
-        List<StateResponse> allStates = stateService.getAllStates();
-        return ResponseEntity.ok(allStates);
+    public ResponseEntity<Page<StateResponse>> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<StateResponse> stateResponses = stateService.getAllStates(pageable);
+
+        return ResponseEntity.ok(stateResponses);
     }
 
     @PutMapping("/{id}")
