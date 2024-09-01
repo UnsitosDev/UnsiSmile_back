@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramDTO;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,6 @@ public class OdontogramController {
         this.odontogramService = odontogramService;
     }
 
-    @PostMapping
-    public ResponseEntity<OdontogramModel> createOdontogram(@Valid @RequestBody OdontogramRequest request) {
-        OdontogramModel savedOdontogram = odontogramService.saveOdontogram(request);
-        return new ResponseEntity<>(savedOdontogram, HttpStatus.CREATED);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<OdontogramResponse> getOdontogramById(@Valid @PathVariable Long id) {
         OdontogramResponse odontogramResponse = odontogramService.getOdontogramById(id);
@@ -60,9 +55,14 @@ public class OdontogramController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public ResponseEntity<OdontogramModel> createOdontogram(@RequestBody OdontogramModel odontogram) {
         OdontogramModel savedOdontogram = odontogramService.saveOdontogram(odontogram);
-        return new ResponseEntity<>(savedOdontogram, HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/details")
+    public OdontogramDTO getOdontogramDetails(@PathVariable Long id) {
+        return odontogramService.getOdontogramDetails(id);
     }
 }
