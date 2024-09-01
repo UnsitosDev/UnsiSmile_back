@@ -1,12 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.*;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
@@ -30,67 +31,6 @@ public class OdontogramService {
     private final IToothFaceConditionRepository toothFaceConditionRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
 
-    @Transactional
-    public OdontogramModel saveOdontogram(OdontogramRequest odontogramReq) {
-        // Crear el odontograma
-        OdontogramModel odontogram = new OdontogramModel();
-        odontogram.setCreationDate(odontogramReq.getCreationDate());
-
-        // Mapear y agregar asignaciones de condiciones de dientes
-        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramReq.getToothConditionAssignments()
-                .stream()
-                .map(dto -> {
-                    ToothConditionAssignmentModel assignment = new ToothConditionAssignmentModel();
-                    assignment.setTooth(
-                            ToothModel.builder()
-                                    .idTooth(dto.getToothId())
-                                    .build()
-                    );
-                    assignment.setToothCondition(ToothConditionModel.builder()
-                            .idToothCondition(dto.getToothConditionId())
-                            .build()
-                    );
-                    assignment.setOdontogram(odontogram);
-                    assignment.setCreationDate(dto.getCreationDate());
-                    return assignment;
-                })
-                .collect(Collectors.toList());
-
-        odontogram.setToothConditionAssignments(toothConditionAssignments);
-
-        // Mapear y agregar asignaciones de condiciones de caras de dientes
-        List<ToothFaceConditionModel> toothFaceConditions = odontogramReq.getToothFaceConditions()
-                .stream()
-                .map(dto -> {
-                    ToothFaceConditionModel faceCondition = new ToothFaceConditionModel();
-                    faceCondition.setToothFace(
-                            ToothFaceModel.builder()
-                                    .idToothFace(dto.getToothFaceId())  // Corregido: Se asigna el id de la cara del diente
-                                    .build()
-                    );
-                    faceCondition.setTooth(
-                            ToothModel.builder()
-                                    .idTooth(dto.getToothId())
-                                    .build()
-                    );
-                    faceCondition.setToothCondition(
-                            ToothConditionModel.builder()
-                                    .idToothCondition(dto.getToothConditionId())
-                                    .build()
-                    );
-                    faceCondition.setOdontogram(odontogram);
-                    faceCondition.setCreationDate(dto.getCreationDate());
-                    return faceCondition;
-                })
-                .collect(Collectors.toList());
-
-        odontogram.setToothFaceConditions(toothFaceConditions);
-
-        // Guardar el odontograma junto con sus asignaciones
-        odontogramRepository.save(odontogram);
-
-        return odontogram;
-    }
 
     @Transactional(readOnly = true)
     public OdontogramResponse getOdontogramById(@NonNull Long id) {
@@ -166,5 +106,72 @@ public class OdontogramService {
         }
 
         return odontogram;
+    }
+
+    public OdontogramDTO getOdontogramDetails(Long odontogramId) {
+        // Obtener todas las asignaciones de condiciones de dientes
+        List<ToothConditionAssignmentModel> toothConditionAssignments =
+                odontogramRepository.findToothConditionAssignmentsByOdontogramId(odontogramId);
+
+        // Obtener todas las condiciones de caras de dientes
+        List<ToothFaceConditionModel> toothFaceConditions =
+                odontogramRepository.findToothFaceConditionsByOdontogramId(odontogramId);
+
+        // Mapa para agrupar los datos por diente
+        Map<String, ToothDTO> toothMap = new HashMap<>();
+
+        // Procesar ToothConditionAssignments
+        for (ToothConditionAssignmentModel tca : toothConditionAssignments) {
+            // Mapeo de ConditionDTO (para tooth conditions)
+            ConditionResponse conditionDTO = new ConditionResponse(
+                    tca.getToothCondition().getIdToothCondition(),
+                    tca.getToothCondition().getDescription(),
+                    "Tooth condition description" // Ajustar según el modelo
+            );
+
+            // Verificar si el diente ya existe en el mapa
+            ToothDTO toothDTO = toothMap.computeIfAbsent(
+                    tca.getTooth().getIdTooth(),
+                    id -> new ToothDTO(id, new ArrayList<>(), true, new ArrayList<>())
+            );
+
+            // Agregar la condición al diente
+            toothDTO.getConditions().add(conditionDTO);
+        }
+
+        // Procesar ToothFaceConditions
+        for (ToothFaceConditionModel tfc : toothFaceConditions) {
+            // Mapeo de ConditionDTO (para face conditions)
+            ConditionResponse conditionDTO = new ConditionResponse(
+                    tfc.getToothCondition().getIdToothCondition(),
+                    tfc.getToothCondition().getDescription(),
+                    "Tooth face condition description" // Ajustar según el modelo
+            );
+
+            // Verificar si el diente ya existe en el mapa
+            ToothDTO toothDTO = toothMap.computeIfAbsent(
+                    tfc.getTooth().getIdTooth(),
+                    id -> new ToothDTO(id, new ArrayList<>(), true, new ArrayList<>())
+            );
+
+            // Buscar o crear la FaceDTO
+            FaceDTO faceDTO = toothDTO.getFaces().stream()
+                    .filter(f -> f.getIdFace().equals(tfc.getToothFace().getIdToothFace()))
+                    .findFirst()
+                    .orElseGet(() -> {
+                        FaceDTO newFace = new FaceDTO(tfc.getToothFace().getIdToothFace(), new ArrayList<>());
+                        toothDTO.getFaces().add(newFace);
+                        return newFace;
+                    });
+
+            // Agregar la condición a la cara del diente
+            faceDTO.getConditions().add(conditionDTO);
+        }
+
+        // Crear la lista de ToothDTO a partir del mapa
+        List<ToothDTO> toothDTOList = new ArrayList<>(toothMap.values());
+
+        // Crear y devolver el OdontogramDTO
+        return new OdontogramDTO(toothDTOList);
     }
 }
