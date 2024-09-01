@@ -35,7 +35,7 @@ CREATE TABLE tooth_condition_assignment
     FOREIGN KEY (tooth_condition_id) REFERENCES tooth_condition (id_tooth_condition)
 );
 
-CREATE TABLE tooth_face_condition
+CREATE TABLE toothface_condition
 (
     odontogram_id      BIGINT,
     tooth_face_id      VARCHAR(3),
