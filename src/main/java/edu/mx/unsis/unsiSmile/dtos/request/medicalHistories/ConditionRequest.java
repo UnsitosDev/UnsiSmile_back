@@ -1,18 +1,19 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramRequest {
-    @NotNull(message = "The request can't be null")
-    private List<ToothRequest> tooths;
+public class ConditionRequest {
+    @NotNull(message = "The condition ID cannot be null.")
+    private Long idCondition;
+
 }

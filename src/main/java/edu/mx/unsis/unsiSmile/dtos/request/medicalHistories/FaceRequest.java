@@ -12,7 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramRequest {
-    @NotNull(message = "The request can't be null")
-    private List<ToothRequest> tooths;
+public class FaceRequest {
+    @NotNull(message = "The face ID cannot be null.")
+    private Long idFace;
+    private List<ConditionRequest> conditions;
 }

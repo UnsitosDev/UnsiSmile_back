@@ -11,9 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ToothDTO {
-    private String idTooth;
-    private List<FaceDTO> faces;
-    private boolean status;
+public class FaceResponse {
+    private String idFace;
     private List<ConditionResponse> conditions;
+
 }
