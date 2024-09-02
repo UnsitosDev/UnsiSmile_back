@@ -10,6 +10,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     public OdontogramResponse toDto(OdontogramModel entity) {
         return OdontogramResponse.builder()
                 .idOdontogram(entity.getIdOdontogram())
-                .date(entity.getCreationDate().toString())
+                .tooths(Collections.emptyList())
                 .build();
     }
 

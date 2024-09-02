@@ -106,7 +106,7 @@ public class OdontogramService {
 
     }
 
-    public OdontogramDTO getOdontogramDetails(Long odontogramId) {
+    public OdontogramResponse getOdontogramDetails(Long odontogramId) {
         // Obtener todas las asignaciones de condiciones de dientes
         List<ToothConditionAssignmentModel> toothConditionAssignments =
                 odontogramRepository.findToothConditionAssignmentsByOdontogramId(odontogramId);
@@ -116,7 +116,7 @@ public class OdontogramService {
                 odontogramRepository.findToothFaceConditionsByOdontogramId(odontogramId);
 
         // Mapa para agrupar los datos por diente
-        Map<String, ToothDTO> toothMap = new HashMap<>();
+        Map<String, ToothResponse> toothMap = new HashMap<>();
 
         // Procesar ToothConditionAssignments
         for (ToothConditionAssignmentModel tca : toothConditionAssignments) {
@@ -128,13 +128,13 @@ public class OdontogramService {
             );
 
             // Verificar si el diente ya existe en el mapa
-            ToothDTO toothDTO = toothMap.computeIfAbsent(
+            ToothResponse toothResponse = toothMap.computeIfAbsent(
                     tca.getTooth().getIdTooth(),
-                    id -> new ToothDTO(id, new ArrayList<>(), true, new ArrayList<>())
+                    id -> new ToothResponse(id, new ArrayList<>(), true, new ArrayList<>())
             );
 
             // Agregar la condición al diente
-            toothDTO.getConditions().add(conditionDTO);
+            toothResponse.getConditions().add(conditionDTO);
         }
 
         // Procesar ToothFaceConditions
@@ -147,29 +147,32 @@ public class OdontogramService {
             );
 
             // Verificar si el diente ya existe en el mapa
-            ToothDTO toothDTO = toothMap.computeIfAbsent(
+            ToothResponse toothResponse = toothMap.computeIfAbsent(
                     tfc.getTooth().getIdTooth(),
-                    id -> new ToothDTO(id, new ArrayList<>(), true, new ArrayList<>())
+                    id -> new ToothResponse(id, new ArrayList<>(), true, new ArrayList<>())
             );
 
             // Buscar o crear la FaceDTO
-            FaceDTO faceDTO = toothDTO.getFaces().stream()
+            FaceResponse faceResponse = toothResponse.getFaces().stream()
                     .filter(f -> f.getIdFace().equals(tfc.getToothFace().getIdToothFace()))
                     .findFirst()
                     .orElseGet(() -> {
-                        FaceDTO newFace = new FaceDTO(tfc.getToothFace().getIdToothFace(), new ArrayList<>());
-                        toothDTO.getFaces().add(newFace);
+                        FaceResponse newFace = new FaceResponse(tfc.getToothFace().getIdToothFace(), new ArrayList<>());
+                        toothResponse.getFaces().add(newFace);
                         return newFace;
                     });
 
             // Agregar la condición a la cara del diente
-            faceDTO.getConditions().add(conditionDTO);
+            faceResponse.getConditions().add(conditionDTO);
         }
 
         // Crear la lista de ToothDTO a partir del mapa
-        List<ToothDTO> toothDTOList = new ArrayList<>(toothMap.values());
+        List<ToothResponse> toothResponseList = new ArrayList<>(toothMap.values());
 
         // Crear y devolver el OdontogramDTO
-        return new OdontogramDTO(toothDTOList);
+        return OdontogramResponse.builder()
+                        .idOdontogram(odontogramId)
+                                .tooths(toothResponseList)
+                .build();
     }
 }
