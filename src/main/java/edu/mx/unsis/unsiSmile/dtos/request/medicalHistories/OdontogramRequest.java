@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,5 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OdontogramRequest {
+    @NotNull(message = "The request can't be null")
     private List<ToothRequest> tooths;
 }

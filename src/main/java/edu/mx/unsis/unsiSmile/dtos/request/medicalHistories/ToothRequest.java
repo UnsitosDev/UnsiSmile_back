@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ToothRequest {
-    private Long idTooth;
-    private Boolean status;
-    private List<ConditionRequest> conditions;
-    private List<FaceRequest> faces;
 
+    @NotNull(message = "The tooth ID cannot be null.")
+    private Long idTooth;
+
+    @NotNull(message = "Whether the tooth is an adult must be specified.")
+    private Boolean isAdult;
+
+    @NotNull(message = "At least one condition must be associated with the tooth.")
+    @Size(min = 1, message = "At least one condition must be associated with the tooth.")
+    private List<ConditionRequest> conditions;
+
+    @NotNull(message = "At least one facial view must be associated with the tooth.")
+    @Size(min = 1, message = "At least one facial view must be associated with the tooth.")
+    private List<FaceRequest> faces;
 }

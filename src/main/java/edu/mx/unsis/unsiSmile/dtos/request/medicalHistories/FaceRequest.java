@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class FaceRequest {
+    @NotNull(message = "The face ID cannot be null.")
     private Long idFace;
     private List<ConditionRequest> conditions;
 }

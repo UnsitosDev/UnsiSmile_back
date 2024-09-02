@@ -71,7 +71,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
         assignmentModel.setTooth(mapToToothModel(toothDTO));
         assignmentModel.setToothCondition(mapToToothConditionModel(conditionDTO));
-        assignmentModel.setCreationDate(java.time.LocalDate.now()); // Asigna la fecha actual
+        assignmentModel.setCreationDate(java.time.LocalDate.now());
 
         return assignmentModel;
     }
@@ -82,7 +82,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         faceConditionModel.setTooth(mapToToothModel(toothDTO));
         faceConditionModel.setToothFace(mapToToothFaceModel(faceDTO));
         faceConditionModel.setToothCondition(mapToToothConditionModel(conditionDTO));
-        faceConditionModel.setCreationDate(java.time.LocalDate.now()); // Asigna la fecha actual
+        faceConditionModel.setCreationDate(java.time.LocalDate.now());
 
         return faceConditionModel;
     }
@@ -90,22 +90,19 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     private static ToothModel mapToToothModel(ToothRequest toothDTO) {
         return ToothModel.builder()
                 .idTooth(toothDTO.getIdTooth().toString())
-                .description("Description") // Puedes ajustar esto según tus necesidades
-                .isAdult(toothDTO.getStatus())
+                .isAdult(toothDTO.getIsAdult())
                 .build();
     }
 
     private static ToothConditionModel mapToToothConditionModel(ConditionRequest conditionDTO) {
         return ToothConditionModel.builder()
                 .idToothCondition(conditionDTO.getIdCondition())
-                .description(conditionDTO.getDescription())
                 .build();
     }
 
     private static ToothFaceModel mapToToothFaceModel(FaceRequest faceDTO) {
         return ToothFaceModel.builder()
                 .idToothFace(faceDTO.getIdFace().toString())
-                .description("Description") // Puedes ajustar esto según tus necesidades
                 .build();
     }
 }
