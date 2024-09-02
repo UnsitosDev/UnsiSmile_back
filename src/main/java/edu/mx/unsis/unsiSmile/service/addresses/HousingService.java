@@ -66,18 +66,6 @@ public class HousingService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<HousingResponse> getAllHousing() {
-        try {
-            List<HousingModel> allHousing = housingRepository.findAll();
-            return allHousing.stream()
-                    .map(housingMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch all housing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
     @Transactional
     public HousingResponse updateHousing(@NonNull String idHousing, @NonNull HousingRequest updatedHousingRequest) {
         try {
@@ -111,5 +99,20 @@ public class HousingService {
         } catch (Exception ex) {
             throw new AppException("Failed to delete housing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<HousingResponse> getHousingsBySearch(String search) {
+        List<HousingModel> housings;
+
+        if (search != null && !search.isEmpty()) {
+            housings = housingRepository.findByCategoryContaining(search);
+        } else {
+            housings = housingRepository.findAll();
+        }
+
+        return housings.stream()
+                .map(housingMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
