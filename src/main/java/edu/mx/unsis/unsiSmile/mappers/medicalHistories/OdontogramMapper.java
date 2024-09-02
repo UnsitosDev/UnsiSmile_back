@@ -1,14 +1,17 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FaceRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {
@@ -16,7 +19,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     @Override
     public OdontogramModel toEntity(OdontogramRequest dto) {
         return OdontogramModel.builder()
-                .idOdontogram(dto.getIdOdontogram())
                 .build();
     }
 
@@ -38,5 +40,72 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     @Override
     public void updateEntity(OdontogramRequest request, OdontogramModel entity) {
 
+    }
+
+
+    public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
+        OdontogramModel odontogramModel = OdontogramModel.builder().creationDate(LocalDate.now()).build();
+
+        // Mapeo de ToothConditionAssignments
+        List<ToothConditionAssignmentModel> toothConditionAssignments = dto.getTooths().stream()
+                .flatMap(toothDTO -> toothDTO.getConditions().stream()
+                        .map(conditionDTO -> mapToToothConditionAssignmentModel(toothDTO, conditionDTO)))
+                .collect(Collectors.toList());
+
+        odontogramModel.setToothConditionAssignments(toothConditionAssignments);
+
+        // Mapeo de ToothFaceConditions
+        List<ToothFaceConditionModel> toothFaceConditions = dto.getTooths().stream()
+                .flatMap(toothDTO -> toothDTO.getFaces().stream()
+                        .flatMap(faceDTO -> faceDTO.getConditions().stream()
+                                .map(conditionDTO -> mapToToothFaceConditionModel(toothDTO, faceDTO, conditionDTO))))
+                .collect(Collectors.toList());
+
+        odontogramModel.setToothFaceConditions(toothFaceConditions);
+
+        return odontogramModel;
+    }
+
+    private static ToothConditionAssignmentModel mapToToothConditionAssignmentModel(ToothRequest toothDTO, ConditionRequest conditionDTO) {
+        ToothConditionAssignmentModel assignmentModel = new ToothConditionAssignmentModel();
+
+        assignmentModel.setTooth(mapToToothModel(toothDTO));
+        assignmentModel.setToothCondition(mapToToothConditionModel(conditionDTO));
+        assignmentModel.setCreationDate(java.time.LocalDate.now()); // Asigna la fecha actual
+
+        return assignmentModel;
+    }
+
+    private static ToothFaceConditionModel mapToToothFaceConditionModel(ToothRequest toothDTO, FaceRequest faceDTO, ConditionRequest conditionDTO) {
+        ToothFaceConditionModel faceConditionModel = new ToothFaceConditionModel();
+
+        faceConditionModel.setTooth(mapToToothModel(toothDTO));
+        faceConditionModel.setToothFace(mapToToothFaceModel(faceDTO));
+        faceConditionModel.setToothCondition(mapToToothConditionModel(conditionDTO));
+        faceConditionModel.setCreationDate(java.time.LocalDate.now()); // Asigna la fecha actual
+
+        return faceConditionModel;
+    }
+
+    private static ToothModel mapToToothModel(ToothRequest toothDTO) {
+        return ToothModel.builder()
+                .idTooth(toothDTO.getIdTooth().toString())
+                .description("Description") // Puedes ajustar esto según tus necesidades
+                .isAdult(toothDTO.getStatus())
+                .build();
+    }
+
+    private static ToothConditionModel mapToToothConditionModel(ConditionRequest conditionDTO) {
+        return ToothConditionModel.builder()
+                .idToothCondition(conditionDTO.getIdCondition())
+                .description(conditionDTO.getDescription())
+                .build();
+    }
+
+    private static ToothFaceModel mapToToothFaceModel(FaceRequest faceDTO) {
+        return ToothFaceModel.builder()
+                .idToothFace(faceDTO.getIdFace().toString())
+                .description("Description") // Puedes ajustar esto según tus necesidades
+                .build();
     }
 }

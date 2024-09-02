@@ -1,35 +1,36 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.*;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class OdontogramService {
 
     private final IOdontogramRepository odontogramRepository;
-    private final OdontogramMapper odontogramMapper;
     private final IToothFaceConditionRepository toothFaceConditionRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
+    private final OdontogramMapper odontogramMapper;
 
 
     @Transactional(readOnly = true)
@@ -88,10 +89,8 @@ public class OdontogramService {
     }
 
     @Transactional
-    public OdontogramModel saveOdontogram(OdontogramModel odontogram) {
-        if (odontogram == null) {
-            throw new IllegalArgumentException("Odontogram cannot be null");
-        }
+    public void saveOdontogram(OdontogramRequest odontogramDTO) {
+        OdontogramModel odontogram = OdontogramMapper.toOdontogramModel(odontogramDTO);
 
         odontogram = odontogramRepository.save(odontogram);
 
@@ -105,7 +104,6 @@ public class OdontogramService {
             toothFaceConditionRepository.save(condition);
         }
 
-        return odontogram;
     }
 
     public OdontogramDTO getOdontogramDetails(Long odontogramId) {

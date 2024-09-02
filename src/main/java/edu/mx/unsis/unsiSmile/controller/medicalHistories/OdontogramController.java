@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramDTO;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;
 import jakarta.validation.Valid;
@@ -56,8 +55,8 @@ public class OdontogramController {
     }
 
     @PostMapping("")
-    public ResponseEntity<OdontogramModel> createOdontogram(@RequestBody OdontogramModel odontogram) {
-        OdontogramModel savedOdontogram = odontogramService.saveOdontogram(odontogram);
+    public ResponseEntity<Void> createOdontogram(@RequestBody OdontogramRequest odontogramDTO) {
+        odontogramService.saveOdontogram(odontogramDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

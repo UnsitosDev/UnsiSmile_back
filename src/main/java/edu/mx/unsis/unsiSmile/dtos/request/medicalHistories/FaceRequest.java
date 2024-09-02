@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramRequest {
-    private List<ToothRequest> tooths;
+public class FaceRequest {
+    private Long idFace;
+    private List<ConditionRequest> conditions;
 }

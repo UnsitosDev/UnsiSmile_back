@@ -5,12 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramRequest {
-    private List<ToothRequest> tooths;
+public class ConditionRequest {
+    private Long idCondition;
+    private String condition;
+    private String description;
 }
