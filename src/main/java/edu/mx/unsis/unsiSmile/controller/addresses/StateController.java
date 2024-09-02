@@ -44,13 +44,14 @@ public class StateController {
     @Operation(summary = "Obtener una lista paginada de estados")
     @GetMapping
     public ResponseEntity<Page<StateResponse>> getAllStudents(
+            @RequestParam(value = "search", required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<StateResponse> stateResponses = stateService.getAllStates(pageable);
+        Page<StateResponse> stateResponses = stateService.getAllStates(pageable, search);
 
         return ResponseEntity.ok(stateResponses);
     }
