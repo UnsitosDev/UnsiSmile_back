@@ -65,12 +65,19 @@ public class StateService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StateResponse> getAllStates(Pageable pageable) {
+    public Page<StateResponse> getAllStates(Pageable pageable, String search) {
         try {
-            Page<StateModel> allStates = stateRepository.findAll(pageable);
-            return allStates.map(stateMapper::toDto);
+            Page<StateModel> states;
+
+            if (search != null && !search.isEmpty()) {
+                states = stateRepository.findByNameContaining(search, pageable);
+            } else {
+                states = stateRepository.findAll(pageable);
+            }
+
+            return states.map(stateMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch all states", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch states", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
