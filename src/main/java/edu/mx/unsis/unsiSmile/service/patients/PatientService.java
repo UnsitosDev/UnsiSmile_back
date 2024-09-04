@@ -1,22 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
@@ -35,12 +18,10 @@ import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -48,6 +29,22 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +58,6 @@ public class PatientService {
     private final GuardianMapper guardianMapper;
     private final IAddressRepository addressRepository;
     private final AddressMapper addressMapper;
-    private final IMedicalHistoryRepository medicalHistoryRepository;
     private final UserService userService;
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
@@ -85,10 +81,6 @@ public class PatientService {
             // create the address
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
-
-            // create the medical history
-            MedicalHistoryModel medicalHistory = createEmptyMedicalHistory();
-            patientModel.setMedicalHistory(medicalHistory);
 
             // Save the entity to the database
             PatientModel savedPatient = patientRepository.save(patientModel);
@@ -118,11 +110,6 @@ public class PatientService {
                 .build();
 
         studentPatientService.createStudentPatient(studentPatientRequest);
-    }
-
-    // Method to create a medical history entity
-    private MedicalHistoryModel createEmptyMedicalHistory() {
-        return medicalHistoryRepository.save(new MedicalHistoryModel());
     }
 
     // Method to create a address entity

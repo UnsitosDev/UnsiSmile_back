@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.MedicalHistoryModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,10 +40,6 @@ public class PatientModel {
 
     @Column(name = "has_disability")
     private Boolean hasDisability;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_medical_history", referencedColumnName = "id_medical_history")
-    private MedicalHistoryModel medicalHistory;
 
     @ManyToOne
     @JoinColumn(name = "fk_nationality", referencedColumnName = "id_nationality")

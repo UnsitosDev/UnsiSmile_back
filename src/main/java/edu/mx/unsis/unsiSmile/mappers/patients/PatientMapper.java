@@ -10,7 +10,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalHistoryMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
 import edu.mx.unsis.unsiSmile.model.patients.MaritalStatusModel;
@@ -31,7 +30,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     private ReligionMapper religionMapper;
     private GuardianMapper guardianMapper;
     private PersonMapper personMapper;
-    private MedicalHistoryMapper medicalHistoryMapper;
 
     @Override
     public PatientModel toEntity(PatientRequest dto) {
@@ -66,7 +64,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 .ethnicGroup(ethnicGroupMapper.toDto(entity.getEthnicGroup()))
                 .religion(religionMapper.toDto(entity.getReligion()))
                 .guardian(entity.getGuardian() != null ? guardianMapper.toDto(entity.getGuardian()) : null)
-                .medicalHistoryResponse(entity.getMedicalHistory() != null ? medicalHistoryMapper.toDto(entity.getMedicalHistory()) : null)
                 .build();
     }
 
