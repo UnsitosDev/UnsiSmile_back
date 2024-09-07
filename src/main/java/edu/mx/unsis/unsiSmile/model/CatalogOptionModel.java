@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.model;
 
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "catalog_options")
-public class CatalogOptionModel {
+public class CatalogOptionModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
