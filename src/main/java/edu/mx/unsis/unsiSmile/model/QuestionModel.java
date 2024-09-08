@@ -21,7 +21,11 @@ public class QuestionModel extends AuditModel {
     @Column(name = "question_text", nullable = false)
     private String questionText;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_form_section", nullable = false)
     private FormSectionModel formSectionModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_answer_type", nullable = false)
+    private AnswerTypeModel answerTypeModel;
 }

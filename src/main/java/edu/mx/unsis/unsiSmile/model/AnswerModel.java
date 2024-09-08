@@ -45,14 +45,7 @@ public class AnswerModel extends AuditModel {
     @JoinColumn(name = "fk_option")
     private CatalogOptionModel catalogOptionModel;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "answer_type", nullable = false)
-    private AnswerType answerType;
-
-    public enum AnswerType {
-        BOOLEAN,
-        NUMERIC,
-        TEXT,
-        CATALOG
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_file")
+    private FileModel fileModel;
 }
