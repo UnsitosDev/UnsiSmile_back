@@ -47,7 +47,9 @@ CREATE TABLE questions (
 CREATE TABLE catalogs (
                             id_catalog bigint(20) NOT NULL AUTO_INCREMENT,
                             catalog_name varchar(50) NOT NULL,
-                            PRIMARY KEY (id_catalog)
+                            fk_question bigint(20),
+                            PRIMARY KEY (id_catalog),
+                            CONSTRAINT catalogs_ibfk_1 FOREIGN KEY (fk_question) REFERENCES questions (id_question)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- CatalogOptions Table (options within a predefined catalog)
@@ -75,7 +77,7 @@ CREATE TABLE patient_clinical_histories (
 
 -- Files Table
 CREATE TABLE files (
-                       id_file BIGINT(20) NOT NULL AUTO_INCREMENT,
+                       id_file varchar(36) NOT NULL,
                        file_name VARCHAR(255) NOT NULL,
                        file_path VARCHAR(255) NOT NULL,
                        file_type VARCHAR(50) NOT NULL,
@@ -92,7 +94,7 @@ CREATE TABLE answers (
                          answer_text TEXT DEFAULT NULL,
                          answer_date DATETIME DEFAULT NULL,
                          fk_option BIGINT(20) DEFAULT NULL,
-                         fk_file BIGINT(20) DEFAULT NULL,
+                         fk_file varchar(36) DEFAULT NULL,
                          PRIMARY KEY (id_answer),
                          KEY fk_patient_clinical_history (fk_patient_clinical_history),
                          KEY fk_question (fk_question),

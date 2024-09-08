@@ -16,7 +16,7 @@ public class FileModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_file")
-    private Long idFile;
+    private String idFile;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
