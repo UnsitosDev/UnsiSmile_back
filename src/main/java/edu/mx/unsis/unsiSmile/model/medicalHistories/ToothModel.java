@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth")
+@Table(name = "teeth")
 public class ToothModel {
 
     @Id

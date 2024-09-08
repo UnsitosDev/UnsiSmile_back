@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "odontogram")
+@Table(name = "odontograms")
 public class OdontogramModel {
 
     @Id

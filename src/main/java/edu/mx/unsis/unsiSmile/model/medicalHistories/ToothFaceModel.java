@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_face")
+@Table(name = "tooth_faces")
 public class ToothFaceModel {
 
     @Id
