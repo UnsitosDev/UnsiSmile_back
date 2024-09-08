@@ -1,41 +1,41 @@
-CREATE TABLE odontogram
+CREATE TABLE odontograms
 (
     id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
     creation_date DATE NOT NULL
 );
 
-CREATE TABLE tooth_face
+CREATE TABLE tooth_faces
 (
     id_tooth_face VARCHAR(3) PRIMARY KEY,
     description   VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE tooth
+CREATE TABLE teeth
 (
     id_tooth    VARCHAR(3) PRIMARY KEY,
     is_adult     BOOLEAN,
     description VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE tooth_condition
+CREATE TABLE tooth_conditions
 (
     id_tooth_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
     description        VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE tooth_condition_assignment
+CREATE TABLE tooth_condition_assignments
 (
     odontogram_id      BIGINT,
     tooth_id           VARCHAR(3),
     tooth_condition_id BIGINT,
     creation_date      DATE NOT NULL,
     PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
-    FOREIGN KEY (odontogram_id) REFERENCES odontogram (id_odontogram),
-    FOREIGN KEY (tooth_id) REFERENCES tooth (id_tooth),
-    FOREIGN KEY (tooth_condition_id) REFERENCES tooth_condition (id_tooth_condition)
+    FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+    FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
+    FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition)
 );
 
-CREATE TABLE toothface_condition
+CREATE TABLE toothface_conditions
 (
     odontogram_id      BIGINT,
     tooth_face_id      VARCHAR(3),
@@ -43,14 +43,14 @@ CREATE TABLE toothface_condition
     tooth_id           VARCHAR(3),
     creation_date      DATE NOT NULL,
     PRIMARY KEY (odontogram_id, tooth_face_id, tooth_condition_id, tooth_id),
-    FOREIGN KEY (odontogram_id) REFERENCES odontogram (id_odontogram),
-    FOREIGN KEY (tooth_face_id) REFERENCES tooth_face (id_tooth_face),
-    FOREIGN KEY (tooth_condition_id) REFERENCES tooth_condition (id_tooth_condition),
-    FOREIGN KEY (tooth_id) REFERENCES tooth (id_tooth)
+    FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+    FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
+    FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition),
+    FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
 );
 
 
-INSERT INTO `tooth_condition`
+INSERT INTO `tooth_conditions`
 VALUES (1, 'Diente presente'),
        (2, 'Diente parcialmente erupcionado'),
        (3, 'Diente obturado'),
@@ -69,7 +69,7 @@ VALUES (1, 'Diente presente'),
        (17, 'Diente en mal posición derecha'),
        (18, 'Diente en mal posición izquierda');
 
-INSERT INTO `unsis_smile`.`tooth`
+INSERT INTO teeth
 (`description`, `is_adult`, `id_tooth`)
 VALUES
     (1, TRUE, '18'),
@@ -125,7 +125,7 @@ VALUES
     (51, FALSE, '82'),
     (52, FALSE, '81');
 
-INSERT INTO `unsis_smile`.`tooth_face`
+INSERT INTO tooth_faces
 (`id_tooth_face`,
  `description`)
 VALUES ('1', "medio"),

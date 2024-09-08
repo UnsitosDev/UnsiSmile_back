@@ -19,7 +19,7 @@ public class AnswerModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_answer")
-    private Integer idAnswer;
+    private Long idAnswer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_patient_clinical_history", nullable = false)

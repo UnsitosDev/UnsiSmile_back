@@ -16,7 +16,7 @@ public class FormSectionModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_form_section")
-    private Integer idFormSection;
+    private Long idFormSection;
 
     @Column(name = "form_name", nullable = false, length = 100)
     private String formName;

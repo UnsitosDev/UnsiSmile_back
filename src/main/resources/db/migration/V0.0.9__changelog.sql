@@ -54,19 +54,6 @@ CREATE TABLE catalog_options (
                                    CONSTRAINT catalog_options_ibfk_1 FOREIGN KEY (fk_catalog) REFERENCES catalogs (id_catalog)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Odontograms Table
-DROP TABLE IF EXISTS odontograms;
-CREATE TABLE odontograms (
-                               id_odontogram bigint(20) NOT NULL AUTO_INCREMENT,
-                               fk_patient bigint(20) NOT NULL,
-                               fk_form_section bigint(20) NOT NULL,
-                               PRIMARY KEY (id_odontogram),
-                               KEY fk_patient (fk_patient),
-                               KEY fk_form_section (fk_form_section),
-                               CONSTRAINT odontograms_ibfk_1 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-                               CONSTRAINT odontograms_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- Treatments Table
 DROP TABLE IF EXISTS patient_clinical_histories;
 CREATE TABLE patient_clinical_histories (

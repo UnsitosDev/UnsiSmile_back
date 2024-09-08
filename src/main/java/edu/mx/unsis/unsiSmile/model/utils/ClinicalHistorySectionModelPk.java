@@ -16,8 +16,8 @@ import java.io.Serializable;
 public class ClinicalHistorySectionModelPk implements Serializable {
 
     @Column(name = "fk_clinical_history_catalog")
-    private Integer idClinicalHistoryCatalog;
+    private Long idClinicalHistoryCatalog;
 
     @Column(name = "fk_form_section")
-    private Integer idFormSectionModel;
+    private Long idFormSectionModel;
 }

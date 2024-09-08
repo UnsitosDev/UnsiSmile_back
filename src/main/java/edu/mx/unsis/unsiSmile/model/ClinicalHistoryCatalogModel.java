@@ -16,7 +16,7 @@ public class ClinicalHistoryCatalogModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_clinical_history_catalog")
-    private Integer idClinicalHistoryCatalog;
+    private Long idClinicalHistoryCatalog;
 
     @Column(name = "clinical_history_name", nullable = false, length = 100)
     private String clinicalHistoryName;

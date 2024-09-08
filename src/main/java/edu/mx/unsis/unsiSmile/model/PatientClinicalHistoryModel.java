@@ -19,7 +19,7 @@ public class PatientClinicalHistoryModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_patient_clinical_history")
-    private Integer idPatientClinicalHistory;
+    private Long idPatientClinicalHistory;
 
     @ManyToOne
     @JoinColumn(name = "fk_clinical_history_catalog")

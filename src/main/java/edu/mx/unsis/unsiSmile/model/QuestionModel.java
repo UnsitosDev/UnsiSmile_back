@@ -16,7 +16,7 @@ public class QuestionModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_question")
-    private Integer idQuestion;
+    private Long idQuestion;
 
     @Column(name = "question_text", nullable = false)
     private String questionText;
