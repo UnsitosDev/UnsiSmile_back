@@ -25,4 +25,7 @@ public class ClinicalHistorySectionModel extends AuditModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_form_section",  nullable = false, insertable = false, updatable = false)
     private FormSectionModel formSectionModel;
+
+    @Column(name = "section_order")
+    private Long order;
 }

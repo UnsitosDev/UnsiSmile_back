@@ -17,6 +17,7 @@ CREATE TABLE form_sections (
 CREATE TABLE clinical_history_sections (
                                              fk_clinical_history_catalog bigint(20) NOT NULL,
                                              fk_form_section bigint(20) NOT NULL,
+                                             section_order bigint(20) DEFAULT null,
                                              PRIMARY KEY (fk_clinical_history_catalog, fk_form_section),
                                              KEY fk_form_section (fk_form_section),
                                              CONSTRAINT clinical_history_sections_ibfk_1 FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs (id_clinical_history_catalog),
@@ -30,26 +31,11 @@ CREATE TABLE answer_types (
                                      PRIMARY KEY (id_answer_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;;
 
--- Questions Table
-CREATE TABLE questions (
-                             id_question bigint(20) NOT NULL AUTO_INCREMENT,
-                             question_text text NOT NULL,
-                             fk_form_section bigint(20) NOT NULL,
-                             fk_answer_type bigint(20) NOT NULL,
-                             PRIMARY KEY (id_question),
-                             KEY fk_form_section (fk_form_section),
-                             KEY fk_answer_type (fk_answer_type),
-                             CONSTRAINT questions_ibfk_1 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
-                             CONSTRAINT questions_ibfk_2 FOREIGN KEY (fk_answer_type) REFERENCES answer_types (id_answer_type)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- Catalogs Table (for predefined answer catalogs)
 CREATE TABLE catalogs (
                             id_catalog bigint(20) NOT NULL AUTO_INCREMENT,
                             catalog_name varchar(50) NOT NULL,
-                            fk_question bigint(20),
-                            PRIMARY KEY (id_catalog),
-                            CONSTRAINT catalogs_ibfk_1 FOREIGN KEY (fk_question) REFERENCES questions (id_question)
+                            PRIMARY KEY (id_catalog)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- CatalogOptions Table (options within a predefined catalog)
@@ -60,6 +46,21 @@ CREATE TABLE catalog_options (
                                    PRIMARY KEY (id_catalog_option),
                                    KEY fk_catalog (fk_catalog),
                                    CONSTRAINT catalog_options_ibfk_1 FOREIGN KEY (fk_catalog) REFERENCES catalogs (id_catalog)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Questions Table
+CREATE TABLE questions (
+                           id_question bigint(20) NOT NULL AUTO_INCREMENT,
+                           question_text text NOT NULL,
+                           fk_form_section bigint(20) NOT NULL,
+                           fk_answer_type bigint(20) NOT NULL,
+                           fk_catalog bigint(20) default null,
+                           PRIMARY KEY (id_question),
+                           KEY fk_form_section (fk_form_section),
+                           KEY fk_answer_type (fk_answer_type),
+                           CONSTRAINT questions_ibfk_1 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
+                           CONSTRAINT questions_ibfk_2 FOREIGN KEY (fk_answer_type) REFERENCES answer_types (id_answer_type),
+                           CONSTRAINT questions_ibfk_3 FOREIGN KEY (fk_catalog) REFERENCES catalogs (id_catalog)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Treatments Table
@@ -76,13 +77,13 @@ CREATE TABLE patient_clinical_histories (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Files Table
-CREATE TABLE files (
+ CREATE TABLE files (
                        id_file varchar(36) NOT NULL,
                        file_name VARCHAR(255) NOT NULL,
                        file_path VARCHAR(255) NOT NULL,
                        file_type VARCHAR(50) NOT NULL,
                        PRIMARY KEY (id_file)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Answers Table
 CREATE TABLE answers (
