@@ -20,4 +20,8 @@ public class CatalogModel extends AuditModel {
 
     @Column(name = "catalog_name")
     private String catalogName;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_question")
+    private QuestionModel questionModel;
 }
