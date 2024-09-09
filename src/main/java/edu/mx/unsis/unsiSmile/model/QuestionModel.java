@@ -28,4 +28,8 @@ public class QuestionModel extends AuditModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_answer_type", nullable = false)
     private AnswerTypeModel answerTypeModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_catalog")
+    private CatalogModel catalogModel;
 }
