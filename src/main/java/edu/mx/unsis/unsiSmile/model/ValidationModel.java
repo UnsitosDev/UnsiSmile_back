@@ -18,13 +18,13 @@ public class ValidationModel extends AuditModel {
     @Column(name = "id_validation")
     private Long idValidation;
 
-    @Column(name = "validation_name", nullable = false)
-    private String validationName;
+    @Column(name = "validation_value", nullable = false)
+    private String validationValue;
 
     @Column(name = "validation_message")
     private String validationMessage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "fk_validation_type")
+    @JoinColumn(name = "fk_validation_type")
     private ValidationTypeModel validationTypeModel;
 }

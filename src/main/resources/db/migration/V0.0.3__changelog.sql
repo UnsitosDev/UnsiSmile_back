@@ -27,7 +27,7 @@ CREATE TABLE clinical_history_sections (
 -- Type answer Table
 CREATE TABLE answer_types (
                               id_answer_type bigint(20) AUTO_INCREMENT,
-                              description VARCHAR(50) NOT NULL,
+                              answer_type VARCHAR(50) NOT NULL,
                               PRIMARY KEY (id_answer_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;;
 
