@@ -21,6 +21,12 @@ public class QuestionModel extends AuditModel {
     @Column(name = "question_text", nullable = false)
     private String questionText;
 
+    @Column(name = "required", nullable = false)
+    private Boolean required;
+
+    @Column(name = "question_order", nullable = false)
+    private Long order;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_form_section", nullable = false)
     private FormSectionModel formSectionModel;
