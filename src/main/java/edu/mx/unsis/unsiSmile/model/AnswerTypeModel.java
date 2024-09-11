@@ -18,6 +18,6 @@ public class AnswerTypeModel extends AuditModel {
     @Column(name = "id_answer_type")
     private Long idAnswerType;
 
-    @Column(name = "description", nullable = false, unique = true)
+    @Column(name = "answer_type", nullable = false, unique = true)
     private String description;
 }
