@@ -45,7 +45,6 @@ public class AnswerModel extends AuditModel {
     @JoinColumn(name = "fk_option")
     private CatalogOptionModel catalogOptionModel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_file")
-    private FileModel fileModel;
+    @Column(name = "is_file")
+    private Boolean isFile;
 }

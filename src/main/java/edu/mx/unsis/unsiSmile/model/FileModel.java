@@ -26,5 +26,9 @@ public class FileModel extends AuditModel {
 
     @Column(name = "file_type", nullable = false, length = 50)
     private String fileType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_answer")
+    private AnswerModel answer;
 }
 

@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 public class AnswerRequest {
 
     @NotNull(message = "The Id Patient Clinical History cannot be null.")
-    private Long idPatientClinicalHistoryModel;
+    private Long idPatientClinicalHistory;
 
     @NotNull(message = "The Id Question cannot be null.")
-    private Long idQuestionModel;
+    private Long idQuestion;
 
     private Boolean answerBoolean;
 
@@ -29,7 +29,7 @@ public class AnswerRequest {
 
     private LocalDateTime answerDate;
 
-    private Long idCatalogOptionModel;
+    private Long idCatalogOption;
 
-    private String idFileModel;
+    private Boolean isFile;
 }

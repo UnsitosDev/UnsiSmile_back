@@ -15,11 +15,18 @@ public class QuestionRequest {
     @NotNull(message = "The Question Description cannot be null.")
     private String questionText;
 
+    private String placeholder;
+
+    @NotNull(message = "The attribute Required cannot be null.")
+    private Boolean isRequired;
+
+    private Long order;
+
     @NotNull(message = "The Id Form Section cannot be null.")
-    private Long idFormSectionModel;
+    private Long idFormSection;
 
     @NotNull(message = "The Id Answer cannot be null.")
-    private Long idAnswerTypeModel;
+    private Long idAnswerType;
 
-    private Long idCatalogModel;
+    private Long idCatalog;
 }

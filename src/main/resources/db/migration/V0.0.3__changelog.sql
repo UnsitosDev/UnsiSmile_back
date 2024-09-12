@@ -106,15 +106,6 @@ CREATE TABLE patient_clinical_histories (
                                             CONSTRAINT patient_clinical_histories_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Files Table
-CREATE TABLE files (
-                       id_file varchar(36) NOT NULL,
-                       file_name VARCHAR(255) NOT NULL,
-                       file_path VARCHAR(255) NOT NULL,
-                       file_type VARCHAR(50) NOT NULL,
-                       PRIMARY KEY (id_file)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- Answers Table
 CREATE TABLE answers (
                          id_answer BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -125,14 +116,24 @@ CREATE TABLE answers (
                          answer_text TEXT DEFAULT NULL,
                          answer_date DATETIME DEFAULT NULL,
                          fk_option BIGINT(20) DEFAULT NULL,
-                         fk_file varchar(36) DEFAULT NULL,
+                         is_file TINYINT(1) DEFAULT NULL,
                          PRIMARY KEY (id_answer),
                          KEY fk_patient_clinical_history (fk_patient_clinical_history),
                          KEY fk_question (fk_question),
                          KEY fk_option (fk_option),
-                         KEY fk_file (fk_file),
                          CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories (id_patient_clinical_history),
                          CONSTRAINT answers_ibfk_2 FOREIGN KEY (fk_question) REFERENCES questions (id_question),
-                         CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option),
-                         CONSTRAINT answers_ibfk_4 FOREIGN KEY (fk_file) REFERENCES files (id_file)
+                         CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Files Table
+CREATE TABLE files (
+                       id_file VARCHAR(36) NOT NULL,
+                       file_name VARCHAR(255) NOT NULL,
+                       file_path VARCHAR(255) NOT NULL,
+                       file_type VARCHAR(50) NOT NULL,
+                       fk_answer BIGINT(20),
+                       PRIMARY KEY (id_file),
+                       KEY fk_answer (fk_answer),
+                       CONSTRAINT fk_answer FOREIGN KEY (fk_answer) REFERENCES answers (id_answer) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
