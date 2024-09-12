@@ -10,14 +10,14 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "answer_types")
-public class AnswerTypeModel extends AuditModel {
+@Table(name = "validation_types")
+public class ValidationTypeModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_answer_type")
-    private Long idAnswerType;
+    @Column(name = "id_validation_type")
+    private Long idValidationType;
 
-    @Column(name = "answer_type", nullable = false, unique = true)
-    private String description;
+    @Column(name = "validation_code")
+    private String validationCode;
 }
