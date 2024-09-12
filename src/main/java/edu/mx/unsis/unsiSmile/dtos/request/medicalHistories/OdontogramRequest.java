@@ -15,4 +15,6 @@ import java.util.List;
 public class OdontogramRequest {
     @NotNull(message = "The request can't be null")
     private List<ToothRequest> tooths;
+    @NotNull(message = "The patient id can't be null")
+    private Long idPatient;
 }
