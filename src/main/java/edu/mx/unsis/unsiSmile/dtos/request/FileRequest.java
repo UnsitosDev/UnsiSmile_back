@@ -20,4 +20,7 @@ public class FileRequest {
 
     @NotNull(message = "The File Type cannot be null.")
     private String fileType;
+
+    @NotNull(message = "The Id Answer cannot be null.")
+    private Long idAnswer;
 }

@@ -16,5 +16,5 @@ public class CatalogOptionRequest {
     private String optionName;
 
     @NotNull(message = "The Id Catalog cannot be null.")
-    private Long idCatalogModel;
+    private Long idCatalog;
 }
