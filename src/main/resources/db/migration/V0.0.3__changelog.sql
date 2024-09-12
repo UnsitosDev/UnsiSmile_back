@@ -69,6 +69,7 @@ CREATE TABLE validations (
 CREATE TABLE questions (
                            id_question bigint(20) NOT NULL AUTO_INCREMENT,
                            question_text text NOT NULL,
+                           placeholder text default null,
                            required tinyint(1) not null default false,
                            question_order bigint(20) not null,
                            fk_form_section bigint(20) NOT NULL,

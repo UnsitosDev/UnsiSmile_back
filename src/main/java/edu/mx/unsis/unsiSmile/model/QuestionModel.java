@@ -21,6 +21,9 @@ public class QuestionModel extends AuditModel {
     @Column(name = "question_text", nullable = false)
     private String questionText;
 
+    @Column(name = "placeholder")
+    private String placeholder;
+
     @Column(name = "required", nullable = false)
     private Boolean required;
 
