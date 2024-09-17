@@ -44,14 +44,14 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long id) {
+    public ClinicalHistoryCatalogResponse findById(Long id, Long patientClinicalHistoryId) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
             ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(id)
                     .orElseThrow(() -> new AppException("Clinical history catalog not found with id: " + id, HttpStatus.NOT_FOUND));
 
-            return this.toResponse(clinicalHistoryCatalogModel);
+            return this.toResponse(clinicalHistoryCatalogModel, patientClinicalHistoryId);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -95,12 +95,12 @@ public class ClinicalHistoryCatalogService {
         }
     }
 
-    private ClinicalHistoryCatalogResponse toResponse(ClinicalHistoryCatalogModel catalog) {
+    private ClinicalHistoryCatalogResponse toResponse(ClinicalHistoryCatalogModel catalog, Long patientClinicalHistoryId) {
 
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
                 .findByClinicalHistoryId(catalog.getIdClinicalHistoryCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList);
+        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistoryId);
 
         ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(catalog);
 

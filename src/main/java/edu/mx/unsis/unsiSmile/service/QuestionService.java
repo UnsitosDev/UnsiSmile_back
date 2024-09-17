@@ -47,7 +47,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public QuestionResponse findById(Long id) {// cambiar el response a toResponse
+    public QuestionResponse findById(Long id) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
