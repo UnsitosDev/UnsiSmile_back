@@ -2,8 +2,10 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistorySectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,9 +22,9 @@ public class ClinicalHistorySectionService {
     private final IClinicalHistorySectionRepository clinicalHistorySectionRepository;
 
     @Transactional
-    public ClinicalHistorySectionModel save(ClinicalHistorySectionModel sectionModel) {
+    public ClinicalHistorySectionModel save(Long idClinicalHistory, Long idSection) {
         try {
-            return clinicalHistorySectionRepository.save(sectionModel);
+            return clinicalHistorySectionRepository.save(toEntity(idClinicalHistory, idSection));
         } catch (Exception ex) {
             throw new AppException("Failed to save clinical history section", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -76,5 +78,16 @@ public class ClinicalHistorySectionService {
         } catch (Exception ex){
             throw new AppException("Failed to fetch clinical history sections", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private ClinicalHistorySectionModel toEntity(Long idClinicalHistory, Long idSection) {
+        return ClinicalHistorySectionModel.builder()
+                .clinicalHistoryCatalogModel(ClinicalHistoryCatalogModel.builder()
+                        .idClinicalHistoryCatalog(idClinicalHistory)
+                        .build())
+                .formSectionModel(FormSectionModel.builder()
+                        .idFormSection(idSection)
+                        .build())
+                .build();
     }
 }

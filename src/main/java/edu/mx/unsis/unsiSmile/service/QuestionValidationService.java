@@ -2,7 +2,9 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.QuestionValidationModel;
+import edu.mx.unsis.unsiSmile.model.ValidationModel;
 import edu.mx.unsis.unsiSmile.repository.IQuestionValidationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,9 @@ public class QuestionValidationService {
     private final IQuestionValidationRepository questionValidationRepository;
 
     @Transactional
-    public QuestionValidationModel save(QuestionValidationModel questionValidationModel) {
+    public QuestionValidationModel save(Long idQuestion, Long idValidation) {
         try {
-            return questionValidationRepository.save(questionValidationModel);
+            return questionValidationRepository.save(toEntity(idQuestion, idValidation));
         } catch (Exception ex) {
             throw new AppException("Failed to save question validation", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -74,5 +76,16 @@ public class QuestionValidationService {
         }catch (Exception ex) {
             throw new AppException("Failed to fetch question validations", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private QuestionValidationModel toEntity(Long idQuestion, Long idValidation) {
+        return QuestionValidationModel.builder()
+                .questionModel(QuestionModel.builder()
+                        .idQuestion(idQuestion)
+                        .build())
+                .validationModel(ValidationModel.builder()
+                        .idValidation(idValidation)
+                        .build())
+                .build();
     }
 }
