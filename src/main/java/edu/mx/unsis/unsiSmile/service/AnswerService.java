@@ -16,9 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,7 +122,7 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public List<AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, Long patientClinicalHistoryId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, Long patientClinicalHistoryId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
@@ -132,9 +130,14 @@ public class AnswerService {
 
             List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientClinicalHistoryId);
 
-            return answerModelList.stream()
-                    .map(this::toResponse)
-                    .collect(Collectors.toList());
+            Map<Long, AnswerResponse> answerMap = new HashMap<>();
+
+            for (AnswerModel answerModel : answerModelList) {
+                AnswerResponse answerResponse = toResponse(answerModel);
+                answerMap.put(answerModel.getQuestionModel().getIdQuestion(), answerResponse);
+            }
+
+            return answerMap;
         } catch (Exception ex){
             throw new AppException("Failed to fetch answers for one Section and Patient Clinical History with ID: " +
                     patientClinicalHistoryId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
