@@ -1,5 +1,6 @@
-package edu.mx.unsis.unsiSmile.dtos.response;
+package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
