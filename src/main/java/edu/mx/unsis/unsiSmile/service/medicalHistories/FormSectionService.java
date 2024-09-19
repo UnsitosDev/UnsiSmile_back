@@ -122,6 +122,9 @@ public class FormSectionService {
                 patientClinicalHistoryId);
         formSectionResponse.setQuestions(questions);
 
+        boolean hasAnsweredQuestions = questions.stream().anyMatch(question -> question.getAnswer() != null);
+        formSectionResponse.setIsAnswered(hasAnsweredQuestions);
+
         List<FormSectionModel> subSections = getSubFormSectionModel(sectionModel.getIdFormSection());
         if (subSections != null && !subSections.isEmpty()) {
             List<FormSectionResponse> subSectionResponses = subSections.stream()
