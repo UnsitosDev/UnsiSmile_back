@@ -54,7 +54,7 @@ public class QuestionService {
             QuestionModel questionModel = questionRepository.findById(id)
                     .orElseThrow(() -> new AppException("Question not found with id: " + id, HttpStatus.NOT_FOUND));
 
-            return questionMapper.toDto(questionModel);
+            return this.toResponse(questionModel, null);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {

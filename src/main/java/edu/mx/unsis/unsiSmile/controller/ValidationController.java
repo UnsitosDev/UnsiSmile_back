@@ -2,6 +2,8 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.ValidationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationResponse;
+import edu.mx.unsis.unsiSmile.model.QuestionValidationModel;
+import edu.mx.unsis.unsiSmile.service.QuestionValidationService;
 import edu.mx.unsis.unsiSmile.service.ValidationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ValidationController {
 
     private final ValidationService validationService;
+    private final QuestionValidationService questionValidationService;
 
     @Operation(summary = "Crea una nueva validación para las preguntas, **necesita un mensaje, valor y un id del tipo de validaión , revisar todas las tablas de intersecciones muchos a muchos para ver como y donde se crean")
     @PostMapping
@@ -27,7 +30,7 @@ public class ValidationController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un tipo de respuesta por su id")
+    @Operation(summary = "Obtiene un tipo de validación por su id")
     @GetMapping("/{id}")
     public ResponseEntity<ValidationResponse> findById(@PathVariable Long id) {
         ValidationResponse response = validationService.findById(id);
@@ -46,5 +49,14 @@ public class ValidationController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         validationService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Crea la relación entre la pregunta y la validación")
+    @PostMapping("/question-validation")
+    public ResponseEntity<QuestionValidationModel> createQuestionValidation(
+            @RequestParam Long idQuestion,
+            @RequestParam Long idValidation) {
+        QuestionValidationModel response = questionValidationService.save(idQuestion, idValidation);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

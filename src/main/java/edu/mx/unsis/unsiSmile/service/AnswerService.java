@@ -114,7 +114,7 @@ public class AnswerService {
         if (answerModel.getCatalogOptionModel() != null){
             CatalogOptionResponse optionResponse = optionService.findById(answerModel.getCatalogOptionModel().getIdCatalogOption());
             answerResponse.setAnswerCatalogOption(optionResponse);
-        }else if(answerModel.getIsFile()){
+        }else if(answerModel.getIsFile() != null && answerModel.getIsFile()){
             List<FileResponse> files = fileService.getFilesByAnswer(answerModel.getIdAnswer());
             answerResponse.setFiles(files);
         }

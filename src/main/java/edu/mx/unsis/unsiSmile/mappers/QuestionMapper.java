@@ -27,9 +27,9 @@ public class QuestionMapper implements BaseMapper<QuestionResponse, QuestionRequ
                 .answerTypeModel(AnswerTypeModel.builder()
                         .idAnswerType(dto.getIdAnswerType())
                         .build())
-                .catalogModel(CatalogModel.builder()
-                        .idCatalog(dto.getIdCatalog())
-                        .build())
+                .catalogModel(dto.getIdCatalog() != 0 ?
+                        CatalogModel.builder()
+                                .idCatalog(dto.getIdCatalog()).build() : null)
                 .build();
     }
 

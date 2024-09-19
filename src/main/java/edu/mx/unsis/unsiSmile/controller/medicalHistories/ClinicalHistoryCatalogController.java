@@ -3,7 +3,11 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
@@ -21,6 +25,8 @@ import java.util.List;
 public class ClinicalHistoryCatalogController {
 
     private final ClinicalHistoryCatalogService clinicalHistoryCatalogService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
+    private final ClinicalHistorySectionService clinicalHistorySectionService;
 
     @Operation(summary = "Crea una historia clínica")
     @PostMapping
@@ -55,5 +61,24 @@ public class ClinicalHistoryCatalogController {
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam Long idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Crea una relación entre el paciente y su historia clínica")
+    @PostMapping("/patient-clinical-history")
+    public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
+            @RequestParam Long idPatient,
+            @RequestParam Long idClinicalHistory) {
+        PatientClinicalHistoryModel response = patientClinicalHistoryService.save(idPatient, idClinicalHistory);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Crea la relación entre una sección y la historia clínica")
+    @PostMapping("/clinial-history-section")
+    public ResponseEntity<ClinicalHistorySectionModel> createClinicalHistorySection(
+            @RequestParam Long idClinicalHistory,
+            @RequestParam Long idSection
+    ) {
+        ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
