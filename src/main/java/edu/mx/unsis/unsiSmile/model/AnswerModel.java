@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -39,7 +39,7 @@ public class AnswerModel extends AuditModel {
     private String answerText;
 
     @Column(name = "answer_date")
-    private LocalDateTime answerDate;
+    private Date answerDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_option")

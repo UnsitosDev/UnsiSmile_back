@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,8 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                         .idQuestion(dto.getIdQuestion())
                         .build())
                 .answerBoolean(dto.getAnswerBoolean())
-                .answerNumeric(dto.getAnswerNumeric())
+                .answerNumeric(dto.getAnswerNumeric() != null && dto.getAnswerNumeric().compareTo(BigDecimal.ZERO)
+                        != 0 ? dto.getAnswerNumeric() : null)
                 .answerText(dto.getAnswerText())
                 .answerDate(dto.getAnswerDate())
                 .catalogOptionModel(dto.getIdCatalogOption() != null ? CatalogOptionModel.builder()
