@@ -114,7 +114,7 @@ CREATE TABLE answers (
                          answer_boolean TINYINT(1) DEFAULT NULL,
                          answer_numeric DECIMAL(10,2) DEFAULT NULL,
                          answer_text TEXT DEFAULT NULL,
-                         answer_date DATETIME DEFAULT NULL,
+                         answer_date DATE DEFAULT NULL,
                          fk_option BIGINT(20) DEFAULT NULL,
                          is_file TINYINT(1) DEFAULT NULL,
                          PRIMARY KEY (id_answer),

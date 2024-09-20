@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -21,13 +21,13 @@ public class AnswerRequest {
     @NotNull(message = "The Id Question cannot be null.")
     private Long idQuestion;
 
-    private Boolean answerBoolean;
+    private Boolean answerBoolean ;
 
     private BigDecimal answerNumeric;
 
     private String answerText;
 
-    private LocalDateTime answerDate;
+    private LocalDate answerDate;
 
     private Long idCatalogOption;
 

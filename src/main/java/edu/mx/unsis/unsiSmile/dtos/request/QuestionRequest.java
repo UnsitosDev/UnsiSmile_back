@@ -25,7 +25,7 @@ public class QuestionRequest {
     @NotNull(message = "The Id Form Section cannot be null.")
     private Long idFormSection;
 
-    @NotNull(message = "The Id Answer cannot be null.")
+    @NotNull(message = "The Id Answer Type cannot be null.")
     private Long idAnswerType;
 
     private Long idCatalog;
