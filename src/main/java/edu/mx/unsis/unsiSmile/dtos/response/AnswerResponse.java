@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -23,7 +23,7 @@ public class AnswerResponse {
 
     private String answerText;
 
-    private Date answerDate;
+    private LocalDate answerDate;
 
     private CatalogOptionResponse answerCatalogOption;
 
