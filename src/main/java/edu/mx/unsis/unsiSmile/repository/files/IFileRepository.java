@@ -1,6 +1,6 @@
-package edu.mx.unsis.unsiSmile.repository;
+package edu.mx.unsis.unsiSmile.repository.files;
 
-import edu.mx.unsis.unsiSmile.model.FileModel;
+import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
