@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.files;
 
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Tag(name = "FILE")
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
 
@@ -23,7 +23,7 @@ public class FileController {
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
     @PostMapping
-    public UUID save(@RequestBody MultipartFile request) {
+    public UUID save(@RequestPart MultipartFile request) {
         return fileService.upload(request);
     }
 
@@ -47,4 +47,11 @@ public class FileController {
         List<FileResponse> response = fileService.getFilesByAnswer(answerId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Operation(summary = "Obtiene un archivo para su descarga")
+    @GetMapping("file/{id}")
+    public ResponseEntity<byte[]> getFileById(@PathVariable String id) {
+        return fileService.downloadFileById(id);
+    }
+
 }

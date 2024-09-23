@@ -1,16 +1,20 @@
 package edu.mx.unsis.unsiSmile.service.files;
 
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.files.DownloadFileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -31,16 +35,25 @@ public class FileService {
 
     public UUID upload(MultipartFile file) {
         if (file.isEmpty()) {
-            return null;
+            throw new AppException("Empty file", HttpStatus.BAD_REQUEST);
+        }
+
+        Path uploadDir = Paths.get(uploadPath);
+        if (!Files.exists(uploadDir)) {
+            try {
+                Files.createDirectories(uploadDir);
+            } catch (Exception e) {
+                throw new AppException("Could not create upload directory", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
         }
 
         try {
-            byte [] bytes = file.getBytes();
+            byte[] bytes = file.getBytes();
             String originalName = URLEncoder.encode(Objects.requireNonNull(file.getOriginalFilename()), StandardCharsets.UTF_8);
-            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String uuid = UUID.randomUUID().toString();
             Path path = Paths.get(uploadPath + uuid);
             String fileName = file.getOriginalFilename();
-            String ext = fileName.substring(fileName.lastIndexOf("."));
+            String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
             Files.write(path, bytes);
 
             FileModel fileModel = FileModel.builder()
@@ -52,10 +65,9 @@ public class FileService {
 
             fileRepository.save(fileModel);
             return UUID.fromString(uuid);
-        }catch (Exception e){
-            throw new AppException("", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (Exception e) {
+            throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
-
     }
 
     public void deleteFile(String idFile) {
@@ -77,9 +89,8 @@ public class FileService {
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
         try {
-
             Path oldFilePath = Paths.get(fileModel.getFilePath());
-            Files.deleteIfExists(oldFilePath);
+            Files.deleteIfExists(oldFilePath);  // Eliminar el archivo antiguo
 
             byte[] bytes = newFile.getBytes();
             String originalName = URLEncoder.encode(Objects.requireNonNull(newFile.getOriginalFilename()), StandardCharsets.UTF_8);
@@ -145,6 +156,23 @@ public class FileService {
         } catch (Exception ex) {
             throw new AppException("Failed to fetch files for answer with ID: " + answerId,
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    public ResponseEntity<byte[]> downloadFileById(String id) {
+        FileModel fileModel = fileRepository.findById(id)
+                .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
+
+        try {
+            Path filePath = Paths.get(fileModel.getFilePath());
+            byte[] fileBytes = Files.readAllBytes(filePath);  // Leer los bytes del archivo
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getFileName() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
+                    .body(fileBytes);
+        } catch (Exception e) {
+            throw new AppException("Error while downloading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
