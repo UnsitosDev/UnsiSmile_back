@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.files;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.files.DownloadFileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -31,14 +30,13 @@ import java.util.stream.Collectors;
 public class FileService {
     private final IFileRepository fileRepository;
     private final FileMapper fileMapper;
-    private final String uploadPath = "uploads/";
 
     public UUID upload(MultipartFile file) {
         if (file.isEmpty()) {
             throw new AppException("Empty file", HttpStatus.BAD_REQUEST);
         }
 
-        Path uploadDir = Paths.get(uploadPath);
+        Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
         if (!Files.exists(uploadDir)) {
             try {
                 Files.createDirectories(uploadDir);
@@ -51,7 +49,7 @@ public class FileService {
             byte[] bytes = file.getBytes();
             String originalName = URLEncoder.encode(Objects.requireNonNull(file.getOriginalFilename()), StandardCharsets.UTF_8);
             String uuid = UUID.randomUUID().toString();
-            Path path = Paths.get(uploadPath + uuid);
+            Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
             String fileName = file.getOriginalFilename();
             String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
             Files.write(path, bytes);
@@ -95,7 +93,7 @@ public class FileService {
             byte[] bytes = newFile.getBytes();
             String originalName = URLEncoder.encode(Objects.requireNonNull(newFile.getOriginalFilename()), StandardCharsets.UTF_8);
             String uuid = UUID.randomUUID().toString().replace("-", "");
-            Path newPath = Paths.get(uploadPath + uuid);
+            Path newPath = Paths.get(Constants.UPLOAD_PATH + uuid);
             String newFileName = newFile.getOriginalFilename();
             String ext = newFileName.substring(newFileName.lastIndexOf(".") + 1);  // Extraer la nueva extensión
             Files.write(newPath, bytes);

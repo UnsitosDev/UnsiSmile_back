@@ -11,4 +11,8 @@ public class Constants {
 
     // Answer Type
     public static final String CATALOG = "CATALOG";
+
+    //upload files path
+    public static final String UPLOAD_PATH = "uploads/";
+
 }
