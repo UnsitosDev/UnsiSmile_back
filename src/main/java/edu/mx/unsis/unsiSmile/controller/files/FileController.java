@@ -1,30 +1,30 @@
-package edu.mx.unsis.unsiSmile.controller;
+package edu.mx.unsis.unsiSmile.controller.files;
 
-import edu.mx.unsis.unsiSmile.dtos.request.FileRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
-import edu.mx.unsis.unsiSmile.service.FileService;
+import edu.mx.unsis.unsiSmile.service.files.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
-@Tag(name = "-------------------FILE")
+@Tag(name = "FILE")
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
 
     private final FileService fileService;
 
-    @Operation(summary = "Crear un archivo, **necesita una respuesta creada")
+    @Operation(summary = "Crear un archivo, necesita una respuesta creada")
     @PostMapping
-    public ResponseEntity<FileResponse> save(@RequestBody FileRequest request) {
-        FileResponse response = fileService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public UUID save(@RequestPart MultipartFile request) {
+        return fileService.upload(request);
     }
 
     @Operation(summary = "Busca un archivo por su id")
@@ -41,17 +41,17 @@ public class FileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina un archivo por id")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable String id) {
-        fileService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
     @Operation(summary = "Obtiene todos los archivos asociados a una respuesta")
     @GetMapping("/answer/{answerId}")
     public ResponseEntity<List<FileResponse>> getFilesByAnswer(@PathVariable Long answerId) {
         List<FileResponse> response = fileService.getFilesByAnswer(answerId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @Operation(summary = "Obtiene un archivo para su descarga")
+    @GetMapping("file/{id}")
+    public ResponseEntity<byte[]> getFileById(@PathVariable String id) {
+        return fileService.downloadFileById(id);
+    }
+
 }

@@ -3,7 +3,7 @@ FROM gradle:jdk21-jammy
 # Variables de entorno para la versión de Gradle
 ENV GRADLE_HOME=/opt/gradle
 ENV PATH=${GRADLE_HOME}/bin:${PATH}
-ENV UNSISMILE_DATABASE=jdbc:mariadb://db:3306/unsis_smile?useSSL=false&serverTimezone=UTC
+ENV UNSISMILE_DATABASE=jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
 ENV DATABASE_USERNAME=root
 ENV DATABASE_PASSWORD=password
 ENV DATABASE_PLATFORM=org.hibernate.dialect.MariaDBDialect
@@ -13,17 +13,17 @@ ENV JWT_SECRET=yOksepqllu0yhyfFGKWOhjd8rISN23HypgnkDaMy/SduH2pj3jtGe2Eu9mxoxAe5Q
 # Crear directorio para la aplicación
 WORKDIR /app
 
-# Copiar el archivo build.gradle y settings.gradle
+# Copiar archivos de configuración antes del código fuente para aprovechar la cache
 COPY build.gradle settings.gradle ./
 
-# Descargar dependencias de Gradle
-RUN gradle build --no-daemon || return 0
+# Descargar dependencias de Gradle (esto será cacheado si los archivos no cambian)
+RUN gradle build --no-daemon --no-build-cache || return 0
 
 # Copiar el código fuente de la aplicación
 COPY src ./src
 
 # Construir la aplicación
-RUN gradle build --no-daemon
+RUN gradle build --no-daemon --no-build-cache
 
 # Exponer el puerto 8080
 EXPOSE 8080

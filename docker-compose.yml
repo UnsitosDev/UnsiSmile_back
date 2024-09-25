@@ -6,6 +6,9 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    volumes:
+      - gradle_cache:/home/gradle/.gradle  # Caché de dependencias de Gradle
+
   db:
     image: "mariadb:10.5"
     container_name: mariadb
@@ -14,10 +17,11 @@ services:
       - MYSQL_DATABASE=unsis_smile
     ports:
       - "3306:3306"
-
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql  # Volumen para persistir los datos de MySQL
 
 volumes:
-  mysql_data: 
+  mysql_data:
+    external: false
+  gradle_cache:  # Volumen para caché de Gradle
     external: false
