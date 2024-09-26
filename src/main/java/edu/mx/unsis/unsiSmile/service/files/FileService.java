@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
+import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import io.jsonwebtoken.lang.Assert;
@@ -31,9 +32,9 @@ public class FileService {
     private final IFileRepository fileRepository;
     private final FileMapper fileMapper;
 
-    public UUID upload(MultipartFile file) {
-        if (file.isEmpty()) {
-            throw new AppException("Empty file", HttpStatus.BAD_REQUEST);
+    public UUID upload(MultipartFile file, Long answerId) {
+        if (file.isEmpty() || answerId == null) {
+            throw new AppException("Empty file or answerId", HttpStatus.BAD_REQUEST);
         }
 
         Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
@@ -47,10 +48,10 @@ public class FileService {
 
         try {
             byte[] bytes = file.getBytes();
-            String originalName = URLEncoder.encode(Objects.requireNonNull(file.getOriginalFilename()), StandardCharsets.UTF_8);
             String uuid = UUID.randomUUID().toString();
             Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
             String fileName = file.getOriginalFilename();
+            assert fileName != null : "Filename is null";
             String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
             Files.write(path, bytes);
 
@@ -59,6 +60,7 @@ public class FileService {
                     .filePath(path.toString())
                     .fileName(fileName)
                     .fileType(ext)
+                    .answer(AnswerModel.builder().idAnswer(answerId).build())
                     .build();
 
             fileRepository.save(fileModel);
@@ -91,10 +93,10 @@ public class FileService {
             Files.deleteIfExists(oldFilePath);  // Eliminar el archivo antiguo
 
             byte[] bytes = newFile.getBytes();
-            String originalName = URLEncoder.encode(Objects.requireNonNull(newFile.getOriginalFilename()), StandardCharsets.UTF_8);
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Path newPath = Paths.get(Constants.UPLOAD_PATH + uuid);
             String newFileName = newFile.getOriginalFilename();
+            assert newFileName != null : "New file name is null";
             String ext = newFileName.substring(newFileName.lastIndexOf(".") + 1);  // Extraer la nueva extensión
             Files.write(newPath, bytes);
 

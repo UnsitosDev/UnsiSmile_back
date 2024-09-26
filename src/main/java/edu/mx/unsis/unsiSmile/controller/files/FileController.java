@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +24,8 @@ public class FileController {
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
     @PostMapping
-    public UUID save(@RequestPart MultipartFile request) {
-        return fileService.upload(request);
+    public UUID upload(@RequestPart MultipartFile file, @RequestPart @Validated Long answerId) {
+        return fileService.upload(file, answerId);
     }
 
     @Operation(summary = "Busca un archivo por su id")
