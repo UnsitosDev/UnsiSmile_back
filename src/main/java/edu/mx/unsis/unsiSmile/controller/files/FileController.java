@@ -28,20 +28,6 @@ public class FileController {
         return fileService.upload(file, answerId);
     }
 
-    @Operation(summary = "Busca un archivo por su id")
-    @GetMapping("/{id}")
-    public ResponseEntity<FileResponse> findById(@PathVariable String id) {
-        FileResponse response = fileService.findById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Operation(summary = "Busca todos los archivos")
-    @GetMapping
-    public ResponseEntity<List<FileResponse>> findAll() {
-        List<FileResponse> response = fileService.findAll();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @Operation(summary = "Obtiene todos los archivos asociados a una respuesta")
     @GetMapping("/answer/{answerId}")
     public ResponseEntity<List<FileResponse>> getFilesByAnswer(@PathVariable Long answerId) {
@@ -51,7 +37,7 @@ public class FileController {
 
     @Operation(summary = "Obtiene un archivo para su descarga")
     @GetMapping("file/{id}")
-    public ResponseEntity<byte[]> getFileById(@PathVariable String id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
         return fileService.downloadFileById(id);
     }
 
