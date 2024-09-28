@@ -12,29 +12,29 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "--------VALIDATION TYPE")
+@Tag(name = "VALIDATION TYPE")
 @RestController
-@RequestMapping("/api/validation-types")
+@RequestMapping("/unsismile/api/v1/validation-types")
 @RequiredArgsConstructor
 public class ValidationTypeController {
 
     private final ValidationTypeService validationTypeService;
 
-    @Operation(summary = "Crea un tipo de validación como MAX_VALUE o algo así")
+    @Operation(summary = "Crea un tipo de validación ejemplo MAX_VALUE.")
     @PostMapping
     public ResponseEntity<ValidationTypeResponse> save(@RequestBody ValidationTypeRequest request) {
         ValidationTypeResponse response = validationTypeService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un tipo de validación por su id")
+    @Operation(summary = "Obtiene un tipo de validación por su id.")
     @GetMapping("/{id}")
     public ResponseEntity<ValidationTypeResponse> findById(@PathVariable Long id) {
         ValidationTypeResponse response = validationTypeService.findById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Devuelve todos los tipos de validación esto puede ser útil cuando mapeas con una validación ")
+    @Operation(summary = "Devuelve todos los tipos de validación")
     @GetMapping
     public ResponseEntity<List<ValidationTypeResponse>> findAll() {
         List<ValidationTypeResponse> response = validationTypeService.findAll();

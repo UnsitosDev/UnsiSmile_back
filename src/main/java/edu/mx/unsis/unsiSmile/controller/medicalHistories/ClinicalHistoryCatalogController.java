@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "------------CLINICAL HISTORY CATALOG")
+@Tag(name = "CLINICAL HISTORY CATALOG")
 @RestController
-@RequestMapping("/api/clinical-history-catalog")
+@RequestMapping("/unsismile/api/v1/clinical-history-catalog")
 @RequiredArgsConstructor
 public class ClinicalHistoryCatalogController {
 
@@ -28,42 +28,42 @@ public class ClinicalHistoryCatalogController {
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final ClinicalHistorySectionService clinicalHistorySectionService;
 
-    @Operation(summary = "Crea una historia clínica")
+    @Operation(summary = "Crea una historia clínica.")
     @PostMapping
     public ResponseEntity<ClinicalHistoryCatalogResponse> save(@RequestBody ClinicalHistoryCatalogRequest request) {
         ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene una historia clínica con toda la configuración **necesita el id del paciente para devolverlo con respuestas")
+    @Operation(summary = "Obtiene una historia clínica con la configuración.")
     @GetMapping("/{id}")
     public ResponseEntity<ClinicalHistoryCatalogResponse> findById(@PathVariable Long id, @Nullable @RequestParam Long patientClinicalHistoryId) {
         ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(id, patientClinicalHistoryId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene una lista de historias clinicas pero con la configuración vacía")
+    @Operation(summary = "Obtiene una lista de historias clinicas sin configuración.")
     @GetMapping
     public ResponseEntity<List<ClinicalHistoryCatalogResponse>> findAll() {
         List<ClinicalHistoryCatalogResponse> response = clinicalHistoryCatalogService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina una historia clínica, 'Verificar luego como eliminar de forma cascade'")
+    @Operation(summary = "Elimina una historia clínica.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         clinicalHistoryCatalogService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Obtiene una lista de catalogos y su relación con el paciente")
+    @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
     @GetMapping("/search")
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam Long idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Crea una relación entre el paciente y su historia clínica")
+    @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
             @RequestParam Long idPatient,
@@ -72,7 +72,7 @@ public class ClinicalHistoryCatalogController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Crea la relación entre una sección y la historia clínica")
+    @Operation(summary = "Crea la relación entre una sección (formulario) y la historia clínica.")
     @PostMapping("/clinial-history-section")
     public ResponseEntity<ClinicalHistorySectionModel> createClinicalHistorySection(
             @RequestParam Long idClinicalHistory,

@@ -14,44 +14,44 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "---------VALIDATION")
+@Tag(name = "VALIDATION")
 @RestController
-@RequestMapping("/api/validations")
+@RequestMapping("/unsismile/api/v1/validations")
 @RequiredArgsConstructor
 public class ValidationController {
 
     private final ValidationService validationService;
     private final QuestionValidationService questionValidationService;
 
-    @Operation(summary = "Crea una nueva validación para las preguntas, **necesita un mensaje, valor y un id del tipo de validaión , revisar todas las tablas de intersecciones muchos a muchos para ver como y donde se crean")
+    @Operation(summary = "Crea una nueva validación para las preguntas.")
     @PostMapping
     public ResponseEntity<ValidationResponse> save(@RequestBody ValidationRequest request) {
         ValidationResponse response = validationService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un tipo de validación por su id")
+    @Operation(summary = "Obtiene un tipo de validación por su id.")
     @GetMapping("/{id}")
     public ResponseEntity<ValidationResponse> findById(@PathVariable Long id) {
         ValidationResponse response = validationService.findById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene todas las validaciones que existen, **paginar")
+    @Operation(summary = "Obtiene todas las validaciones")
     @GetMapping
     public ResponseEntity<List<ValidationResponse>> findAll() {
         List<ValidationResponse> response = validationService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina una validación mediante su id")
+    @Operation(summary = "Elimina una validación mediante su id.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         validationService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Crea la relación entre la pregunta y la validación")
+    @Operation(summary = "Crea la relación entre la pregunta y la validación.")
     @PostMapping("/question-validation")
     public ResponseEntity<QuestionValidationModel> createQuestionValidation(
             @RequestParam Long idQuestion,

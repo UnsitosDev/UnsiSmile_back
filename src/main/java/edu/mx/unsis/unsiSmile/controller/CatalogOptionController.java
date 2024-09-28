@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "-------------CATALOG OPTIONS")
+@Tag(name = "CATALOG OPTIONS")
 @RestController
-@RequestMapping("/api/catalog-options")
+@RequestMapping("/unsismile/api/v1/catalog-options")
 @RequiredArgsConstructor
 public class CatalogOptionController {
 
     private final CatalogOptionService catalogOptionService;
 
-    @Operation(summary = "Crea una opción de respuesta para un catálogo, **el catálogo debe estar creado")
+    @Operation(summary = "Crea una opción de respuesta para un catálogo.")
     @PostMapping
     public ResponseEntity<CatalogOptionResponse> save(@RequestBody CatalogOptionRequest request) {
         CatalogOptionResponse response = catalogOptionService.save(request);
@@ -34,21 +34,21 @@ public class CatalogOptionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene todas las opciones de respuesta, **paginar")
+    @Operation(summary = "Obtiene todas las opciones de respuesta.")
     @GetMapping
     public ResponseEntity<List<CatalogOptionResponse>> findAll() {
         List<CatalogOptionResponse> response = catalogOptionService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina una opción de respuesta mediante su id")
+    @Operation(summary = "Elimina una opción de respuesta mediante su id.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         catalogOptionService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Devuelve todas las opciones de un catálogo mediante el id del catálogo")
+    @Operation(summary = "Devuelve todas las opciones de un catálogo mediante el id del catálogo.")
     @GetMapping("/catalog/{catalogId}")
     public ResponseEntity<List<CatalogOptionResponse>> getOptionsByCatalog(@PathVariable Long catalogId) {
         List<CatalogOptionResponse> response = catalogOptionService.getOptionsByCatalog(catalogId);
