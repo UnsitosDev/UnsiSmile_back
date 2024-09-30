@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,22 +24,8 @@ public class FileController {
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
     @PostMapping
-    public UUID save(@RequestPart MultipartFile request) {
-        return fileService.upload(request);
-    }
-
-    @Operation(summary = "Busca un archivo por su id")
-    @GetMapping("/{id}")
-    public ResponseEntity<FileResponse> findById(@PathVariable String id) {
-        FileResponse response = fileService.findById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Operation(summary = "Busca todos los archivos")
-    @GetMapping
-    public ResponseEntity<List<FileResponse>> findAll() {
-        List<FileResponse> response = fileService.findAll();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public UUID upload(@RequestPart MultipartFile file, @RequestPart @Validated Long answerId) {
+        return fileService.upload(file, answerId);
     }
 
     @Operation(summary = "Obtiene todos los archivos asociados a una respuesta")
@@ -50,7 +37,7 @@ public class FileController {
 
     @Operation(summary = "Obtiene un archivo para su descarga")
     @GetMapping("file/{id}")
-    public ResponseEntity<byte[]> getFileById(@PathVariable String id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
         return fileService.downloadFileById(id);
     }
 
