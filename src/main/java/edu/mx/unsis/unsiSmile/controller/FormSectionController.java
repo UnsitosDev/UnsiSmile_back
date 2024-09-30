@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "FORM SECTION")
 @RestController
-@RequestMapping("/unsismile/api/v1/form-section")
+@RequestMapping("/unsismile/api/v1/form-sections")
 @RequiredArgsConstructor
 public class FormSectionController {
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Tag(name = "CLINICAL HISTORY CATALOG")
 @RestController
-@RequestMapping("/unsismile/api/v1/clinical-history-catalog")
+@RequestMapping("/unsismile/api/v1/clinical-histories")
 @RequiredArgsConstructor
 public class ClinicalHistoryCatalogController {
 
@@ -36,9 +36,11 @@ public class ClinicalHistoryCatalogController {
     }
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")
-    @GetMapping("/{id}")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> findById(@PathVariable Long id, @Nullable @RequestParam Long patientClinicalHistoryId) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(id, patientClinicalHistoryId);
+    @GetMapping("/{idClinicalHistory}/patients/{idPatientClinicalHistory}")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
+            @PathVariable Long idClinicalHistory,
+            @PathVariable Long idPatientClinicalHistory) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatientClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -57,7 +59,7 @@ public class ClinicalHistoryCatalogController {
     }
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
-    @GetMapping("/search")
+    @GetMapping("/patient-clinical-histories")
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam Long idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);

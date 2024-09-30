@@ -46,7 +46,15 @@ public class ClinicalHistoryCatalogService {
     @Transactional(readOnly = true)
     public ClinicalHistoryCatalogResponse findById(Long id, Long patientClinicalHistoryId) {
         try {
-            Assert.notNull(id, "Id cannot be null");
+            Assert.notNull(id, "Clinical History Id cannot be null");
+            if (id == 0) {
+                throw new AppException("Clinical History Id cannot be 0", HttpStatus.BAD_REQUEST);
+            }
+
+            Assert.notNull(patientClinicalHistoryId, "Patient clinical history ID cannot be null");
+            if (patientClinicalHistoryId == 0) {
+                throw new AppException("Patient clinical history ID cannot be 0", HttpStatus.BAD_REQUEST);
+            }
 
             ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(id)
                     .orElseThrow(() -> new AppException("Clinical history catalog not found with id: " + id, HttpStatus.NOT_FOUND));

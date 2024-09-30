@@ -14,7 +14,7 @@ import java.util.List;
 
 @Tag(name = "ANSWERS")
 @RestController
-@RequestMapping("/unsismile/api/answers")
+@RequestMapping("/unsismile/api/v1/answers")
 @RequiredArgsConstructor
 public class AnswerController {
 
@@ -57,7 +57,7 @@ public class AnswerController {
     }
 
     @Operation(summary = "Crea múltiples registros de respuestas, para rellenar los formularios.")
-    @PostMapping("/batch")
+    @PostMapping("/forms")
     public ResponseEntity<List<AnswerResponse>> saveBatch(@RequestBody List<AnswerRequest> requests) {
         List<AnswerResponse> responses = answerService.saveBatch(requests);
         return new ResponseEntity<>(responses, HttpStatus.CREATED);
