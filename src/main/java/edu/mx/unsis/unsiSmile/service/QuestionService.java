@@ -121,22 +121,16 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponse> findAllBySection(Long sectionId, @Nullable Long patientClinicalHistoryId) {
+    public List<QuestionResponse> findAllBySection(Long sectionId, Long patientClinicalHistoryId) {
         List<QuestionModel> questionList = questionRepository.findAllByFormSectionId(sectionId);
 
-        if (patientClinicalHistoryId == null) {
-            return questionList.stream()
-                    .map(question -> toResponse(question, null))
-                    .collect(Collectors.toList());
-        } else {
-            Map<Long, AnswerResponse> answers = answerService.findAllBySectionAndPatientClinicalHistory(questionList, patientClinicalHistoryId);
+        Map<Long, AnswerResponse> answers = answerService.findAllBySectionAndPatientClinicalHistory(questionList, patientClinicalHistoryId);
 
-            return questionList.stream()
-                    .map(question -> {
-                        AnswerResponse answer = answers.get(question.getIdQuestion());
-                        return toResponse(question, answer);
-                    })
-                    .collect(Collectors.toList());
-        }
+        return questionList.stream()
+                .map(question -> {
+                    AnswerResponse answer = answers.get(question.getIdQuestion());
+                    return toResponse(question, answer);
+                })
+                .collect(Collectors.toList());
     }
 }

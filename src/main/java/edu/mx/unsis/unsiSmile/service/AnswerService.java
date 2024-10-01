@@ -144,4 +144,27 @@ public class AnswerService {
                     patientClinicalHistoryId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public List<AnswerResponse> saveBatch(List<AnswerRequest> requests) {
+        try {
+            Assert.notNull(requests, "AnswerRequest list cannot be null");
+            if (requests.isEmpty()) {
+                throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+
+            List<AnswerModel> savedAnswers = requests.stream()
+                    .map(answerMapper::toEntity)
+                    .map(answerRepository::save)
+                    .toList();
+
+            return savedAnswers.stream()
+                    .map(answerMapper::toDto)
+                    .toList();
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to save batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

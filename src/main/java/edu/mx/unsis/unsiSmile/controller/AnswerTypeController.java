@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "----------------ANSWER TYPES")
+@Tag(name = "ANSWER TYPES")
 @RestController
-@RequestMapping("/api/answer-types")
+@RequestMapping("/unsismile/api/v1/answer-types")
 @RequiredArgsConstructor
 public class AnswerTypeController {
 
     private final AnswerTypeService answerTypeService;
 
-    @Operation(summary = "Crea un tipo de respuesta")
+    @Operation(summary = "Crea un tipo de respuesta.")
     @PostMapping
     public ResponseEntity<AnswerTypeResponse> save(@RequestBody AnswerTypeRequest request) {
         AnswerTypeResponse response = answerTypeService.save(request);
@@ -34,14 +34,14 @@ public class AnswerTypeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene todos los tipos de respuestas, **paginarlas a futuro")
+    @Operation(summary = "Obtiene todos los tipos de respuestas")
     @GetMapping
     public ResponseEntity<List<AnswerTypeResponse>> findAll() {
         List<AnswerTypeResponse> response = answerTypeService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina un tipo de respuesta por su id")
+    @Operation(summary = "Elimina un tipo de respuesta por su id.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         answerTypeService.deleteById(id);

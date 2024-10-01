@@ -12,43 +12,43 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "----------QUESTION")
+@Tag(name = "QUESTION")
 @RestController
-@RequestMapping("/api/questions")
+@RequestMapping("/unsismile/api/v1/questions")
 @RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
 
-    @Operation(summary = "Crea una pregunta para las secciones, **necesita la descripción de la pregunta, si es o no requerida, por ahora es obligatorio l sección a la que pertenece, y el tipo de respuesta")
+    @Operation(summary = "Crea una pregunta para algun formulario.")
     @PostMapping
     public ResponseEntity<QuestionResponse> save(@RequestBody QuestionRequest request) {
         QuestionResponse response = questionService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene una pregunta con el id de esta")
+    @Operation(summary = "Obtiene una pregunta por su id.")
     @GetMapping("/{id}")
     public ResponseEntity<QuestionResponse> findById(@PathVariable Long id) {
         QuestionResponse response = questionService.findById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Devuelve todas las preguntas")
+    @Operation(summary = "Devuelve todas las preguntas.")
     @GetMapping
     public ResponseEntity<List<QuestionResponse>> findAll() {
         List<QuestionResponse> response = questionService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina una pregunta")
+    @Operation(summary = "Elimina una pregunta por su id.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         questionService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Obtiene todas las preguntas con o sin respuesta que pertenecen a una sección mediante el id de la sección")
+    @Operation(summary = "Obtiene todas las preguntas con o sin respuesta que pertenecen a un formulario mediante el id.")
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<List<QuestionResponse>> findAllBySection(
             @PathVariable Long sectionId, @RequestParam(required = false) Long patientClinicalHistoryId) {

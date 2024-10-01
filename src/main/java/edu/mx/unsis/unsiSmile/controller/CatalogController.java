@@ -12,36 +12,36 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "----------------ANSWER CATALOGS")
+@Tag(name = "ANSWER CATALOGS")
 @RestController
-@RequestMapping("/api/catalogs")
+@RequestMapping("/unsismile/api/v1/catalogs")
 @RequiredArgsConstructor
 public class CatalogController {
 
     private final CatalogService catalogService;
 
-    @Operation(summary = "Crea un tipo de catálogo")
+    @Operation(summary = "Crea un tipo de catálogo.")
     @PostMapping
     public ResponseEntity<CatalogResponse> save(@RequestBody CatalogRequest request) {
         CatalogResponse response = catalogService.save(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un catálogo por su id")
+    @Operation(summary = "Obtiene un catálogo por su id.")
     @GetMapping("/{id}")
     public ResponseEntity<CatalogResponse> findById(@PathVariable Long id) {
         CatalogResponse response = catalogService.findById(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene todos los tipos de catálogos, **paginarlos")
+    @Operation(summary = "Obtiene todos los tipos de catálogos.")
     @GetMapping
     public ResponseEntity<List<CatalogResponse>> findAll() {
         List<CatalogResponse> response = catalogService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina un catálogo por su id")
+    @Operation(summary = "Elimina un catálogo por su id.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         catalogService.deleteById(id);
