@@ -25,9 +25,8 @@ public class StudentPatientMapper implements BaseMapper<StudentPatientResponse, 
     @Override
     public StudentPatientModel toEntity(StudentPatientRequest dto) {
         return StudentPatientModel.builder()
-                .idStudentPatient(dto.getIdStudentPatient() != null ? dto.getIdStudentPatient() : 0)
                 .patient(PatientModel.builder().idPatient(dto.getPatientId()).build())
-                .student(StudentModel.builder().enrollment(dto.getStudentId()).build())
+                .student(StudentModel.builder().enrollment(dto.getStudentEnrollment()).build())
                 .build();
     }
 

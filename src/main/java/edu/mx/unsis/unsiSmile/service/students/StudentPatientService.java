@@ -1,11 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -13,8 +7,15 @@ import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentPatientModel;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StudentPatientService {
 
+    private final IStudentRepository studentRepository;
+    private final IPatientRepository patientRepository;
     private final IStudentPatientRepository studentPatientRepository;
     private final StudentPatientMapper studentPatientMapper;
 
@@ -31,6 +34,14 @@ public class StudentPatientService {
     public StudentPatientResponse createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
         try {
             Assert.notNull(studentPatientRequest, "StudentPatientRequest cannot be null");
+
+            studentRepository.findById(studentPatientRequest.getStudentEnrollment())
+                    .orElseThrow(() -> new AppException("Student not found with enrollment: "
+                            + studentPatientRequest.getStudentEnrollment(), HttpStatus.NOT_FOUND));
+
+            patientRepository.findById(studentPatientRequest.getPatientId())
+                    .orElseThrow(() -> new AppException("Patient not found with id: "
+                            + studentPatientRequest.getPatientId(), HttpStatus.NOT_FOUND));
 
             StudentPatientModel studentPatientModel = studentPatientMapper.toEntity(studentPatientRequest);
             StudentPatientModel savedStudentPatient = studentPatientRepository.save(studentPatientModel);

@@ -106,7 +106,7 @@ public class PatientService {
 
         StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
                 .patientId(savedPatient.getIdPatient())
-                .studentId(studentResponse.getEnrollment())
+                .studentEnrollment(studentResponse.getEnrollment())
                 .build();
 
         studentPatientService.createStudentPatient(studentPatientRequest);

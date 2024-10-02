@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StudentPatientRequest {
-    @NotNull(message = "Student patient ID cannot be null")
-    private Long idStudentPatient;
 
     @NotNull(message = "Patient cannot be null")
     private Long patientId;
 
     @NotNull(message = "Student cannot be null")
-    private String studentId;
+    private String studentEnrollment;
 }

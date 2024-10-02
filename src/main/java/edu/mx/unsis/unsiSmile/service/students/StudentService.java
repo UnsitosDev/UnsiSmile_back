@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
-import java.util.List;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
@@ -24,6 +15,12 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
