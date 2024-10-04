@@ -13,5 +13,6 @@ import java.util.List;
 @Builder
 public class OdontogramResponse {
     private Long idOdontogram;
-    private List<ToothResponse> tooths;
+    private List<ToothResponse> adultArcade;
+    private List<ToothResponse> childArcade;
 }

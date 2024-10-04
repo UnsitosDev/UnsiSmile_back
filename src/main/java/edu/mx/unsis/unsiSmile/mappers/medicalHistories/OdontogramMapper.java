@@ -26,7 +26,8 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     public OdontogramResponse toDto(OdontogramModel entity) {
         return OdontogramResponse.builder()
                 .idOdontogram(entity.getIdOdontogram())
-                .tooths(Collections.emptyList())
+                .adultArcade(Collections.emptyList())
+                .childArcade(Collections.emptyList())
                 .build();
     }
 
