@@ -23,8 +23,9 @@ public class StudentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public StudentResponse createStudent(@RequestBody StudentRequest request) {
-        return studentService.createStudent(request);
+    public ResponseEntity<Void> createStudent(@RequestBody StudentRequest request) {
+        studentService.createStudent(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{enrollment}")
@@ -48,10 +49,10 @@ public class StudentController {
     }
 
     @PutMapping("/{enrollment}")
-    public ResponseEntity<StudentResponse> updateStudent(@PathVariable String enrollment,
+    public ResponseEntity<Void> updateStudent(@PathVariable String enrollment,
             @RequestBody StudentRequest updatedStudentRequest) {
-         StudentResponse updateStudent= studentService.updateStudent(enrollment, updatedStudentRequest);
-         return ResponseEntity.ok(updateStudent);
+         studentService.updateStudent(enrollment, updatedStudentRequest);
+         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{enrollment}")

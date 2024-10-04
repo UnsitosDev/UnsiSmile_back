@@ -34,7 +34,7 @@ public class StudentService {
     private final UserService userService;
 
     @Transactional
-    public StudentResponse createStudent(StudentRequest request) {
+    public void createStudent(StudentRequest request) {
         try {
             // Create user
             UserModel userModel = userService.createUser(setCredentials(request));
@@ -47,10 +47,7 @@ public class StudentService {
             // set user
             StudentModel studentModel = studentMapper.toEntity(request);
             studentModel.setUser(userModel);
-            StudentModel savedStudent = studentRepository.save(studentModel);
-
-            return studentMapper.toDto(savedStudent);
-
+            studentRepository.save(studentModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -93,7 +90,7 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentResponse updateStudent(String enrollment, StudentRequest updatedStudentRequest) {
+    public void updateStudent(String enrollment, StudentRequest updatedStudentRequest) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
@@ -101,9 +98,7 @@ public class StudentService {
 
             studentMapper.updateEntity(updatedStudentRequest, studentModel);
 
-            StudentModel updatedStudent = studentRepository.save(studentModel);
-
-            return studentMapper.toDto(updatedStudent);
+            studentRepository.save(studentModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

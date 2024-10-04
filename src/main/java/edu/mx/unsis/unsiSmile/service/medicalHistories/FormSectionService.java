@@ -30,15 +30,13 @@ public class FormSectionService {
     private final QuestionService questionService;
 
     @Transactional
-    public FormSectionResponse save(FormSectionRequest request) {
+    public void save(FormSectionRequest request) {
         try {
             Assert.notNull(request, "FormSectionRequest cannot be null");
 
             FormSectionModel formSectionModel = formSectionMapper.toEntity(request);
 
-            FormSectionModel savedFormSection = formSectionRepository.save(formSectionModel);
-
-            return formSectionMapper.toDto(savedFormSection);
+            formSectionRepository.save(formSectionModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save form section due to an internal server error", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

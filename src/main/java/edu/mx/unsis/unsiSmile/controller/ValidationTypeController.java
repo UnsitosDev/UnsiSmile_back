@@ -22,9 +22,9 @@ public class ValidationTypeController {
 
     @Operation(summary = "Crea un tipo de validación ejemplo MAX_VALUE.")
     @PostMapping
-    public ResponseEntity<ValidationTypeResponse> save(@RequestBody ValidationTypeRequest request) {
-        ValidationTypeResponse response = validationTypeService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody ValidationTypeRequest request) {
+        validationTypeService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene un tipo de validación por su id.")

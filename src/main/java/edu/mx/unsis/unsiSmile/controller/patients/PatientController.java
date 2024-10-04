@@ -94,7 +94,7 @@ public class PatientController {
     @PostMapping("/students")
     public ResponseEntity<StudentPatientResponse> createStudent(
             @RequestBody StudentPatientRequest studentPatientRequest) {
-        StudentPatientResponse response = studentPatientService.createStudentPatient(studentPatientRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        studentPatientService.createStudentPatient(studentPatientRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

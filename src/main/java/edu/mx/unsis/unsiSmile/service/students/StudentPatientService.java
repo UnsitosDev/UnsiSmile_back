@@ -31,7 +31,7 @@ public class StudentPatientService {
     private final StudentPatientMapper studentPatientMapper;
 
     @Transactional
-    public StudentPatientResponse createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
+    public void createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
         try {
             Assert.notNull(studentPatientRequest, "StudentPatientRequest cannot be null");
 
@@ -44,9 +44,7 @@ public class StudentPatientService {
                             + studentPatientRequest.getPatientId(), HttpStatus.NOT_FOUND));
 
             StudentPatientModel studentPatientModel = studentPatientMapper.toEntity(studentPatientRequest);
-            StudentPatientModel savedStudentPatient = studentPatientRepository.save(studentPatientModel);
-
-            return studentPatientMapper.toDto(savedStudentPatient);
+            studentPatientRepository.save(studentPatientModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create student-patient relationship", HttpStatus.INTERNAL_SERVER_ERROR,
                     ex);

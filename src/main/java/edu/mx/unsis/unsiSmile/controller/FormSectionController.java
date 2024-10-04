@@ -23,9 +23,9 @@ public class FormSectionController {
 
     @Operation(summary = "Crea una sección para un formulario, puede o no ser una subsección.")
     @PostMapping
-    public ResponseEntity<FormSectionResponse> save(@RequestBody FormSectionRequest request) {
-        FormSectionResponse response = formSectionService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody FormSectionRequest request) {
+        formSectionService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una sección y la configuración con el id de la historia clínica del paciente.")

@@ -22,9 +22,9 @@ public class CatalogController {
 
     @Operation(summary = "Crea un tipo de catálogo.")
     @PostMapping
-    public ResponseEntity<CatalogResponse> save(@RequestBody CatalogRequest request) {
-        CatalogResponse response = catalogService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody CatalogRequest request) {
+        catalogService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene un catálogo por su id.")

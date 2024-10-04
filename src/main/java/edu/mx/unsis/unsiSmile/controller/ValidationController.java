@@ -25,9 +25,9 @@ public class ValidationController {
 
     @Operation(summary = "Crea una nueva validación para las preguntas.")
     @PostMapping
-    public ResponseEntity<ValidationResponse> save(@RequestBody ValidationRequest request) {
-        ValidationResponse response = validationService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody ValidationRequest request) {
+        validationService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene un tipo de validación por su id.")

@@ -27,9 +27,9 @@ public class StudentSemesterController {
     private final StudentSemesterService studentSemesterService;
 
     @PostMapping
-    public ResponseEntity<StudentSemesterResponse> createStudentSemester(@Valid @RequestBody StudentSemesterRequest request) {
-        StudentSemesterResponse createdStudentSemester = studentSemesterService.createStudentSemester(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudentSemester);
+    public ResponseEntity<Void> createStudentSemester(@Valid @RequestBody StudentSemesterRequest request) {
+        studentSemesterService.createStudentSemester(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -45,10 +45,10 @@ public class StudentSemesterController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentSemesterResponse> updateStudentSemester(@PathVariable Long id,
+    public ResponseEntity<Void> updateStudentSemester(@PathVariable Long id,
             @Valid @RequestBody StudentSemesterRequest updatedRequest) {
-        StudentSemesterResponse updatedStudentSemester = studentSemesterService.updateStudentSemester(id, updatedRequest);
-        return ResponseEntity.ok(updatedStudentSemester);
+        studentSemesterService.updateStudentSemester(id, updatedRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
