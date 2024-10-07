@@ -35,7 +35,7 @@ public class StudentPatientService {
         try {
             Assert.notNull(studentPatientRequest, "StudentPatientRequest cannot be null");
 
-            studentRepository.findById(studentPatientRequest.getStudentEnrollment())
+            studentRepository.findByEnrollmentAndStatusKey(studentPatientRequest.getStudentEnrollment(), "A")
                     .orElseThrow(() -> new AppException("Student not found with enrollment: "
                             + studentPatientRequest.getStudentEnrollment(), HttpStatus.NOT_FOUND));
 
