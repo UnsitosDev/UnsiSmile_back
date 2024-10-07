@@ -22,11 +22,10 @@ public class StudentSemesterService {
     private final StudentSemesterMapper studentSemesterMapper;
 
     @Transactional
-    public StudentSemesterResponse createStudentSemester(StudentSemesterRequest request) {
+    public void createStudentSemester(StudentSemesterRequest request) {
         try {
             StudentSemesterModel studentSemesterModel = studentSemesterMapper.toEntity(request);
-            StudentSemesterModel savedStudentSemester = studentSemesterRepository.save(studentSemesterModel);
-            return studentSemesterMapper.toDto(savedStudentSemester);
+            studentSemesterRepository.save(studentSemesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create student semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -56,7 +55,7 @@ public class StudentSemesterService {
     }
 
     @Transactional
-    public StudentSemesterResponse updateStudentSemester(Long id, StudentSemesterRequest updatedRequest) {
+    public void updateStudentSemester(Long id, StudentSemesterRequest updatedRequest) {
         try {
             StudentSemesterModel studentSemesterModel = studentSemesterRepository.findById(id)
                     .orElseThrow(() -> new AppException(
@@ -65,7 +64,6 @@ public class StudentSemesterService {
 
             studentSemesterMapper.updateEntity(updatedRequest, studentSemesterModel);
             studentSemesterRepository.save(studentSemesterModel);
-            return studentSemesterMapper.toDto(studentSemesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update student semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

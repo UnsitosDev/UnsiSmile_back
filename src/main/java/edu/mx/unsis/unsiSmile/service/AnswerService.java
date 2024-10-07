@@ -29,15 +29,13 @@ public class AnswerService {
     private final FileService fileService;
 
     @Transactional
-    public AnswerResponse save(AnswerRequest request) {
+    public void save(AnswerRequest request) {
         try {
             Assert.notNull(request, "AnswerRequest cannot be null");
 
             AnswerModel answerModel = answerMapper.toEntity(request);
 
-            AnswerModel answerSaved = answerRepository.save(answerModel);
-
-            return answerMapper.toDto(answerSaved);
+            answerRepository.save(answerModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save answer", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -146,7 +144,7 @@ public class AnswerService {
     }
 
     @Transactional
-    public List<AnswerResponse> saveBatch(List<AnswerRequest> requests) {
+    public void saveBatch(List<AnswerRequest> requests) {
         try {
             Assert.notNull(requests, "AnswerRequest list cannot be null");
             if (requests.isEmpty()) {
@@ -157,11 +155,6 @@ public class AnswerService {
                     .map(answerMapper::toEntity)
                     .map(answerRepository::save)
                     .toList();
-
-            return savedAnswers.stream()
-                    .map(answerMapper::toDto)
-                    .toList();
-
         } catch (Exception ex) {
             throw new AppException("Failed to save batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

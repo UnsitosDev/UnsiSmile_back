@@ -24,15 +24,13 @@ public class AnswerTypeService {
     private final AnswerTypeMapper answerTypeMapper;
 
     @Transactional
-    public AnswerTypeResponse save(AnswerTypeRequest request) {
+    public void save(AnswerTypeRequest request) {
         try {
             Assert.notNull(request, "AnswerTypeRequest cannot be null");
 
             AnswerTypeModel answerTypeModel = answerTypeMapper.toEntity(request);
 
-            AnswerTypeModel savedAnswerType = answerTypeRepository.save(answerTypeModel);
-
-            return answerTypeMapper.toDto(savedAnswerType);
+            answerTypeRepository.save(answerTypeModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save answer type", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

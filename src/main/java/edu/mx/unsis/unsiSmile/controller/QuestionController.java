@@ -22,9 +22,9 @@ public class QuestionController {
 
     @Operation(summary = "Crea una pregunta para algun formulario.")
     @PostMapping
-    public ResponseEntity<QuestionResponse> save(@RequestBody QuestionRequest request) {
-        QuestionResponse response = questionService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody QuestionRequest request) {
+        questionService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una pregunta por su id.")

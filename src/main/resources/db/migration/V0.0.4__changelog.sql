@@ -43,4 +43,4 @@ ALTER TABLE `user_app` DISABLE KEYS;
 INSERT IGNORE INTO `user_app` VALUES (_binary 'w~2��NB�\�','$2a$10$FsfHswsodA.7t8.tJKuvgef3NR/ar3VZEXgAxEIv.kIYH19//l0kq',1,'string',1),(_binary '�n;/��K�','$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',1,'2019060310',2);
 ALTER TABLE `user_app` ENABLE KEYS;
 
-INSERT IGNORE INTO `students` VALUES ('2019060310','FIMJ011004HOCGRLA8',_binary '�n;/��K�');
+INSERT IGNORE INTO `students` VALUES ('2019060310','FIMJ011004HOCGRLA8',_binary '�n;/��K�', null, null, 'A', null, null);

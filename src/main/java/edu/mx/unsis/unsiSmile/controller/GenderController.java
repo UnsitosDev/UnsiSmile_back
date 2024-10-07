@@ -29,10 +29,9 @@ public class GenderController {
         }
 
         @PostMapping
-        public ResponseEntity<GenderResponse> createGender(@Valid @RequestBody GenderRequest genderRequest) {
-
-                GenderResponse createdGender = genderService.createGender(genderRequest);
-                return ResponseEntity.status(HttpStatus.CREATED).body(createdGender);
+        public ResponseEntity<Void> createGender(@Valid @RequestBody GenderRequest genderRequest) {
+                genderService.createGender(genderRequest);
+                return new ResponseEntity<>(HttpStatus.CREATED);
         }
 
         @GetMapping("/{id}")

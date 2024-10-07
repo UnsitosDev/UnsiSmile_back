@@ -29,7 +29,7 @@ public class ClinicalHistoryCatalogService {
     private final FormSectionService formSectionService;
 
     @Transactional
-    public ClinicalHistoryCatalogResponse save(ClinicalHistoryCatalogRequest request) {
+    public void save(ClinicalHistoryCatalogRequest request) {
         try {
             Assert.notNull(request, "ClinicalHistoryCatalogRequest cannot be null");
 
@@ -37,7 +37,6 @@ public class ClinicalHistoryCatalogService {
 
             ClinicalHistoryCatalogModel savedCatalog = clinicalHistoryCatalogRepository.save(clinicalHistoryCatalogModel);
 
-            return clinicalHistoryCatalogMapper.toDto(savedCatalog);
         } catch (Exception ex) {
             throw new AppException("Failed to save clinical history catalog due to an internal server error", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

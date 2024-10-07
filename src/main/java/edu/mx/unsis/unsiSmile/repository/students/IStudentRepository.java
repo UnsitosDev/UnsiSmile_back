@@ -10,5 +10,8 @@ import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 
 @Repository
 public interface IStudentRepository extends JpaRepository<StudentModel, String> {
+
+        Optional<StudentModel> findByEnrollmentAndStatusKey(String enrollment, String statusKey);
+
         Optional<StudentModel> findByUser(UserModel user);
 }

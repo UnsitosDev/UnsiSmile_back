@@ -22,9 +22,9 @@ public class AnswerController {
 
     @Operation(summary = "Guarda la respuesta a una pregunta.")
     @PostMapping
-    public ResponseEntity<AnswerResponse> save(@RequestBody AnswerRequest request) {
-        AnswerResponse response = answerService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody AnswerRequest request) {
+        answerService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una respuesta por su id.")
@@ -58,9 +58,9 @@ public class AnswerController {
 
     @Operation(summary = "Crea múltiples registros de respuestas, para rellenar los formularios.")
     @PostMapping("/forms")
-    public ResponseEntity<List<AnswerResponse>> saveBatch(@RequestBody List<AnswerRequest> requests) {
-        List<AnswerResponse> responses = answerService.saveBatch(requests);
-        return new ResponseEntity<>(responses, HttpStatus.CREATED);
+    public ResponseEntity<Void> saveBatch(@RequestBody List<AnswerRequest> requests) {
+        answerService.saveBatch(requests);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

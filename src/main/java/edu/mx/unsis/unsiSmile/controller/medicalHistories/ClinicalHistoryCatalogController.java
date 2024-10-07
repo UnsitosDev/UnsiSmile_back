@@ -30,9 +30,9 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Crea una historia clínica.")
     @PostMapping
-    public ResponseEntity<ClinicalHistoryCatalogResponse> save(@RequestBody ClinicalHistoryCatalogRequest request) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody ClinicalHistoryCatalogRequest request) {
+        clinicalHistoryCatalogService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")

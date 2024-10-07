@@ -24,15 +24,13 @@ public class CatalogOptionService {
     private final CatalogOptionMapper catalogOptionMapper;
 
     @Transactional
-    public CatalogOptionResponse save(CatalogOptionRequest request) {
+    public void save(CatalogOptionRequest request) {
         try {
             Assert.notNull(request, "CatalogOptionRequest cannot be null");
 
             CatalogOptionModel catalogOptionModel = catalogOptionMapper.toEntity(request);
 
-            CatalogOptionModel catalogOptionSaved = catalogOptionRepository.save(catalogOptionModel);
-
-            return catalogOptionMapper.toDto(catalogOptionSaved);
+            catalogOptionRepository.save(catalogOptionModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save catalog option", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

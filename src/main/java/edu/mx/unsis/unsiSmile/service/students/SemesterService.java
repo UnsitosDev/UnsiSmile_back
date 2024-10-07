@@ -25,13 +25,12 @@ public class SemesterService {
     private final SemesterMapper semesterMapper;
 
     @Transactional
-    public SemesterResponse createSemester(@NonNull SemesterRequest request) {
+    public void createSemester(@NonNull SemesterRequest request) {
         try {
             Assert.notNull(request, "SemesterRequest cannot be null");
 
             SemesterModel semesterModel = semesterMapper.toEntity(request);
-            SemesterModel savedSemester = semesterRepository.save(semesterModel);
-            return semesterMapper.toDto(savedSemester);
+            semesterRepository.save(semesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -61,7 +60,7 @@ public class SemesterService {
     }
 
     @Transactional
-    public SemesterResponse updateSemester(@NonNull Long id, @NonNull SemesterRequest updatedSemesterRequest) {
+    public void updateSemester(@NonNull Long id, @NonNull SemesterRequest updatedSemesterRequest) {
         try {
             Assert.notNull(updatedSemesterRequest, "Updated SemesterRequest cannot be null");
 
@@ -70,9 +69,7 @@ public class SemesterService {
 
             semesterMapper.updateEntity(updatedSemesterRequest, semesterModel);
 
-            SemesterModel updatedSemester = semesterRepository.save(semesterModel);
-
-            return semesterMapper.toDto(updatedSemester);
+            semesterRepository.save(semesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
