@@ -32,7 +32,7 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .catalogOptionModel(dto.getIdCatalogOption() != null ? CatalogOptionModel.builder()
                         .idCatalogOption(dto.getIdCatalogOption())
                         .build() : null)
-                .isFile(dto.getIsFile())
+                .isFile(dto.getFiles() != null && dto.getFiles().isEmpty() ? true : null)
                 .build();
     }
 

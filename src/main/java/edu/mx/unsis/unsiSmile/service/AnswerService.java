@@ -35,7 +35,11 @@ public class AnswerService {
 
             AnswerModel answerModel = answerMapper.toEntity(request);
 
-            answerRepository.save(answerModel);
+            AnswerModel saved = answerRepository.save(answerModel);
+
+            if (saved.getIsFile()) {
+                fileService.uploadBatch(request.getFiles(), saved.getIdAnswer());
+            }
         } catch (Exception ex) {
             throw new AppException("Failed to save answer", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -151,13 +155,17 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
-            List<AnswerModel> savedAnswers = requests.stream()
-                    .map(answerMapper::toEntity)
-                    .map(answerRepository::save)
-                    .toList();
+            requests.forEach(request -> {
+                AnswerModel answerModel = answerMapper.toEntity(request);
+
+                AnswerModel saved = answerRepository.save(answerModel);
+
+                if (request.getFiles() != null && !request.getFiles().isEmpty()) {
+                    fileService.uploadBatch(request.getFiles(), saved.getIdAnswer());
+                }
+            });
         } catch (Exception ex) {
             throw new AppException("Failed to save batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }
