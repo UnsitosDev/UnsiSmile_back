@@ -58,9 +58,8 @@ public class AnswerController {
 
     @Operation(summary = "Crea múltiples registros de respuestas, para rellenar los formularios.")
     @PostMapping("/forms")
-    public ResponseEntity<Void> saveBatch(@RequestBody List<AnswerRequest> requests) {
+    public ResponseEntity<Void> saveBatch(@RequestPart List<AnswerRequest> requests) {
         answerService.saveBatch(requests);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }

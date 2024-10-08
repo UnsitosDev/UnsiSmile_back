@@ -16,13 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -176,4 +173,17 @@ public class FileService {
         }
     }
 
+    public void uploadBatch(List<MultipartFile> files, Long answerId) {
+        if (files == null || files.isEmpty() || answerId == null) {
+            throw new AppException("Empty file list or answerId", HttpStatus.BAD_REQUEST);
+        }
+
+        files.forEach(file -> {
+            try {
+                this.upload(file, answerId);
+            } catch (Exception e) {
+                throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
+        });
+    }
 }
