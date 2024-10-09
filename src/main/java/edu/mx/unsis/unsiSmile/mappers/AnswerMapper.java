@@ -32,7 +32,6 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .catalogOptionModel(dto.getIdCatalogOption() != null ? CatalogOptionModel.builder()
                         .idCatalogOption(dto.getIdCatalogOption())
                         .build() : null)
-                .isFile(dto.getIsFile())
                 .build();
     }
 
@@ -56,5 +55,18 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
 
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
+
+    public AnswerModel toEntityFromFile(Long idPatientClinicalHistory, Long idQuestion) {
+        return AnswerModel.builder()
+                .patientClinicalHistoryModel(PatientClinicalHistoryModel.builder()
+                        .idPatientClinicalHistory(idPatientClinicalHistory)
+                        .build())
+                .questionModel(QuestionModel.builder()
+                        .idQuestion(idQuestion)
+                        .build())
+                .isFile(true)
+                .build();
+    }
+
 
 }
