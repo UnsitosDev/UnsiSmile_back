@@ -3,10 +3,13 @@ package edu.mx.unsis.unsiSmile.service.files;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
+import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
+import edu.mx.unsis.unsiSmile.service.AnswerService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,13 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,10 +32,12 @@ import java.util.stream.Collectors;
 public class FileService {
     private final IFileRepository fileRepository;
     private final FileMapper fileMapper;
+    private final IAnswerRepository answerRepository;
+    private final AnswerMapper answerMapper;
 
-    public UUID upload(MultipartFile file, Long answerId) {
-        if (file.isEmpty() || answerId == null) {
-            throw new AppException("Empty file or answerId", HttpStatus.BAD_REQUEST);
+    public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
+        if (files.isEmpty() || idPatientClinicalHistory == null || idQuestion == null) {
+            throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
 
         Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
@@ -46,27 +49,30 @@ public class FileService {
             }
         }
 
-        try {
-            byte[] bytes = file.getBytes();
-            String uuid = UUID.randomUUID().toString();
-            Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
-            String fileName = file.getOriginalFilename();
-            assert fileName != null : "Filename is null";
-            String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
-            Files.write(path, bytes);
+        Long answerId = this.createFromFile(idPatientClinicalHistory, idQuestion);
 
-            FileModel fileModel = FileModel.builder()
-                    .idFile(uuid)
-                    .filePath(path.toString())
-                    .fileName(fileName)
-                    .fileType(ext)
-                    .answer(AnswerModel.builder().idAnswer(answerId).build())
-                    .build();
+        for (MultipartFile file : files) {
+            try {
+                byte[] bytes = file.getBytes();
+                String uuid = UUID.randomUUID().toString();
+                Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
+                String fileName = file.getOriginalFilename();
+                assert fileName != null : "Filename is null";
+                String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
+                Files.write(path, bytes);
 
-            fileRepository.save(fileModel);
-            return UUID.fromString(uuid);
-        } catch (Exception e) {
-            throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+                FileModel fileModel = FileModel.builder()
+                        .idFile(uuid)
+                        .filePath(path.toString())
+                        .fileName(fileName)
+                        .fileType(ext)
+                        .answer(AnswerModel.builder().idAnswer(answerId).build())
+                        .build();
+
+                fileRepository.save(fileModel);
+            } catch (Exception e) {
+                throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
         }
     }
 
@@ -173,6 +179,26 @@ public class FileService {
                     .body(fileBytes);
         } catch (Exception e) {
             throw new AppException("Error while downloading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private Long createFromFile(Long idPatientClinicalHistory, Long idQuestion) {
+        try {
+            Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientClinicalHistoryModelIdPatientClinicalHistory(
+                    idQuestion, idPatientClinicalHistory
+            );
+
+            if (existingAnswer.isPresent()) {
+                return existingAnswer.get().getIdAnswer();
+            }
+
+            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(idPatientClinicalHistory, idQuestion);
+
+            newAnswerModel = answerRepository.save(newAnswerModel);
+
+            return newAnswerModel.getIdAnswer();
+        } catch (Exception ex) {
+            throw new AppException("Failed to save answer", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

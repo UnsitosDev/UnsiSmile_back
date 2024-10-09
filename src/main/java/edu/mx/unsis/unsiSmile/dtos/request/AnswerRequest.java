@@ -30,6 +30,4 @@ public class AnswerRequest {
     private LocalDate answerDate;
 
     private Long idCatalogOption;
-
-    private Boolean isFile;
 }

@@ -120,13 +120,13 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-    ("Peso", 1, 2, 1, true, "Ingrese su peso en kilogramos"),
-    ("Estatura", 1, 2, 2, true, "Ingrese su estatura en metros"),
-    ("Temperatura", 1, 2, 3, true, "Ingrese su temperatura corporal"),
-    ("Frecuencia cardiaca", 1, 2, 4, true, "Ingrese su FC (latidos por minuto)"),
-    ("Frecuencia respiratoria", 1, 2, 5, true, "Ingrese su FR (respiraciones por minuto)"),
-    ("Presión arterial", 1, 2, 6, true, "Ingrese su PA (Ej. 120/80)"),
-    ("Saturación de oxigeno", 1, 2, 7, true, "Ingrese su saturación de oxígeno");
+    ("Peso (kg)", 1, 2, 1, true, "Ingrese su peso en kilogramos"),
+    ("Estatura (m)", 1, 2, 2, true, "Ingrese su estatura en metros"),
+    ("Temperatura (°C)", 1, 2, 3, true, "Ingrese su temperatura corporal"),
+    ("Frecuencia cardíaca (lpm)", 1, 2, 4, true, "Ingrese su FC (latidos por minuto)"),
+    ("Frecuencia respiratoria (rpm)", 1, 2, 5, true, "Ingrese su FR (respiraciones por minuto)"),
+    ("Presión arterial (T/A)", 1, 3, 6, true, "Ingrese su PA (Ej. 120/80)"),
+    ("Saturación de oxígeno (%)", 1, 2, 7, true, "Ingrese su saturación de oxígeno");
 
 -- Examen facial
 INSERT INTO questions
@@ -218,12 +218,12 @@ marcapasos/ bypass", 5, 1, 13, true, null),
     ("Tuberculosis o vive con persona(s) con este padecimiento", 5, 1, 22, true, null),
     ("Enfermedades de la piel", 5, 1, 23, true, null),
     ("Trasplantes de órganos", 5, 1, 24, true, null),
-    ("¿Has sido hospitalizado?¿Cual fue el motivo?(en mujeres también anotar datos de parto)", 5, 3, 25, true, "Indique
-        motivo de hospitalización"),
-    ("¿Ha tomado algún medicamento recientemente?¿Cuál y por qué motivo?", 5, 3, 26, true, "Indique medicamentos
-        recientes"),
-    ("¿Ha tenido algún problema con la anestesia dental o anestesia general?, ¿Cuál?", 5, 3, 27, true, "Indique
-        problemas con anestesia"),
+    ("¿Has sido hospitalizado? ¿Cuál fue el motivo?(en mujeres también anotar datos de parto)", 5, 3, 25, true,
+     "Indique motivo de hospitalización"),
+    ("¿Ha tomado algún medicamento recientemente?¿Cuál y por qué motivo?", 5, 3, 26, true,
+     "Indique medicamentos recientes"),
+    ("¿Ha tenido algún problema con la anestesia dental o anestesia general?, ¿Cuál?", 5, 3, 27, true,
+     "Indique problemas con anestesia"),
     ("¿Es alérgico a algún medicamento o sustancia?, ¿Cuál?", 5, 3, 28, true, "Indique alergias"),
     ("(Solo para mujeres) ¿Está embarazada?, Anotar meses de embarazo", 5, 3, 29, false, "Indique meses de embarazo"),
     ("Ampliar respuestas", 5, 3, 30, false, "Indique más detalles si es necesario"),
@@ -285,10 +285,10 @@ INSERT INTO questions
  question_order,
  required)
 VALUES
-    ("Relación molar: Derecha", 19, 4, 3, 1, true),
-    ("Relación molar: Izquierda", 19, 4, 3, 2, true),
-    ("Relación canina: Derecha", 19, 4, 3, 3, true),
-    ("Relación canina: Izquierda", 19, 4, 3, 4, true)
+    ("Relación molar: Derecha", 19, 4, 3, 2, true),
+    ("Relación molar: Izquierda", 19, 4, 3, 1, true),
+    ("Relación canina: Derecha", 19, 4, 3, 4, true),
+    ("Relación canina: Izquierda", 19, 4, 3, 3, true)
 ;
 
 -- Análisis radiográfico

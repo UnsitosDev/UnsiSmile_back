@@ -24,8 +24,12 @@ public class FileController {
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
     @PostMapping
-    public UUID upload(@RequestPart MultipartFile file, @RequestPart @Validated Long answerId) {
-        return fileService.upload(file, answerId);
+    public ResponseEntity<Void> upload(
+            @RequestPart List<MultipartFile> files,
+            @RequestPart @Validated String idPatientClinicalHistory,
+            @RequestPart @Validated String idQuestion) {
+        fileService.upload(files, Long.parseLong(idPatientClinicalHistory), Long.parseLong(idQuestion));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene todos los archivos asociados a una respuesta")
