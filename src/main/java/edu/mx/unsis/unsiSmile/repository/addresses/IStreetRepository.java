@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 
 @Repository
@@ -16,6 +15,6 @@ public interface IStreetRepository extends JpaRepository<StreetModel, Long> {
 
     List<StreetModel> findByName(String name);
 
-    List<StreetModel> findByNeighborhood(NeighborhoodModel neighborhood);
+    List<StreetModel> findByNeighborhoodIdNeighborhood(Long neighborhoodId);
 
 }

@@ -51,7 +51,10 @@ public class NeighborhoodService {
                     .orElseThrow(() -> new AppException("Neighborhood not found with ID: " + idNeighborhood, HttpStatus.NOT_FOUND));
 
             return neighborhoodMapper.toDto(neighborhoodModel);
-        } catch (Exception ex) {
+        }catch (AppException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
             throw new AppException("Failed to fetch neighborhood by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }

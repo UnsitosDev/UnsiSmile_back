@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.StreetMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class StreetService {
 
     private final IStreetRepository streetRepository;
     private final StreetMapper streetMapper;
+    private final NeighborhoodService neighborhoodService;
 
     @Transactional
     public StreetResponse createStreet(@NonNull StreetRequest streetRequest) {
@@ -68,12 +69,17 @@ public class StreetService {
     }
 
     @Transactional(readOnly = true)
-    public List<StreetResponse> getStreetsByNeighborhood(@NonNull NeighborhoodModel neighborhood) {
+    public List<StreetResponse> getStreetsByNeighborhood(@NonNull Long neighborhoodId) {
         try {
-            List<StreetModel> streetModels = streetRepository.findByNeighborhood(neighborhood);
+            NeighborhoodResponse neighborhood = neighborhoodService.getNeighborhoodById(neighborhoodId);
+            List<StreetModel> streetModels = streetRepository.findByNeighborhoodIdNeighborhood(
+                    neighborhood.getIdNeighborhood());
+
             return streetModels.stream()
                     .map(streetMapper::toDto)
                     .collect(Collectors.toList());
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch streets by neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
