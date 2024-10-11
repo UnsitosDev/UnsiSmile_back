@@ -50,6 +50,8 @@ public class LocalityService {
                     .orElseThrow(() -> new AppException("Locality not found with ID: " + idLocality, HttpStatus.NOT_FOUND));
 
             return localityMapper.toDto(localityModel);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch locality by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
