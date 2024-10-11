@@ -31,6 +31,19 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
                 .build();
     }
 
+    public PersonModel toEntity(PersonResponse dto) {
+        return PersonModel.builder()
+                .curp(dto.getCurp())
+                .firstName(dto.getFirstName())
+                .secondName(dto.getSecondName())
+                .firstLastName(dto.getFirstLastName())
+                .secondLastName(dto.getSecondLastName())
+                .phone(dto.getPhone())
+                .birthDate(dto.getBirthDate())
+                .email(dto.getEmail())
+                .build();
+    }
+
     @Override
     public PersonResponse toDto(PersonModel entity) {
         return PersonResponse.builder()

@@ -29,6 +29,10 @@ public class PersonService {
         try {
             Assert.notNull(personRequest, "PersonRequest cannot be null");
 
+            if(personRepository.existsById(personRequest.getCurp())){
+              throw new AppException("Person with " + personRequest.getCurp() + " already exists", HttpStatus.CONFLICT);
+            }
+
             // Map the DTO request to the entity
             PersonModel personModel = personMapper.toEntity(personRequest);
 
