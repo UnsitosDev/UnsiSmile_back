@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.students;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,5 +51,23 @@ public class StudentPatientMapper implements BaseMapper<StudentPatientResponse, 
     public void updateEntity(StudentPatientRequest request, StudentPatientModel entity) {
         // entity.setPatient(patientMapper.toEntity(PatientModel.builder().idPatient(request.getPatientId()).build()));
         // entity.setStudent(studentMapper.toEntity(StudentModel.builder().idStudent(request.getStudentId()).build()));
+    }
+
+    public PatientStudentResponse toResponse(StudentPatientModel entity) {
+        StudentModel student = entity.getStudent();
+
+        StudentRes studentRes = StudentRes.builder()
+                .enrollment(student.getEnrollment())
+                .firstName(student.getPerson().getFirstName())
+                .secondName(student.getPerson().getSecondName())
+                .firstLastName(student.getPerson().getFirstLastName())
+                .secondLastName(student.getPerson().getSecondLastName())
+                .build();
+
+        return PatientStudentResponse.builder()
+                .idStudentPatient(entity.getIdStudentPatient())
+                .patientId(entity.getPatient().getIdPatient())
+                .student(studentRes)
+                .build();
     }
 }

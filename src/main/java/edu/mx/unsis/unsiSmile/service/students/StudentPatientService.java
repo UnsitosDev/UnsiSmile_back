@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
@@ -17,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,5 +119,17 @@ public class StudentPatientService {
                     HttpStatus.NOT_FOUND);
         }
         studentPatientRepository.deleteById(idStudentPatient);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PatientStudentResponse> getByPatients(Set<Long> patientsId) {
+        if (patientsId.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            List<StudentPatientModel> studentPatients = studentPatientRepository.findAllByPatientsId(patientsId);
+            return studentPatients.stream()
+                    .map(studentPatientMapper::toResponse)
+                    .collect(Collectors.toList());
+        }
     }
 }
