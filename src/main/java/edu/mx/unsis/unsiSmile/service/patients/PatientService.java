@@ -10,6 +10,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -17,6 +18,7 @@ import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
@@ -160,8 +162,8 @@ public class PatientService {
         Page<PatientModel> allPatients = patientRepository.findAll(pageable);
         Set<Long> patientIds = extractPatientIds(allPatients);
 
-        List<StudentPatientResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
-        Map<Long, StudentResponse> studentMap = createStudentMap(studentPatientResponses);
+        List<PatientStudentResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
+        Map<Long, StudentRes> studentMap = createStudentMap(studentPatientResponses);
 
         List<PatientResponse> patientResponses = mapPatientsToResponses(allPatients, studentMap);
 
@@ -174,21 +176,21 @@ public class PatientService {
         return patientIds;
     }
 
-    private Map<Long, StudentResponse> createStudentMap(List<StudentPatientResponse> studentPatientResponses) {
-        Map<Long, StudentResponse> studentMap = new HashMap<>();
-        for (StudentPatientResponse studentPatientResponse : studentPatientResponses) {
-            Long patientId = studentPatientResponse.getPatient().getIdPatient();
-            StudentResponse student = studentPatientResponse.getStudent();
+    private Map<Long, StudentRes> createStudentMap(List<PatientStudentResponse> studentPatientResponses) {
+        Map<Long, StudentRes> studentMap = new HashMap<>();
+        for (PatientStudentResponse studentPatientResponse : studentPatientResponses) {
+            Long patientId = studentPatientResponse.getPatientId();
+            StudentRes student = studentPatientResponse.getStudent();
             studentMap.put(patientId, student);
         }
         return studentMap;
     }
 
-    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<Long, StudentResponse> studentMap) {
+    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<Long, StudentRes> studentMap) {
         return allPatients.stream()
                 .map(patient -> {
                     PatientResponse patientResponse = patientMapper.toDto(patient);
-                    StudentResponse studentForPatient = studentMap.get(patientResponse.getIdPatient());
+                    StudentRes studentForPatient = studentMap.get(patientResponse.getIdPatient());
                     if (studentForPatient != null) {
                         patientResponse.setStudent(studentForPatient);
                     }

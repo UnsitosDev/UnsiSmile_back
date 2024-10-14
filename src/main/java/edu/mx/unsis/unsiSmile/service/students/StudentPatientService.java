@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
@@ -121,13 +122,13 @@ public class StudentPatientService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudentPatientResponse> getByPatients(Set<Long> patientsId) {
+    public List<PatientStudentResponse> getByPatients(Set<Long> patientsId) {
         if (patientsId.isEmpty()) {
             return Collections.emptyList();
         } else {
             List<StudentPatientModel> studentPatients = studentPatientRepository.findAllByPatientsId(patientsId);
             return studentPatients.stream()
-                    .map(studentPatientMapper::toDto)
+                    .map(studentPatientMapper::toResponse)
                     .collect(Collectors.toList());
         }
     }

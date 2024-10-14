@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.dtos.response.patients;
 
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +27,5 @@ public class PatientResponse {
     private EthnicGroupResponse ethnicGroup;
     private ReligionResponse religion;
     private GuardianResponse guardian;
-    private StudentResponse student;
+    private StudentRes student;
 }
