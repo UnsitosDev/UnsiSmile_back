@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(name = "FILE")
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/unsismile/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
 
