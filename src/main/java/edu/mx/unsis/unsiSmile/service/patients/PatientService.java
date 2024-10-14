@@ -21,7 +21,6 @@ import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
@@ -43,10 +42,7 @@ import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +50,6 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final IPatientRepository patientRepository;
-    private final IPersonRepository personRepository;
     private final PatientMapper patientMapper;
     private final PersonMapper personMapper;
     private final IGuardianRepository guardianRepository;
@@ -163,7 +158,43 @@ public class PatientService {
 
     private Page<PatientResponse> getAllPatientsPage(Pageable pageable) {
         Page<PatientModel> allPatients = patientRepository.findAll(pageable);
-        return allPatients.map(patientMapper::toDto);
+        Set<Long> patientIds = extractPatientIds(allPatients);
+
+        List<StudentPatientResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
+        Map<Long, StudentResponse> studentMap = createStudentMap(studentPatientResponses);
+
+        List<PatientResponse> patientResponses = mapPatientsToResponses(allPatients, studentMap);
+
+        return new PageImpl<>(patientResponses, pageable, allPatients.getTotalElements());
+    }
+
+    private Set<Long> extractPatientIds(Page<PatientModel> allPatients) {
+        Set<Long> patientIds = new HashSet<>();
+        allPatients.forEach(patient -> patientIds.add(patient.getIdPatient()));
+        return patientIds;
+    }
+
+    private Map<Long, StudentResponse> createStudentMap(List<StudentPatientResponse> studentPatientResponses) {
+        Map<Long, StudentResponse> studentMap = new HashMap<>();
+        for (StudentPatientResponse studentPatientResponse : studentPatientResponses) {
+            Long patientId = studentPatientResponse.getPatient().getIdPatient();
+            StudentResponse student = studentPatientResponse.getStudent();
+            studentMap.put(patientId, student);
+        }
+        return studentMap;
+    }
+
+    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<Long, StudentResponse> studentMap) {
+        return allPatients.stream()
+                .map(patient -> {
+                    PatientResponse patientResponse = patientMapper.toDto(patient);
+                    StudentResponse studentForPatient = studentMap.get(patientResponse.getIdPatient());
+                    if (studentForPatient != null) {
+                        patientResponse.setStudent(studentForPatient);
+                    }
+                    return patientResponse;
+                })
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -260,11 +291,9 @@ public class PatientService {
     @Transactional(readOnly = true)
     public PatientModel getPatientModel(@NonNull Long id) {
         try {
-            PatientModel patientModel = patientRepository.findByIdPatient(id)
+            return patientRepository.findByIdPatient(id)
                     .orElseThrow(
                             () -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
-
-            return patientModel;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -283,8 +312,7 @@ public class PatientService {
         Set<Long> patientIds = studentPatientResponses.stream()
                 .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
                 .collect(Collectors.toSet());
-        List<PatientModel> filteredPatients = patientRepository.findAllById(patientIds);
-        return filteredPatients;
+        return patientRepository.findAllById(patientIds);
     }
 
     private List<PatientResponse> patientsMapped(List<PatientModel> patientes) {

@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,5 +118,17 @@ public class StudentPatientService {
                     HttpStatus.NOT_FOUND);
         }
         studentPatientRepository.deleteById(idStudentPatient);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudentPatientResponse> getByPatients(Set<Long> patientsId) {
+        if (patientsId.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            List<StudentPatientModel> studentPatients = studentPatientRepository.findAllByPatientsId(patientsId);
+            return studentPatients.stream()
+                    .map(studentPatientMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }
 }
