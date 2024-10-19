@@ -20,21 +20,18 @@ VALUES
     ("Recibo"),
     ("Autorización de tratamiento"),
     ("Evaluación de prótesis parcial fija"),
-    (
-        "CARTA DE CONSENTIMIENTO INFORMADO PARA PRÓTESIS BUCAL"
-    );
+    ("CARTA DE CONSENTIMIENTO INFORMADO PARA PRÓTESIS BUCAL");
 
 INSERT INTO
     form_sections (form_name, fk_parent_section) -- 6 y 7
 VALUES
-    ("Cámara Pulpar", 6),
-    ("Zona Apical", 6),
-    ("Conducto Radicular", 6),
-    ("Número de conductos", 7),
-    ("Proporción Corona-Raíz", 7),
-    ("Odontograma", 7);
+    ("Cámara Pulpar", 25),
+    ("Zona Apical", 25),
+    ("Conducto Radicular", 25),
+    ("Número de conductos", 26),
+    ("Proporción Corona-Raíz", 26),
+    ("Odontograma", 26);
 
--- insert para las secciones de historia clínica general
 INSERT INTO
     clinical_history_sections (
     fk_clinical_history_catalog,
@@ -47,8 +44,8 @@ VALUES
     (2, 22, 3),
     (2, 23, 4),
     (2, 24, 5),
-    (2, 32, 6),
-    (2, 33, 7),
+    (2, 25, 6),
+    (2, 26, 7),
     (2, 27, 8),
     (2, 28, 9),
     (2, 29, 10),
