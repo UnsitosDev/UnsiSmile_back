@@ -107,7 +107,7 @@ VALUES
     ("Peso", 20, 2, 1, true),
     ("T/A", 20, 2, 2, true),
     ("Pulso", 20, 2, 3, true),
-    ("Temperatura", 20, 4, 1, true),
+    ("Temperatura", 20, 2, 4, true),
     ("Glucosa", 20, 2, 5, true);
 
 -- INTERROGATIORIO
@@ -318,7 +318,7 @@ INSERT INTO
 )
 VALUES
     ("Cámara pulpar", 32, 4, 5, 1, true),
-    ("Zona Apical", 32, 4, 3, 6, true),
+    ("Zona Apical", 32, 4, 6, 2, true),
     ("Conducto Radicular", 32, 4, 7, 3, true);
 
 INSERT INTO
