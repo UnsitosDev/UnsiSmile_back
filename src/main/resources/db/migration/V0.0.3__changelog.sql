@@ -7,7 +7,7 @@ CREATE TABLE clinical_history_catalogs (
 -- FormSections Table
 CREATE TABLE form_sections (
                                id_form_section BIGINT(20) NOT NULL AUTO_INCREMENT,
-                               form_name VARCHAR(100) UNIQUE NOT NULL,
+                               form_name VARCHAR(100) NOT NULL,
                                fk_parent_section BIGINT(20) DEFAULT NULL,
                                PRIMARY KEY (id_form_section),
                                FOREIGN KEY (fk_parent_section) REFERENCES form_sections (id_form_section)
