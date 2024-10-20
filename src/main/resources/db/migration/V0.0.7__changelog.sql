@@ -13,7 +13,7 @@ INSERT INTO form_sections
 VALUES
     ("Signos vitales"),
     ("Exámen facial"),
-    ("Antecedentes Heredofamiliares"),
+    ("Antecedentes heredofamiliares"),
     ("Antecedentes personales no patológicos"),
     ("Antecedentes personales patológicos"),
     ("Odontograma inicial"),
@@ -35,7 +35,7 @@ VALUES
 INSERT INTO form_sections
 (form_name, fk_parent_section)
 VALUES
-    ("Clasificación de Angle", 12)
+    ("Clasificación de angle", 12)
 ;
 select * from form_sections;
 -- insert para las secciones de historia clínica general

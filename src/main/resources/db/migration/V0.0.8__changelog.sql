@@ -20,16 +20,16 @@ VALUES
     ("Recibo"),
     ("Autorización de tratamiento"),
     ("Evaluación de prótesis parcial fija"),
-    ("CARTA DE CONSENTIMIENTO INFORMADO PARA PRÓTESIS BUCAL");
+    ("Carta de consentimiento informado para prótesis bucal");
 
 INSERT INTO
     form_sections (form_name, fk_parent_section) -- 6 y 7
 VALUES
-    ("Cámara Pulpar", 25),
-    ("Zona Apical", 25),
-    ("Conducto Radicular", 25),
+    ("Cámara pulpar", 25),
+    ("Zona apical", 25),
+    ("Conducto radicular", 25),
     ("Número de conductos", 26),
-    ("Proporción Corona-Raíz", 26),
+    ("Proporción corona-raíz", 26),
     ("Odontograma", 26);
 
 INSERT INTO
@@ -58,8 +58,8 @@ VALUES
     ("Cámara pulpar"), -- id: 5
     ("Zona apical"),
     ("Conducto radicular"),
-    ("Numero de conductos"),
-    ("Proporción Corona-Raíz");
+    ("Número de conductos"),
+    ("Proporción corona-raíz");
 
 INSERT INTO
     catalog_options (fk_catalog, option_name)
@@ -209,15 +209,15 @@ INSERT INTO
     required
 )
 values
-    ("Piso de la Boca", 23, 3, 1, true),
+    ("Piso de la boca", 23, 3, 1, true),
     ("Labios", 23, 3, 2, true),
-    ("Paladar Duro y Blando", 23, 3, 3, true),
+    ("Paladar duro y blando", 23, 3, 3, true),
     ("Lengua", 23, 3, 4, true),
     ("Carrillos", 23, 3, 5, true),
-    ("Proceso Residual", 23, 3, 6, true),
-    ("Áreas Edéntulas", 23, 3, 7, true),
-    ("Mucosa Bucal:", 23, 3, 8, true),
-    ("Articulación Temporomandibular", 23, 3, 9, true);
+    ("Proceso residual", 23, 3, 6, true),
+    ("Áreas edéntulas", 23, 3, 7, true),
+    ("Mucosa bucal:", 23, 3, 8, true),
+    ("Articulación temporomandibular", 23, 3, 9, true);
 
 INSERT INTO
     questions (
@@ -246,7 +246,7 @@ values
     ("Semestre", 28, 3, 2, true),
     ("Grupo", 28, 3, 3, true),
     ("Indicaciones", 28, 8, 4, true),
-    ("No. De Recibo", 28, 2, 5, true),
+    ("No. de recibo", 28, 2, 5, true),
     ("Costo total:", 28, 2, 6, true),
     (
         "Nombre del catedrático responsable",
@@ -296,7 +296,7 @@ INSERT INTO
 )
 values
     (
-        "CARTA DE CONSENTIMIENTO INFORMADO PARA PRÓTESIS BUCAL",
+        "Carta de consentimiento informado para prótesis bucal",
         31,
         6,
         1,
@@ -315,8 +315,8 @@ INSERT INTO
 )
 VALUES
     ("Cámara pulpar", 32, 4, 5, 1, true),
-    ("Zona Apical", 33, 4, 6, 2, true),
-    ("Conducto Radicular", 34, 4, 7, 3, true);
+    ("Zona apical", 33, 4, 6, 2, true),
+    ("Conducto radicular", 34, 4, 7, 3, true);
 
 
 INSERT INTO
@@ -329,8 +329,8 @@ INSERT INTO
     required
 )
 VALUES
-    ("Numero de Conductos", 35, 4, 8, 1, true),
-    ("Proporción Corona-Raíz", 36, 4, 9, 2, true);
+    ("Número de conductos", 35, 4, 8, 1, true),
+    ("Proporción corona-raíz", 36, 4, 9, 2, true);
 
 INSERT INTO
     questions (
@@ -341,13 +341,13 @@ INSERT INTO
     required
 )
 values
-    ("Dientes Cariados", 24, 3, 1, true),
+    ("Dientes cariados", 24, 3, 1, true),
     ("Amalgamas", 24, 3, 2, true),
-    ("Dientes Ausentes", 24, 3, 3, true),
+    ("Dientes ausentes", 24, 3, 3, true),
     ("Resinas", 24, 3, 4, true),
-    ("Dientes Obturados", 24, 3, 5, true),
+    ("Dientes obturados", 24, 3, 5, true),
     ("Incrustaciones", 24, 3, 6, true),
-    ("Extracciones Indicadas", 24, 3, 7, true),
-    ("Prótesis Fija", 24, 3, 8, true),
+    ("Extracciones indicadas", 24, 3, 7, true),
+    ("Prótesis fija", 24, 3, 8, true),
     ("Raíces", 24, 3, 9, true),
-    ("Prótesis Removible", 24, 3, 10, true);
+    ("Prótesis removible", 24, 3, 10, true);
