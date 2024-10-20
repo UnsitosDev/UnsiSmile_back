@@ -315,8 +315,8 @@ INSERT INTO
 )
 VALUES
     ("Cámara pulpar", 32, 4, 5, 1, true),
-    ("Zona Apical", 32, 4, 6, 2, true),
-    ("Conducto Radicular", 32, 4, 7, 3, true);
+    ("Zona Apical", 33, 4, 6, 2, true),
+    ("Conducto Radicular", 34, 4, 7, 3, true);
 
 INSERT INTO
     questions (
@@ -328,5 +328,5 @@ INSERT INTO
     required
 )
 VALUES
-    ("Numero de Conductos", 33, 4, 8, 1, true),
-    ("Proporción Corona-Raíz", 33, 4, 9, 2, true);
+    ("Numero de Conductos", 35, 4, 8, 1, true),
+    ("Proporción Corona-Raíz", 36, 4, 9, 2, true);
