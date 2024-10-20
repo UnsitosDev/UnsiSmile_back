@@ -64,7 +64,7 @@ public class PatientService {
     private final PersonService personService;
 
     @Transactional
-    public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
+    public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
 
             PersonModel person = createPersonEntity(patientRequest.getPerson());
@@ -73,10 +73,7 @@ public class PatientService {
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
-            relateStudentPatient(savedPatient);
-
-            return patientMapper.toDto(savedPatient);
-
+            relateStudentPatient(savedPatient, patientRequest.getStudent().getEnrollment());
         } catch (DataAccessException ex) {
             throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -102,21 +99,29 @@ public class PatientService {
         return patientModel;
     }
 
-    private void relateStudentPatient(PatientModel savedPatient) {
+    private void relateStudentPatient(PatientModel savedPatient, String enrollment) {
 
         // search the user
         UserResponse user = userService.getCurrentUser();
+        StudentPatientRequest studentPatientRequest;
+        StudentResponse student;
+        try {
 
-        UserRequest userRequest = buildUserRequest(user);
+            student = user.getRole().getRole().equals(ERole.ROLE_STUDENT)
+                    ? studentService.getStudentByUser(buildUserRequest(user))
+                    : studentService.getStudentByEnrollment(enrollment);
 
-        StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
+            studentPatientRequest = StudentPatientRequest.builder()
+                    .patientId(savedPatient.getIdPatient())
+                    .studentEnrollment(student.getEnrollment())
+                    .build();
 
-        StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
-                .patientId(savedPatient.getIdPatient())
-                .studentEnrollment(studentResponse.getEnrollment())
-                .build();
-
-        studentPatientService.createStudentPatient(studentPatientRequest);
+            studentPatientService.createStudentPatient(studentPatientRequest);
+        } catch (AppException ex) {
+           throw ex;
+        } catch (Exception e) {
+            throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     // Method to create an address entity

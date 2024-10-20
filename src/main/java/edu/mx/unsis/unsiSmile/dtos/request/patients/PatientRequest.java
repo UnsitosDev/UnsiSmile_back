@@ -1,14 +1,15 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
-import java.time.LocalDate;
-
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.students.StudentReq;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -48,4 +49,6 @@ public class PatientRequest {
     private Long religionId;
 
     private GuardianRequest guardian;
+
+    private StudentReq student;
 }
