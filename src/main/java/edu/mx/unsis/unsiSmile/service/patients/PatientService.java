@@ -64,7 +64,7 @@ public class PatientService {
     private final PersonService personService;
 
     @Transactional
-    public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
+    public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
 
             PersonModel person = createPersonEntity(patientRequest.getPerson());
@@ -73,10 +73,7 @@ public class PatientService {
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
-            relateStudentPatient(savedPatient, patientRequest.getEnrollment());
-
-            return patientMapper.toDto(savedPatient);
-
+            relateStudentPatient(savedPatient, patientRequest.getStudent().getEnrollment());
         } catch (DataAccessException ex) {
             throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -124,7 +121,6 @@ public class PatientService {
            throw ex;
         } catch (Exception e) {
             throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
-
         }
     }
 
