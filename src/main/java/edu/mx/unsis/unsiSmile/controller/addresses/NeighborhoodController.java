@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.addresses;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 import edu.mx.unsis.unsiSmile.service.addresses.NeighborhoodService;
 import jakarta.validation.Valid;
 
@@ -47,11 +47,10 @@ public class NeighborhoodController {
         return ResponseEntity.ok(neighborhoodResponses);
     }
 
+    @Operation(summary = "Obtiene las colonias de una localidad")
     @GetMapping("/locality/{localityId}")
     public ResponseEntity<List<NeighborhoodResponse>> getNeighborhoodsByLocality(@Valid @PathVariable String localityId) {
-        // Assuming you have a method to get the LocalityModel by ID
-        LocalityModel locality = getLocalityById(localityId);
-        List<NeighborhoodResponse> neighborhoodResponses = neighborhoodService.getNeighborhoodsByLocality(locality);
+        List<NeighborhoodResponse> neighborhoodResponses = neighborhoodService.getNeighborhoodsByLocality(localityId);
         return ResponseEntity.ok(neighborhoodResponses);
     }
 
@@ -71,11 +70,5 @@ public class NeighborhoodController {
     public ResponseEntity<?> deleteNeighborhoodById(@Valid @PathVariable Long id) {
         neighborhoodService.deleteNeighborhoodById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private LocalityModel getLocalityById(String localityId) {
-        // Implement the logic to fetch the LocalityModel by ID
-        // This is just a placeholder, you need to provide the actual implementation
-        return new LocalityModel();
     }
 }

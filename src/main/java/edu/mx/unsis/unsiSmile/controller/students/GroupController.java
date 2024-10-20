@@ -29,32 +29,28 @@ public class GroupController {
     }
 
     @PostMapping
-    public ResponseEntity<GroupResponse> createGroup(@Valid @RequestBody GroupRequest request) {
-        GroupResponse createdGroup = groupService.createGroup(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdGroup);
-
+    public ResponseEntity<Valid> createGroup(@Valid @RequestBody GroupRequest request) {
+        groupService.createGroup(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<GroupResponse> getGroupById(@Valid @PathVariable Long id) {
-
         GroupResponse groupResponse = groupService.getGroupById(id);
         return ResponseEntity.ok(groupResponse);
     }
 
     @GetMapping
     public ResponseEntity<List<GroupResponse>> getAllGroups() {
-
         List<GroupResponse> allGroups = groupService.getAllGroups();
         return ResponseEntity.ok(allGroups);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GroupResponse> updateGroup(@Valid @PathVariable Long id,
+    public ResponseEntity<Void> updateGroup(@Valid @PathVariable Long id,
     @Valid @RequestBody GroupRequest updatedGroupRequest) {
-
-        GroupResponse updatedGroup = groupService.updateGroup(id, updatedGroupRequest);
-        return ResponseEntity.ok(updatedGroup);
+        groupService.updateGroup(id, updatedGroupRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

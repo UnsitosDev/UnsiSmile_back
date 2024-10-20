@@ -1,8 +1,13 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import java.time.LocalDate;
-import java.util.List;
-
+import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
+import edu.mx.unsis.unsiSmile.service.patients.PatientService;
+import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,25 +16,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
-import edu.mx.unsis.unsiSmile.service.patients.PatientService;
-import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/patients")
 public class PatientController {
 
     private final PatientService patientService;
+    private final StudentPatientService studentPatientService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, StudentPatientService studentPatientService) {
         this.patientService = patientService;
+        this.studentPatientService = studentPatientService;
     }
 
     @PostMapping
-    public ResponseEntity<PatientResponse> createPatient(@Valid @RequestBody PatientRequest patientRequest) {
-        PatientResponse createdPatient = patientService.createPatient(patientRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPatient);
+    public ResponseEntity<Void> createPatient(@Valid @RequestBody PatientRequest patientRequest) {
+        patientService.createPatient(patientRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -83,5 +88,13 @@ public class PatientController {
     public ResponseEntity<?> deletePatientById(@PathVariable Long id) {
         patientService.deletePatientById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Asigna un estudiante a un paciente")
+    @PostMapping("/students")
+    public ResponseEntity<StudentPatientResponse> createStudent(
+            @RequestBody StudentPatientRequest studentPatientRequest) {
+        studentPatientService.createStudentPatient(studentPatientRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

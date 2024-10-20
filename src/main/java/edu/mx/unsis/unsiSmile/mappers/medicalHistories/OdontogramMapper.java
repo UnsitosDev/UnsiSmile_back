@@ -1,12 +1,11 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FaceRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.*;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -45,7 +44,16 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
 
     public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
-        OdontogramModel odontogramModel = OdontogramModel.builder().creationDate(LocalDate.now()).build();
+        OdontogramModel odontogramModel = OdontogramModel.builder()
+        .creationDate(LocalDate.now())
+                .patient(
+                        PatientModel.builder().
+                                idPatient(dto.getIdPatient())
+                                .build())
+                .formSection(FormSectionModel.builder().
+                        idFormSection(dto.getTypeOdontogram().getValue()).
+                        build())
+                .build();
 
         // Mapeo de ToothConditionAssignments
         List<ToothConditionAssignmentModel> toothConditionAssignments = dto.getTooths().stream()

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "toothface_condition")
+@Table(name = "toothface_conditions")
 @IdClass(ToothFaceConditionId.class)
 public class ToothFaceConditionModel {
 
