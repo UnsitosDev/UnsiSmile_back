@@ -190,7 +190,17 @@ VALUES
         5,
         14,
         true
-    ),
+    );
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+VALUES
     ("Materia alba", 22, 1, 1, true),
     ("Placa bacteriana", 22, 1, 2, true),
     ("Sarro", 22, 1, 3, true),

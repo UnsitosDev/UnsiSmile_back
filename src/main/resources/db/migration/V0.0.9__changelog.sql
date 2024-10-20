@@ -7,6 +7,7 @@ VALUES
     ("Periodontograma"),
     ("Carta de concentimiento informado para periodoncia")
 ;
+
 INSERT INTO
     clinical_history_sections (
     fk_clinical_history_catalog,
@@ -36,6 +37,7 @@ INSERT INTO
 )
 values
     ("Hoja de evalucación de periodoncia",38,6,1,true);
+
 -- CARTA DE CONSENTIMIENTO INFORMADO PARA PERIODONCIA
 INSERT INTO
     questions (
