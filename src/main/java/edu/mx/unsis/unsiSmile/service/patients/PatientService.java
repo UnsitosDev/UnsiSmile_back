@@ -73,7 +73,7 @@ public class PatientService {
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
-            relateStudentPatient(savedPatient);
+            relateStudentPatient(savedPatient, patientRequest.getEnrollment());
 
             return patientMapper.toDto(savedPatient);
 
@@ -102,21 +102,30 @@ public class PatientService {
         return patientModel;
     }
 
-    private void relateStudentPatient(PatientModel savedPatient) {
+    private void relateStudentPatient(PatientModel savedPatient, String enrollment) {
 
         // search the user
         UserResponse user = userService.getCurrentUser();
+        StudentPatientRequest studentPatientRequest;
+        StudentResponse student;
+        try {
 
-        UserRequest userRequest = buildUserRequest(user);
+            student = user.getRole().getRole().equals(ERole.ROLE_STUDENT)
+                    ? studentService.getStudentByUser(buildUserRequest(user))
+                    : studentService.getStudentByEnrollment(enrollment);
 
-        StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
+            studentPatientRequest = StudentPatientRequest.builder()
+                    .patientId(savedPatient.getIdPatient())
+                    .studentEnrollment(student.getEnrollment())
+                    .build();
 
-        StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
-                .patientId(savedPatient.getIdPatient())
-                .studentEnrollment(studentResponse.getEnrollment())
-                .build();
+            studentPatientService.createStudentPatient(studentPatientRequest);
+        } catch (AppException ex) {
+           throw ex;
+        } catch (Exception e) {
+            throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
 
-        studentPatientService.createStudentPatient(studentPatientRequest);
+        }
     }
 
     // Method to create an address entity

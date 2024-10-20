@@ -48,4 +48,6 @@ public class PatientRequest {
     private Long religionId;
 
     private GuardianRequest guardian;
+
+    private String enrollment;
 }
