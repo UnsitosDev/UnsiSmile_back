@@ -18,21 +18,21 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
 
         Optional<StudentModel> findByUser(UserModel user);
 
-        @Query("SELECT s FROM StudentModel s WHERE s.enrollment LIKE %:searchInput% " +
-                "OR s.person.curp LIKE %:searchInput% " +
-                "OR s.person.firstName LIKE %:searchInput% " +
-                "OR s.person.secondName LIKE %:searchInput% " +
-                "OR s.person.firstLastName LIKE %:searchInput% " +
-                "OR s.person.secondLastName LIKE %:searchInput% " +
-                "OR s.person.phone LIKE %:searchInput% " +
-                "OR s.person.email LIKE %:searchInput% " +
-                "OR s.person.gender.gender LIKE %:searchInput% " +
-                "OR (YEAR(s.person.birthDate) = :searchInputInt " +
-                "OR MONTH(s.person.birthDate) = :searchInputInt " +
-                "OR DAY(s.person.birthDate) = :searchInputInt) " +
+        @Query("SELECT s FROM StudentModel s WHERE s.enrollment LIKE %:keyWord% " +
+                "OR s.person.curp LIKE %:keyWord% " +
+                "OR s.person.firstName LIKE %:keyWord% " +
+                "OR s.person.secondName LIKE %:keyWord% " +
+                "OR s.person.firstLastName LIKE %:keyWord% " +
+                "OR s.person.secondLastName LIKE %:keyWord% " +
+                "OR s.person.phone LIKE %:keyWord% " +
+                "OR s.person.email LIKE %:keyWord% " +
+                "OR s.person.gender.gender LIKE %:keyWord% " +
+                "OR (YEAR(s.person.birthDate) = :keyWordInt " +
+                "OR MONTH(s.person.birthDate) = :keyWordInt " +
+                "OR DAY(s.person.birthDate) = :keyWord) " +
                 "AND s.statusKey='A'")
         Page<StudentModel> findAllBySearchInput(
-                @Param("searchInput") String searchInput,
-                @Param("searchInputInt") Integer searchInputInt,
+                @Param("keyWord") String keyWord,
+                @Param("keyWordInt") Integer keyWordInt,
                 Pageable pageable);
 }

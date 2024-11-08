@@ -41,10 +41,10 @@ public class StudentController {
             @Parameter(description = "Field key for filter", example = "person.email, enrollment")
             @RequestParam(defaultValue = "person.firstName") String order,
             @RequestParam(defaultValue = "true") boolean asc,
-            @RequestParam(required = false) String searchInput) {
+            @RequestParam(required = false) String keyWord) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<StudentResponse> studentResponses = studentService.getAllStudents(pageable, searchInput);
+        Page<StudentResponse> studentResponses = studentService.getAllStudents(pageable, keyWord);
 
         return ResponseEntity.ok(studentResponses);
     }
