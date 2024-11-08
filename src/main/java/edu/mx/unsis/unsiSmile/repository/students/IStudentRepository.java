@@ -19,20 +19,20 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
         Optional<StudentModel> findByUser(UserModel user);
 
         @Query("SELECT s FROM StudentModel s WHERE s.enrollment LIKE %:keyWord% " +
-                "OR s.person.curp LIKE %:keyWord% " +
-                "OR s.person.firstName LIKE %:keyWord% " +
-                "OR s.person.secondName LIKE %:keyWord% " +
-                "OR s.person.firstLastName LIKE %:keyWord% " +
-                "OR s.person.secondLastName LIKE %:keyWord% " +
-                "OR s.person.phone LIKE %:keyWord% " +
-                "OR s.person.email LIKE %:keyWord% " +
-                "OR s.person.gender.gender LIKE %:keyWord% " +
-                "OR (YEAR(s.person.birthDate) = :keyWordInt " +
-                "OR MONTH(s.person.birthDate) = :keyWordInt " +
-                "OR DAY(s.person.birthDate) = :keyWord) " +
+                "OR s.person.curp LIKE %:keyword% " +
+                "OR s.person.firstName LIKE %:keyword% " +
+                "OR s.person.secondName LIKE %:keyword% " +
+                "OR s.person.firstLastName LIKE %:keyword% " +
+                "OR s.person.secondLastName LIKE %:keyword% " +
+                "OR s.person.phone LIKE %:keyword% " +
+                "OR s.person.email LIKE %:keyword% " +
+                "OR s.person.gender.gender LIKE %:keyword% " +
+                "OR (YEAR(s.person.birthDate) = :keywordInt " +
+                "OR MONTH(s.person.birthDate) = :keywordInt " +
+                "OR DAY(s.person.birthDate) = :keyword) " +
                 "AND s.statusKey='A'")
         Page<StudentModel> findAllBySearchInput(
-                @Param("keyWord") String keyWord,
-                @Param("keyWordInt") Integer keyWordInt,
+                @Param("keyword") String keyword,
+                @Param("keywordInt") Integer keywordInt,
                 Pageable pageable);
 }

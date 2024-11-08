@@ -80,22 +80,22 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentResponse> getAllStudents(Pageable pageable, String keyWord) {
+    public Page<StudentResponse> getAllStudents(Pageable pageable, String keyword) {
         try {
             Page<StudentModel> allStudents;
 
-            if (keyWord == null || keyWord.isEmpty()) {
+            if (keyword == null || keyword.isEmpty()) {
                 allStudents = studentRepository.findAll(pageable);
             } else {
-                Integer keyWordInt = null;
-                if (keyWord.matches("\\d+")) {
-                    keyWordInt = Integer.parseInt(keyWord);
-                } else if (!keyWord.matches("[a-zA-Z]+")) {
+                Integer keywordInt = null;
+                if (keyword.matches("\\d+")) {
+                    keywordInt = Integer.parseInt(keyword);
+                } else if (!keyword.matches("[a-zA-Z]+")) {
                     throw new AppException("The input is not valid. It must be a number or a string.",
                     HttpStatus.BAD_REQUEST);
                 }
 
-                allStudents = studentRepository.findAllBySearchInput(keyWord, keyWordInt, pageable);
+                allStudents = studentRepository.findAllBySearchInput(keyword, keywordInt, pageable);
             }
 
             return allStudents.map(studentMapper::toDto);
