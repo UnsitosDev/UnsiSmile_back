@@ -18,7 +18,7 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
 
         Optional<StudentModel> findByUser(UserModel user);
 
-        @Query("SELECT s FROM StudentModel s WHERE s.enrollment LIKE %:keyWord% " +
+        @Query("SELECT s FROM StudentModel s WHERE s.enrollment LIKE %:keyword% " +
                 "OR s.person.curp LIKE %:keyword% " +
                 "OR s.person.firstName LIKE %:keyword% " +
                 "OR s.person.secondName LIKE %:keyword% " +

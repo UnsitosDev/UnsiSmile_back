@@ -144,13 +144,13 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PatientResponse> getAllPatients(Pageable pageable) {
+    public Page<PatientResponse> getAllPatients(Pageable pageable, String keyword) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 return getPatientsForStudent(user, pageable);
             } else {
-                return getAllPatientsPage(pageable);
+                return getAllPatientsPage(pageable, keyword);
             }
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patients", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -163,8 +163,13 @@ public class PatientService {
         return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
     }
 
-    private Page<PatientResponse> getAllPatientsPage(Pageable pageable) {
-        Page<PatientModel> allPatients = patientRepository.findAll(pageable);
+    private Page<PatientResponse> getAllPatientsPage(Pageable pageable, String keyword) {
+        Page<PatientModel> allPatients;
+        if (keyword == null || keyword.isEmpty()) {
+            allPatients = patientRepository.findAll(pageable);
+        } else {
+            allPatients = patientRepository.findAllBySearchInput(keyword, pageable);
+        }
         Set<Long> patientIds = extractPatientIds(allPatients);
 
         List<PatientStudentResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
