@@ -17,6 +17,6 @@ public interface IEthnicGroupRepository extends JpaRepository<EthnicGroupModel, 
 
     Optional<EthnicGroupModel> findByEthnicGroup(String ethnicGroup);
 
-    @Query("SELECT l FROM EthnicGroupModel l WHERE l.ethnicGroup like :keyword%")
+    @Query("SELECT e FROM EthnicGroupModel e WHERE e.ethnicGroup LIKE :keyword%")
     Page<EthnicGroupModel> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

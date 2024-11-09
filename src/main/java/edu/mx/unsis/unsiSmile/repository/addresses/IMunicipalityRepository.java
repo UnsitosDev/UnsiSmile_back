@@ -21,6 +21,6 @@ public interface IMunicipalityRepository extends JpaRepository<MunicipalityModel
 
     List<MunicipalityModel> findByState(StateModel state);
 
-    @Query("SELECT l FROM MunicipalityModel l WHERE l.name like :keyword%")
+    @Query("SELECT m FROM MunicipalityModel m WHERE m.name like :keyword%")
     Page<MunicipalityModel> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
