@@ -4,6 +4,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
 import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 import edu.mx.unsis.unsiSmile.service.addresses.MunicipalityService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,8 +53,11 @@ public class MunicipalityController {
         return ResponseEntity.ok(municipalityResponses);
     }
 
+    @Operation(summary = "Obtener una lista paginada de municipios.")
     @GetMapping
     public ResponseEntity<Page<MunicipalityResponse>> getAllMunicipalities(
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String order,
@@ -60,7 +65,7 @@ public class MunicipalityController {
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<MunicipalityResponse> municipalityResponses = municipalityService.getAllMunicipalities(pageable);
+        Page<MunicipalityResponse> municipalityResponses = municipalityService.getAllMunicipalities(pageable, keyword);
 
         return ResponseEntity.ok(municipalityResponses);
     }

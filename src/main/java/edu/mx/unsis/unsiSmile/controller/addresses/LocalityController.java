@@ -60,7 +60,7 @@ public class LocalityController {
         return ResponseEntity.ok(localityResponses);
     }
 
-    @Operation(summary = "Obtener una lista paginada de localidades")
+    @Operation(summary = "Obtener una lista paginada de localidades.")
     @GetMapping
     public ResponseEntity<Page<LocalityResponse>> getAllLocalities(
             @Parameter(description = "Optional parameter to specify a search criterion.")
