@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.service.patients.EthnicGroupService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,16 +42,18 @@ public class EthnicGroupController {
         return ResponseEntity.ok(ethnicGroupResponse);
     }
 
-    @Operation(summary = "Obtener una lista paginada de grupos étnicos")
+    @Operation(summary = "Obtener una lista paginada de grupos étnicos.")
     @GetMapping
-    public ResponseEntity<Page<EthnicGroupResponse>> getAllStudents(
+    public ResponseEntity<Page<EthnicGroupResponse>> getAllEthnicGroups(
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "ethnicGroup") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<EthnicGroupResponse> ethnicGroupsResponses = ethnicGroupService.getAllEthnicGroups(pageable);
+        Page<EthnicGroupResponse> ethnicGroupsResponses = ethnicGroupService.getAllEthnicGroups(pageable, keyword);
 
         return ResponseEntity.ok(ethnicGroupsResponses);
     }

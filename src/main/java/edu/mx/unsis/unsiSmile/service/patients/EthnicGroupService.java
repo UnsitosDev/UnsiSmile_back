@@ -65,10 +65,16 @@ public class EthnicGroupService {
     }
 
     @Transactional(readOnly = true)
-    public Page<EthnicGroupResponse> getAllEthnicGroups(Pageable pageable) {
+    public Page<EthnicGroupResponse> getAllEthnicGroups(Pageable pageable, String keyword) {
         try {
-            Page<EthnicGroupModel> allEthnicGroups = ethnicGroupRepository.findAll(pageable);
-            return allEthnicGroups.map(ethnicGroupMapper::toDto);
+            Page<EthnicGroupModel> ethnicGroups;
+            if (keyword != null && !keyword.isEmpty()) {
+                ethnicGroups = ethnicGroupRepository.findByKeyword(keyword, pageable);
+            } else {
+                ethnicGroups = ethnicGroupRepository.findAll(pageable);
+            }
+
+            return ethnicGroups.map(ethnicGroupMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all ethnic groups", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
