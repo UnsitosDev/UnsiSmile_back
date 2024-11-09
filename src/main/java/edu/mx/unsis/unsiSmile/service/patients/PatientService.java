@@ -73,7 +73,7 @@ public class PatientService {
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
-            relateStudentPatient(savedPatient, patientRequest.getStudent().getEnrollment());
+            relateStudentPatient(savedPatient);
         } catch (DataAccessException ex) {
             throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -99,26 +99,25 @@ public class PatientService {
         return patientModel;
     }
 
-    private void relateStudentPatient(PatientModel savedPatient, String enrollment) {
+    private void relateStudentPatient(PatientModel savedPatient) {
 
-        // search the user
         UserResponse user = userService.getCurrentUser();
-        StudentPatientRequest studentPatientRequest;
-        StudentResponse student;
+
+        if (!user.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
+            return;
+        }
+
         try {
+            StudentResponse student = studentService.getStudentByUser(buildUserRequest(user));
 
-            student = user.getRole().getRole().equals(ERole.ROLE_STUDENT)
-                    ? studentService.getStudentByUser(buildUserRequest(user))
-                    : studentService.getStudentByEnrollment(enrollment);
-
-            studentPatientRequest = StudentPatientRequest.builder()
+            StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
                     .patientId(savedPatient.getIdPatient())
                     .studentEnrollment(student.getEnrollment())
                     .build();
 
             studentPatientService.createStudentPatient(studentPatientRequest);
         } catch (AppException ex) {
-           throw ex;
+            throw ex;
         } catch (Exception e) {
             throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -148,7 +147,7 @@ public class PatientService {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
-                return getPatientsForStudent(user, pageable);
+                return getPatientsForStudent(user, pageable, keyword);
             } else {
                 return getAllPatientsPage(pageable, keyword);
             }
@@ -157,9 +156,9 @@ public class PatientService {
         }
     }
 
-    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable) {
+    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable, String keyword) {
         StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-        List<PatientModel> patients = getPatientsByStudents(studentResponse);
+        List<PatientModel> patients = getPatientsByStudents(studentResponse, keyword, pageable);
         return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
     }
 
@@ -215,7 +214,7 @@ public class PatientService {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                List<PatientModel> patients = getPatientsByStudents(studentResponse);
+                List<PatientModel> patients = getPatientsByStudents(studentResponse,  null, null);
                 return getPatientByIdByStudent(patients, idPatient);
             } else {
                 PatientModel patientModel = getPatientModel(idPatient);
@@ -317,9 +316,9 @@ public class PatientService {
                 .build();
     }
 
-    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse) {
+    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse, String keyword, Pageable  pageable) {
         List<StudentPatientResponse> studentPatientResponses = studentPatientService
-                .getAllStudentPatients(studentResponse.getEnrollment());
+                .getAllStudentPatients(studentResponse.getEnrollment(), keyword, pageable);
 
         Set<Long> patientIds = studentPatientResponses.stream()
                 .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())

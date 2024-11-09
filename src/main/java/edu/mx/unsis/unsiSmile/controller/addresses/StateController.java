@@ -43,7 +43,7 @@ public class StateController {
 
     @Operation(summary = "Obtener una lista paginada de estados")
     @GetMapping
-    public ResponseEntity<Page<StateResponse>> getAllStudents(
+    public ResponseEntity<Page<StateResponse>> getAllStates(
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

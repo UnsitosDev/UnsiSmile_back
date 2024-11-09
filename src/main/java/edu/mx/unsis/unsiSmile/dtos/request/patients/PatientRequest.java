@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.students.StudentReq;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,6 +48,4 @@ public class PatientRequest {
     private Long religionId;
 
     private GuardianRequest guardian;
-
-    private StudentReq student;
 }
