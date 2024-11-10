@@ -29,7 +29,7 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
                 "OR s.person.gender.gender LIKE %:keyword% " +
                 "OR (YEAR(s.person.birthDate) = :keywordInt " +
                 "OR MONTH(s.person.birthDate) = :keywordInt " +
-                "OR DAY(s.person.birthDate) = :keyword) " +
+                "OR DAY(s.person.birthDate) = :keywordInt) " +
                 "AND s.statusKey='A'")
         Page<StudentModel> findAllBySearchInput(
                 @Param("keyword") String keyword,
