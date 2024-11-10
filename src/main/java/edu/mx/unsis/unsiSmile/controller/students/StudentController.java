@@ -38,12 +38,14 @@ public class StudentController {
     public ResponseEntity<Page<StudentResponse>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Catalog key for filter", example = "person.email, enrollment")
+            @Parameter(description = "Field key for filter", example = "person.email, enrollment")
             @RequestParam(defaultValue = "person.firstName") String order,
-            @RequestParam(defaultValue = "true") boolean asc) {
+            @RequestParam(defaultValue = "true") boolean asc,
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(required = false) String keyword) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<StudentResponse> studentResponses = studentService.getAllStudents(pageable);
+        Page<StudentResponse> studentResponses = studentService.getAllStudents(pageable, keyword);
 
         return ResponseEntity.ok(studentResponses);
     }

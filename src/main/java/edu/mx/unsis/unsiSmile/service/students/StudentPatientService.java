@@ -12,6 +12,7 @@ import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -83,9 +84,15 @@ public class StudentPatientService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudentPatientResponse> getAllStudentPatients(String enrollment) {
+    public List<StudentPatientResponse> getAllStudentPatients(String enrollment, String keyword, Pageable pageable) {
         if (enrollment != null) {
-            List<StudentPatientModel> studentPatients = studentPatientRepository.findAllByStudentEnrollment(enrollment);
+            List<StudentPatientModel> studentPatients;
+            if (keyword != null && !keyword.isEmpty() && pageable != null) {
+                studentPatients = studentPatientRepository.findAllBySearchInput(enrollment, keyword, pageable);
+            } else {
+                studentPatients  = studentPatientRepository.findAllByStudentEnrollment(enrollment);
+            }
+
             return studentPatients.stream()
                     .map(studentPatientMapper::toDto)
                     .collect(Collectors.toList());

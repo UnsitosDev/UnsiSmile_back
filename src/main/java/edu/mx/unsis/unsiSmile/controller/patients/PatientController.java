@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,15 +38,18 @@ public class PatientController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Obtener una lista paginada de pacientes")
     @GetMapping
     public ResponseEntity<Page<PatientResponse>> getPatients(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "person.firstName") String order,
-            @RequestParam(defaultValue = "true") boolean asc) {
+            @RequestParam(defaultValue = "true") boolean asc,
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(required = false) String keyword) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<PatientResponse> patientResponses = patientService.getAllPatients(pageable);
+        Page<PatientResponse> patientResponses = patientService.getAllPatients(pageable, keyword);
 
         return ResponseEntity.ok(patientResponses);
     }
