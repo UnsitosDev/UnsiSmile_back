@@ -65,10 +65,15 @@ public class ReligionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ReligionResponse> getAllReligions(Pageable pageable) {
+    public Page<ReligionResponse> getAllReligions(Pageable pageable, String keyword) {
         try {
-            Page<ReligionModel> allReligions = religionRepository.findAll(pageable);
-            return allReligions.map(religionMapper::toDto);
+            Page<ReligionModel> religions;
+            if(keyword != null && !keyword.isEmpty()){
+                religions = religionRepository.findByKeyword(keyword, pageable);
+            } else {
+                religions = religionRepository.findAll(pageable);
+            }
+            return religions.map(religionMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all religions", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

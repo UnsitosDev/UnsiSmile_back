@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.service.patients.ReligionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,16 +42,18 @@ public class ReligionController {
         return ResponseEntity.ok(religionResponse);
     }
 
-    @Operation(summary = "Obtener una lista paginada de religiones")
+    @Operation(summary = "Obtener una lista paginada de religiones.")
     @GetMapping
     public ResponseEntity<Page<ReligionResponse>> getAllStudents(
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "religion") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<ReligionResponse> religionResponses = religionService.getAllReligions(pageable);
+        Page<ReligionResponse> religionResponses = religionService.getAllReligions(pageable, keyword);
 
         return ResponseEntity.ok(religionResponses);
     }
