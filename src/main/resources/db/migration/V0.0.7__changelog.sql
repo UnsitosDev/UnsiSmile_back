@@ -321,6 +321,25 @@ VALUES
 ;
 
 -- Estudio de laboratotio biopsia
+
+-- catalogos para modelos de estudio
+INSERT INTO catalogs
+(catalog_name)
+VALUES
+    ("Tipos de estudio de laboratorio")
+;
+
+INSERT INTO catalog_options
+(fk_catalog,
+ option_name)
+VALUES
+    (5, "Biometria hemática"),
+    (5, "TP: Tiempo de protrombina"),
+    (5, "TPT: Tiempo de tromboplastina parcial"),
+    (5, "INR: Índice internacional normalizado"),
+    (5, "TT: Tiempo de trombina")
+;
+
 INSERT INTO questions
 (question_text,
  fk_form_section,
@@ -329,11 +348,23 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-    ("Tipos de estudio de laboratorio", 15, 3, 1, true, "Indique tipo de estudio"),
     ("Tipo de biopsia", 15, 3, 2, true, "Indique tipo de biopsia"),
     ("Región donde se realizó la biopsia", 15, 3, 3, true, "Indique región de la biopsia"),
     ("Laboratorio donde se envía el estudio", 15, 3, 4, true, "Indique laboratorio de estudio")
 ;
+
+INSERT INTO questions
+(question_text,
+ fk_form_section,
+ fk_answer_type,
+ fk_catalog,
+ question_order,
+ required,
+ placeholder)
+VALUES
+    ("Tipos de estudio de laboratorio", 15, 4, 5, 1, true, "Indique tipo de estudio")
+;
+
 
 -- interconsulta médica, como manejar la firma
 INSERT INTO questions

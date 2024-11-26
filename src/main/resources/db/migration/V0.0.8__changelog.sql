@@ -55,7 +55,7 @@ VALUES
 INSERT INTO
     catalogs (catalog_name)
 VALUES
-    ("Cámara pulpar"), -- id: 5
+    ("Cámara pulpar"), -- id: 6
     ("Zona apical"),
     ("Conducto radicular"),
     ("Número de conductos"),
@@ -64,31 +64,31 @@ VALUES
 INSERT INTO
     catalog_options (fk_catalog, option_name)
 VALUES
-    (5, "Normal"),
-    (5, "Amplio"),
-    (5, "Estrecho"),
-    (5, "Nódulos"),
-    (5, "Calcificada"),
-    (6, "Periodonto normal"),
-    (6, "Periodonto ensanchado"),
-    (6, "Reabsorción apical"),
-    (6, "Cementosis"),
-    (6, "Osteoesclerosis"),
-    (7, "Normal"),
-    (7, "Amplio"),
-    (7, "Estrecho"),
-    (7, "Agujas cálcicas"),
-    (7, "Calcificado"),
-    (8, "1"),
-    (8, "2"),
-    (8, "3"),
-    (8, "4"),
-    (9, "1 a 3"),
-    (9, "1 a 2"),
-    (9, "1 a 1"),
-    (9, "Reabsorción interna"),
-    (9, "Reabsorción externa"),
-    (9, "Obturado");
+    (6, "Normal"),
+    (6, "Amplio"),
+    (6, "Estrecho"),
+    (6, "Nódulos"),
+    (6, "Calcificada"),
+    (7, "Periodonto normal"),
+    (7, "Periodonto ensanchado"),
+    (7, "Reabsorción apical"),
+    (7, "Cementosis"),
+    (7, "Osteoesclerosis"),
+    (8, "Normal"),
+    (8, "Amplio"),
+    (8, "Estrecho"),
+    (8, "Agujas cálcicas"),
+    (8, "Calcificado"),
+    (9, "1"),
+    (9, "2"),
+    (9, "3"),
+    (9, "4"),
+    (10, "1 a 3"),
+    (10, "1 a 2"),
+    (10, "1 a 1"),
+    (10, "Reabsorción interna"),
+    (10, "Reabsorción externa"),
+    (10, "Obturado");
 
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3,  ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- SIGNOS VITALES
@@ -324,9 +324,9 @@ INSERT INTO
     required
 )
 VALUES
-    ("Cámara pulpar", 32, 4, 5, 1, true),
-    ("Zona apical", 33, 4, 6, 2, true),
-    ("Conducto radicular", 34, 4, 7, 3, true);
+    ("Cámara pulpar", 32, 4, 6, 1, true),
+    ("Zona apical", 33, 4, 7, 2, true),
+    ("Conducto radicular", 34, 4, 8, 3, true);
 
 
 INSERT INTO
@@ -339,8 +339,8 @@ INSERT INTO
     required
 )
 VALUES
-    ("Número de conductos", 35, 4, 8, 1, true),
-    ("Proporción corona-raíz", 36, 4, 9, 2, true);
+    ("Número de conductos", 35, 4, 9, 1, true),
+    ("Proporción corona-raíz", 36, 4, 10, 2, true);
 
 INSERT INTO
     questions (

@@ -23,8 +23,8 @@ VALUES
 INSERT INTO
     catalog_options (fk_catalog, option_name)
 VALUES
-    (10, "Normal"),
-    (10, "Prolongado");
+    (11, "Normal"),
+    (11, "Prolongado");
 
 INSERT INTO
     clinical_history_sections (
@@ -90,7 +90,7 @@ INSERT INTO
     required
 )
 VALUES
-    ("Tipo de Sangrado", 44, 4,10, 4, true); -- catalog
+    ("Tipo de Sangrado", 44, 4,11, 4, true); -- catalog
 
 INSERT INTO
     questions (
