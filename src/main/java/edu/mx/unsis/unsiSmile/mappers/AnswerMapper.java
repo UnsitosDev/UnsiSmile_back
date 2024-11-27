@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
@@ -53,8 +55,29 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void updateEntity(AnswerRequest request, AnswerModel entity) {}
+    public void updateEntity(AnswerRequest request, AnswerModel entity) {
+        updateField(request.getAnswerBoolean(), entity::setAnswerBoolean);
+        updateField(request.getAnswerNumeric(), value -> {
+            if (value.compareTo(BigDecimal.ZERO) != 0) {
+                entity.setAnswerNumeric(value);
+            }
+        });
+        updateField(request.getAnswerText(), entity::setAnswerText);
+        updateField(request.getAnswerDate(), entity::setAnswerDate);
+        updateCatalogOption(request.getIdCatalogOption(), entity);
+    }
+
+    private <T> void updateField(T value, Consumer<T> updater) {
+        Optional.ofNullable(value).ifPresent(updater);
+    }
+
+    private void updateCatalogOption(Long idCatalogOption, AnswerModel entity) {
+        Optional.ofNullable(idCatalogOption).ifPresent(id ->
+                entity.setCatalogOptionModel(CatalogOptionModel.builder()
+                        .idCatalogOption(id)
+                        .build())
+        );
+    }
 
     public AnswerModel toEntityFromFile(Long idPatientClinicalHistory, Long idQuestion) {
         return AnswerModel.builder()
@@ -67,6 +90,5 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .isFile(true)
                 .build();
     }
-
 
 }

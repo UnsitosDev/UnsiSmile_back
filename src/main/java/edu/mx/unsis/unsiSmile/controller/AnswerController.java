@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.AnswerUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.service.AnswerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,4 +64,10 @@ public class AnswerController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Actualiza múltiples registros de respuestas.")
+    @PatchMapping("/forms")
+    public ResponseEntity<Void> updateBatch(@RequestBody List<AnswerUpdateRequest> requests) {
+        answerService.updateBatch(requests);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
