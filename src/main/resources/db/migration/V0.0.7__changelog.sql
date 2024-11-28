@@ -74,7 +74,8 @@ VALUES
     ("MULTIVALUED"),
     ("PHOTO"),
     ("FILE"),
-    ("LONG_TEXT")
+    ("LONG_TEXT"),
+    ("DATE");
 ;
 
 
@@ -160,7 +161,7 @@ VALUES
     ("Malformaciones congénitas", 3, 5, 7, true),
     ("Problemas cardiacos", 3, 5, 8, true);
 
--- Antecedentes personales no patológicos
+-- Antecedentes perso   nales no patológicos
 INSERT INTO questions
 (question_text,
  fk_form_section,
@@ -300,10 +301,20 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-    ("Periapical", 13, 3, 1, true, "Descripción periapical"),
-    ("Cefálica lateral", 13, 3, 2, true, "Descripción cefálica lateral"),
-    ("Panorámica", 13, 3, 3, true, "Descripción panorámica"),
-    ("Panorámica", 13, 3, 4, false, "Descripción adicional")
+    ("Ortopantomografía", 13, 3, 1, false, "Descripción"),
+    ("Lateral de cráneo", 13, 3, 1, false, "Descripción"),
+    ("Serie periapical completa", 13, 3, 1, false, "Descripción"),
+    ("Periapical individual", 13, 3, 1, false, "Descripción"),
+    ("Oclusal superior", 13, 3, 1, false, "Descripción"),
+    ("Oclusal inferior", 13, 3, 1, false, "Descripción"),
+    ("Posteroanterior de cráneo (PA)", 13, 3, 1, false, "Descripción"),
+    ("Anteroposterior de cráneo (AP)", 13, 3, 1, false, "Descripción"),
+    ("Dígito palmar", 13, 3, 1, false, "Descripción"),
+    ("Senos paranasales", 13, 3, 1, false, "Descripción"),
+    ("Waters de cráneo", 13, 3, 1, false, "Descripción"),
+    ("Submento vertex", 13, 3, 1, false, "Descripción"),
+    ("Tomografía volumétrica completa", 13, 3, 1, false, "Descripción"),
+    ("Otros (especifique)", 13, 3, 1, false, "Descripción")
 ;
 
 -- Mmodelo de estudio y fotografías

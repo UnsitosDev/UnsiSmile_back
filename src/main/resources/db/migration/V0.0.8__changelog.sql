@@ -1,8 +1,3 @@
-INSERT INTO
-    answer_types (answer_type)
-VALUES
-    ("DATE");
-
 -- *-*-*-*-*-*-*-*-* (2) HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3, ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- Secciones padre:
