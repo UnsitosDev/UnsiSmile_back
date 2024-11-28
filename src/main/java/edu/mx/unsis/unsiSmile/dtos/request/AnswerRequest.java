@@ -2,17 +2,17 @@ package edu.mx.unsis.unsiSmile.dtos.request;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
 public class AnswerRequest {
 
     @NotNull(message = "The Id Patient Clinical History cannot be null.")

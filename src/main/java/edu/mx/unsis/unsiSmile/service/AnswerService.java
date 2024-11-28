@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.AnswerUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
@@ -155,9 +156,40 @@ public class AnswerService {
                     .map(answerMapper::toEntity)
                     .map(answerRepository::save)
                     .toList();
+
+            if (savedAnswers.isEmpty()) {
+                throw new AppException("No answers were saved", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         } catch (Exception ex) {
             throw new AppException("Failed to save batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
+    @Transactional
+    public void updateBatch(List<AnswerUpdateRequest> requests) {
+        try {
+            Assert.notNull(requests, "AnswerRequest list cannot be null");
+            if (requests.isEmpty()) {
+                throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+
+            List<AnswerModel> updatedAnswers = requests.stream()
+                    .map(answerRequest -> {
+                        AnswerModel existingAnswer = answerRepository.findById(answerRequest.getIdAnswer())
+                                .orElseThrow(() -> new AppException("Answer not found with id: " + answerRequest.getIdAnswer(), HttpStatus.NOT_FOUND));
+
+                        answerMapper.updateEntity(answerRequest, existingAnswer);
+
+                        return answerRepository.save(existingAnswer);
+                    })
+                    .toList();
+
+            if (updatedAnswers.isEmpty()) {
+                throw new AppException("No answers were updated", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception ex) {
+            throw new AppException("Failed to update batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }
