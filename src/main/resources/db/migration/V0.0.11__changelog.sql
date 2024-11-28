@@ -1,10 +1,5 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    answer_types (answer_type)
-VALUES
-    ("BROAD_DATE");
-
-INSERT INTO
     form_sections (form_name)
 VALUES
     ("Interrogatorio por aparatos y sistemas"),
@@ -17,14 +12,14 @@ VALUES
 INSERT INTO
     catalogs (catalog_name)
 VALUES
-    ("Tipo de Sangrado") -- id: 10
+    ("Tipo de Sangrado") -- id: 11
 ;
 
 INSERT INTO
     catalog_options (fk_catalog, option_name)
 VALUES
-    (10, "Normal"),
-    (10, "Prolongado");
+    (11, "Normal"),
+    (11, "Prolongado");
 
 INSERT INTO
     clinical_history_sections (
@@ -69,8 +64,8 @@ INSERT INTO
     required
 )
 values
-    ("Fecha de última consulta médica (agregar motivo)", 44, 10, 1, true),
-    ("Fecha de ultima consulta dental (agregar motivo)", 44, 10, 2, true),
+    ("Fecha de última consulta médica (agregar motivo)", 44, 9, 1, true),
+    ("Fecha de ultima consulta dental (agregar motivo)", 44, 9, 2, true),
     ("Si es mujer, ¿Está embarazada?", 44, 5, 3, true),
     ("Si es mujer, ¿Está lactando?", 44, 5, 5, true),
     ("Examen Radiológico", 44, 3, 6, true),
@@ -90,7 +85,7 @@ INSERT INTO
     required
 )
 VALUES
-    ("Tipo de Sangrado", 44, 4,10, 4, true); -- catalog
+    ("Tipo de Sangrado", 44, 4,11, 4, true); -- catalog
 
 INSERT INTO
     questions (

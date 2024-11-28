@@ -74,7 +74,8 @@ VALUES
     ("MULTIVALUED"),
     ("PHOTO"),
     ("FILE"),
-    ("LONG_TEXT")
+    ("LONG_TEXT"),
+    ("DATE");
 ;
 
 
@@ -160,7 +161,7 @@ VALUES
     ("Malformaciones congénitas", 3, 5, 7, true),
     ("Problemas cardiacos", 3, 5, 8, true);
 
--- Antecedentes personales no patológicos
+-- Antecedentes perso   nales no patológicos
 INSERT INTO questions
 (question_text,
  fk_form_section,
@@ -300,10 +301,20 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-    ("Periapical", 13, 3, 1, true, "Descripción periapical"),
-    ("Cefálica lateral", 13, 3, 2, true, "Descripción cefálica lateral"),
-    ("Panorámica", 13, 3, 3, true, "Descripción panorámica"),
-    ("Panorámica", 13, 3, 4, false, "Descripción adicional")
+    ("Ortopantomografía", 13, 3, 1, false, "Descripción"),
+    ("Lateral de cráneo", 13, 3, 1, false, "Descripción"),
+    ("Serie periapical completa", 13, 3, 1, false, "Descripción"),
+    ("Periapical individual", 13, 3, 1, false, "Descripción"),
+    ("Oclusal superior", 13, 3, 1, false, "Descripción"),
+    ("Oclusal inferior", 13, 3, 1, false, "Descripción"),
+    ("Posteroanterior de cráneo (PA)", 13, 3, 1, false, "Descripción"),
+    ("Anteroposterior de cráneo (AP)", 13, 3, 1, false, "Descripción"),
+    ("Dígito palmar", 13, 3, 1, false, "Descripción"),
+    ("Senos paranasales", 13, 3, 1, false, "Descripción"),
+    ("Waters de cráneo", 13, 3, 1, false, "Descripción"),
+    ("Submento vertex", 13, 3, 1, false, "Descripción"),
+    ("Tomografía volumétrica completa", 13, 3, 1, false, "Descripción"),
+    ("Otros (especifique)", 13, 3, 1, false, "Descripción")
 ;
 
 -- Mmodelo de estudio y fotografías
@@ -321,6 +332,25 @@ VALUES
 ;
 
 -- Estudio de laboratotio biopsia
+
+-- catalogos para modelos de estudio
+INSERT INTO catalogs
+(catalog_name)
+VALUES
+    ("Tipos de estudio de laboratorio")
+;
+
+INSERT INTO catalog_options
+(fk_catalog,
+ option_name)
+VALUES
+    (5, "Biometria hemática"),
+    (5, "TP: Tiempo de protrombina"),
+    (5, "TPT: Tiempo de tromboplastina parcial"),
+    (5, "INR: Índice internacional normalizado"),
+    (5, "TT: Tiempo de trombina")
+;
+
 INSERT INTO questions
 (question_text,
  fk_form_section,
@@ -329,11 +359,23 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-    ("Tipos de estudio de laboratorio", 15, 3, 1, true, "Indique tipo de estudio"),
     ("Tipo de biopsia", 15, 3, 2, true, "Indique tipo de biopsia"),
     ("Región donde se realizó la biopsia", 15, 3, 3, true, "Indique región de la biopsia"),
     ("Laboratorio donde se envía el estudio", 15, 3, 4, true, "Indique laboratorio de estudio")
 ;
+
+INSERT INTO questions
+(question_text,
+ fk_form_section,
+ fk_answer_type,
+ fk_catalog,
+ question_order,
+ required,
+ placeholder)
+VALUES
+    ("Tipos de estudio de laboratorio", 15, 4, 5, 1, true, "Indique tipo de estudio")
+;
+
 
 -- interconsulta médica, como manejar la firma
 INSERT INTO questions
