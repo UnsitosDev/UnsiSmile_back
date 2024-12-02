@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class PatientResponse {
-    private Long idPatient;
+    private String idPatient;
     private LocalDate admissionDate;
     private Boolean isMinor;
     private Boolean hasDisability;

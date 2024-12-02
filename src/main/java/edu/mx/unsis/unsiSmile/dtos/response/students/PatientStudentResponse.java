@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PatientStudentResponse {
     private Long idStudentPatient;
-    private Long patientId;
+    private String patientId;
     private StudentRes student;
 }

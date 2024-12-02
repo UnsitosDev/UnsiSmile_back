@@ -129,7 +129,7 @@ public class StudentPatientService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientStudentResponse> getByPatients(Set<Long> patientsId) {
+    public List<PatientStudentResponse> getByPatients(Set<String> patientsId) {
         if (patientsId.isEmpty()) {
             return Collections.emptyList();
         } else {

@@ -94,8 +94,10 @@ public class PatientService {
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
+        String uuid = UUID.randomUUID().toString();
         PatientModel patientModel = patientMapper.toEntity(patientRequest);
         patientModel.setPerson(person);
+        patientModel.setIdPatient(uuid);
         return patientModel;
     }
 
@@ -169,33 +171,33 @@ public class PatientService {
         } else {
             allPatients = patientRepository.findAllBySearchInput(keyword, pageable);
         }
-        Set<Long> patientIds = extractPatientIds(allPatients);
+        Set<String> patientIds = extractPatientIds(allPatients);
 
         List<PatientStudentResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
-        Map<Long, StudentRes> studentMap = createStudentMap(studentPatientResponses);
+        Map<String, StudentRes> studentMap = createStudentMap(studentPatientResponses);
 
         List<PatientResponse> patientResponses = mapPatientsToResponses(allPatients, studentMap);
 
         return new PageImpl<>(patientResponses, pageable, allPatients.getTotalElements());
     }
 
-    private Set<Long> extractPatientIds(Page<PatientModel> allPatients) {
-        Set<Long> patientIds = new HashSet<>();
+    private Set<String> extractPatientIds(Page<PatientModel> allPatients) {
+        Set<String> patientIds = new HashSet<>();
         allPatients.forEach(patient -> patientIds.add(patient.getIdPatient()));
         return patientIds;
     }
 
-    private Map<Long, StudentRes> createStudentMap(List<PatientStudentResponse> studentPatientResponses) {
-        Map<Long, StudentRes> studentMap = new HashMap<>();
+    private Map<String, StudentRes> createStudentMap(List<PatientStudentResponse> studentPatientResponses) {
+        Map<String, StudentRes> studentMap = new HashMap<>();
         for (PatientStudentResponse studentPatientResponse : studentPatientResponses) {
-            Long patientId = studentPatientResponse.getPatientId();
+            String patientId = studentPatientResponse.getPatientId();
             StudentRes student = studentPatientResponse.getStudent();
             studentMap.put(patientId, student);
         }
         return studentMap;
     }
 
-    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<Long, StudentRes> studentMap) {
+    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<String, StudentRes> studentMap) {
         return allPatients.stream()
                 .map(patient -> {
                     PatientResponse patientResponse = patientMapper.toDto(patient);
@@ -209,7 +211,7 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public PatientResponse getPatientById(@NonNull Long idPatient) {
+    public PatientResponse getPatientById(@NonNull String idPatient) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
@@ -264,7 +266,7 @@ public class PatientService {
     }
 
     @Transactional
-    public PatientResponse updatePatient(@NonNull Long idPatient, @NonNull PatientRequest updatedPatientRequest) {
+    public PatientResponse updatePatient(@NonNull String idPatient, @NonNull PatientRequest updatedPatientRequest) {
         try {
             Assert.notNull(updatedPatientRequest, "Updated PatientRequest cannot be null");
 
@@ -287,10 +289,10 @@ public class PatientService {
     }
 
     @Transactional
-    public void deletePatientById(@NonNull Long idPatient) {
+    public void deletePatientById(@NonNull String idPatient) {
         try {
             // Check if the patient exists
-            if (!patientRepository.existsById(idPatient)) {
+            if (!patientRepository.existsById(  idPatient)) {
                 throw new AppException("Patient not found with ID: " + idPatient, HttpStatus.NOT_FOUND);
             }
             patientRepository.deleteById(idPatient);
@@ -300,7 +302,7 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public PatientModel getPatientModel(@NonNull Long id) {
+    public PatientModel getPatientModel(@NonNull String id) {
         try {
             return patientRepository.findByIdPatient(id)
                     .orElseThrow(
@@ -320,7 +322,7 @@ public class PatientService {
         List<StudentPatientResponse> studentPatientResponses = studentPatientService
                 .getAllStudentPatients(studentResponse.getEnrollment(), keyword, pageable);
 
-        Set<Long> patientIds = studentPatientResponses.stream()
+        Set<String> patientIds = studentPatientResponses.stream()
                 .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
                 .collect(Collectors.toSet());
         return patientRepository.findAllById(patientIds);
@@ -335,7 +337,7 @@ public class PatientService {
                 .collect(Collectors.toList());
     }
 
-    private PatientResponse getPatientByIdByStudent(List<PatientModel> patients, Long idPatient) {
+    private PatientResponse getPatientByIdByStudent(List<PatientModel> patients, String idPatient) {
         Optional<PatientModel> optionalPatient = patients.stream()
                 .filter(patient -> patient.getIdPatient().equals(idPatient))
                 .findFirst();
