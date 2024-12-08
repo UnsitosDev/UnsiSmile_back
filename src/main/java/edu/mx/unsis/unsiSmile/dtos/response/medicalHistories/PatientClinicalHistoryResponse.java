@@ -18,6 +18,5 @@ public class PatientClinicalHistoryResponse {
     @Builder.Default
     private Long patientClinicalHistoryId = 0L;
 
-    @Builder.Default
-    private Long patientId = 0L;
+    private String patientId;
 }

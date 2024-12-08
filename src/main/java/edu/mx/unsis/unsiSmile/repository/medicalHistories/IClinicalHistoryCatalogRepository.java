@@ -17,5 +17,5 @@ public interface IClinicalHistoryCatalogRepository extends JpaRepository<Clinica
             "LEFT JOIN patient_clinical_histories pch " +
             "ON chc.id_clinical_history_catalog = pch.fk_clinical_history_catalog " +
             "AND pch.fk_patient = :patientId", nativeQuery = true)
-    List<Object[]> findAllClinicalHistoryByPatientId(@Param("patientId") Long patientId);
+    List<Object[]> findAllClinicalHistoryByPatientId(@Param("patientId") String patientId);
 }

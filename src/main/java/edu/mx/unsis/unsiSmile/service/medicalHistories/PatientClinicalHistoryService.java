@@ -84,7 +84,7 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryModel> findByPatient(Long idPatient) {
+    public List<PatientClinicalHistoryModel> findByPatient(String idPatient) {
         try {
             return patientClinicalHistoryRepository.findAllByPatientId(idPatient);
         } catch (Exception ex) {

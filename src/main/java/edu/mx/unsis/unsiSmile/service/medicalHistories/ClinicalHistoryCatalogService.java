@@ -117,7 +117,7 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(Long idPatient) {//falta validar que primero exista el paciente, si no devolver un error
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {//falta validar que primero exista el paciente, si no devolver un error
         try {
             List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
             if (results.isEmpty()) {
@@ -136,7 +136,7 @@ public class ClinicalHistoryCatalogService {
                 .id(((Number) result[0]).longValue())
                 .clinicalHistoryName((String) result[1])
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
-                .patientId(result[3] != null ? ((Number) result[3]).longValue() : 0L)
+                .patientId(result[3] != null ? result[3].toString() : "")
                 .build();
     }
 }
