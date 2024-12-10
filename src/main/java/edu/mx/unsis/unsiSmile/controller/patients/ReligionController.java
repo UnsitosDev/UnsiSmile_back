@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/religions")
+@RequestMapping("/unsismile/api/v1/religions")
 public class ReligionController {
 
     private final ReligionService religionService;
