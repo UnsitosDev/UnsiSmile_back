@@ -175,14 +175,8 @@ public class AnswerService {
             }
 
             List<AnswerModel> updatedAnswers = requests.stream()
-                    .map(answerRequest -> {
-                        AnswerModel existingAnswer = answerRepository.findById(answerRequest.getIdAnswer())
-                                .orElseThrow(() -> new AppException("Answer not found with id: " + answerRequest.getIdAnswer(), HttpStatus.NOT_FOUND));
-
-                        answerMapper.updateEntity(answerRequest, existingAnswer);
-
-                        return answerRepository.save(existingAnswer);
-                    })
+                    .map(answerMapper::toEntity)
+                    .map(answerRepository::save)
                     .toList();
 
             if (updatedAnswers.isEmpty()) {
