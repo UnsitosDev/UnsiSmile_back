@@ -10,7 +10,6 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionSer
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
     @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam Long idPatient) {
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -68,7 +67,7 @@ public class ClinicalHistoryCatalogController {
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
-            @RequestParam Long idPatient,
+            @RequestParam String idPatient,
             @RequestParam Long idClinicalHistory) {
         PatientClinicalHistoryModel response = patientClinicalHistoryService.save(idPatient, idClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

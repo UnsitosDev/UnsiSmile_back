@@ -22,7 +22,7 @@ public class PatientClinicalHistoryService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     @Transactional
-    public PatientClinicalHistoryModel save(Long idPatient, Long idClinicalHistory) {
+    public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
         try {
             return patientClinicalHistoryRepository.save(toEntity(idPatient, idClinicalHistory));
         } catch (Exception ex) {
@@ -71,7 +71,7 @@ public class PatientClinicalHistoryService {
         }
     }
 
-    private PatientClinicalHistoryModel toEntity(Long idPatient, Long idClinicalHistory) {
+    private PatientClinicalHistoryModel toEntity(String idPatient, Long idClinicalHistory) {
         return PatientClinicalHistoryModel.builder()
                 .patient(PatientModel.builder()
                         .idPatient(idPatient)
@@ -84,7 +84,7 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryModel> findByPatient(Long idPatient) {
+    public List<PatientClinicalHistoryModel> findByPatient(String idPatient) {
         try {
             return patientClinicalHistoryRepository.findAllByPatientId(idPatient);
         } catch (Exception ex) {

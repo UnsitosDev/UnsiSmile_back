@@ -12,5 +12,5 @@ import java.util.List;
 public interface IPatientClinicalHistoryRepository extends JpaRepository<PatientClinicalHistoryModel, Long> {
 
     @Query("SELECT pch FROM PatientClinicalHistoryModel pch where pch.patient.idPatient = :patientId")
-    List<PatientClinicalHistoryModel> findAllByPatientId(@Param("patientId") Long patientId);
+    List<PatientClinicalHistoryModel> findAllByPatientId(@Param("patientId") String patientId);
 }

@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IPatientRepository extends JpaRepository<PatientModel, Long> {
+public interface IPatientRepository extends JpaRepository<PatientModel, String> {
 
-    Optional<PatientModel> findByIdPatient(Long idPatient);
+    Optional<PatientModel> findByIdPatient(String idPatient);
 
     List<PatientModel> findByAdmissionDate(LocalDate admissionDate);
 

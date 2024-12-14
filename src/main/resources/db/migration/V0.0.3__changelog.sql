@@ -97,7 +97,7 @@ CREATE TABLE question_validations (
 CREATE TABLE patient_clinical_histories (
                                             id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
                                             fk_clinical_history_catalog bigint(20) DEFAULT NULL,
-                                            fk_patient bigint(20) NOT NULL,
+                                            fk_patient VARCHAR(36) NOT NULL,
                                             date datetime DEFAULT NULL,
                                             PRIMARY KEY (id_patient_clinical_history),
                                             KEY fk_clinical_history_catalog (fk_clinical_history_catalog),

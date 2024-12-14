@@ -1,20 +1,13 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import java.time.LocalDate;
-
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,9 +19,8 @@ import lombok.*;
 public class PatientModel extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_patient")
-    private Long idPatient;
+    private String idPatient;
 
     @Column(name = "admission_date")
     private LocalDate admissionDate;

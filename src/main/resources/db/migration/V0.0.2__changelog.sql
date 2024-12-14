@@ -179,7 +179,7 @@ CREATE TABLE groups (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE patients (
-                          id_patient BIGINT(20) NOT NULL AUTO_INCREMENT,
+                          id_patient VARCHAR(36) NOT NULL,
                           admission_date DATE DEFAULT NULL,
                           has_disability BIT(1) DEFAULT NULL,
                           is_minor BIT(1) DEFAULT NULL,
@@ -239,7 +239,7 @@ CREATE TABLE students (
 
 CREATE TABLE student_patient (
                                  id_student_patient BIGINT(20) NOT NULL AUTO_INCREMENT,
-                                 fk_patient BIGINT(20) DEFAULT NULL,
+                                 fk_patient VARCHAR(36) DEFAULT NULL,
                                  fk_student VARCHAR(255) DEFAULT NULL,
                                  PRIMARY KEY (id_student_patient),
                                  KEY FKghwwjdkti37jnwnwrtiepotgr (fk_patient),
