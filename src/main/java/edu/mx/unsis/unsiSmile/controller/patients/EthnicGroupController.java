@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/ethnic-groups")
+@RequestMapping("/unsismile/api/v1/ethnic-groups")
 public class EthnicGroupController {
 
     private final EthnicGroupService ethnicGroupService;
