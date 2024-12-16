@@ -35,11 +35,11 @@ public class ClinicalHistoryCatalogController {
     }
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")
-    @GetMapping("/{idClinicalHistory}/patients/{idPatientClinicalHistory}")
+    @GetMapping("/{idClinicalHistory}/patients/{idPatient}")
     public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
             @PathVariable Long idClinicalHistory,
-            @PathVariable Long idPatientClinicalHistory) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatientClinicalHistory);
+            @PathVariable String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -43,14 +43,14 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse findById(Long id, Long patientClinicalHistoryId) {
+    public FormSectionResponse findById(Long id, String patientId) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
             FormSectionModel formSectionModel = formSectionRepository.findById(id)
                     .orElseThrow(() -> new AppException("Form section not found with id: " + id, HttpStatus.NOT_FOUND));
 
-            return this.toResponse(formSectionModel, patientClinicalHistoryId);
+            return this.toResponse(formSectionModel, patientId);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -96,7 +96,7 @@ public class FormSectionService {
 
     @Transactional(readOnly = true)
     public List<FormSectionResponse> findAllByClinicalHistory(
-            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, Long patientClinicalHistoryId) {
+            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, String patientId) {
         try {
             Set<Long> sectionIds = clinicalHistorySectionModels.stream()
                     .map(chsm -> chsm.getFormSectionModel().getIdFormSection())
@@ -105,7 +105,7 @@ public class FormSectionService {
             List<FormSectionModel> formSectionModels = formSectionRepository.findAllById(sectionIds);
 
             return formSectionModels.stream()
-                    .map(sectionModel -> toResponse(sectionModel, patientClinicalHistoryId))
+                    .map(sectionModel -> toResponse(sectionModel, patientId))
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new AppException("Failed to fetch form sections", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -113,11 +113,10 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse toResponse(FormSectionModel sectionModel, Long patientClinicalHistoryId) {
+    public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId) {
         FormSectionResponse formSectionResponse = formSectionMapper.toDto(sectionModel);
 
-        List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(),
-                patientClinicalHistoryId);
+        List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(), patientId);
         formSectionResponse.setQuestions(questions);
 
         boolean hasAnsweredQuestions = questions.stream().anyMatch(question -> question.getAnswer() != null);
@@ -126,7 +125,7 @@ public class FormSectionService {
         List<FormSectionModel> subSections = getSubFormSectionModel(sectionModel.getIdFormSection());
         if (subSections != null && !subSections.isEmpty()) {
             List<FormSectionResponse> subSectionResponses = subSections.stream()
-                    .map(subSection -> toResponse(subSection, patientClinicalHistoryId))
+                    .map(subSection -> toResponse(subSection, patientId))
                     .collect(Collectors.toList());
             formSectionResponse.setSubSections(subSectionResponses);
         }

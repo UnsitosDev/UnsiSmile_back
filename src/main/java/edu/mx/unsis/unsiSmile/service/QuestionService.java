@@ -121,10 +121,10 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponse> findAllBySection(Long sectionId, Long patientClinicalHistoryId) {
+    public List<QuestionResponse> findAllBySection(Long sectionId, String patientId) {
         List<QuestionModel> questionList = questionRepository.findAllByFormSectionId(sectionId);
 
-        Map<Long, AnswerResponse> answers = answerService.findAllBySectionAndPatientClinicalHistory(questionList, patientClinicalHistoryId);
+        Map<Long, AnswerResponse> answers = answerService.findAllBySectionAndPatientClinicalHistory(questionList, patientId);
 
         return questionList.stream()
                 .map(question -> {

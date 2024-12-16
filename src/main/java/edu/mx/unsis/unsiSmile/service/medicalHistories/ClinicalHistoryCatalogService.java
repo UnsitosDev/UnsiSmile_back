@@ -9,6 +9,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class ClinicalHistoryCatalogService {
     private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
     private final ClinicalHistorySectionService clinicalHistorySectionService;
     private final FormSectionService formSectionService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
     @Transactional
     public void save(ClinicalHistoryCatalogRequest request) {
@@ -43,22 +45,21 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long id, Long patientClinicalHistoryId) {
+    public ClinicalHistoryCatalogResponse findById(Long id, String idPatient) {
         try {
             Assert.notNull(id, "Clinical History Id cannot be null");
             if (id == 0) {
                 throw new AppException("Clinical History Id cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
-            Assert.notNull(patientClinicalHistoryId, "Patient clinical history ID cannot be null");
-            if (patientClinicalHistoryId == 0) {
-                throw new AppException("Patient clinical history ID cannot be 0", HttpStatus.BAD_REQUEST);
+            Assert.notNull(idPatient, "Patient ID cannot be null");
+            if (idPatient.equals("0")) {
+                throw new AppException("Patient ID cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
-            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Clinical history catalog not found with id: " + id, HttpStatus.NOT_FOUND));
+            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, id);
 
-            return this.toResponse(clinicalHistoryCatalogModel, patientClinicalHistoryId);
+            return this.toResponse(patientClinicalHistory);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -102,14 +103,14 @@ public class ClinicalHistoryCatalogService {
         }
     }
 
-    private ClinicalHistoryCatalogResponse toResponse(ClinicalHistoryCatalogModel catalog, Long patientClinicalHistoryId) {
+    private ClinicalHistoryCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
 
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
-                .findByClinicalHistoryId(catalog.getIdClinicalHistoryCatalog());
+                .findByClinicalHistoryId(patientClinicalHistory.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistoryId);
+        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient());
 
-        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(catalog);
+        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
 
         clinicalHistoryCatalogResponse.setFormSections(sections);
 

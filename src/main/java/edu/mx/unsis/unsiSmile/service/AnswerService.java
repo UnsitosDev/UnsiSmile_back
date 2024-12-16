@@ -9,9 +9,11 @@ import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final CatalogOptionService optionService;
     private final FileService fileService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
     @Transactional
     public void save(AnswerRequest request) {
@@ -35,6 +38,10 @@ public class AnswerService {
             Assert.notNull(request, "AnswerRequest cannot be null");
 
             AnswerModel answerModel = answerMapper.toEntity(request);
+
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryService.findById(request.getIdPatientClinicalHistory());
+
+            answerModel.setPatientModel(patientClinicalHistoryModel.getPatient());
 
             answerRepository.save(answerModel);
         } catch (Exception ex) {
@@ -122,13 +129,13 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, Long patientClinicalHistoryId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, String patientId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
                     .collect(Collectors.toSet());
 
-            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientClinicalHistoryId);
+            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId);
 
             Map<Long, AnswerResponse> answerMap = new HashMap<>();
 
@@ -139,8 +146,8 @@ public class AnswerService {
 
             return answerMap;
         } catch (Exception ex){
-            throw new AppException("Failed to fetch answers for one Section and Patient Clinical History with ID: " +
-                    patientClinicalHistoryId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch answers for one Section with patientId: " +
+                    patientId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -152,8 +159,13 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
+            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
+            PatientClinicalHistoryModel patientClinicalHistoryModel =
+                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+
             List<AnswerModel> savedAnswers = requests.stream()
                     .map(answerMapper::toEntity)
+                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
                     .map(answerRepository::save)
                     .toList();
 
