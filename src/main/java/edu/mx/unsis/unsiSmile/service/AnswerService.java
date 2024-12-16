@@ -186,8 +186,13 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
+            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
+            PatientClinicalHistoryModel patientClinicalHistoryModel =
+                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+
             List<AnswerModel> updatedAnswers = requests.stream()
                     .map(answerMapper::toEntity)
+                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
                     .map(answerRepository::save)
                     .toList();
 
