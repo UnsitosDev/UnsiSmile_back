@@ -23,7 +23,7 @@ public class AnswerModel extends AuditModel {
     private Long idAnswer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_patient_clinical_history", nullable = false)
+    @JoinColumn(name = "fk_patient_clinical_history")
     private PatientClinicalHistoryModel patientClinicalHistoryModel;
 
     @ManyToOne(fetch = FetchType.LAZY)

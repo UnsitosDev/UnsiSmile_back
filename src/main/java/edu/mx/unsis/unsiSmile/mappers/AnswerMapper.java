@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -56,10 +57,10 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
 
-    public AnswerModel toEntityFromFile(Long idPatientClinicalHistory, Long idQuestion) {
+    public AnswerModel toEntityFromFile(String idPatient, Long idQuestion) {
         return AnswerModel.builder()
-                .patientClinicalHistoryModel(PatientClinicalHistoryModel.builder()
-                        .idPatientClinicalHistory(idPatientClinicalHistory)
+                .patientModel(PatientModel.builder()
+                        .idPatient(idPatient)
                         .build())
                 .questionModel(QuestionModel.builder()
                         .idQuestion(idQuestion)

@@ -27,7 +27,7 @@ public class FileController {
             @RequestPart List<MultipartFile> files,
             @RequestPart @Validated String idPatientClinicalHistory,
             @RequestPart @Validated String idQuestion) {
-        fileService.upload(files, Long.parseLong(idPatientClinicalHistory), Long.parseLong(idQuestion));
+        fileService.upload(files, idPatientClinicalHistory, Long.parseLong(idQuestion));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
