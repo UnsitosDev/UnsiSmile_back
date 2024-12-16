@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8082:8080" # El puerto del host apunta al puerto del contenedor
+      - "8082:8082" # El puerto del host apunta al puerto del contenedor
     depends_on:
       - db
     environment:

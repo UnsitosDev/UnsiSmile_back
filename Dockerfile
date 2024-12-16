@@ -23,7 +23,7 @@ WORKDIR /app
 COPY --from=build /app/build/libs/unsiSmile-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponer el puerto 8080
-EXPOSE 8080
+EXPOSE 8082
 
 # Healthcheck opcional
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s CMD curl -f http://localhost:8082/actuator/health || exit 1
