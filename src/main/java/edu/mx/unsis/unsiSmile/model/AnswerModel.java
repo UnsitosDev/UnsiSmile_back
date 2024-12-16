@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.model;
 
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,10 @@ public class AnswerModel extends AuditModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_question", nullable = false)
     private QuestionModel questionModel;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_patient")
+    private PatientModel patientModel;
 
     @Column(name = "answer_boolean")
     private Boolean answerBoolean;

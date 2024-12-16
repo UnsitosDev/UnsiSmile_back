@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
@@ -34,7 +35,10 @@ public class PatientClinicalHistoryService {
     public PatientClinicalHistoryModel findById(Long id) {
         try {
             return patientClinicalHistoryRepository.findById(id)
+                    .map(this::toDto)
                     .orElseThrow(() -> new AppException("Patient clinical history not found with ID: " + id, HttpStatus.NOT_FOUND));
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to find patient clinical history with ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -90,5 +94,32 @@ public class PatientClinicalHistoryService {
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(String idPatient, Long idClinicalHistory) {
+        try {
+            Optional<PatientClinicalHistoryModel> patientClinicalHistory = patientClinicalHistoryRepository
+                    .findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
+                            idPatient, idClinicalHistory);
+            if (patientClinicalHistory.isPresent()) {
+                return this.toDto(patientClinicalHistory.get());
+            } else {
+                throw new AppException("Patient clinical history not found for idPatient: " + idPatient +
+                        " and idClinicalHistory: " + idClinicalHistory, HttpStatus.NOT_FOUND);
+            }
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Failed to find patient clinical history with idPatient: " + idPatient + " and idClinicalHistory: " + idClinicalHistory, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private PatientClinicalHistoryModel toDto(PatientClinicalHistoryModel entity) {
+        return PatientClinicalHistoryModel.builder()
+                .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
+                .patient(entity.getPatient())
+                .clinicalHistoryCatalog(entity.getClinicalHistoryCatalog())
+                .build();
     }
 }

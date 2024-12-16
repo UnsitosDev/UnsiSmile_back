@@ -17,10 +17,9 @@ public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
     List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("patientClinicalHistoryId") Long patientClinicalHistoryId);
 
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion IN :questionIds AND " +
-            "a.patientClinicalHistoryModel.idPatientClinicalHistory = :patientClinicalHistoryId")
+            "a.patientModel.idPatient = :patientId")
     List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("questionIds") Set<Long> questionIds,
-                                                        @Param("patientClinicalHistoryId") Long
-                                                                patientClinicalHistoryId);
+                                                        @Param("patientId") String patientId);
 
     Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientClinicalHistoryModelIdPatientClinicalHistory(Long id, Long idClinicalHistory);
 }

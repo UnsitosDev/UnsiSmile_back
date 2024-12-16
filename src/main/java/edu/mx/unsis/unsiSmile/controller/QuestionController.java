@@ -51,8 +51,8 @@ public class QuestionController {
     @Operation(summary = "Obtiene todas las preguntas con o sin respuesta que pertenecen a un formulario mediante el id.")
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<List<QuestionResponse>> findAllBySection(
-            @PathVariable Long sectionId, @RequestParam(required = false) Long patientClinicalHistoryId) {
-        List<QuestionResponse> response = questionService.findAllBySection(sectionId, patientClinicalHistoryId);
+            @PathVariable Long sectionId, @RequestParam(required = false) String patientId) {
+        List<QuestionResponse> response = questionService.findAllBySection(sectionId, patientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -30,8 +30,8 @@ public class FormSectionController {
 
     @Operation(summary = "Obtiene una sección y la configuración con el id de la historia clínica del paciente.")
     @GetMapping("/{id}")
-    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam Long patientClinicalHistoryId) {
-        FormSectionResponse response = formSectionService.findById(id, patientClinicalHistoryId);
+    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam String patientId) {
+        FormSectionResponse response = formSectionService.findById(id, patientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
