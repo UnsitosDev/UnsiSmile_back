@@ -1,27 +1,45 @@
+version: '3.9'
+
 services:
   app:
     container_name: unsismile_back-app
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8082:8080" # El puerto del host apunta al puerto del contenedor
     depends_on:
       - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MariaDBDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: yOksepqllu0yhyfFGKWOhjd8rISN23HypgnkDaMy/SduH2pj3jtGe2Eu9mxoxAe5QIPvkGB2RXyGtd/nLAbTnw/2gOq1pW2rbGJ5hshLK2XTBqE4DtsLsWkB2Y9TzmZK5MGh9VjYVVH2rfEAtPxUp4F6nHbumg1Ii/T+ut3F3G/qGhYS5jGKXaGDJIGCjXQntcX5dRMHDa5kU1L2S+hYlc7YIUuDgsItGJ9rob10FhWjn7u1EGSFq7NoIaLmrmaB1PIk1XA3oZ4fC/8rpz9OQZj/Wv9GRzkEvhPARH3n81XnDj4OXoTST3vVRyOaTphIoht+Rag9lgeQB7GAiqEcmJUB63LQNyUwRdveMk+4sQA=
+      FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
+    networks:
+      - unsismile_network
     volumes:
-      - gradle_cache:/home/gradle/.gradle  # Caché de dependencias de Gradle
+      - gradle_cache:/home/gradle/.gradle
 
   db:
-    image: "mariadb:10.5"
+    image: mariadb:10.5
     container_name: mariadb
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=unsis_smile
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: unsis_smile
     ports:
-      - "3306:3306"
+      - "3306:3306" # Base de datos
     volumes:
-      - mysql_data:/var/lib/mysql  # Volumen para persistir los datos de MySQL
+      - mysql_data:/var/lib/mysql
+    networks:
+      - unsismile_network
+
+networks:
+  unsismile_network:
+    driver: bridge
 
 volumes:
   mysql_data:
-    external: false
-  gradle_cache:  # Volumen para caché de Gradle
-    external: false
+  gradle_cache:
