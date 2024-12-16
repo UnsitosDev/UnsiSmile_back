@@ -109,7 +109,7 @@ CREATE TABLE patient_clinical_histories (
 -- Answers Table
 CREATE TABLE answers (
                          id_answer BIGINT(20) NOT NULL AUTO_INCREMENT,
-                         fk_patient_clinical_history BIGINT(20) NOT NULL,
+                         fk_patient_clinical_history BIGINT(20) DEFAULT NULL,
                          fk_question BIGINT(20) NOT NULL,
                          fk_patient VARCHAR(36) NOT NULL,
                          answer_boolean TINYINT(1) DEFAULT NULL,

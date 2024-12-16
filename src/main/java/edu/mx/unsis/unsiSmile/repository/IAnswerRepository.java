@@ -21,5 +21,5 @@ public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
     List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("questionIds") Set<Long> questionIds,
                                                         @Param("patientId") String patientId);
 
-    Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientClinicalHistoryModelIdPatientClinicalHistory(Long id, Long idClinicalHistory);
+    Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientModel_IdPatient(Long id, String idClinicalHistory);
 }

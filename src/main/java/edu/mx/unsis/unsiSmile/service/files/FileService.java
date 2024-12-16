@@ -9,7 +9,6 @@ import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
-import edu.mx.unsis.unsiSmile.service.AnswerService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -35,8 +34,8 @@ public class FileService {
     private final IAnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
 
-    public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
-        if (files.isEmpty() || idPatientClinicalHistory == null || idQuestion == null) {
+    public void upload(List<MultipartFile> files, String idPatient, Long idQuestion) {
+        if (files.isEmpty() || idPatient == null || idQuestion == null) {
             throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
 
@@ -49,7 +48,7 @@ public class FileService {
             }
         }
 
-        Long answerId = this.createFromFile(idPatientClinicalHistory, idQuestion);
+        Long answerId = this.createFromFile(idPatient, idQuestion);
 
         for (MultipartFile file : files) {
             try {
@@ -182,17 +181,17 @@ public class FileService {
         }
     }
 
-    private Long createFromFile(Long idPatientClinicalHistory, Long idQuestion) {
+    private Long createFromFile(String idPatient, Long idQuestion) {
         try {
-            Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientClinicalHistoryModelIdPatientClinicalHistory(
-                    idQuestion, idPatientClinicalHistory
+            Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
+                    idQuestion, idPatient
             );
 
             if (existingAnswer.isPresent()) {
                 return existingAnswer.get().getIdAnswer();
             }
 
-            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(idPatientClinicalHistory, idQuestion);
+            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(idPatient, idQuestion);
 
             newAnswerModel = answerRepository.save(newAnswerModel);
 
