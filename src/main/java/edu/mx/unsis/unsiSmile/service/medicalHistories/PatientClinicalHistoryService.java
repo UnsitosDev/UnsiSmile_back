@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class PatientClinicalHistoryService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     @Transactional
-    public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
+    public PatientClinicalHistoryModel save(UUID idPatient, Long idClinicalHistory) {
         try {
             return patientClinicalHistoryRepository.save(toEntity(idPatient, idClinicalHistory));
         } catch (Exception ex) {
@@ -75,7 +76,7 @@ public class PatientClinicalHistoryService {
         }
     }
 
-    private PatientClinicalHistoryModel toEntity(String idPatient, Long idClinicalHistory) {
+    private PatientClinicalHistoryModel toEntity(UUID idPatient, Long idClinicalHistory) {
         return PatientClinicalHistoryModel.builder()
                 .patient(PatientModel.builder()
                         .idPatient(idPatient)
@@ -88,7 +89,7 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryModel> findByPatient(String idPatient) {
+    public List<PatientClinicalHistoryModel> findByPatient(UUID idPatient) {
         try {
             return patientClinicalHistoryRepository.findAllByPatientId(idPatient);
         } catch (Exception ex) {
@@ -97,7 +98,7 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(String idPatient, Long idClinicalHistory) {
+    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(UUID idPatient, Long idClinicalHistory) {
         try {
             Optional<PatientClinicalHistoryModel> patientClinicalHistory = patientClinicalHistoryRepository
                     .findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(

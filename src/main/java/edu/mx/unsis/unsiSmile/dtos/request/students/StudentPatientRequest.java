@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class StudentPatientRequest {
 
     @NotNull(message = "Patient cannot be null")
-    private String patientId;
+    private UUID patientId;
 
     @NotNull(message = "Student cannot be null")
     private String studentEnrollment;

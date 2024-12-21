@@ -6,12 +6,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "FILE")
 @RestController
@@ -22,12 +24,12 @@ public class FileController {
     private final FileService fileService;
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> upload(
             @RequestPart List<MultipartFile> files,
-            @RequestPart @Validated String idPatientClinicalHistory,
+            @RequestPart @Validated UUID idPatient,
             @RequestPart @Validated String idQuestion) {
-        fileService.upload(files, idPatientClinicalHistory, Long.parseLong(idQuestion));
+        fileService.upload(files, idPatient, Long.parseLong(idQuestion));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

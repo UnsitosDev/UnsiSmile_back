@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "CLINICAL HISTORY CATALOG")
 @RestController
@@ -38,7 +39,7 @@ public class ClinicalHistoryCatalogController {
     @GetMapping("/{idClinicalHistory}/patients/{idPatient}")
     public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
             @PathVariable Long idClinicalHistory,
-            @PathVariable String idPatient) {
+            @PathVariable UUID idPatient) {
         ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -59,7 +60,7 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
     @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient) {
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam UUID idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -67,7 +68,7 @@ public class ClinicalHistoryCatalogController {
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
-            @RequestParam String idPatient,
+            @RequestParam UUID idPatient,
             @RequestParam Long idClinicalHistory) {
         PatientClinicalHistoryModel response = patientClinicalHistoryService.save(idPatient, idClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

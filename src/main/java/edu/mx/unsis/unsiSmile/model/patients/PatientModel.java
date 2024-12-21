@@ -6,8 +6,10 @@ import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,8 +21,10 @@ import java.time.LocalDate;
 public class PatientModel extends AuditModel {
 
     @Id
+    @GenericGenerator(name = "uuid2")
+    @GeneratedValue(generator = "system-uuid")
     @Column(name = "id_patient")
-    private String idPatient;
+    private UUID idPatient;
 
     @Column(name = "admission_date")
     private LocalDate admissionDate;

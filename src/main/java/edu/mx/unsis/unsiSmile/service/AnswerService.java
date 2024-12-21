@@ -129,7 +129,7 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, String patientId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, UUID patientId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
