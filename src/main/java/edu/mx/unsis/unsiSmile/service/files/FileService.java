@@ -53,7 +53,7 @@ public class FileService {
         for (MultipartFile file : files) {
             try {
                 byte[] bytes = file.getBytes();
-                String uuid = UUID.randomUUID().toString();
+                UUID uuid = UUID.randomUUID();
                 Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
                 String fileName = file.getOriginalFilename();
                 assert fileName != null : "Filename is null";
@@ -75,7 +75,7 @@ public class FileService {
         }
     }
 
-    public void deleteFile(String idFile) {
+    public void deleteFile(UUID idFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -89,7 +89,7 @@ public class FileService {
         }
     }
 
-    public FileModel updateFile(String idFile, MultipartFile newFile) {
+    public FileModel updateFile(UUID idFile, MultipartFile newFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -117,7 +117,7 @@ public class FileService {
     }
 
     @Transactional(readOnly = true)
-    public FileResponse findById(String id) {
+    public FileResponse findById(UUID id) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
@@ -164,7 +164,7 @@ public class FileService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadFileById(String id) {
+    public ResponseEntity<byte[]> downloadFileById(UUID id) {
         FileModel fileModel = fileRepository.findById(id)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 

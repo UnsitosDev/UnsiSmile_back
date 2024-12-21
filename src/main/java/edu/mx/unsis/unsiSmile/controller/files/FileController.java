@@ -42,7 +42,7 @@ public class FileController {
 
     @Operation(summary = "Obtiene un archivo para su descarga")
     @GetMapping("file/{id}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable UUID id) {
         return fileService.downloadFileById(id);
     }
 
