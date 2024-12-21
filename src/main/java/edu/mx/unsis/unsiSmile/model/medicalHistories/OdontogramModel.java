@@ -28,11 +28,11 @@ public class OdontogramModel {
     private LocalDate creationDate;
 
     @ManyToOne
-    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
+    @JoinColumn(name = "fk_patients", referencedColumnName = "id_patient")
     private PatientModel patient;
 
     @ManyToOne
-    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
+    @JoinColumn(name = "fk_form_sections", referencedColumnName = "id_form_section")
     private FormSectionModel formSection;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)

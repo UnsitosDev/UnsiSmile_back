@@ -1,11 +1,25 @@
--- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
+-- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
     form_sections (form_name)
 VALUES
-    ("Exploración de la cavidad bucal y anexos"),
-    (
-        "Carta de concentimiento informado para periodoncia"
-    );
+    ("Interrogatorio por aparatos y sistemas"),
+    ("Padecimiento actual"),
+    ("Recomendaciones previas a la intervensión quirúrgica"),
+    ("Recomendaciones para despues de intervenciones quirúrgicas"),
+    ("Carta de consentimiento informado para cirugía oral")
+;
+
+INSERT INTO
+    catalogs (catalog_name)
+VALUES
+    ("Tipo de Sangrado") -- id: 11
+;
+
+INSERT INTO
+    catalog_options (fk_catalog, option_name)
+VALUES
+    (11, "Normal"),
+    (11, "Prolongado");
 
 INSERT INTO
     clinical_history_sections (
@@ -14,13 +28,51 @@ INSERT INTO
     section_order
 )
 VALUES
-    (4, 20, 1),
-    (4, 21, 2),
-    (4, 5, 3), -- antecedentes personales patológicos
-    (4, 41, 4),
-    (4, 28, 5), -- recibo
-    (4, 42, 6)
--- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
+    (5, 1, 1),
+    (5, 3, 2),
+    (5, 43, 3),
+    (5, 44, 4),
+    (5, 45, 5),
+    (5, 46, 6),
+    (5, 47, 7)
+;
+
+-- interrogatorio por aparatos y sistemas
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Aparato cardiovascular", 43, 3, 1, true),
+    ("Aparato Digestivo", 43, 3, 2, true),
+    ("Aparato Renal", 43, 3, 3, true),
+    ("Sistema Nervioso", 43, 3, 4, true),
+    ("Sistema Genital", 43, 3, 5, true)
+;
+
+-- padecimiento actual
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Fecha de última consulta médica (agregar motivo)", 44, 9, 1, true),
+    ("Fecha de ultima consulta dental (agregar motivo)", 44, 9, 2, true),
+    ("Si es mujer, ¿Está embarazada?", 44, 5, 3, true),
+    ("Si es mujer, ¿Está lactando?", 44, 5, 5, true),
+    ("Examen Radiológico", 44, 3, 6, true),
+    ("Técnicas de Anestesia", 44, 3, 7, true),
+    ("Instrumental", 44, 3, 8, true),
+    ("Dientes Extraídos", 44, 2, 9, true),
+    ("Estado del Paciente", 44, 3, 10, true)
 ;
 
 INSERT INTO
@@ -28,15 +80,12 @@ INSERT INTO
     question_text,
     fk_form_section,
     fk_answer_type,
+    fk_catalog,
     question_order,
     required
 )
-values
-    ("Tejidos blandos", 41, 8, 1, true),
-    ("Articulación temporomandibular", 41,8, 2, true),
-    ("Diagnóstico", 41,8, 3, true),
-    ("Estudio de laboratorio y gabinete", 41,8, 4, true),
-    ("Indicaciones de interconsulta médica u odontológica", 41,8, 5, true);
+VALUES
+    ("Tipo de Sangrado", 44, 4,11, 4, true); -- catalog
 
 INSERT INTO
     questions (
@@ -47,11 +96,7 @@ INSERT INTO
     required
 )
 values
-    (
-        "Carta de concentimiento informado para operatoria dental",
-        42,
-        6,
-        1,
-        true
-    )
+    ("Recomendaciones previas a la intervensión quirúrgica", 45, 6, 1, true),
+    ("Recomendaciones para despues de intervenciones quirúrgicas", 46, 6, 1, true),
+    ("Carta de consentimiento informado para cirugía oral", 47, 6, 1, true)
 ;
