@@ -27,9 +27,9 @@ public class FileController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> upload(
             @RequestPart List<MultipartFile> files,
-            @RequestPart @Validated UUID idPatient,
+            @RequestPart @Validated String idPatient,
             @RequestPart @Validated String idQuestion) {
-        fileService.upload(files, idPatient, Long.parseLong(idQuestion));
+        fileService.upload(files, UUID.fromString(idPatient), Long.parseLong(idQuestion));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
