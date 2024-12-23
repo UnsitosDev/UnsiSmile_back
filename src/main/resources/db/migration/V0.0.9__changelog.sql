@@ -1,12 +1,11 @@
--- *-*-*-*-*-*-*-*-* (3) HISTORIA CLÍNICA DE PERIODONCIA *-*-*-*-*-*-*-*-*-
-
+-- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
     form_sections (form_name)
 VALUES
-    ("Hoja de evaluación de periodoncia"),
-    ("Periodontograma"),
-    ("Carta de concentimiento informado para periodoncia")
-;
+    ("Exploración de la cavidad bucal y anexos"),
+    (
+        "Carta de concentimiento informado para periodoncia"
+    );
 
 INSERT INTO
     clinical_history_sections (
@@ -15,18 +14,15 @@ INSERT INTO
     section_order
 )
 VALUES
-    (3, 20, 1),
-    (3, 21, 2),
-    (3, 22, 3),
-    (3, 23, 4),
-    (3, 27, 5),
-    (3, 28, 6),
-    (3, 38, 7),
-    (3, 39, 8),
-    (3, 40, 9)
+    (4, 20, 1),
+    (4, 21, 2),
+    (4, 5, 3), -- antecedentes personales patológicos
+    (4, 41, 4),
+    (4, 28, 5), -- recibo
+    (4, 42, 6)
+-- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
 ;
 
--- HOJA DE EVALUACIÓN DE PERIODONCIA
 INSERT INTO
     questions (
     question_text,
@@ -36,9 +32,12 @@ INSERT INTO
     required
 )
 values
-    ("Hoja de evalucación de periodoncia",38,6,1,true);
+    ("Tejidos blandos", 41, 8, 1, true),
+    ("Articulación temporomandibular", 41,8, 2, true),
+    ("Diagnóstico", 41,8, 3, true),
+    ("Estudio de laboratorio y gabinete", 41,8, 4, true),
+    ("Indicaciones de interconsulta médica u odontológica", 41,8, 5, true);
 
--- CARTA DE CONSENTIMIENTO INFORMADO PARA PERIODONCIA
 INSERT INTO
     questions (
     question_text,
@@ -48,4 +47,11 @@ INSERT INTO
     required
 )
 values
-    ("Carta de concentimiento informado",40,6,1,true);
+    (
+        "Carta de concentimiento informado para operatoria dental",
+        42,
+        6,
+        1,
+        true
+    )
+;

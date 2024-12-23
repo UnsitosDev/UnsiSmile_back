@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   app:
     container_name: unsismile_back-app
@@ -14,8 +12,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MariaDBDialect
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
       JWT_SECRET: yOksepqllu0yhyfFGKWOhjd8rISN23HypgnkDaMy/SduH2pj3jtGe2Eu9mxoxAe5QIPvkGB2RXyGtd/nLAbTnw/2gOq1pW2rbGJ5hshLK2XTBqE4DtsLsWkB2Y9TzmZK5MGh9VjYVVH2rfEAtPxUp4F6nHbumg1Ii/T+ut3F3G/qGhYS5jGKXaGDJIGCjXQntcX5dRMHDa5kU1L2S+hYlc7YIUuDgsItGJ9rob10FhWjn7u1EGSFq7NoIaLmrmaB1PIk1XA3oZ4fC/8rpz9OQZj/Wv9GRzkEvhPARH3n81XnDj4OXoTST3vVRyOaTphIoht+Rag9lgeQB7GAiqEcmJUB63LQNyUwRdveMk+4sQA=
       FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
     networks:

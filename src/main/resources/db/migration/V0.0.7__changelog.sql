@@ -1,465 +1,358 @@
-INSERT INTO clinical_history_catalogs
-(clinical_history_name)
-VALUES
-    ("General"),
-    ("Prótesis bucal"),
-    ("Periodoncia"),
-    ("Operatoria dental"),
-    ("Cirugía bucal");
-
--- secciones padre
-INSERT INTO form_sections
-(form_name)
+-- *-*-*-*-*-*-*-*-* (2) HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
+-- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3, ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
+-- Secciones padre:
+INSERT INTO
+    form_sections (form_name)
 VALUES
     ("Signos vitales"),
-    ("Exámen facial"),
-    ("Antecedentes heredofamiliares"),
-    ("Antecedentes personales no patológicos"),
-    ("Antecedentes personales patológicos"),
-    ("Odontograma inicial"),
-    ("Odontograma final"),
-    ("Medición de bolsas inicial"),
-    ("Exámen clínico"),
-    ("Análisis funcional"),
-    ("Postura del paciente"),
-    ("Exámen bucal"),
-    ("Análisis radiográfico"),
-    ("Modelos de estudio de fotografías"),
-    ("Estudio de laboratorio/biopsia"),
-    ("Interconsulta médica"),
-    ("Consentimiento informado"),
-    ("Nota de evolución")
-;
+    ("Interrogatorio"),
+    ("Examen parodontal"),
+    ("Exploración de la cavidad bucal"),
+    ("Exámen de dientes pilares"),
+    ("Exámen radiográfico de dientes pilares"), -- tiene hijos
+    ("Exámen de organo dentario"), -- tiene hijos
+    ("Plan de tratamiento"),
+    ("Recibo"),
+    ("Autorización de tratamiento"),
+    ("Evaluación de prótesis parcial fija"),
+    ("Carta de consentimiento informado para prótesis bucal");
 
--- secciones hijas
-INSERT INTO form_sections
-(form_name, fk_parent_section)
+INSERT INTO
+    form_sections (form_name, fk_parent_section) -- 6 y 7
 VALUES
-    ("Clasificación de angle", 12)
-;
-select * from form_sections;
--- insert para las secciones de historia clínica general
-INSERT INTO clinical_history_sections
-(fk_clinical_history_catalog,
- fk_form_section,
- section_order)
-VALUES
-    (1,1, 1),
-    (1,2, 2),
-    (1,3, 3),
-    (1,4, 4),
-    (1,5, 5),
-    (1,6, 6),
-    (1,7, 7),
-    (1,8, 8),
-    (1,9, 9),
-    (1,10, 10),
-    (1,11, 11),
-    (1,12, 12),
-    (1,13, 13),
-    (1,14, 14),
-    (1,15, 15),
-    (1,16, 16),
-    (1,17, 17),
-    (1,18, 18)
-;
+    ("Cámara pulpar", 25),
+    ("Zona apical", 25),
+    ("Conducto radicular", 25),
+    ("Número de conductos", 26),
+    ("Proporción corona-raíz", 26),
+    ("Odontograma", 26);
 
-INSERT INTO answer_types
-(answer_type)
-VALUES
-    ("BOOLEAN"),
-    ("NUMERIC"),
-    ("SHORT_TEXT"),
-    ("CATALOG"),
-    ("MULTIVALUED"),
-    ("PHOTO"),
-    ("FILE"),
-    ("LONG_TEXT"),
-    ("DATE");
-;
-
-
-INSERT INTO catalogs
-(catalog_name)
-VALUES
-    ("Perfil facial"),
-    ("Morfología facial"),
-    ("Clases de angles"),
-    ("Material de vivienda")
-;
-
-
-INSERT INTO catalog_options
-(fk_catalog,
- option_name)
-VALUES
-    ( 1, "Recto"),
-    ( 1, "Cóncavo"),
-    ( 1, "Convexo"),
-    ( 2, "Braquifacial"),
-    ( 2, "Normofacial"),
-    ( 2, "Dolicofacial"),
-    (3, "Clase I"),
-    (3, "Clase II"),
-    (3, "Clase III"),
-    (4, "Ladrillo"),
-    (4, "Adobe"),
-    (4, "Madera"),
-    (4, "Lámina"),
-    (4, "Otro")
-;
-
-
--- (1,"BOOLEAN"), (2,"NUMERIC"), (3, "TEXT"), (4, "CATALOG"), (5, "MULTIVALUED"), (6,"FILE")
-
--- Signos vitales
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Peso (kg)", 1, 2, 1, true, "Ingrese su peso en kilogramos"),
-    ("Estatura (m)", 1, 2, 2, true, "Ingrese su estatura en metros"),
-    ("Temperatura (°C)", 1, 2, 3, true, "Ingrese su temperatura corporal"),
-    ("Frecuencia cardíaca (lpm)", 1, 2, 4, true, "Ingrese su FC (latidos por minuto)"),
-    ("Frecuencia respiratoria (rpm)", 1, 2, 5, true, "Ingrese su FR (respiraciones por minuto)"),
-    ("Presión arterial (T/A)", 1, 3, 6, true, "Ingrese su PA (Ej. 120/80)"),
-    ("Saturación de oxígeno (%)", 1, 2, 7, true, "Ingrese su saturación de oxígeno");
-
--- Examen facial
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- fk_catalog,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Perfil", 2, 4, 1, 1, true, null),
-    ("Frente", 2, 4, 2, 2, true, null),
-    ("Señas particulares",2, 3, null, 3, true, "Anote características distintivas")
-;
-
--- Antecedentes heredofamiliares
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required)
-VALUES
-    ("Neoplasia (Cáncer)", 3, 5, 1, true),
-    ("Diabetes", 3, 5, 2, true),
-    ("Hipertensión Arterial", 3, 5, 3, true),
-    ("Padecimientos mentales/neurológicos", 3, 5, 4, true),
-    ("Obesidad", 3, 5, 5, true),
-    ("Padecimientos hematológicos", 3, 5, 6, true),
-    ("Malformaciones congénitas", 3, 5, 7, true),
-    ("Problemas cardiacos", 3, 5, 8, true);
-
--- Antecedentes perso   nales no patológicos
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder,
- fk_catalog)
-VALUES
-    ("Come frutas y verduras", 4, 1, 1, true, null, null),
-    ("Come carnes (Res, puerco o pollo)", 4, 1, 2, true, null, null),
-    ("Come cereales (Pan, Cereal, etc.)", 4, 1, 3, true, null, null),
-    ("Come alimentos chatarra (Dulces, botanas, etc.)", 4, 1, 4, true, null, null),
-    ("Toma o bebe 2 litros de agua al día", 4, 1, 5, true, null, null),
-    ("Toma o bebe uno o más refrescos al día", 4, 1, 6, true, null, null),
-    ("Horas que duerme al día", 4, 2, 7, true, "Indique horas de sueño", null),
-    ("¿Cuántas veces a la semana se baña?", 4, 2, 8, true, "Indique frecuencia de baño", null),
-    ("¿Cuántas veces al día cepilla sus dientes?", 4, 2, 9, true, "Indique frecuencia de cepillado", null),
-    ("¿Su vivienda tiene piso?", 4, 1, 10, true, null, null),
-    ("Su vivienda esta hecha de:", 4, 4, 11, true, null, 4)
-;
-
--- Antecedentes personales patológicos
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder
+INSERT INTO
+    clinical_history_sections (
+    fk_clinical_history_catalog,
+    fk_form_section,
+    section_order
 )
 VALUES
-    ("Tabaquismo", 5, 1, 1, true, null),
-    ("Alcoholismo", 5, 1, 2, true, null),
-    ("Otras sustancias psicoactivas o recreativas", 5, 1, 3, true, null),
-    ("Perforaciones (Aretes, en mujeres además de los 2 aretes en cada oreja)", 5, 1, 4, true, null),
-    ("Tatuajes", 5, 1, 5, true, null),
-    ("Neoplasia (Cáncer)", 5, 1, 6, true, null),
-    ("Diabetes", 5, 1, 7, true, null),
-    ("Hipertensión Arterial", 5, 1, 8, true, null),
-    ("Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia", 5, 1, 9, true, null),
-    ("Obesidad diagnosticada", 5, 1, 10, true, null),
-    ("Padecimientos hematológicos/hemorrágicos/anemia/leucemia", 5, 1, 11, true, null),
-    ("Malformaciones congénitas/ Síndromes", 5, 1, 12, true, null),
-    ("Problemas cardiacos/ angina de pecho/ infarto/ tromboembolia/
-marcapasos/ bypass", 5, 1, 13, true, null),
-    ("Radioterapia/Quimioterapia", 5, 1, 14, true, null),
-    ("Padecimientos reumatológicos/ artritis/ osteoporosis", 5, 1, 15, true, null),
-    ("Enfermedades del riñón", 5, 1, 16, true, null),
-    ("Enfermedades hepáticas/Hepatitis", 5, 1, 17, true, null),
-    ("Enfermedades de transmisión sexual", 5, 1, 18, true, null),
-    ("Hipertiroidismo/Hipotiroidismo", 5, 1, 19, true, null),
-    ("Enfermedades de vías aéreas/asma", 5, 1, 20, true, null),
-    ("Enfermedades digestivas", 5, 1, 21, true, null),
-    ("Tuberculosis o vive con persona(s) con este padecimiento", 5, 1, 22, true, null),
-    ("Enfermedades de la piel", 5, 1, 23, true, null),
-    ("Trasplantes de órganos", 5, 1, 24, true, null),
-    ("¿Has sido hospitalizado? ¿Cuál fue el motivo?(en mujeres también anotar datos de parto)", 5, 3, 25, true,
-     "Indique motivo de hospitalización"),
-    ("¿Ha tomado algún medicamento recientemente?¿Cuál y por qué motivo?", 5, 3, 26, true,
-     "Indique medicamentos recientes"),
-    ("¿Ha tenido algún problema con la anestesia dental o anestesia general?, ¿Cuál?", 5, 3, 27, true,
-     "Indique problemas con anestesia"),
-    ("¿Es alérgico a algún medicamento o sustancia?, ¿Cuál?", 5, 3, 28, true, "Indique alergias"),
-    ("(Solo para mujeres) ¿Está embarazada?, Anotar meses de embarazo", 5, 3, 29, false, "Indique meses de embarazo"),
-    ("Ampliar respuestas", 5, 3, 30, false, "Indique más detalles si es necesario"),
-    ("Firma del paciente", 5, 6, 31, true, null);
+    (2, 20, 1),
+    (2, 21, 2),
+    (2, 22, 3),
+    (2, 23, 4),
+    (2, 24, 5),
+    (2, 25, 6),
+    (2, 26, 7),
+    (2, 27, 8),
+    (2, 28, 9),
+    (2, 29, 10),
+    (2, 30, 11),
+    (2, 31, 12);
 
--- Examen clínico
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
+INSERT INTO
+    catalogs (catalog_name)
 VALUES
-    ("Paladar",9, 3, 1, true, "Descripción del paladar"),
-    ("Istmo de las fauces",9, 3, 2, true, "Descripción del istmo"),
-    ("Mucosa yugal",9, 3, 3, true, "Descripción de la mucosa"),
-    ("Nódulos linfáticos",9, 3, 4, true, "Descripción de nódulos linfáticos"),
-    ("Lengua",9, 3, 5, true, "Descripción de la lengua"),
-    ("Piso de boca",9, 3, 6, true, "Descripción del piso de boca"),
-    ("Labios",9, 3, 7, true, "Descripción de los labios"),
-    ("Glándulas salivales",9, 3, 8, true, "Descripción de glándulas"),
-    ("Encía",9, 3, 9, true, "Descripción de encías"),
-    ("Frenillos",9, 3, 10, true, "Descripción de frenillos"),
-    ("Saliva",9, 3, 11, true, "Descripción de saliva"),
-    ("Otras señas particulares",9, 3, 12, false, "Indique otras características");
+    ("Cámara pulpar"), -- id: 6
+    ("Zona apical"),
+    ("Conducto radicular"),
+    ("Número de conductos"),
+    ("Proporción corona-raíz");
 
--- Análisis funcional
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
+INSERT INTO
+    catalog_options (fk_catalog, option_name)
 VALUES
-    ("Deglución",10, 3, 1, true, "Descripción de deglución"),
-    ("Fonación masticación",10, 3, 2, true, "Descripción de fonación"),
-    ("Respiración",10, 3, 3, true, "Descripción de respiración"),
-    ("Observaciones",10, 3, 4, false, "Observaciones generales");
+    (6, "Normal"),
+    (6, "Amplio"),
+    (6, "Estrecho"),
+    (6, "Nódulos"),
+    (6, "Calcificada"),
+    (7, "Periodonto normal"),
+    (7, "Periodonto ensanchado"),
+    (7, "Reabsorción apical"),
+    (7, "Cementosis"),
+    (7, "Osteoesclerosis"),
+    (8, "Normal"),
+    (8, "Amplio"),
+    (8, "Estrecho"),
+    (8, "Agujas cálcicas"),
+    (8, "Calcificado"),
+    (9, "1"),
+    (9, "2"),
+    (9, "3"),
+    (9, "4"),
+    (10, "1 a 3"),
+    (10, "1 a 2"),
+    (10, "1 a 1"),
+    (10, "Reabsorción interna"),
+    (10, "Reabsorción externa"),
+    (10, "Obturado");
 
--- Postura del paciente
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("ATM – Palpación", 11, 3, 1, true, "Descripción de palpación");
-
--- examen bucal
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- fk_catalog,
- question_order,
- required)
-VALUES
-    ("Relación molar: Derecha", 19, 4, 3, 2, true),
-    ("Relación molar: Izquierda", 19, 4, 3, 1, true),
-    ("Relación canina: Derecha", 19, 4, 3, 4, true),
-    ("Relación canina: Izquierda", 19, 4, 3, 3, true)
-;
-
--- Análisis radiográfico
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Ortopantomografía", 13, 3, 1, false, "Descripción"),
-    ("Lateral de cráneo", 13, 3, 1, false, "Descripción"),
-    ("Serie periapical completa", 13, 3, 1, false, "Descripción"),
-    ("Periapical individual", 13, 3, 1, false, "Descripción"),
-    ("Oclusal superior", 13, 3, 1, false, "Descripción"),
-    ("Oclusal inferior", 13, 3, 1, false, "Descripción"),
-    ("Posteroanterior de cráneo (PA)", 13, 3, 1, false, "Descripción"),
-    ("Anteroposterior de cráneo (AP)", 13, 3, 1, false, "Descripción"),
-    ("Dígito palmar", 13, 3, 1, false, "Descripción"),
-    ("Senos paranasales", 13, 3, 1, false, "Descripción"),
-    ("Waters de cráneo", 13, 3, 1, false, "Descripción"),
-    ("Submento vertex", 13, 3, 1, false, "Descripción"),
-    ("Tomografía volumétrica completa", 13, 3, 1, false, "Descripción"),
-    ("Otros (especifique)", 13, 3, 1, false, "Descripción")
-;
-
--- Mmodelo de estudio y fotografías
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Modelos de estudio", 14, 3, 1, true, "Descripción de modelos"),
-    ("Tipo de arcada", 14, 3, 2, true, "Indique tipo de arcada"),
-    ("Fotografías", 14, 6, 3, true, null)
-;
-
--- Estudio de laboratotio biopsia
-
--- catalogos para modelos de estudio
-INSERT INTO catalogs
-(catalog_name)
-VALUES
-    ("Tipos de estudio de laboratorio")
-;
-
-INSERT INTO catalog_options
-(fk_catalog,
- option_name)
-VALUES
-    (5, "Biometria hemática"),
-    (5, "TP: Tiempo de protrombina"),
-    (5, "TPT: Tiempo de tromboplastina parcial"),
-    (5, "INR: Índice internacional normalizado"),
-    (5, "TT: Tiempo de trombina")
-;
-
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Tipo de biopsia", 15, 3, 2, true, "Indique tipo de biopsia"),
-    ("Región donde se realizó la biopsia", 15, 3, 3, true, "Indique región de la biopsia"),
-    ("Laboratorio donde se envía el estudio", 15, 3, 4, true, "Indique laboratorio de estudio")
-;
-
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- fk_catalog,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Tipos de estudio de laboratorio", 15, 4, 5, 1, true, "Indique tipo de estudio")
-;
-
-
--- interconsulta médica, como manejar la firma
-INSERT INTO questions
-(question_text,
- fk_form_section,
- fk_answer_type,
- question_order,
- required,
- placeholder)
-VALUES
-    ("Nombre del médico", 16, 3, 1, true, "Ingrese nombre del médico"),
-    ("Razón de interconsulta", 16, 3, 2, true, "Indique razón de interconsulta"),
-    ("Motivo de diagnóstico presuntivo", 16, 3, 3, true, "Indique diagnóstico presuntivo"),
-    ("Motivo de envío y servicio al que se envía", 16, 3, 4, true, "Indique motivo de envío"),
-    ("Diagnóstico", 16, 8, 5, true, "Indique diagnóstico"),
-    ("Pronóstico", 16, 8, 6, true, "Indique pronóstico"),
-    ("Tratamiento y manejo integral", 16, 8, 7, true, "Indique tratamiento integral"),
-    ("Firma", 16, 6, 8, true, null)
-;
-
-INSERT INTO validation_types (validation_code)
-VALUES
-    ("REGEX"),
-    ("MIN_VALUE"),
-    ("MAX_VALUE"),
-    ("MIN_LENGHT"),
-    ("MAX_LENGHT");
-
-INSERT INTO validations
-(validation_value,
- validation_message,
- fk_validation_type
+-- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3,  ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
+-- SIGNOS VITALES
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
 )
 VALUES
-    ("^(250(\.00|\.0[0-9]|[0-9]{1,2})?|[1-9]?[0-9]{1,2}(\.[0-9]{1,2})?)$",
-     "El peso debe ser entre 0 y 250 kg (Ej. 75.5, 100).", 1),
-    ("^(3(\.0{1,2}|\.([0-9]{1,2}))?|[0-2](\.[0-9]{1,2})?)$",
-     "La estatura debe estar entre 0 y 3 m (Ej. 1.75, 3).", 1),
-    ("^(3[0-9](\.[0-9]{1,2})?|4[0-4](\.[0-9]{1,2})?|45(\.[0-9]{1,2})?)$",
-     "La temperatura debe estar entre 30 y 45 °C (Ej. 36.5, 40).", 1),
-    ("^(5[0-9]|[7-9][0-9]|1[0-9]{2}|2[0-1][0-9]|220)(\.[0-9]{1,2})?$",
-     "La FC debe estar entre 50 y 220 lpm (Ej. 75, 180.50).", 1),
-    ("^(1[2-9]|[2-5][0-9]|60)(\.[0-9]{1,2})?$",
-     "Frecuencia respiratoria debe estar entre 12 y 60 rpm.", 1),
-    ("/^\d{2,3}\/\d{2,3}$/", "Presión arterial debe estar en formato sistólica/diastólica", 1),
-    ("^(100|[1-9]?[0-9])(\.[0-9]{1,2})?$", "Saturación de oxígeno debe estar entre 0 y 100%.", 1),
-    ("1", "", 4),
-    ("2", "", 4),
-    ("6", "", 4),
-    ("1", "", 5),
-    ("2", "", 5),
-    ("4", "", 5),
-    ("5", "", 5),
-    ("6", "", 5);
+    ("Peso", 20, 2, 1, true),
+    ("T/A", 20, 2, 2, true),
+    ("Pulso", 20, 2, 3, true),
+    ("Temperatura", 20, 2, 4, true),
+    ("Glucosa", 20, 2, 5, true);
 
-INSERT INTO question_validations
-(fk_question,
- fk_validation)
+-- INTERROGATIORIO
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
 VALUES
-    (1, 1),
-    (1, 8),
-    (1, 14),
-    (2, 2),
-    (2, 8),
-    (2, 13),
-    (3, 3),
-    (3, 8),
-    (3, 14),
-    (4, 4),
-    (4, 9),
-    (4, 14),
-    (5, 5),
-    (5, 9),
-    (5, 14),
-    (6, 6),
-    (6, 10),
-    (6, 15),
-    (7, 7),
-    (7, 8),
-    (7, 14),
-    (25, 8),
-    (25, 12),
-    (26, 8),
-    (26, 12),
-    (27, 8),
-    (27, 11)
-    ;
+    ("Motivo de la consulta", 21, 8, 1, true),
+    ("Padecimiento Actual", 21, 8, 2, true),
+    ("¿Goza usted de buena salud?", 21, 1, 3, true),
+    (
+        "¿Está siendo atendido actualmente por un médico?",
+        21,
+        1,
+        4,
+        true
+    ),
+    (
+        "Fecha de su último examen físico",
+        21,
+        9,
+        5,
+        true
+    ),
+    (
+        "¿Está recibiendo en este momento cualquier tipo de medicación (prescrita o no prescrita) o droga? Si este es el caso, indique los nombres de los medicamentos y las razones por las cuales las usa.",
+        21,
+        5,
+        6,
+        true
+    ),
+    (
+        "¿Hay alguna medicina que usted no pueda tomar?",
+        21,
+        5,
+        7,
+        true
+    ),
+    (
+        "¿Alguna vez ha sufrido una reacción inusual a una droga/medicamento?",
+        21,
+        5,
+        8,
+        true
+    ),
+    (
+        "¿Ha tenido complicaciones con la anestesia local?",
+        21,
+        5,
+        9,
+        true
+    ),
+    (
+        "¿Existe alguna otra información que deba ser conocida acerca de su salud?",
+        21,
+        5,
+        10,
+        true
+    ),
+    (
+        "¿Padece alguna enfermedad infecciosa? (Fiebre reumática, hepatitis, paludismo, sífilis):",
+        21,
+        5,
+        11,
+        true
+    ),
+    ("¿Sufre de ataques epilépticos?", 21, 1, 12, true),
+    (
+        "Acerca de sus consultas odontológicas previas",
+        21,
+        8,
+        13,
+        true
+    ),
+    (
+        "En caso de ser mujer, ¿usted está embarazada? (especificar los meses)",
+        21,
+        5,
+        14,
+        true
+    );
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+VALUES
+    ("Materia alba", 22, 1, 1, true),
+    ("Placa bacteriana", 22, 1, 2, true),
+    ("Sarro", 22, 1, 3, true),
+    ("Gingivitis", 22, 1, 4, true),
+    ("Bolsas periodontales", 22, 1, 5, true),
+    ("Absceso periodontal", 22, 1, 6, true),
+    ("Reabsorción ósea", 22, 1, 7, true),
+    ("Movilidad dental", 22, 1, 8, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Piso de la boca", 23, 3, 1, true),
+    ("Labios", 23, 3, 2, true),
+    ("Paladar duro y blando", 23, 3, 3, true),
+    ("Lengua", 23, 3, 4, true),
+    ("Carrillos", 23, 3, 5, true),
+    ("Proceso residual", 23, 3, 6, true),
+    ("Áreas edéntulas", 23, 3, 7, true),
+    ("Mucosa bucal:", 23, 3, 8, true),
+    ("Articulación temporomandibular", 23, 3, 9, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Fecha de inicio", 27, 9, 1, true),
+    ("Fecha de terminado", 27, 9, 2, true),
+    ("Observaciones", 27, 8, 3, true),
+    ("Control post-operatorio", 27, 8, 4, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Nombre del alumno", 28, 3, 1, true),
+    ("Semestre", 28, 3, 2, true),
+    ("Grupo", 28, 3, 3, true),
+    ("Indicaciones", 28, 8, 4, true),
+    ("No. de recibo", 28, 2, 5, true),
+    ("Costo total:", 28, 2, 6, true),
+    (
+        "Nombre del catedrático responsable",
+        28,
+        3,
+        7,
+        true
+    ),
+    ("C.D.", 28, 8, 8, true),
+    ("Observaciones", 28, 8, 9, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    (
+        "Firma de autorización de tratamiento",
+        29,
+        6,
+        1,
+        true
+    );
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Evolución", 30, 6, 1, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    (
+        "Carta de consentimiento informado para prótesis bucal",
+        31,
+        6,
+        1,
+        true
+    );
+
+-- EXÁMEN RADIOGRÁFICO DE DIENTES PILARES
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    fk_catalog,
+    question_order,
+    required
+)
+VALUES
+    ("Cámara pulpar", 32, 4, 6, 1, true),
+    ("Zona apical", 33, 4, 7, 2, true),
+    ("Conducto radicular", 34, 4, 8, 3, true);
+
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    fk_catalog,
+    question_order,
+    required
+)
+VALUES
+    ("Número de conductos", 35, 4, 9, 1, true),
+    ("Proporción corona-raíz", 36, 4, 10, 2, true);
+
+INSERT INTO
+    questions (
+    question_text,
+    fk_form_section,
+    fk_answer_type,
+    question_order,
+    required
+)
+values
+    ("Dientes cariados", 24, 3, 1, true),
+    ("Amalgamas", 24, 3, 2, true),
+    ("Dientes ausentes", 24, 3, 3, true),
+    ("Resinas", 24, 3, 4, true),
+    ("Dientes obturados", 24, 3, 5, true),
+    ("Incrustaciones", 24, 3, 6, true),
+    ("Extracciones indicadas", 24, 3, 7, true),
+    ("Prótesis fija", 24, 3, 8, true),
+    ("Raíces", 24, 3, 9, true),
+    ("Prótesis removible", 24, 3, 10, true);
