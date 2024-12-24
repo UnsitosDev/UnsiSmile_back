@@ -97,7 +97,7 @@ CREATE TABLE question_validations (
 CREATE TABLE patient_clinical_histories (
                                             id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
                                             fk_clinical_history_catalog bigint(20) DEFAULT NULL,
-                                            fk_patient VARCHAR(36) NOT NULL,
+                                            fk_patient BINARY(16) NOT NULL,
                                             date datetime DEFAULT NULL,
                                             PRIMARY KEY (id_patient_clinical_history),
                                             KEY fk_clinical_history_catalog (fk_clinical_history_catalog),
@@ -111,7 +111,7 @@ CREATE TABLE answers (
                          id_answer BIGINT(20) NOT NULL AUTO_INCREMENT,
                          fk_patient_clinical_history BIGINT(20) DEFAULT NULL,
                          fk_question BIGINT(20) NOT NULL,
-                         fk_patient VARCHAR(36) NOT NULL,
+                         fk_patient BINARY(16) NOT NULL,
                          answer_boolean TINYINT(1) DEFAULT NULL,
                          answer_numeric DECIMAL(10,2) DEFAULT NULL,
                          answer_text TEXT DEFAULT NULL,
@@ -124,12 +124,13 @@ CREATE TABLE answers (
                          KEY fk_option (fk_option),
                          CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories (id_patient_clinical_history),
                          CONSTRAINT answers_ibfk_2 FOREIGN KEY (fk_question) REFERENCES questions (id_question),
-                         CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option)
+                         CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option),
+                         CONSTRAINT answers_ibkf_4 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Files Table
 CREATE TABLE files (
-                       id_file VARCHAR(36) NOT NULL,
+                       id_file BINARY(16) NOT NULL,
                        file_name VARCHAR(255) NOT NULL,
                        file_path VARCHAR(255) NOT NULL,
                        file_type VARCHAR(50) NOT NULL,

@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface IFileRepository extends JpaRepository<FileModel, String> {
+public interface IFileRepository extends JpaRepository<FileModel, UUID> {
 
     @Query("SELECT f FROM FileModel f WHERE f.answer.idAnswer = :answerId")
     List<FileModel> findAllByAnswerId(@Param("answerId") Long answerId);

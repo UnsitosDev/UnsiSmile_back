@@ -15,8 +15,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class PatientRequest {
-    private String idPatient;
-
     @NotNull(message = "Admission date cannot be null")
     private LocalDate admissionDate;
 

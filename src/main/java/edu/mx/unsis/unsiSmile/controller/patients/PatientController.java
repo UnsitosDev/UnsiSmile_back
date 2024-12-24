@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/patients")
@@ -55,7 +56,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PatientResponse> getPatientById(@PathVariable String id) {
+    public ResponseEntity<PatientResponse> getPatientById(@PathVariable UUID id) {
         PatientResponse patientResponse = patientService.getPatientById(id);
         return ResponseEntity.ok(patientResponse);
     }
@@ -82,14 +83,14 @@ public class PatientController {
     // address, marital status, occupation, ethnic group, religion, guardian, etc.
 
     @PutMapping("/{id}")
-    public ResponseEntity<PatientResponse> updatePatient(@PathVariable String id,
+    public ResponseEntity<PatientResponse> updatePatient(@PathVariable UUID id,
             @Valid @RequestBody PatientRequest updatedPatientRequest) {
         PatientResponse updatedPatient = patientService.updatePatient(id, updatedPatientRequest);
         return ResponseEntity.ok(updatedPatient);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePatientById(@PathVariable String id) {
+    public ResponseEntity<?> deletePatientById(@PathVariable UUID id) {
         patientService.deletePatientById(id);
         return ResponseEntity.noContent().build();
     }

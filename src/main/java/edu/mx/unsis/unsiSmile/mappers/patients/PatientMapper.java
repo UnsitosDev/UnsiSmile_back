@@ -34,7 +34,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     @Override
     public PatientModel toEntity(PatientRequest dto) {
         return PatientModel.builder()
-                .idPatient(dto.getIdPatient())
                 .admissionDate(dto.getAdmissionDate())
                 .isMinor(dto.getIsMinor())
                 .hasDisability(dto.getHasDisability())
