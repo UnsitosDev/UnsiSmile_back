@@ -7,7 +7,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Repository
 public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
@@ -16,8 +18,9 @@ public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
     List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("patientClinicalHistoryId") Long patientClinicalHistoryId);
 
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion IN :questionIds AND " +
-            "a.patientClinicalHistoryModel.idPatientClinicalHistory = :patientClinicalHistoryId")
+            "a.patientModel.idPatient = :patientId")
     List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("questionIds") Set<Long> questionIds,
-                                                        @Param("patientClinicalHistoryId") Long
-                                                                patientClinicalHistoryId);
+                                                        @Param("patientId") UUID patientId);
+
+    Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientModel_IdPatient(Long id, UUID idPatient);
 }

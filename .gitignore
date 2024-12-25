@@ -40,3 +40,4 @@ out/
 docker-compose.yml
 src/main/resources/application.properties
 /uploads/*
+application-local-dev.properties

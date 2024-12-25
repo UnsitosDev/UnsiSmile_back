@@ -19,7 +19,7 @@ import edu.mx.unsis.unsiSmile.service.patients.GuardianService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/guardian")
+@RequestMapping("/unsismile/api/v1/guardian")
 public class GuardianController {
 
     private final GuardianService guardianService;

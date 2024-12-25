@@ -25,13 +25,12 @@ public class GroupService {
     private final GroupMapper groupMapper;
 
     @Transactional
-    public GroupResponse createGroup(@NonNull GroupRequest request) {
+    public void createGroup(@NonNull GroupRequest request) {
         try {
             Assert.notNull(request, "GroupRequest cannot be null");
 
             GroupModel groupModel = groupMapper.toEntity(request);
-            GroupModel savedGroup = groupRepository.save(groupModel);
-            return groupMapper.toDto(savedGroup);
+            groupRepository.save(groupModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -61,7 +60,7 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupResponse updateGroup(@NonNull Long id, @NonNull GroupRequest updatedGroupRequest) {
+    public void updateGroup(@NonNull Long id, @NonNull GroupRequest updatedGroupRequest) {
         try {
             Assert.notNull(updatedGroupRequest, "Updated GroupRequest cannot be null");
 
@@ -70,9 +69,7 @@ public class GroupService {
 
             groupMapper.updateEntity(updatedGroupRequest, groupModel);
 
-            GroupModel updatedGroup = groupRepository.save(groupModel);
-
-            return groupMapper.toDto(updatedGroup);
+            groupRepository.save(groupModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

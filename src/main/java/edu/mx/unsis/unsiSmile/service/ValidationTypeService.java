@@ -24,15 +24,13 @@ public class ValidationTypeService {
     private final ValidationTypeMapper validationTypeMapper;
 
     @Transactional
-    public ValidationTypeResponse save(ValidationTypeRequest request) {
+    public void save(ValidationTypeRequest request) {
         try {
             Assert.notNull(request, "ValidationTypeRequest cannot be null");
 
             ValidationTypeModel validationTypeModel = validationTypeMapper.toEntity(request);
 
-            ValidationTypeModel validationTypeSaved = validationTypeRepository.save(validationTypeModel);
-
-            return validationTypeMapper.toDto(validationTypeSaved);
+            validationTypeRepository.save(validationTypeModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save validation type", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

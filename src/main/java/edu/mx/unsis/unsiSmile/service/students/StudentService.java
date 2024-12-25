@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
-import java.util.List;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
@@ -24,6 +15,12 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +34,7 @@ public class StudentService {
     private final UserService userService;
 
     @Transactional
-    public StudentResponse createStudent(StudentRequest request) {
+    public void createStudent(StudentRequest request) {
         try {
             // Create user
             UserModel userModel = userService.createUser(setCredentials(request));
@@ -50,10 +47,7 @@ public class StudentService {
             // set user
             StudentModel studentModel = studentMapper.toEntity(request);
             studentModel.setUser(userModel);
-            StudentModel savedStudent = studentRepository.save(studentModel);
-
-            return studentMapper.toDto(savedStudent);
-
+            studentRepository.save(studentModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -86,17 +80,34 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentResponse> getAllStudents(Pageable pageable) {
+    public Page<StudentResponse> getAllStudents(Pageable pageable, String keyword) {
         try {
-            Page<StudentModel> allStudents = studentRepository.findAll(pageable);
+            Page<StudentModel> allStudents;
+
+            if (keyword == null || keyword.isEmpty()) {
+                allStudents = studentRepository.findAll(pageable);
+            } else {
+                Integer keywordInt = null;
+                if (keyword.matches("\\d+")) {
+                    keywordInt = Integer.parseInt(keyword);
+                } else if (!keyword.matches("[a-zA-Z]+")) {
+                    throw new AppException("The input is not valid. It must be a number or a string.",
+                    HttpStatus.BAD_REQUEST);
+                }
+
+                allStudents = studentRepository.findAllBySearchInput(keyword, keywordInt, pageable);
+            }
+
             return allStudents.map(studentMapper::toDto);
+        } catch (AppException ex) {
+          throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch students", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public StudentResponse updateStudent(String enrollment, StudentRequest updatedStudentRequest) {
+    public void updateStudent(String enrollment, StudentRequest updatedStudentRequest) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
@@ -104,9 +115,7 @@ public class StudentService {
 
             studentMapper.updateEntity(updatedStudentRequest, studentModel);
 
-            StudentModel updatedStudent = studentRepository.save(studentModel);
-
-            return studentMapper.toDto(updatedStudent);
+            studentRepository.save(studentModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

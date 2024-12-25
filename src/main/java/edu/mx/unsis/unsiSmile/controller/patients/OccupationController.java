@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/patients/occupations")
+@RequestMapping("/unsismile/api/v1/occupations")
 public class OccupationController {
 
     private final OccupationService occupationService;

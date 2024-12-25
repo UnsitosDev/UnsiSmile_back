@@ -22,9 +22,9 @@ public class CatalogOptionController {
 
     @Operation(summary = "Crea una opción de respuesta para un catálogo.")
     @PostMapping
-    public ResponseEntity<CatalogOptionResponse> save(@RequestBody CatalogOptionRequest request) {
-        CatalogOptionResponse response = catalogOptionService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody CatalogOptionRequest request) {
+        catalogOptionService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una opcion mediante su id")

@@ -27,9 +27,9 @@ public class CycleController {
     }
 
     @PostMapping
-    public ResponseEntity<CycleResponse> createCycle(@RequestBody CycleRequest cycleRequest) {
-        CycleResponse createdCycle = cycleService.createCycle(cycleRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCycle);
+    public ResponseEntity<Void> createCycle(@RequestBody CycleRequest cycleRequest) {
+        cycleService.createCycle(cycleRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -45,10 +45,10 @@ public class CycleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CycleResponse> updateCycle(@PathVariable Long id,
+    public ResponseEntity<Void> updateCycle(@PathVariable Long id,
             @RequestBody CycleRequest updateCycleRequest) {
-        CycleResponse updateCycle = cycleService.updateCycle(id, updateCycleRequest);
-        return ResponseEntity.ok(updateCycle);
+        cycleService.updateCycle(id, updateCycleRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")

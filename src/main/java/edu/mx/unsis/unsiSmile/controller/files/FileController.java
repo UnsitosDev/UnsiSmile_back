@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +17,20 @@ import java.util.UUID;
 
 @Tag(name = "FILE")
 @RestController
-@RequestMapping("/api/v1/files")
+@RequestMapping("/unsismile/api/v1/files")
 @RequiredArgsConstructor
 public class FileController {
 
     private final FileService fileService;
 
     @Operation(summary = "Crear un archivo, necesita una respuesta creada")
-    @PostMapping
-    public UUID upload(@RequestPart MultipartFile file, @RequestPart @Validated Long answerId) {
-        return fileService.upload(file, answerId);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> upload(
+            @RequestPart List<MultipartFile> files,
+            @RequestPart @Validated String idPatient,
+            @RequestPart @Validated String idQuestion) {
+        fileService.upload(files, UUID.fromString(idPatient), Long.parseLong(idQuestion));
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene todos los archivos asociados a una respuesta")
@@ -37,7 +42,7 @@ public class FileController {
 
     @Operation(summary = "Obtiene un archivo para su descarga")
     @GetMapping("file/{id}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable UUID id) {
         return fileService.downloadFileById(id);
     }
 

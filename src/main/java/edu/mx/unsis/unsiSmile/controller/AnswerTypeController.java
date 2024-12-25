@@ -22,9 +22,9 @@ public class AnswerTypeController {
 
     @Operation(summary = "Crea un tipo de respuesta.")
     @PostMapping
-    public ResponseEntity<AnswerTypeResponse> save(@RequestBody AnswerTypeRequest request) {
-        AnswerTypeResponse response = answerTypeService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody AnswerTypeRequest request) {
+        answerTypeService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene un tipo de respuesta mediante su id")

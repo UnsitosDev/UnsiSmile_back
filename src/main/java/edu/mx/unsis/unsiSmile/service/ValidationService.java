@@ -28,15 +28,13 @@ public class ValidationService {
     private final ValidationTypeService validationTypeService;
 
     @Transactional
-    public ValidationResponse save(ValidationRequest request) {
+    public void save(ValidationRequest request) {
         try {
             Assert.notNull(request, "ValidationRequest cannot be null");
 
             ValidationModel validationModel = validationMapper.toEntity(request);
 
-            ValidationModel validationSaved = validationRepository.save(validationModel);
-
-            return validationMapper.toDto(validationSaved);
+            validationRepository.save(validationModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save validation", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

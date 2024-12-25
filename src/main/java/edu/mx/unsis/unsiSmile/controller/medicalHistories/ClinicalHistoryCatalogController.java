@@ -10,13 +10,13 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionSer
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "CLINICAL HISTORY CATALOG")
 @RestController
@@ -30,17 +30,17 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Crea una historia clínica.")
     @PostMapping
-    public ResponseEntity<ClinicalHistoryCatalogResponse> save(@RequestBody ClinicalHistoryCatalogRequest request) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody ClinicalHistoryCatalogRequest request) {
+        clinicalHistoryCatalogService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")
-    @GetMapping("/{idClinicalHistory}/patients/{idPatientClinicalHistory}")
+    @GetMapping("/{idClinicalHistory}/patients/{idPatient}")
     public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
             @PathVariable Long idClinicalHistory,
-            @PathVariable Long idPatientClinicalHistory) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatientClinicalHistory);
+            @PathVariable UUID idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -60,7 +60,7 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
     @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam Long idPatient) {
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam UUID idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -68,7 +68,7 @@ public class ClinicalHistoryCatalogController {
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
-            @RequestParam Long idPatient,
+            @RequestParam UUID idPatient,
             @RequestParam Long idClinicalHistory) {
         PatientClinicalHistoryModel response = patientClinicalHistoryService.save(idPatient, idClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

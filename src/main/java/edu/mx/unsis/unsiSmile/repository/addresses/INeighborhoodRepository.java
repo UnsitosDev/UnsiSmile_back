@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 
 @Repository
@@ -15,6 +14,6 @@ public interface INeighborhoodRepository extends JpaRepository<NeighborhoodModel
 
     List<NeighborhoodModel> findByName(String name);
 
-    List<NeighborhoodModel> findByLocality(LocalityModel locality);
+    List<NeighborhoodModel> findByLocalityIdLocality(String idLocality);
 
 }

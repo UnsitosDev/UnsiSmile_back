@@ -1,35 +1,30 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import java.time.LocalDate;
-
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
-@Data
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "patients")
-public class PatientModel {
+public class PatientModel extends AuditModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GenericGenerator(name = "uuid2")
+    @GeneratedValue(generator = "system-uuid")
     @Column(name = "id_patient")
-    private Long idPatient;
+    private UUID idPatient;
 
     @Column(name = "admission_date")
     private LocalDate admissionDate;

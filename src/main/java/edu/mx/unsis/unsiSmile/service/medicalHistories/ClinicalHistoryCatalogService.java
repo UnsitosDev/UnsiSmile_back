@@ -9,6 +9,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,9 +31,10 @@ public class ClinicalHistoryCatalogService {
     private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
     private final ClinicalHistorySectionService clinicalHistorySectionService;
     private final FormSectionService formSectionService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
     @Transactional
-    public ClinicalHistoryCatalogResponse save(ClinicalHistoryCatalogRequest request) {
+    public void save(ClinicalHistoryCatalogRequest request) {
         try {
             Assert.notNull(request, "ClinicalHistoryCatalogRequest cannot be null");
 
@@ -37,29 +42,27 @@ public class ClinicalHistoryCatalogService {
 
             ClinicalHistoryCatalogModel savedCatalog = clinicalHistoryCatalogRepository.save(clinicalHistoryCatalogModel);
 
-            return clinicalHistoryCatalogMapper.toDto(savedCatalog);
         } catch (Exception ex) {
             throw new AppException("Failed to save clinical history catalog due to an internal server error", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long id, Long patientClinicalHistoryId) {
+    public ClinicalHistoryCatalogResponse findById(Long id, UUID idPatient) {
         try {
             Assert.notNull(id, "Clinical History Id cannot be null");
             if (id == 0) {
                 throw new AppException("Clinical History Id cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
-            Assert.notNull(patientClinicalHistoryId, "Patient clinical history ID cannot be null");
-            if (patientClinicalHistoryId == 0) {
-                throw new AppException("Patient clinical history ID cannot be 0", HttpStatus.BAD_REQUEST);
+            Assert.notNull(idPatient, "Patient ID cannot be null");
+            if (idPatient.equals("0")) {
+                throw new AppException("Patient ID cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
-            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Clinical history catalog not found with id: " + id, HttpStatus.NOT_FOUND));
+            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, id);
 
-            return this.toResponse(clinicalHistoryCatalogModel, patientClinicalHistoryId);
+            return this.toResponse(patientClinicalHistory);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -103,14 +106,14 @@ public class ClinicalHistoryCatalogService {
         }
     }
 
-    private ClinicalHistoryCatalogResponse toResponse(ClinicalHistoryCatalogModel catalog, Long patientClinicalHistoryId) {
+    private ClinicalHistoryCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
 
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
-                .findByClinicalHistoryId(catalog.getIdClinicalHistoryCatalog());
+                .findByClinicalHistoryId(patientClinicalHistory.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistoryId);
+        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient());
 
-        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(catalog);
+        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
 
         clinicalHistoryCatalogResponse.setFormSections(sections);
 
@@ -118,7 +121,7 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(Long idPatient) {//falta validar que primero exista el paciente, si no devolver un error
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(UUID idPatient) {//falta validar que primero exista el paciente, si no devolver un error
         try {
             List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
             if (results.isEmpty()) {
@@ -133,11 +136,34 @@ public class ClinicalHistoryCatalogService {
     }
 
     private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(Object[] result) {
+        UUID patientId = convertBytesToUUID(result[3]);
+
         return PatientClinicalHistoryResponse.builder()
                 .id(((Number) result[0]).longValue())
                 .clinicalHistoryName((String) result[1])
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
-                .patientId(result[3] != null ? ((Number) result[3]).longValue() : 0L)
+                .patientId(patientId)
                 .build();
     }
+
+    private UUID convertBytesToUUID(Object result) {
+        if (result == null || !(result instanceof byte[])) {
+            return null;
+        }
+
+        byte[] binaryBytes = (byte[]) result;
+
+        if (binaryBytes.length != 16) {
+            return null;
+        }
+
+        ByteBuffer buffer = ByteBuffer.wrap(binaryBytes);
+        buffer.order(ByteOrder.BIG_ENDIAN);
+
+        long mostSigBits = buffer.getLong();
+        long leastSigBits = buffer.getLong();
+
+        return new UUID(mostSigBits, leastSigBits);
+    }
+
 }

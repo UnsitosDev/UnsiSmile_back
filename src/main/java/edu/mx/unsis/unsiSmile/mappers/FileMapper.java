@@ -24,7 +24,7 @@ public class FileMapper implements BaseMapper<FileResponse, FileRequest, FileMod
     @Override
     public FileModel toEntity(FileRequest dto) {
         return FileModel.builder()
-                .idFile(UUID.randomUUID().toString())
+                .idFile(UUID.randomUUID())
                 .fileName(dto.getFileName())
                 .fileType(dto.getFileType())
                 .filePath(dto.getFilePath())

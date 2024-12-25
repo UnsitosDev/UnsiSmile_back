@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.NeighborhoodMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class NeighborhoodService {
 
     private final INeighborhoodRepository neighborhoodRepository;
     private final NeighborhoodMapper neighborhoodMapper;
+    private final LocalityService localityService;
 
     @Transactional
     public NeighborhoodResponse createNeighborhood(@NonNull NeighborhoodRequest neighborhoodRequest) {
@@ -50,7 +51,10 @@ public class NeighborhoodService {
                     .orElseThrow(() -> new AppException("Neighborhood not found with ID: " + idNeighborhood, HttpStatus.NOT_FOUND));
 
             return neighborhoodMapper.toDto(neighborhoodModel);
-        } catch (Exception ex) {
+        }catch (AppException ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
             throw new AppException("Failed to fetch neighborhood by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
@@ -68,12 +72,15 @@ public class NeighborhoodService {
     }
 
     @Transactional(readOnly = true)
-    public List<NeighborhoodResponse> getNeighborhoodsByLocality(@NonNull LocalityModel locality) {
+    public List<NeighborhoodResponse> getNeighborhoodsByLocality(@NonNull String localityId) {
         try {
-            List<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocality(locality);
+            LocalityResponse locality = localityService.getLocalityById(localityId);
+            List<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocalityIdLocality(locality.getIdLocality());
             return neighborhoodModels.stream()
                     .map(neighborhoodMapper::toDto)
                     .collect(Collectors.toList());
+        } catch (AppException ex){
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch neighborhoods by locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

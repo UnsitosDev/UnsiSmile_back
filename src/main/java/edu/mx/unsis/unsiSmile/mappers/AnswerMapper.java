@@ -6,10 +6,12 @@ import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,7 +34,6 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .catalogOptionModel(dto.getIdCatalogOption() != null ? CatalogOptionModel.builder()
                         .idCatalogOption(dto.getIdCatalogOption())
                         .build() : null)
-                .isFile(dto.getIsFile())
                 .build();
     }
 
@@ -56,5 +57,17 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
 
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
+
+    public AnswerModel toEntityFromFile(UUID idPatient, Long idQuestion) {
+        return AnswerModel.builder()
+                .patientModel(PatientModel.builder()
+                        .idPatient(idPatient)
+                        .build())
+                .questionModel(QuestionModel.builder()
+                        .idQuestion(idQuestion)
+                        .build())
+                .isFile(true)
+                .build();
+    }
 
 }

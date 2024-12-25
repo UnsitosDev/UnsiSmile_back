@@ -2,15 +2,18 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.AnswerUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,17 +30,20 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final CatalogOptionService optionService;
     private final FileService fileService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
     @Transactional
-    public AnswerResponse save(AnswerRequest request) {
+    public void save(AnswerRequest request) {
         try {
             Assert.notNull(request, "AnswerRequest cannot be null");
 
             AnswerModel answerModel = answerMapper.toEntity(request);
 
-            AnswerModel answerSaved = answerRepository.save(answerModel);
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryService.findById(request.getIdPatientClinicalHistory());
 
-            return answerMapper.toDto(answerSaved);
+            answerModel.setPatientModel(patientClinicalHistoryModel.getPatient());
+
+            answerRepository.save(answerModel);
         } catch (Exception ex) {
             throw new AppException("Failed to save answer", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -123,13 +129,13 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, Long patientClinicalHistoryId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, UUID patientId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
                     .collect(Collectors.toSet());
 
-            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientClinicalHistoryId);
+            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId);
 
             Map<Long, AnswerResponse> answerMap = new HashMap<>();
 
@@ -140,31 +146,61 @@ public class AnswerService {
 
             return answerMap;
         } catch (Exception ex){
-            throw new AppException("Failed to fetch answers for one Section and Patient Clinical History with ID: " +
-                    patientClinicalHistoryId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch answers for one Section with patientId: " +
+                    patientId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional
-    public List<AnswerResponse> saveBatch(List<AnswerRequest> requests) {
+    public void saveBatch(List<AnswerRequest> requests) {
         try {
             Assert.notNull(requests, "AnswerRequest list cannot be null");
             if (requests.isEmpty()) {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
+            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
+            PatientClinicalHistoryModel patientClinicalHistoryModel =
+                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+
             List<AnswerModel> savedAnswers = requests.stream()
                     .map(answerMapper::toEntity)
+                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
                     .map(answerRepository::save)
                     .toList();
 
-            return savedAnswers.stream()
-                    .map(answerMapper::toDto)
-                    .toList();
+            if (savedAnswers.isEmpty()) {
+                throw new AppException("No answers were saved", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
 
         } catch (Exception ex) {
             throw new AppException("Failed to save batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
+    @Transactional
+    public void updateBatch(List<AnswerUpdateRequest> requests) {
+        try {
+            Assert.notNull(requests, "AnswerRequest list cannot be null");
+            if (requests.isEmpty()) {
+                throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+
+            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
+            PatientClinicalHistoryModel patientClinicalHistoryModel =
+                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+
+            List<AnswerModel> updatedAnswers = requests.stream()
+                    .map(answerMapper::toEntity)
+                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
+                    .map(answerRepository::save)
+                    .toList();
+
+            if (updatedAnswers.isEmpty()) {
+                throw new AppException("No answers were updated", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception ex) {
+            throw new AppException("Failed to update batch of answers", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

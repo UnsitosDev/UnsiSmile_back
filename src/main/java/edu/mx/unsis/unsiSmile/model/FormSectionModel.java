@@ -18,7 +18,7 @@ public class FormSectionModel extends AuditModel {
     @Column(name = "id_form_section")
     private Long idFormSection;
 
-    @Column(name = "form_name", nullable = false, length = 100, unique = true)
+    @Column(name = "form_name", nullable = false, length = 100)
     private String formName;
 
     @ManyToOne(fetch = FetchType.LAZY)

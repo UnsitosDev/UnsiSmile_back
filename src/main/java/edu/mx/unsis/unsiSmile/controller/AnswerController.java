@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.AnswerUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.service.AnswerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +23,9 @@ public class AnswerController {
 
     @Operation(summary = "Guarda la respuesta a una pregunta.")
     @PostMapping
-    public ResponseEntity<AnswerResponse> save(@RequestBody AnswerRequest request) {
-        AnswerResponse response = answerService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody AnswerRequest request) {
+        answerService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una respuesta por su id.")
@@ -58,9 +59,15 @@ public class AnswerController {
 
     @Operation(summary = "Crea múltiples registros de respuestas, para rellenar los formularios.")
     @PostMapping("/forms")
-    public ResponseEntity<List<AnswerResponse>> saveBatch(@RequestBody List<AnswerRequest> requests) {
-        List<AnswerResponse> responses = answerService.saveBatch(requests);
-        return new ResponseEntity<>(responses, HttpStatus.CREATED);
+    public ResponseEntity<Void> saveBatch(@RequestBody List<AnswerRequest> requests) {
+        answerService.saveBatch(requests);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Actualiza múltiples registros de respuestas.")
+    @PatchMapping("/forms")
+    public ResponseEntity<Void> updateBatch(@RequestBody List<AnswerUpdateRequest> requests) {
+        answerService.updateBatch(requests);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

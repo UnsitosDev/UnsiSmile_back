@@ -25,7 +25,7 @@ public class CycleService {
     private final CycleMapper cycleMapper;
 
     @Transactional
-    public CycleResponse createCycle(@NonNull CycleRequest cycleRequest) {
+    public void createCycle(@NonNull CycleRequest cycleRequest) {
         try {
             Assert.notNull(cycleRequest, "CycleRequest cannot be null");
 
@@ -33,10 +33,7 @@ public class CycleService {
             CycleModel cycleModel = cycleMapper.toEntity(cycleRequest);
 
             // Save the entity to the database
-            CycleModel savedCycle = cycleRepository.save(cycleModel);
-
-            // Map the saved entity back to a response DTO
-            return cycleMapper.toDto(savedCycle);
+            cycleRepository.save(cycleModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create cycle", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -69,7 +66,7 @@ public class CycleService {
     }
 
     @Transactional
-    public CycleResponse updateCycle(@NonNull Long id, @NonNull CycleRequest updateCycleRequest) {
+    public void updateCycle(@NonNull Long id, @NonNull CycleRequest updateCycleRequest) {
         try {
             Assert.notNull(updateCycleRequest, "Update CycleRequest cannot be null");
 
@@ -78,9 +75,7 @@ public class CycleService {
 
             cycleMapper.updateEntity(updateCycleRequest, cycleModel);
 
-            CycleModel updatedCycle = cycleRepository.save(cycleModel);
-
-            return cycleMapper.toDto(updatedCycle);
+            cycleRepository.save(cycleModel);
         } catch (Exception ex) {
             throw new AppException("Failed to update cycle", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

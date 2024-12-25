@@ -1,7 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
-import java.time.LocalDate;
-
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import jakarta.validation.constraints.NotNull;
@@ -10,13 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PatientRequest {
-    private Long idPatient;
-
     @NotNull(message = "Admission date cannot be null")
     private LocalDate admissionDate;
 

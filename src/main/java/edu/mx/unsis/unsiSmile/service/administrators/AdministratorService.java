@@ -1,12 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.administrators;
 
-import java.util.List;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
@@ -21,6 +14,12 @@ import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -82,12 +81,19 @@ public class AdministratorService {
     }
 
     @Transactional(readOnly = true)
-    public List<AdministratorResponse> getAllAdministrators() {
+    public Page<AdministratorResponse> getAllAdministrators(Pageable pageable, String keyword) {
         try {
-            List<AdministratorsModel> allAdministrators = administratorRepository.findAll();
-            return administratorMapper.toDtos(allAdministrators);
+            Page<AdministratorsModel> administrators;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                administrators = administratorRepository.findByKeyword(keyword, pageable);
+            } else {
+                administrators = administratorRepository.findAll(pageable);
+            }
+
+            return administrators.map(administratorMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch administrators", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Error al obtener la lista de administradores", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

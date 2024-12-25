@@ -7,8 +7,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,15 +18,16 @@ import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
@@ -40,10 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.Period;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +52,6 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final IPatientRepository patientRepository;
-    private final IPersonRepository personRepository;
     private final PatientMapper patientMapper;
     private final PersonMapper personMapper;
     private final IGuardianRepository guardianRepository;
@@ -61,58 +61,69 @@ public class PatientService {
     private final UserService userService;
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
+    private final PersonService personService;
 
     @Transactional
-    public PatientResponse createPatient(@Valid @NonNull PatientRequest patientRequest) {
+    public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
-            // Create person entity
+
             PersonModel person = createPersonEntity(patientRequest.getPerson());
-
-            // Map the DTO request to the patient entity
-            PatientModel patientModel = patientMapper.toEntity(patientRequest);
-            patientModel.setPerson(person);
-
-            // Create a guardian if the patient is a minor
-            if (patientRequest.getIsMinor() && patientRequest.getGuardian() != null) {
-                GuardianModel guardianModel = createGuardianEntity(patientRequest.getGuardian());
-                patientModel.setGuardian(guardianModel);
-            }
-
-            // create the address
+            PatientModel patientModel = preparePatientModel(patientRequest, person);
+            validateAndSetGuardian(patientRequest, patientModel);
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
-
-            // Save the entity to the database
             PatientModel savedPatient = patientRepository.save(patientModel);
-
-            // relate student with patient
             relateStudentPatient(savedPatient);
-
-            // Map the saved entity back to a response DTO
-            return patientMapper.toDto(savedPatient);
         } catch (DataAccessException ex) {
             throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
-    private void relateStudentPatient(PatientModel savedPatient) {
-
-        // serach the user
-        UserResponse user = userService.getCurrentUser();
-
-        UserRequest userRequest = buildUserRequest(user);
-
-        StudentResponse studentResponse = studentService.getStudentByUser(userRequest);
-
-        StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
-                .patientId(savedPatient.getIdPatient())
-                .studentId(studentResponse.getEnrollment())
-                .build();
-
-        studentPatientService.createStudentPatient(studentPatientRequest);
+    private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
+        if (patientRequest.getIsMinor() || isMinor(patientRequest.getPerson().getBirthDate())) {
+            GuardianModel guardianModel = Optional.ofNullable(patientRequest.getGuardian())
+                    .map(this::createGuardianEntity)
+                    .orElseThrow(() -> new AppException("The patient needs to have a guardian", HttpStatus.BAD_REQUEST));
+            patientModel.setGuardian(guardianModel);
+        }
     }
 
-    // Method to create a address entity
+    private boolean isMinor(LocalDate birthDate) {
+        LocalDate today = LocalDate.now();
+        return Period.between(birthDate, today).getYears() < 18;
+    }
+
+    private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
+        PatientModel patientModel = patientMapper.toEntity(patientRequest);
+        patientModel.setPerson(person);
+        return patientModel;
+    }
+
+    private void relateStudentPatient(PatientModel savedPatient) {
+
+        UserResponse user = userService.getCurrentUser();
+
+        if (!user.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
+            return;
+        }
+
+        try {
+            StudentResponse student = studentService.getStudentByUser(buildUserRequest(user));
+
+            StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
+                    .patientId(savedPatient.getIdPatient())
+                    .studentEnrollment(student.getEnrollment())
+                    .build();
+
+            studentPatientService.createStudentPatient(studentPatientRequest);
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    // Method to create an address entity
     private AddressModel createAddressModel(AddressRequest addressRequest) {
         Assert.notNull(addressRequest, "AddressRequest cannot be null");
         return addressRepository.save(addressMapper.toEntity(addressRequest));
@@ -121,7 +132,8 @@ public class PatientService {
     // Method to create a person entity
     private PersonModel createPersonEntity(PersonRequest personRequest) {
         Assert.notNull(personRequest, "PersonRequest cannot be null");
-        return personRepository.save(personMapper.toEntity(personRequest));
+        PersonResponse personResponse = personService.createPerson(personRequest);
+        return personMapper.toEntity(personResponse);
     }
 
     // Method to create a guardian entity
@@ -131,37 +143,78 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PatientResponse> getAllPatients(Pageable pageable) {
+    public Page<PatientResponse> getAllPatients(Pageable pageable, String keyword) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
-                return getPatientsForStudent(user, pageable);
+                return getPatientsForStudent(user, pageable, keyword);
             } else {
-                return getAllPatientsPage(pageable);
+                return getAllPatientsPage(pageable, keyword);
             }
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patients", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
-    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable) {
+    private Page<PatientResponse> getPatientsForStudent(UserResponse user, Pageable pageable, String keyword) {
         StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-        List<PatientModel> patients = getPatientsByStudents(studentResponse);
+        List<PatientModel> patients = getPatientsByStudents(studentResponse, keyword, pageable);
         return new PageImpl<>(patientsMapped(patients), pageable, patients.size());
     }
 
-    private Page<PatientResponse> getAllPatientsPage(Pageable pageable) {
-        Page<PatientModel> allPatients = patientRepository.findAll(pageable);
-        return allPatients.map(patientMapper::toDto);
+    private Page<PatientResponse> getAllPatientsPage(Pageable pageable, String keyword) {
+        Page<PatientModel> allPatients;
+        if (keyword == null || keyword.isEmpty()) {
+            allPatients = patientRepository.findAll(pageable);
+        } else {
+            allPatients = patientRepository.findAllBySearchInput(keyword, pageable);
+        }
+        Set<UUID> patientIds = extractPatientIds(allPatients);
+
+        List<PatientStudentResponse> studentPatientResponses = studentPatientService.getByPatients(patientIds);
+        Map<UUID, StudentRes> studentMap = createStudentMap(studentPatientResponses);
+
+        List<PatientResponse> patientResponses = mapPatientsToResponses(allPatients, studentMap);
+
+        return new PageImpl<>(patientResponses, pageable, allPatients.getTotalElements());
+    }
+
+    private Set<UUID> extractPatientIds(Page<PatientModel> allPatients) {
+        Set<UUID> patientIds = new HashSet<>();
+        allPatients.forEach(patient -> patientIds.add(patient.getIdPatient()));
+        return patientIds;
+    }
+
+    private Map<UUID, StudentRes> createStudentMap(List<PatientStudentResponse> studentPatientResponses) {
+        Map<UUID, StudentRes> studentMap = new HashMap<>();
+        for (PatientStudentResponse studentPatientResponse : studentPatientResponses) {
+            UUID patientId = studentPatientResponse.getPatientId();
+            StudentRes student = studentPatientResponse.getStudent();
+            studentMap.put(patientId, student);
+        }
+        return studentMap;
+    }
+
+    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<UUID, StudentRes> studentMap) {
+        return allPatients.stream()
+                .map(patient -> {
+                    PatientResponse patientResponse = patientMapper.toDto(patient);
+                    StudentRes studentForPatient = studentMap.get(patientResponse.getIdPatient());
+                    if (studentForPatient != null) {
+                        patientResponse.setStudent(studentForPatient);
+                    }
+                    return patientResponse;
+                })
+                .toList();
     }
 
     @Transactional(readOnly = true)
-    public PatientResponse getPatientById(@NonNull Long idPatient) {
+    public PatientResponse getPatientById(@NonNull UUID idPatient) {
         try {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                List<PatientModel> patients = getPatientsByStudents(studentResponse);
+                List<PatientModel> patients = getPatientsByStudents(studentResponse,  null, null);
                 return getPatientByIdByStudent(patients, idPatient);
             } else {
                 PatientModel patientModel = getPatientModel(idPatient);
@@ -210,11 +263,8 @@ public class PatientService {
         }
     }
 
-    // Implement similar methods for other search criteria like nationality, person,
-    // address, marital status, occupation, ethnic group, religion, guardian, etc.
-
     @Transactional
-    public PatientResponse updatePatient(@NonNull Long idPatient, @NonNull PatientRequest updatedPatientRequest) {
+    public PatientResponse updatePatient(@NonNull UUID idPatient, @NonNull PatientRequest updatedPatientRequest) {
         try {
             Assert.notNull(updatedPatientRequest, "Updated PatientRequest cannot be null");
 
@@ -237,7 +287,7 @@ public class PatientService {
     }
 
     @Transactional
-    public void deletePatientById(@NonNull Long idPatient) {
+    public void deletePatientById(@NonNull UUID idPatient) {
         try {
             // Check if the patient exists
             if (!patientRepository.existsById(idPatient)) {
@@ -250,13 +300,11 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public PatientModel getPatientModel(@NonNull Long id) {
+    public PatientModel getPatientModel(@NonNull UUID id) {
         try {
-            PatientModel patientModel = patientRepository.findByIdPatient(id)
+            return patientRepository.findByIdPatient(id)
                     .orElseThrow(
                             () -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
-
-            return patientModel;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -268,15 +316,14 @@ public class PatientService {
                 .build();
     }
 
-    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse) {
+    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse, String keyword, Pageable  pageable) {
         List<StudentPatientResponse> studentPatientResponses = studentPatientService
-                .getAllStudentPatients(studentResponse.getEnrollment());
+                .getAllStudentPatients(studentResponse.getEnrollment(), keyword, pageable);
 
-        Set<Long> patientIds = studentPatientResponses.stream()
+        Set<UUID> patientIds = studentPatientResponses.stream()
                 .map(studentPatientResponse -> studentPatientResponse.getPatient().getIdPatient())
                 .collect(Collectors.toSet());
-        List<PatientModel> filteredPatients = patientRepository.findAllById(patientIds);
-        return filteredPatients;
+        return patientRepository.findAllById(patientIds);
     }
 
     private List<PatientResponse> patientsMapped(List<PatientModel> patientes) {
@@ -288,7 +335,7 @@ public class PatientService {
                 .collect(Collectors.toList());
     }
 
-    private PatientResponse getPatientByIdByStudent(List<PatientModel> patients, Long idPatient) {
+    private PatientResponse getPatientByIdByStudent(List<PatientModel> patients, UUID idPatient) {
         Optional<PatientModel> optionalPatient = patients.stream()
                 .filter(patient -> patient.getIdPatient().equals(idPatient))
                 .findFirst();

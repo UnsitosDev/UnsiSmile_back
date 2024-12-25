@@ -3,9 +3,11 @@ package edu.mx.unsis.unsiSmile.service.files;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
+import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,10 +31,12 @@ import java.util.stream.Collectors;
 public class FileService {
     private final IFileRepository fileRepository;
     private final FileMapper fileMapper;
+    private final IAnswerRepository answerRepository;
+    private final AnswerMapper answerMapper;
 
-    public UUID upload(MultipartFile file, Long answerId) {
-        if (file.isEmpty() || answerId == null) {
-            throw new AppException("Empty file or answerId", HttpStatus.BAD_REQUEST);
+    public void upload(List<MultipartFile> files, UUID idPatient, Long idQuestion) {
+        if (files.isEmpty() || idPatient == null || idQuestion == null) {
+            throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
 
         Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
@@ -46,31 +48,34 @@ public class FileService {
             }
         }
 
-        try {
-            byte[] bytes = file.getBytes();
-            String uuid = UUID.randomUUID().toString();
-            Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
-            String fileName = file.getOriginalFilename();
-            assert fileName != null : "Filename is null";
-            String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
-            Files.write(path, bytes);
+        Long answerId = this.createFromFile(idPatient, idQuestion);
 
-            FileModel fileModel = FileModel.builder()
-                    .idFile(uuid)
-                    .filePath(path.toString())
-                    .fileName(fileName)
-                    .fileType(ext)
-                    .answer(AnswerModel.builder().idAnswer(answerId).build())
-                    .build();
+        for (MultipartFile file : files) {
+            try {
+                byte[] bytes = file.getBytes();
+                UUID uuid = UUID.randomUUID();
+                Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
+                String fileName = file.getOriginalFilename();
+                assert fileName != null : "Filename is null";
+                String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
+                Files.write(path, bytes);
 
-            fileRepository.save(fileModel);
-            return UUID.fromString(uuid);
-        } catch (Exception e) {
-            throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+                FileModel fileModel = FileModel.builder()
+                        .idFile(uuid)
+                        .filePath(path.toString())
+                        .fileName(fileName)
+                        .fileType(ext)
+                        .answer(AnswerModel.builder().idAnswer(answerId).build())
+                        .build();
+
+                fileRepository.save(fileModel);
+            } catch (Exception e) {
+                throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
         }
     }
 
-    public void deleteFile(String idFile) {
+    public void deleteFile(UUID idFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -84,7 +89,7 @@ public class FileService {
         }
     }
 
-    public FileModel updateFile(String idFile, MultipartFile newFile) {
+    public FileModel updateFile(UUID idFile, MultipartFile newFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -112,7 +117,7 @@ public class FileService {
     }
 
     @Transactional(readOnly = true)
-    public FileResponse findById(String id) {
+    public FileResponse findById(UUID id) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
@@ -159,7 +164,7 @@ public class FileService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadFileById(String id) {
+    public ResponseEntity<byte[]> downloadFileById(UUID id) {
         FileModel fileModel = fileRepository.findById(id)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -173,6 +178,26 @@ public class FileService {
                     .body(fileBytes);
         } catch (Exception e) {
             throw new AppException("Error while downloading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private Long createFromFile(UUID idPatient, Long idQuestion) {
+        try {
+            Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
+                    idQuestion, idPatient
+            );
+
+            if (existingAnswer.isPresent()) {
+                return existingAnswer.get().getIdAnswer();
+            }
+
+            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(idPatient, idQuestion);
+
+            newAnswerModel = answerRepository.save(newAnswerModel);
+
+            return newAnswerModel.getIdAnswer();
+        } catch (Exception ex) {
+            throw new AppException("Failed to save answer", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

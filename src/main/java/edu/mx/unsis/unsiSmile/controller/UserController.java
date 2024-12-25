@@ -20,18 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable UUID id) {
-        UserResponse userResponse = userService.getUserById(id);
-        return ResponseEntity.ok(userResponse);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> allUsers = userService.getAllUsers();
-        return ResponseEntity.ok(allUsers);
-    }
-
     @GetMapping("/profile")
     public UserResponse getProfile() {
         return userService.getCurrentUser();

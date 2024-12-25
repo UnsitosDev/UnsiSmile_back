@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface IClinicalHistoryCatalogRepository extends JpaRepository<ClinicalHistoryCatalogModel, Long> {
@@ -17,5 +18,5 @@ public interface IClinicalHistoryCatalogRepository extends JpaRepository<Clinica
             "LEFT JOIN patient_clinical_histories pch " +
             "ON chc.id_clinical_history_catalog = pch.fk_clinical_history_catalog " +
             "AND pch.fk_patient = :patientId", nativeQuery = true)
-    List<Object[]> findAllClinicalHistoryByPatientId(@Param("patientId") Long patientId);
+    List<Object[]> findAllClinicalHistoryByPatientId(@Param("patientId") UUID patientId);
 }

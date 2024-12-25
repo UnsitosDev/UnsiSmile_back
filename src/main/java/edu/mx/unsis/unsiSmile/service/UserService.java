@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service;
 import java.util.List;
 import java.util.UUID;
 
+import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final IStudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final IAdministratorRepository administratorRepository;
+    private final AdministratorMapper administratorMapper;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -119,6 +123,10 @@ public class UserService {
 
             switch (currentUser.getRole().getRole()) {
                 case ERole.ROLE_ADMIN:
+                    owner = ResponseEntity.ok(administratorMapper.toDto(administratorRepository.findById(currentUser.getUsername())
+                            .orElseThrow(() -> new AppException(
+                                    "Admin not found with enrollment: " + currentUser.getUsername(),
+                                    HttpStatus.NOT_FOUND))));
                     break;
                 case ERole.ROLE_STUDENT:
                     owner = ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(currentUser.getUsername())

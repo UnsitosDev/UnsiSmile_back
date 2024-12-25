@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.addresses;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.service.addresses.StreetService;
 import jakarta.validation.Valid;
 
@@ -47,11 +47,10 @@ public class StreetController {
         return ResponseEntity.ok(streetResponses);
     }
 
+    @Operation(summary = "Obtiene las calles de una colonia")
     @GetMapping("/neighborhood/{neighborhoodId}")
-    public ResponseEntity<List<StreetResponse>> getStreetsByNeighborhood(@Valid @PathVariable String neighborhoodId) {
-        // Assuming you have a method to get the NeighborhoodModel by ID
-        NeighborhoodModel neighborhood = getNeighborhoodById(neighborhoodId);
-        List<StreetResponse> streetResponses = streetService.getStreetsByNeighborhood(neighborhood);
+    public ResponseEntity<List<StreetResponse>> getStreetsByNeighborhood(@Valid @PathVariable Long neighborhoodId) {
+        List<StreetResponse> streetResponses = streetService.getStreetsByNeighborhood(neighborhoodId);
         return ResponseEntity.ok(streetResponses);
     }
 
@@ -71,11 +70,5 @@ public class StreetController {
     public ResponseEntity<?> deleteStreetById(@Valid @PathVariable Long id) {
         streetService.deleteStreetById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private NeighborhoodModel getNeighborhoodById(String neighborhoodId) {
-        // Implement the logic to fetch the NeighborhoodModel by ID
-        // This is just a placeholder, you need to provide the actual implementation
-        return new NeighborhoodModel();
     }
 }

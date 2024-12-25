@@ -82,10 +82,17 @@ public class MunicipalityService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MunicipalityResponse> getAllMunicipalities(Pageable pageable) {
+    public Page<MunicipalityResponse> getAllMunicipalities(Pageable pageable, String keyword) {
         try {
-            Page<MunicipalityModel> allMunicipalities = municipalityRepository.findAll(pageable);
-            return allMunicipalities.map(municipalityMapper::toDto);
+            Page<MunicipalityModel> municipalities;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                municipalities = municipalityRepository.findByKeyword(keyword, pageable);
+            } else {
+                municipalities = municipalityRepository.findAll(pageable);
+            }
+
+            return municipalities.map(municipalityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all municipalities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,8 @@ public class LocalityService {
                     .orElseThrow(() -> new AppException("Locality not found with ID: " + idLocality, HttpStatus.NOT_FOUND));
 
             return localityMapper.toDto(localityModel);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch locality by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -92,12 +96,17 @@ public class LocalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocalityResponse> getAllLocalities() {
+    public Page<LocalityResponse> getAllLocalities(Pageable pageable, String keyword) {
         try {
-            List<LocalityModel> allLocalities = localityRepository.findAll();
-            return allLocalities.stream()
-                    .map(localityMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<LocalityModel> localities;
+
+            if (keyword != null && !keyword.isEmpty()) {
+                localities = localityRepository.findByKeyword(keyword, pageable);
+            } else {
+                localities = localityRepository.findAll(pageable);
+            }
+
+            return localities.map(localityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all localities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

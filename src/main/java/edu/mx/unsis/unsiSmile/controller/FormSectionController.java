@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "FORM SECTION")
 @RestController
@@ -23,15 +24,15 @@ public class FormSectionController {
 
     @Operation(summary = "Crea una sección para un formulario, puede o no ser una subsección.")
     @PostMapping
-    public ResponseEntity<FormSectionResponse> save(@RequestBody FormSectionRequest request) {
-        FormSectionResponse response = formSectionService.save(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Void> save(@RequestBody FormSectionRequest request) {
+        formSectionService.save(request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene una sección y la configuración con el id de la historia clínica del paciente.")
     @GetMapping("/{id}")
-    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam Long patientClinicalHistoryId) {
-        FormSectionResponse response = formSectionService.findById(id, patientClinicalHistoryId);
+    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam UUID patientId) {
+        FormSectionResponse response = formSectionService.findById(id, patientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -4,6 +4,9 @@ import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,8 +18,10 @@ import lombok.*;
 public class FileModel extends AuditModel {
 
     @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "uuid2")
     @Column(name = "id_file")
-    private String idFile;
+    private UUID idFile;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;

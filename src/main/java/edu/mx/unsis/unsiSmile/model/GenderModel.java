@@ -1,18 +1,17 @@
 package edu.mx.unsis.unsiSmile.model;
 
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "genders")
-public class GenderModel {
+public class GenderModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
