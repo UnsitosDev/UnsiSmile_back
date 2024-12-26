@@ -3,9 +3,9 @@ CREATE TABLE
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
         creation_date DATE NOT NULL,
         fk_patient BINARY(16) NOT NULL,
-        fk_form_sections BIGINT NOT NULL,
+        fk_form_section BIGINT NOT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_sections) REFERENCES form_sections (id_form_section)
+        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -32,7 +32,6 @@ CREATE TABLE
         odontogram_id BIGINT,
         tooth_id VARCHAR(3),
         tooth_condition_id BIGINT,
-        creation_date DATE NOT NULL,
         PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
@@ -45,7 +44,6 @@ CREATE TABLE
         tooth_face_id VARCHAR(3),
         tooth_condition_id BIGINT,
         tooth_id VARCHAR(3),
-        creation_date DATE NOT NULL,
         PRIMARY KEY (
             odontogram_id,
             tooth_face_id,

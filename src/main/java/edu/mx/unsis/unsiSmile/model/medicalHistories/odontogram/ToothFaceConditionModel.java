@@ -1,22 +1,19 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories;
+package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
 
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import edu.mx.unsis.unsiSmile.model.utils.ToothFaceConditionId;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "toothface_conditions")
 @IdClass(ToothFaceConditionId.class)
-public class ToothFaceConditionModel {
+public class ToothFaceConditionModel extends AuditModel {
 
     @Id
     @ManyToOne
@@ -38,6 +35,4 @@ public class ToothFaceConditionModel {
     @JoinColumn(name = "odontogram_id")
     private OdontogramModel odontogram;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
 }

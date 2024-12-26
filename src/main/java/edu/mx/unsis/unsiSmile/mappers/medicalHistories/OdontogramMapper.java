@@ -1,10 +1,13 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.*;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FaceRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.*;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.*;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 
@@ -81,7 +84,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
         assignmentModel.setTooth(mapToToothModel(toothDTO));
         assignmentModel.setToothCondition(mapToToothConditionModel(conditionDTO));
-        assignmentModel.setCreationDate(java.time.LocalDate.now());
 
         return assignmentModel;
     }
@@ -92,7 +94,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         faceConditionModel.setTooth(mapToToothModel(toothDTO));
         faceConditionModel.setToothFace(mapToToothFaceModel(faceDTO));
         faceConditionModel.setToothCondition(mapToToothConditionModel(conditionDTO));
-        faceConditionModel.setCreationDate(java.time.LocalDate.now());
 
         return faceConditionModel;
     }

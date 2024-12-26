@@ -1,10 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
