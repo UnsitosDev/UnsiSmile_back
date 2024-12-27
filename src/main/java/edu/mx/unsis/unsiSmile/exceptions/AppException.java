@@ -1,36 +1,63 @@
 package edu.mx.unsis.unsiSmile.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+@Getter
 public class AppException extends RuntimeException {
 
     private final HttpStatus httpStatus;
-    private final Exception originalException;
+    private final String errorCode;
+    private final Exception rootCause;
+    private final LocalDateTime timestamp;
 
     public AppException(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
-        this.originalException = null;
+        this.errorCode = null;
+        this.rootCause = null;
+        this.timestamp = LocalDateTime.now();
     }
 
-    public AppException(String message, HttpStatus httpStatus, Exception originalException) {
-        super(message, originalException);
+    public AppException(String message, HttpStatus httpStatus, String errorCode) {
+        super(message);
         this.httpStatus = httpStatus;
-        this.originalException = originalException;
+        this.errorCode = errorCode;
+        this.rootCause = null;
+        this.timestamp = LocalDateTime.now();
     }
 
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    public AppException(String message, HttpStatus httpStatus, Exception rootCause) {
+        super(message, rootCause);
+        this.httpStatus = httpStatus;
+        this.errorCode = "Server Error";
+        this.rootCause = rootCause;
+        this.timestamp = LocalDateTime.now();
     }
 
-    public Exception getOriginalException() {
-        return originalException;
+    public AppException(String message, HttpStatus httpStatus, String errorCode, Exception rootCause) {
+        super(message, rootCause);
+        this.httpStatus = httpStatus;
+        this.errorCode = errorCode;
+        this.rootCause = rootCause;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public Optional<String> getErrorCode() {
+        return Optional.ofNullable(errorCode);
+    }
+
+    public Optional<Exception> getRootCause() {
+        return Optional.ofNullable(rootCause);
     }
 
     public String getFullMessage() {
         StringBuilder fullMessage = new StringBuilder(getMessage());
-        if (originalException != null) {
-            fullMessage.append("; Caused by: ").append(originalException.getMessage());
+        if (rootCause != null) {
+            fullMessage.append("; Caused by: ").append(rootCause.getMessage());
         }
         return fullMessage.toString();
     }

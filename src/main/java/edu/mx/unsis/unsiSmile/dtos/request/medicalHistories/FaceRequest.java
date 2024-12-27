@@ -15,5 +15,5 @@ import java.util.List;
 public class FaceRequest {
     @NotNull(message = "The face ID cannot be null.")
     private Long idFace;
-    private List<ConditionRequest> conditions;
+    private List<ToothFaceConditionRequest> conditions;
 }

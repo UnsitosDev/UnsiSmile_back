@@ -9,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/medical-histories/odontograms")
+@RequestMapping("/unsismile/api/v1/medical-histories/odontogram")
 public class OdontogramController {
 
     private final OdontogramService odontogramService;
@@ -45,14 +46,14 @@ public class OdontogramController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("")
-    public ResponseEntity<Void> createOdontogram(@RequestBody OdontogramRequest odontogramDTO) {
+    @PostMapping
+    public ResponseEntity<Void> createOdontogram(@Valid @RequestBody OdontogramRequest odontogramDTO) {
         odontogramService.saveOdontogram(odontogramDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}/details")
-    public OdontogramResponse getOdontogramDetails(@PathVariable Long id) {
-        return odontogramService.getOdontogramDetails(id);
+    @GetMapping("/latest/{patientId}")
+    public OdontogramResponse getOdontogramDetails(@PathVariable UUID patientId) {
+        return odontogramService.getOdontogramDetails(patientId);
     }
 }

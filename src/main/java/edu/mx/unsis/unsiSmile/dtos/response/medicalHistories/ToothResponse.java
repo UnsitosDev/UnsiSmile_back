@@ -14,6 +14,5 @@ import java.util.List;
 public class ToothResponse {
     private String idTooth;
     private List<FaceResponse> faces;
-    private boolean isAdult;
     private List<ConditionResponse> conditions;
 }

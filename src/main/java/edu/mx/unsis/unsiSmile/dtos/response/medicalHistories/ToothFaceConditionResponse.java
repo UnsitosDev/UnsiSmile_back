@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramResponse {
-    private Long idOdontogram;
-    private List<ToothResponse> adultArcade;
-    private List<ToothResponse> childArcade;
+public class ToothFaceConditionResponse {
+    private Long idToothFaceCondition;
+    private String description;
 }
+

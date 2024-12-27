@@ -1,11 +1,10 @@
 CREATE TABLE
     odontograms (
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
-        creation_date DATE NOT NULL,
         fk_patient BINARY(16) NOT NULL,
-        fk_form_sections BIGINT NOT NULL,
+        fk_form_section BIGINT NOT NULL unique,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_sections) REFERENCES form_sections (id_form_section)
+        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -32,7 +31,6 @@ CREATE TABLE
         odontogram_id BIGINT,
         tooth_id VARCHAR(3),
         tooth_condition_id BIGINT,
-        creation_date DATE NOT NULL,
         PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
@@ -41,43 +39,49 @@ CREATE TABLE
 
 CREATE TABLE
     toothface_conditions (
-        odontogram_id BIGINT,
-        tooth_face_id VARCHAR(3),
-        tooth_condition_id BIGINT,
-        tooth_id VARCHAR(3),
-        creation_date DATE NOT NULL,
-        PRIMARY KEY (
-            odontogram_id,
-            tooth_face_id,
-            tooth_condition_id,
-            tooth_id
-        ),
-        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
-        FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
-        FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition),
-        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-    );
+                             id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
+                             description VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE
+    toothface_conditions_assignments (
+                                         odontogram_id BIGINT,
+                                         tooth_face_id VARCHAR(3),
+                                         toothface_condition_id BIGINT,
+                                         tooth_id VARCHAR(3),
+                                         PRIMARY KEY (
+                                                      odontogram_id,
+                                                      tooth_face_id,
+                                                      toothface_condition_id,
+                                                      tooth_id
+                                             ),
+                                         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+                                         FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
+                                         FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions(id_toothface_conditions),
+                                         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
+);
 
 INSERT INTO
-    `tooth_conditions`
+    tooth_conditions(description)
 VALUES
-    (1, 'Diente presente'),
-    (2, 'Diente parcialmente erupcionado'),
-    (3, 'Diente obturado'),
-    (4, 'Diente con corona'),
-    (5, 'Mantenedor de espacio con corona'),
-    (6, 'Mantenedor de espacio con banda'),
-    (7, 'Prótesis removible'),
-    (8, 'Puente'),
-    (9, 'Diente cariado'),
-    (10, 'Diente extraido'),
-    (12, 'Diente con fractura'),
-    (13, 'Fístula'),
-    (14, 'Diente con fluorosis'),
-    (15, 'Diente con hipoplasia'),
-    (16, 'Diente obturado con caries'),
-    (17, 'Diente en mal posición derecha'),
-    (18, 'Diente en mal posición izquierda');
+    ('Diente presente'),
+    ('Diente parcialmente erupcionado'),
+    ('Diente obturado'),
+    ('Diente con corona'),
+    ('Mantenedor de espacio con corona'),
+    ('Mantenedor de espacio con banda'),
+    ('Prótesis removible'),
+    ('Puente'),
+    ('Diente extraido'),
+    ('Fístula'),
+    ('Diente con fluorosis'),
+    ('Diente con hipoplasia'),
+    ('Diente obturado con caries'),
+    ('Diente en mal posición derecha'),
+    ('Diente en mal posición izquierda');
+
+INSERT INTO toothface_conditions(description) values ('Diente cariado'),('Diente con fractura');
 
 INSERT INTO
     teeth (`description`, `is_adult`, `id_tooth`)
