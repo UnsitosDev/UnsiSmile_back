@@ -1,9 +1,8 @@
 CREATE TABLE
     odontograms (
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
-        creation_date DATE NOT NULL,
         fk_patient BINARY(16) NOT NULL,
-        fk_form_section BIGINT NOT NULL,
+        fk_form_section BIGINT NOT NULL unique,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
         CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -64,25 +63,25 @@ CREATE TABLE
 );
 
 INSERT INTO
-    `tooth_conditions`
+    tooth_conditions(description)
 VALUES
-    (1, 'Diente presente'),
-    (2, 'Diente parcialmente erupcionado'),
-    (3, 'Diente obturado'),
-    (4, 'Diente con corona'),
-    (5, 'Mantenedor de espacio con corona'),
-    (6, 'Mantenedor de espacio con banda'),
-    (7, 'Prótesis removible'),
-    (8, 'Puente'),
-    (9, 'Diente cariado'),
-    (10, 'Diente extraido'),
-    (12, 'Diente con fractura'),
-    (13, 'Fístula'),
-    (14, 'Diente con fluorosis'),
-    (15, 'Diente con hipoplasia'),
-    (16, 'Diente obturado con caries'),
-    (17, 'Diente en mal posición derecha'),
-    (18, 'Diente en mal posición izquierda');
+    ('Diente presente'),
+    ('Diente parcialmente erupcionado'),
+    ('Diente obturado'),
+    ('Diente con corona'),
+    ('Mantenedor de espacio con corona'),
+    ('Mantenedor de espacio con banda'),
+    ('Prótesis removible'),
+    ('Puente'),
+    ('Diente extraido'),
+    ('Fístula'),
+    ('Diente con fluorosis'),
+    ('Diente con hipoplasia'),
+    ('Diente obturado con caries'),
+    ('Diente en mal posición derecha'),
+    ('Diente en mal posición izquierda');
+
+INSERT INTO toothface_conditions(description) values ('Diente cariado'),('Diente con fractura');
 
 INSERT INTO
     teeth (`description`, `is_adult`, `id_tooth`)

@@ -9,22 +9,20 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,13 +107,20 @@ public class OdontogramService {
                 toothFaceConditionAssignmentRepository.save(condition);
             }
 
-        }catch (Exception e){
-            throw new AppException("", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException("Duplicate entry", HttpStatus.CONFLICT, e);
+        } catch (Exception e) {
+            throw new AppException(e.getCause().toString(), HttpStatus.BAD_REQUEST, e);
         }
 
     }
 
-    public OdontogramResponse getOdontogramDetails(Long odontogramId) {
+    public OdontogramResponse getOdontogramDetails(UUID patientId) {
+
+        Long odontogramId = getLatestOdontogramIdByPatient(patientId).orElseThrow(
+                () -> new AppException("Odontogram not found with ID: " + patientId, HttpStatus.NOT_FOUND)
+        );
+
         // Obtener todas las asignaciones de condiciones de dientes
         List<ToothConditionAssignmentModel> toothConditionAssignments =
                 odontogramRepository.findToothConditionAssignmentsByOdontogramId(odontogramId);
@@ -139,13 +144,13 @@ public class OdontogramService {
                     .build();
 
             // Verificar si el diente ya existe en el mapa
-            if(tca.getTooth().isAdult()){
+            if (tca.getTooth().isAdult()) {
                 ToothResponse adultTheetResponse = adultTeethMap.computeIfAbsent(
                         tca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
                 );
                 adultTheetResponse.getConditions().add(conditionDTO);
-            }else{
+            } else {
                 ToothResponse childTeethResponse = childTeethMap.computeIfAbsent(
                         tca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
@@ -165,7 +170,7 @@ public class OdontogramService {
             );
 
             // Verificar si el diente ya existe en el mapa
-            if(tfca.getTooth().isAdult()){
+            if (tfca.getTooth().isAdult()) {
                 ToothResponse adultToothResponse = adultTeethMap.computeIfAbsent(
                         tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
@@ -183,7 +188,7 @@ public class OdontogramService {
 
                 // Agregar la condición a la cara del diente
                 adultFace.getConditions().add(conditionDTO);
-            }else{
+            } else {
                 ToothResponse childToothResponse = childTeethMap.computeIfAbsent(
                         tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
@@ -217,5 +222,10 @@ public class OdontogramService {
                 .adultArcade(adultToothResponseList)
                 .childArcade(childToothResponseList)
                 .build();
+    }
+
+    public Optional<Long> getLatestOdontogramIdByPatient(UUID patientId) {
+        List<Long> results = odontogramRepository.findOdontogramIdsByPatient(patientId, PageRequest.of(0, 1));
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 }

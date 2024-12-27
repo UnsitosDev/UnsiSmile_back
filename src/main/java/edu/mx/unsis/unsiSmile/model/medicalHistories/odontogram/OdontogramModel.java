@@ -23,15 +23,12 @@ public class OdontogramModel extends AuditModel {
     @Column(name = "id_odontogram")
     private Long idOdontogram;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
-
     @ManyToOne
     @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
     private PatientModel patient;
 
     @ManyToOne
-    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
+    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section", unique = true)
     private FormSectionModel formSection;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
