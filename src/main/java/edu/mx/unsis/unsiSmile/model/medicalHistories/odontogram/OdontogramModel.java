@@ -38,5 +38,5 @@ public class OdontogramModel extends AuditModel {
     private List<ToothConditionAssignmentModel> toothConditionAssignments;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<ToothFaceConditionModel> toothFaceConditions;
+    private List<ToothfaceConditionsAssignmentModel> toothFaceConditionsAssignments;
 }

@@ -1,15 +1,19 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.*;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -28,7 +32,7 @@ import java.util.stream.Collectors;
 public class OdontogramService {
 
     private final IOdontogramRepository odontogramRepository;
-    private final IToothFaceConditionRepository toothFaceConditionRepository;
+    private final IToothFaceConditionAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final OdontogramMapper odontogramMapper;
 
@@ -100,10 +104,11 @@ public class OdontogramService {
                 toothConditionAssignmentRepository.save(assignment);
             }
 
-            for (ToothFaceConditionModel condition : odontogram.getToothFaceConditions()) {
+            for (ToothfaceConditionsAssignmentModel condition : odontogram.getToothFaceConditionsAssignments()) {
                 condition.setOdontogram(odontogram);
-                toothFaceConditionRepository.save(condition);
+                toothFaceConditionAssignmentRepository.save(condition);
             }
+
         }catch (Exception e){
             throw new AppException("", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -116,8 +121,8 @@ public class OdontogramService {
                 odontogramRepository.findToothConditionAssignmentsByOdontogramId(odontogramId);
 
         // Obtener todas las condiciones de caras de dientes
-        List<ToothFaceConditionModel> toothFaceConditions =
-                odontogramRepository.findToothFaceConditionsByOdontogramId(odontogramId);
+        List<ToothfaceConditionsAssignmentModel> toothFaceConditions =
+                odontogramRepository.findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
 
         // Mapa para agrupar los datos por diente
         Map<String, ToothResponse> adultTeethMap = new HashMap<>();
@@ -151,27 +156,27 @@ public class OdontogramService {
         }
 
         // Procesar ToothFaceConditions
-        for (ToothFaceConditionModel tfc : toothFaceConditions) {
+        for (ToothfaceConditionsAssignmentModel tfca : toothFaceConditions) {
             // Mapeo de ConditionDTO (para face conditions)
             ConditionResponse conditionDTO = new ConditionResponse(
-                    tfc.getToothCondition().getIdToothCondition(),
-                    tfc.getToothCondition().getDescription(),
+                    tfca.getToothFaceCondition().getIdToothFaceCondition(),
+                    tfca.getToothFaceCondition().getDescription(),
                     "Tooth face condition description" // Ajustar según el modelo
             );
 
             // Verificar si el diente ya existe en el mapa
-            if(tfc.getTooth().isAdult()){
+            if(tfca.getTooth().isAdult()){
                 ToothResponse adultToothResponse = adultTeethMap.computeIfAbsent(
-                        tfc.getTooth().getIdTooth(),
+                        tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
                 );
 
                 // Buscar o crear la FaceDTO
                 FaceResponse adultFace = adultToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfc.getToothFace().getIdToothFace()))
+                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
                         .findFirst()
                         .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfc.getToothFace().getIdToothFace(), new ArrayList<>());
+                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(), new ArrayList<>());
                             adultToothResponse.getFaces().add(newFace);
                             return newFace;
                         });
@@ -180,16 +185,16 @@ public class OdontogramService {
                 adultFace.getConditions().add(conditionDTO);
             }else{
                 ToothResponse childToothResponse = childTeethMap.computeIfAbsent(
-                        tfc.getTooth().getIdTooth(),
+                        tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
                 );
 
                 // Buscar o crear la FaceDTO
                 FaceResponse childFace = childToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfc.getToothFace().getIdToothFace()))
+                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
                         .findFirst()
                         .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfc.getToothFace().getIdToothFace(), new ArrayList<>());
+                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(), new ArrayList<>());
                             childToothResponse.getFaces().add(newFace);
                             return newFace;
                         });

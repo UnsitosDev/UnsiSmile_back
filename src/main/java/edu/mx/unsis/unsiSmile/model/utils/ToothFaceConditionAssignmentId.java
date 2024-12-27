@@ -8,9 +8,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ToothFaceConditionId implements Serializable {
+public class ToothFaceConditionAssignmentId implements Serializable {
     private String toothFace;
-    private Long toothCondition;
+    private Long toothFaceCondition;
     private String tooth;
     private Long odontogram;
 }
