@@ -1,15 +1,16 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {
@@ -25,5 +26,8 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
 
     @Query("SELECT tfca FROM ToothfaceConditionsAssignmentModel tfca WHERE tfca.odontogram.idOdontogram = :odontogramId")
     List<ToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByOdontogramId(Long odontogramId);
+
+    @Query("SELECT o.idOdontogram FROM OdontogramModel o WHERE o.patient.idPatient = :patientId ORDER BY o.createdAt DESC")
+    List<Long> findOdontogramIdsByPatient(@Param("patientId") UUID patientId, Pageable pageable);
 
 }

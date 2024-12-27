@@ -9,22 +9,19 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,7 +112,12 @@ public class OdontogramService {
 
     }
 
-    public OdontogramResponse getOdontogramDetails(Long odontogramId) {
+    public OdontogramResponse getOdontogramDetails(UUID patientId) {
+
+        Long odontogramId = getLatestOdontogramIdByPatient(patientId).orElseThrow(
+                () -> new AppException("Odontogram not found with ID: " + patientId, HttpStatus.NOT_FOUND)
+        );
+
         // Obtener todas las asignaciones de condiciones de dientes
         List<ToothConditionAssignmentModel> toothConditionAssignments =
                 odontogramRepository.findToothConditionAssignmentsByOdontogramId(odontogramId);
@@ -217,5 +219,10 @@ public class OdontogramService {
                 .adultArcade(adultToothResponseList)
                 .childArcade(childToothResponseList)
                 .build();
+    }
+
+    public Optional<Long> getLatestOdontogramIdByPatient(UUID patientId) {
+        List<Long> results = odontogramRepository.findOdontogramIdsByPatient(patientId, PageRequest.of(0, 1));
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }
 }
