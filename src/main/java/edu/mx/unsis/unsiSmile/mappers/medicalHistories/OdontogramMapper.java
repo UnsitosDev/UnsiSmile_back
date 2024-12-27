@@ -52,7 +52,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 idPatient(dto.getIdPatient())
                                 .build())
                 .formSection(FormSectionModel.builder().
-                        idFormSection(dto.getTypeOdontogram().getValue()).
+                        idFormSection(dto.getIdFormSection()).
                         build())
                 .build();
 

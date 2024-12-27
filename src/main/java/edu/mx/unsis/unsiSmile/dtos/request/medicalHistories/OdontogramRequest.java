@@ -18,6 +18,6 @@ public class OdontogramRequest {
     private List<ToothRequest> tooths;
     @NotNull(message = "The patient id can't be null")
     private UUID idPatient;
-    @NotNull(message = "The odontogram type cannot be null")
-    private TypeOdontogram typeOdontogram;
+    @NotNull(message = "The odontogram idFormSection cannot be null")
+    private Long idFormSection;
 }
