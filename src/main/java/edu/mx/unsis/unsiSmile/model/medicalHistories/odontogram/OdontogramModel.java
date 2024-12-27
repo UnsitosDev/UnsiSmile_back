@@ -23,9 +23,6 @@ public class OdontogramModel extends AuditModel {
     @Column(name = "id_odontogram")
     private Long idOdontogram;
 
-    @Column(name = "creation_date", nullable = false)
-    private LocalDate creationDate;
-
     @ManyToOne
     @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
     private PatientModel patient;

@@ -1,7 +1,6 @@
 CREATE TABLE
     odontograms (
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
-        creation_date DATE NOT NULL,
         fk_patient BINARY(16) NOT NULL,
         fk_form_section BIGINT NOT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),

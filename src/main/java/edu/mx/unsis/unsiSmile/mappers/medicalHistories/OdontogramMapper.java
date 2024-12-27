@@ -46,7 +46,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
     public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
         OdontogramModel odontogramModel = OdontogramModel.builder()
-        .creationDate(LocalDate.now())
                 .patient(
                         PatientModel.builder().
                                 idPatient(dto.getIdPatient())
