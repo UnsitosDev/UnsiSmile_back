@@ -40,21 +40,28 @@ CREATE TABLE
 
 CREATE TABLE
     toothface_conditions (
-        odontogram_id BIGINT,
-        tooth_face_id VARCHAR(3),
-        tooth_condition_id BIGINT,
-        tooth_id VARCHAR(3),
-        PRIMARY KEY (
-            odontogram_id,
-            tooth_face_id,
-            tooth_condition_id,
-            tooth_id
-        ),
-        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
-        FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
-        FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition),
-        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-    );
+                             id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
+                             description VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE
+    toothface_conditions_assignments (
+                                         odontogram_id BIGINT,
+                                         tooth_face_id VARCHAR(3),
+                                         toothface_condition_id BIGINT,
+                                         tooth_id VARCHAR(3),
+                                         PRIMARY KEY (
+                                                      odontogram_id,
+                                                      tooth_face_id,
+                                                      toothface_condition_id,
+                                                      tooth_id
+                                             ),
+                                         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+                                         FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
+                                         FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions(id_toothface_conditions),
+                                         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
+);
 
 INSERT INTO
     `tooth_conditions`
