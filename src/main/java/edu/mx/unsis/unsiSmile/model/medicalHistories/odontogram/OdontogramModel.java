@@ -28,7 +28,7 @@ public class OdontogramModel extends AuditModel {
     private PatientModel patient;
 
     @ManyToOne
-    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
+    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section", unique = true)
     private FormSectionModel formSection;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)

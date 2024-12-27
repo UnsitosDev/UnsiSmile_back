@@ -14,6 +14,7 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -106,8 +107,10 @@ public class OdontogramService {
                 toothFaceConditionAssignmentRepository.save(condition);
             }
 
-        }catch (Exception e){
-            throw new AppException("", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException("Duplicate entry", HttpStatus.CONFLICT, e);
+        } catch (Exception e) {
+            throw new AppException(e.getCause().toString(), HttpStatus.BAD_REQUEST, e);
         }
 
     }
@@ -141,13 +144,13 @@ public class OdontogramService {
                     .build();
 
             // Verificar si el diente ya existe en el mapa
-            if(tca.getTooth().isAdult()){
+            if (tca.getTooth().isAdult()) {
                 ToothResponse adultTheetResponse = adultTeethMap.computeIfAbsent(
                         tca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
                 );
                 adultTheetResponse.getConditions().add(conditionDTO);
-            }else{
+            } else {
                 ToothResponse childTeethResponse = childTeethMap.computeIfAbsent(
                         tca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
@@ -167,7 +170,7 @@ public class OdontogramService {
             );
 
             // Verificar si el diente ya existe en el mapa
-            if(tfca.getTooth().isAdult()){
+            if (tfca.getTooth().isAdult()) {
                 ToothResponse adultToothResponse = adultTeethMap.computeIfAbsent(
                         tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())
@@ -185,7 +188,7 @@ public class OdontogramService {
 
                 // Agregar la condición a la cara del diente
                 adultFace.getConditions().add(conditionDTO);
-            }else{
+            } else {
                 ToothResponse childToothResponse = childTeethMap.computeIfAbsent(
                         tfca.getTooth().getIdTooth(),
                         id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>())

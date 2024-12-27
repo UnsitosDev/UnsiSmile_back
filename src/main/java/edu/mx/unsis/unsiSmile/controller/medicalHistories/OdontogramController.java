@@ -47,7 +47,7 @@ public class OdontogramController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createOdontogram(@RequestBody OdontogramRequest odontogramDTO) {
+    public ResponseEntity<Void> createOdontogram(@Valid @RequestBody OdontogramRequest odontogramDTO) {
         odontogramService.saveOdontogram(odontogramDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
