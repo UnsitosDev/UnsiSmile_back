@@ -32,6 +32,7 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -62,10 +63,27 @@ public class PatientService {
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
+    @Value("${file.max.number}")
+    private int maxFileNumberProperties;
 
     @Transactional
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
+            if (patientRequest.getFileNumber() == null || patientRequest.getFileNumber() == 0) {
+
+                long maxFileNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
+
+                if (maxFileNumber < maxFileNumberProperties) {
+                    patientRequest.setFileNumber((long) maxFileNumberProperties);
+                } else {
+                    patientRequest.setFileNumber(maxFileNumber + 1);
+                }
+            } else {
+                Optional<PatientModel> existingFolio = patientRepository.findByFileNumber(patientRequest.getFileNumber());
+                if (existingFolio.isPresent()) {
+                    throw new AppException("The provided folio already exists: " + patientRequest.getFileNumber(), HttpStatus.CONFLICT);
+                }
+            }
 
             PersonModel person = createPersonEntity(patientRequest.getPerson());
             PatientModel patientModel = preparePatientModel(patientRequest, person);

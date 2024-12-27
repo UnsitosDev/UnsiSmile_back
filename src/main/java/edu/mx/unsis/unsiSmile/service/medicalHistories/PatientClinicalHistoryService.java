@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
@@ -121,6 +120,7 @@ public class PatientClinicalHistoryService {
                 .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
                 .patient(entity.getPatient())
                 .clinicalHistoryCatalog(entity.getClinicalHistoryCatalog())
+                .date(entity.getDate())
                 .build();
     }
 }

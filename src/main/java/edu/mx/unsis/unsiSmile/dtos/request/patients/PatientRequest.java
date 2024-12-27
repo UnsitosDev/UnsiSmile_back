@@ -46,4 +46,6 @@ public class PatientRequest {
     private Long religionId;
 
     private GuardianRequest guardian;
+
+    private Long fileNumber;
 }
