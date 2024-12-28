@@ -68,6 +68,6 @@ public class PatientModel extends AuditModel {
     @JoinColumn(name = "fk_guardian", referencedColumnName = "id_guardian")
     private GuardianModel guardian;
 
-    @Column(name = "file_number")
+    @Column(name = "file_number", unique = true)
     private Long fileNumber;
 }

@@ -15,9 +15,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class PatientRequest {
-    @NotNull(message = "Admission date cannot be null")
-    private LocalDate admissionDate;
-
     @NotNull(message = "isMinor cannot be null")
     private Boolean isMinor;
 
@@ -46,6 +43,4 @@ public class PatientRequest {
     private Long religionId;
 
     private GuardianRequest guardian;
-
-    private Long fileNumber;
 }

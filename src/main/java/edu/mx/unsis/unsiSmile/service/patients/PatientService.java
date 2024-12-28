@@ -69,22 +69,6 @@ public class PatientService {
     @Transactional
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
-            if (patientRequest.getFileNumber() == null || patientRequest.getFileNumber() == 0) {
-
-                long maxFileNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
-
-                if (maxFileNumber < maxFileNumberProperties) {
-                    patientRequest.setFileNumber((long) maxFileNumberProperties);
-                } else {
-                    patientRequest.setFileNumber(maxFileNumber + 1);
-                }
-            } else {
-                Optional<PatientModel> existingFolio = patientRepository.findByFileNumber(patientRequest.getFileNumber());
-                if (existingFolio.isPresent()) {
-                    throw new AppException("The provided folio already exists: " + patientRequest.getFileNumber(), HttpStatus.CONFLICT);
-                }
-            }
-
             PersonModel person = createPersonEntity(patientRequest.getPerson());
             PatientModel patientModel = preparePatientModel(patientRequest, person);
             validateAndSetGuardian(patientRequest, patientModel);
@@ -112,7 +96,16 @@ public class PatientService {
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
+        long maxFileNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
+
         PatientModel patientModel = patientMapper.toEntity(patientRequest);
+
+        if (maxFileNumber < maxFileNumberProperties) {
+            patientModel.setFileNumber((long) maxFileNumberProperties);
+        } else {
+            patientModel.setFileNumber(maxFileNumber + 1);
+        }
+
         patientModel.setPerson(person);
         return patientModel;
     }
