@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -132,4 +133,36 @@ public class NeighborhoodService {
             throw new AppException("Failed to delete neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public NeighborhoodModel findOrCreateNeighborhood(@NonNull NeighborhoodRequest neighborhoodRequest) {
+        try {
+            Assert.notNull(neighborhoodRequest, "NeighborhoodRequest cannot be null");
+
+            String localityId = neighborhoodRequest.getLocality().getIdLocality();
+            String neighborhoodName = neighborhoodRequest.getName();
+
+            if (localityId != null) {
+                NeighborhoodModel existingNeighborhood = neighborhoodRepository
+                        .findByLocalityIdAndName(localityId, neighborhoodName)
+                        .orElse(null);
+
+                if (existingNeighborhood != null) {
+                    return existingNeighborhood;
+                }
+            }
+
+            LocalityModel locality = localityService.findOrCreateLocality(neighborhoodRequest.getLocality());
+
+            NeighborhoodModel neighborhoodModel = neighborhoodMapper.toModel(neighborhoodRequest);
+
+            neighborhoodModel.setLocality(locality);
+
+            return neighborhoodRepository.save(neighborhoodModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

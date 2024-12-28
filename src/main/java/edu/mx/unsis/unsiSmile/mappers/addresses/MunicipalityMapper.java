@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.mappers.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
+import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,5 +48,13 @@ public class MunicipalityMapper implements BaseMapper<MunicipalityResponse, Muni
     public void updateEntity(MunicipalityRequest request, MunicipalityModel entity) {
         // entity.setName(request.getName());
         // entity.setState(StateModel.builder().idState(request.getStateId()).build());
+    }
+
+    public MunicipalityModel toModel(MunicipalityRequest dto) {
+        return MunicipalityModel.builder()
+                .idMunicipality(dto.getIdMunicipality())
+                .name(dto.getName())
+                .state(null)
+                .build();
     }
 }

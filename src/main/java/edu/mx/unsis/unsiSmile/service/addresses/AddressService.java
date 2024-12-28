@@ -25,19 +25,16 @@ public class AddressService {
 
     private final IAddressRepository addressRepository;
     private final AddressMapper addressMapper;
+    private final HousingService housingService;
+    private final StreetService streetService;
 
     @Transactional
     public AddressResponse createAddress(@NonNull AddressRequest addressRequest) {
         try {
             Assert.notNull(addressRequest, "AddressRequest cannot be null");
 
-            // Map the DTO request to the entity
-            AddressModel addressModel = addressMapper.toEntity(addressRequest);
+            AddressModel savedAddress = this.findOrCreateAddress(addressRequest);
 
-            // Save the entity to the database
-            AddressModel savedAddress = addressRepository.save(addressModel);
-
-            // Map the saved entity back to a response DTO
             return addressMapper.toDto(savedAddress);
         } catch (Exception ex) {
             throw new AppException("Failed to create address", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -150,4 +147,37 @@ public class AddressService {
             throw new AppException("Failed to delete address", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public AddressModel findOrCreateAddress(@NonNull AddressRequest addressRequest) {
+        try {
+            Assert.notNull(addressRequest, "AddressRequest cannot be null");
+
+            String streetNumber = addressRequest.getStreetNumber();
+            String interiorNumber = addressRequest.getInteriorNumber();
+            String housingId = addressRequest.getHousing().getIdHousing();
+            Long streetId = addressRequest.getStreet().getIdStreet();
+
+            AddressModel existingAddress = addressRepository.findByStreetDataRequest(
+                    streetNumber, interiorNumber, housingId, streetId
+            ).orElse(null);
+
+            if (existingAddress != null) {
+                return existingAddress;
+            }
+
+            HousingModel housing = housingService.findOrCreateHousing(addressRequest.getHousing());
+            StreetModel street = streetService.findOrCreateStreet(addressRequest.getStreet());
+
+            AddressModel addressModel = addressMapper.toModel(addressRequest);
+            addressModel.setHousing(housing);
+            addressModel.setStreet(street);
+
+            return addressRepository.save(addressModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create address", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

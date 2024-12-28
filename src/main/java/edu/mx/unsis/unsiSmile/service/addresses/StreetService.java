@@ -1,22 +1,22 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.addresses.StreetMapper;
+import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.StreetMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,4 +131,34 @@ public class StreetService {
             throw new AppException("Failed to delete street", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public StreetModel findOrCreateStreet(@NonNull StreetRequest streetRequest) {
+        try {
+            Assert.notNull(streetRequest, "StreetRequest cannot be null");
+
+            Long neighborhoodId = streetRequest.getNeighborhood().getIdNeighborhood();
+            String streetName = streetRequest.getName();
+
+            if (neighborhoodId != null) {
+                StreetModel existingStreet = streetRepository.findByNeighborhoodIdAndName(neighborhoodId, streetName).orElse(null);
+
+                if (existingStreet != null) {
+                    return existingStreet;
+                }
+            }
+
+            NeighborhoodModel neighborhood = neighborhoodService.findOrCreateNeighborhood(streetRequest.getNeighborhood());
+
+            StreetModel streetModel = streetMapper.toModel(streetRequest);
+
+            streetModel.setNeighborhood(neighborhood);
+
+            return streetRepository.save(streetModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create street", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

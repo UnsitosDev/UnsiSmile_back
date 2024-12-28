@@ -26,4 +26,8 @@ public interface ILocalityRepository extends JpaRepository<LocalityModel, String
 
     @Query("SELECT l FROM LocalityModel l WHERE l.name like :keyword%")
     Page<LocalityModel> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT l FROM LocalityModel l WHERE l.name = :name AND l.municipality.idMunicipality = :municipalityId")
+    Optional<LocalityModel> findByMunicipalityIdAndName(@Param("municipalityId") String municipalityId,
+                                                        @Param("name") String name);
 }
