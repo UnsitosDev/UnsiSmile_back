@@ -41,7 +41,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 .ethnicGroup(EthnicGroupModel.builder().idEthnicGroup(dto.getEthnicGroupId()).build())
                 .religion(ReligionModel.builder().idReligion(dto.getReligionId()).build())
                 .guardian(dto.getGuardian() != null ? guardianMapper.toEntity(dto.getGuardian()) : null)
-                .fileNumber(null)
+                .medicalRecordNumber(null)
                 .build();
     }
 
@@ -50,7 +50,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
         return PatientResponse.builder()
                 .idPatient(entity.getIdPatient())
                 .admissionDate(entity.getAdmissionDate())
-                .fileNumber(entity.getFileNumber())
+                .medicalRecordNumber(entity.getMedicalRecordNumber())
                 .isMinor(entity.getIsMinor())
                 .hasDisability(entity.getHasDisability())
                 .nationality(nationalityMapper.toDto(entity.getNationality()))

@@ -19,7 +19,7 @@ public class ClinicalHistoryCatalogResponse {
 
     private String clinicalHistoryName;
 
-    private Long fileNumber;
+    private Long medicalRecordNumber;
 
     private LocalDateTime date;
 

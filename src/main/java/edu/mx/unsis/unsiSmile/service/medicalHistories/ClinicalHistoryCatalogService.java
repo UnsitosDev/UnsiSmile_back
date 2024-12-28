@@ -115,7 +115,7 @@ public class ClinicalHistoryCatalogService {
 
         ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
 
-        clinicalHistoryCatalogResponse.setFileNumber(patientClinicalHistory.getPatient().getFileNumber());
+        clinicalHistoryCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
         clinicalHistoryCatalogResponse.setDate(patientClinicalHistory.getDate());
 
         clinicalHistoryCatalogResponse.setFormSections(sections);

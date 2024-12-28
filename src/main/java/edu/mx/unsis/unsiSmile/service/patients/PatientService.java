@@ -63,7 +63,7 @@ public class PatientService {
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
-    @Value("${file.max.number}")
+    @Value("${max.medical.record.number}")
     private int maxFileNumberProperties;
 
     @Transactional
@@ -96,14 +96,14 @@ public class PatientService {
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
-        long maxFileNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
+        long maxMedicalRecordNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
 
         PatientModel patientModel = patientMapper.toEntity(patientRequest);
 
-        if (maxFileNumber < maxFileNumberProperties) {
-            patientModel.setFileNumber((long) maxFileNumberProperties);
+        if (maxMedicalRecordNumber < maxFileNumberProperties) {
+            patientModel.setMedicalRecordNumber((long) maxFileNumberProperties);
         } else {
-            patientModel.setFileNumber(maxFileNumber + 1);
+            patientModel.setMedicalRecordNumber(maxMedicalRecordNumber + 1);
         }
 
         patientModel.setPerson(person);
