@@ -20,7 +20,7 @@ import edu.mx.unsis.unsiSmile.service.addresses.StreetService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/streets")
+@RequestMapping("/unsismile/api/v1/streets")
 public class StreetController {
 
     private final StreetService streetService;

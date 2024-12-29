@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/municipalities")
+@RequestMapping("/unsismile/api/v1/municipalities")
 public class MunicipalityController {
 
     private final MunicipalityService municipalityService;

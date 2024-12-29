@@ -19,7 +19,7 @@ import edu.mx.unsis.unsiSmile.service.addresses.LocalityService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/locality")
+@RequestMapping("/unsismile/api/v1/locality")
 public class LocalityController {
 
     private final LocalityService localityService;
