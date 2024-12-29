@@ -1,22 +1,18 @@
 package edu.mx.unsis.unsiSmile.mappers.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
-import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
-import edu.mx.unsis.unsiSmile.model.patients.MaritalStatusModel;
-import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.model.patients.ReligionModel;
+import edu.mx.unsis.unsiSmile.model.patients.*;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -34,7 +30,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     @Override
     public PatientModel toEntity(PatientRequest dto) {
         return PatientModel.builder()
-                .admissionDate(dto.getAdmissionDate())
+                .admissionDate(LocalDate.now())
                 .isMinor(dto.getIsMinor())
                 .hasDisability(dto.getHasDisability())
                 .nationality(NationalityModel.builder().idNationality(dto.getNationalityId()).build())
@@ -45,6 +41,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 .ethnicGroup(EthnicGroupModel.builder().idEthnicGroup(dto.getEthnicGroupId()).build())
                 .religion(ReligionModel.builder().idReligion(dto.getReligionId()).build())
                 .guardian(dto.getGuardian() != null ? guardianMapper.toEntity(dto.getGuardian()) : null)
+                .medicalRecordNumber(null)
                 .build();
     }
 
@@ -53,6 +50,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
         return PatientResponse.builder()
                 .idPatient(entity.getIdPatient())
                 .admissionDate(entity.getAdmissionDate())
+                .medicalRecordNumber(entity.getMedicalRecordNumber())
                 .isMinor(entity.getIsMinor())
                 .hasDisability(entity.getHasDisability())
                 .nationality(nationalityMapper.toDto(entity.getNationality()))
@@ -75,7 +73,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
 
     @Override
     public void updateEntity(PatientRequest request, PatientModel entity) {
-        entity.setAdmissionDate(request.getAdmissionDate());
+        entity.setAdmissionDate(LocalDate.now());
         entity.setIsMinor(request.getIsMinor());
         entity.setHasDisability(request.getHasDisability());
         entity.setNationality(NationalityModel.builder().idNationality(request.getNationalityId()).build());

@@ -56,7 +56,7 @@ public class ClinicalHistoryCatalogService {
             }
 
             Assert.notNull(idPatient, "Patient ID cannot be null");
-            if (idPatient.equals("0")) {
+            if ("0".equals(idPatient.toString())) {
                 throw new AppException("Patient ID cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
@@ -115,6 +115,9 @@ public class ClinicalHistoryCatalogService {
 
         ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
 
+        clinicalHistoryCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
+        clinicalHistoryCatalogResponse.setDate(patientClinicalHistory.getDate());
+
         clinicalHistoryCatalogResponse.setFormSections(sections);
 
         return clinicalHistoryCatalogResponse;
@@ -147,7 +150,7 @@ public class ClinicalHistoryCatalogService {
     }
 
     private UUID convertBytesToUUID(Object result) {
-        if (result == null || !(result instanceof byte[])) {
+        if (!(result instanceof byte[])) {
             return null;
         }
 

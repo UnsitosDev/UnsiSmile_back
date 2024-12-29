@@ -18,6 +18,7 @@ import java.util.UUID;
 public class PatientResponse {
     private UUID idPatient;
     private LocalDate admissionDate;
+    private Long medicalRecordNumber;
     private Boolean isMinor;
     private Boolean hasDisability;
     private NationalityResponse nationality;

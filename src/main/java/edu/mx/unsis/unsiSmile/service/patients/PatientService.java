@@ -32,6 +32,7 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -62,11 +63,12 @@ public class PatientService {
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
+    @Value("${max.medical.record.number}")
+    private int maxFileNumberProperties;
 
     @Transactional
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
-
             PersonModel person = createPersonEntity(patientRequest.getPerson());
             PatientModel patientModel = preparePatientModel(patientRequest, person);
             validateAndSetGuardian(patientRequest, patientModel);
@@ -94,7 +96,16 @@ public class PatientService {
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
+        long maxMedicalRecordNumber = Optional.ofNullable(patientRepository.findMaxFileNumber()).orElse(0L);
+
         PatientModel patientModel = patientMapper.toEntity(patientRequest);
+
+        if (maxMedicalRecordNumber < maxFileNumberProperties) {
+            patientModel.setMedicalRecordNumber((long) maxFileNumberProperties);
+        } else {
+            patientModel.setMedicalRecordNumber(maxMedicalRecordNumber + 1);
+        }
+
         patientModel.setPerson(person);
         return patientModel;
     }
