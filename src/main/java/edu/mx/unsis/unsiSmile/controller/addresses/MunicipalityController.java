@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.controller.addresses;
 
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
 import edu.mx.unsis.unsiSmile.service.addresses.MunicipalityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,13 +44,24 @@ public class MunicipalityController {
         return ResponseEntity.ok(municipalityResponses);
     }
 
+    @Operation(summary = "Obtener una lista paginada de municipios por estado.")
     @GetMapping("/state/{stateId}")
-    public ResponseEntity<List<MunicipalityResponse>> getMunicipalitiesByState(@Valid @PathVariable String stateId) {
-        // Assuming you have a method to get the StateModel by ID
-        StateModel state = getStateById(stateId);
-        List<MunicipalityResponse> municipalityResponses = municipalityService.getMunicipalitiesByState(state);
+    public ResponseEntity<Page<MunicipalityResponse>> getMunicipalitiesByState(
+            @Valid @PathVariable String stateId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<MunicipalityResponse> municipalityResponses =
+                municipalityService.getMunicipalitiesByStateId(stateId, pageable);
+
         return ResponseEntity.ok(municipalityResponses);
     }
+
 
     @Operation(summary = "Obtener una lista paginada de municipios.")
     @GetMapping
@@ -81,11 +91,5 @@ public class MunicipalityController {
     public ResponseEntity<?> deleteMunicipalityById(@Valid @PathVariable String id) {
         municipalityService.deleteMunicipalityById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private StateModel getStateById(String stateId) {
-        // Implement the logic to fetch the StateModel by ID
-        // This is just a placeholder, you need to provide the actual implementation
-        return new StateModel();
     }
 }
