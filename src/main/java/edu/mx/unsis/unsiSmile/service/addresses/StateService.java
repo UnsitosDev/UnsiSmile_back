@@ -115,4 +115,37 @@ public class StateService {
             throw new AppException("Failed to delete state", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public StateModel findOrCreateState(@NonNull StateRequest stateRequest) {
+        try {
+            Assert.notNull(stateRequest, "StateRequest cannot be null");
+
+            if (stateRequest.getIdState() != null) {
+                StateModel existingState = stateRepository
+                        .findByIdState(stateRequest.getIdState())
+                        .orElse(null);
+
+                if (existingState != null) {
+                    return existingState;
+                }
+            }
+
+            String stateName = stateRequest.getName();
+            StateModel existingState = stateRepository.findByName(stateName)
+                    .orElse(null);
+
+            if (existingState != null) {
+                return existingState;
+            }
+
+            StateModel stateModel = stateMapper.toEntity(stateRequest);
+
+            return stateRepository.save(stateModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create state", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class LocalityService {
 
     private final ILocalityRepository localityRepository;
     private final LocalityMapper localityMapper;
+    private final MunicipalityService municipalityService;
 
     @Transactional
     public LocalityResponse createLocality(@NonNull LocalityRequest localityRequest) {
@@ -146,4 +148,35 @@ public class LocalityService {
             throw new AppException("Failed to delete locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public LocalityModel findOrCreateLocality(@NonNull LocalityRequest localityRequest) {
+        try {
+            Assert.notNull(localityRequest, "LocalityRequest cannot be null");
+
+            String municipalityId = localityRequest.getMunicipality().getIdMunicipality();
+            String localityName = localityRequest.getName();
+
+            if (municipalityId != null) {
+                LocalityModel existingLocality = localityRepository.findByMunicipalityIdAndName(municipalityId, localityName)
+                        .orElse(null);
+
+                if (existingLocality != null) {
+                    return existingLocality;
+                }
+            }
+
+            MunicipalityModel municipality = municipalityService.findOrCreateMunicipality(localityRequest.getMunicipality());
+
+            LocalityModel localityModel = localityMapper.toModel(localityRequest);
+
+            localityModel.setMunicipality(municipality);
+
+            return localityRepository.save(localityModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

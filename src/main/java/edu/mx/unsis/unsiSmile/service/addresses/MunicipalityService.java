@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,7 @@ public class MunicipalityService {
 
     private final IMunicipalityRepository municipalityRepository;
     private final MunicipalityMapper municipalityMapper;
+    private final StateService stateService;
 
     @Transactional
     public MunicipalityResponse createMunicipality(@NonNull MunicipalityRequest municipalityRequest) {
@@ -132,4 +135,36 @@ public class MunicipalityService {
             throw new AppException("Failed to delete municipality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public MunicipalityModel findOrCreateMunicipality(@NonNull MunicipalityRequest municipalityRequest) {
+        try {
+            Assert.notNull(municipalityRequest, "MunicipalityRequest cannot be null");
+
+            String stateId = municipalityRequest.getState().getIdState();
+            String municipalityName = municipalityRequest.getName();
+
+            if (stateId != null) {
+                MunicipalityModel existingMunicipality = municipalityRepository
+                        .findByStateIdAndName(stateId, municipalityName)
+                        .orElse(null);
+
+                if (existingMunicipality != null) {
+                    return existingMunicipality;
+                }
+            }
+
+            StateModel state = stateService.findOrCreateState(municipalityRequest.getState());
+
+            MunicipalityModel municipalityModel = municipalityMapper.toModel(municipalityRequest);
+
+            municipalityModel.setState(state);
+
+            return municipalityRepository.save(municipalityModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create municipality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package edu.mx.unsis.unsiSmile.mappers.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -46,5 +48,13 @@ public class NeighborhoodMapper implements BaseMapper<NeighborhoodResponse, Neig
     public void updateEntity(NeighborhoodRequest request, NeighborhoodModel entity) {
         // entity.setName(request.getName());
         // entity.setLocality(LocalityModel.builder().idLocality(request.getLocalityId()).build());
+    }
+
+    public NeighborhoodModel toModel(NeighborhoodRequest dto) {
+        return NeighborhoodModel.builder()
+                .idNeighborhood(dto.getIdNeighborhood())
+                .name(dto.getName())
+                .locality(null)
+                .build();
     }
 }

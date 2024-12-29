@@ -115,4 +115,25 @@ public class HousingService {
                 .map(housingMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public HousingModel findOrCreateHousing(@NonNull HousingRequest housingRequest) {
+        try {
+            Assert.notNull(housingRequest, "HousingRequest cannot be null");
+
+            HousingModel existingHousing = housingRepository.findByCategory(housingRequest.getCategory()).orElse(null);
+
+            if (existingHousing != null) {
+                return existingHousing;
+            }
+
+            HousingModel housingModel = housingMapper.toEntity(housingRequest);
+
+            return housingRepository.save(housingModel);
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to find or create housing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

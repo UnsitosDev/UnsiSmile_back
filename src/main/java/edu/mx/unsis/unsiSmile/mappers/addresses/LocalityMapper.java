@@ -2,6 +2,8 @@ package edu.mx.unsis.unsiSmile.mappers.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
+import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,5 +50,14 @@ public class LocalityMapper implements BaseMapper<LocalityResponse, LocalityRequ
         // entity.setName(request.getName());
         // entity.setPostalCode(request.getPostalCode());
         // entity.setMunicipality(MunicipalityModel.builder().idMunicipality(request.getMunicipalityId()).build());
+    }
+
+    public LocalityModel toModel(LocalityRequest dto) {
+        return LocalityModel.builder()
+                .idLocality(dto.getIdLocality())
+                .name(dto.getName())
+                .postalCode(dto.getPostalCode())
+                .municipality(null)
+                .build();
     }
 }
