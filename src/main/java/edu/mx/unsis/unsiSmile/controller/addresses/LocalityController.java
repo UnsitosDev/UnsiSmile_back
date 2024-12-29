@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.controller.addresses;
 
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
 import edu.mx.unsis.unsiSmile.service.addresses.LocalityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -95,11 +94,5 @@ public class LocalityController {
     public ResponseEntity<?> deleteLocalityById(@Valid @PathVariable String id) {
         localityService.deleteLocalityById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private MunicipalityModel getMunicipalityById(String municipalityId) {
-        // Implement the logic to fetch the MunicipalityModel by ID
-        // This is just a placeholder, you need to provide the actual implementation
-        return new MunicipalityModel();
     }
 }
