@@ -44,17 +44,39 @@ public class NeighborhoodController {
         return ResponseEntity.ok(neighborhoodResponses);
     }
 
-    @Operation(summary = "Obtiene las colonias de una localidad")
+    @Operation(summary = "Obtiene una lista paginada de colonias de una localidad")
     @GetMapping("/locality/{localityId}")
-    public ResponseEntity<List<NeighborhoodResponse>> getNeighborhoodsByLocality(@Valid @PathVariable String localityId) {
-        List<NeighborhoodResponse> neighborhoodResponses = neighborhoodService.getNeighborhoodsByLocality(localityId);
-        return ResponseEntity.ok(neighborhoodResponses);
+    public ResponseEntity<Page<NeighborhoodResponse>> getNeighborhoodsByLocality(
+            @PathVariable String localityId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<NeighborhoodResponse> neighborhoods = neighborhoodService.getNeighborhoodsByLocalityId(localityId, pageable);
+
+        return ResponseEntity.ok(neighborhoods);
     }
 
+    @Operation(summary = "Obtener una lista paginada de colonias.")
     @GetMapping
-    public ResponseEntity<List<NeighborhoodResponse>> getAllNeighborhoods() {
-        List<NeighborhoodResponse> allNeighborhoods = neighborhoodService.getAllNeighborhoods();
-        return ResponseEntity.ok(allNeighborhoods);
+    public ResponseEntity<Page<NeighborhoodResponse>> getAllNeighborhoods(
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<NeighborhoodResponse> neighborhoods = neighborhoodService.getAllNeighborhoods(pageable, keyword);
+
+        return ResponseEntity.ok(neighborhoods);
     }
 
     @PutMapping("/{id}")
