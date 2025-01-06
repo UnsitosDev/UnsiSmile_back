@@ -1,9 +1,11 @@
 package edu.mx.unsis.unsiSmile.controller.addresses;
 
-import java.util.List;
-
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
+import edu.mx.unsis.unsiSmile.service.addresses.LocalityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,14 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
-import edu.mx.unsis.unsiSmile.service.addresses.LocalityService;
-import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/locality")
+@RequestMapping("/unsismile/api/v1/locality")
 public class LocalityController {
 
     private final LocalityService localityService;
@@ -53,12 +51,21 @@ public class LocalityController {
     }
 
     @GetMapping("/municipality/{municipalityId}")
-    public ResponseEntity<List<LocalityResponse>> getLocalitiesByMunicipality(@Valid @PathVariable String municipalityId) {
-        // Assuming you have a method to get the MunicipalityModel by ID
-        MunicipalityModel municipality = getMunicipalityById(municipalityId);
-        List<LocalityResponse> localityResponses = localityService.getLocalitiesByMunicipality(municipality);
-        return ResponseEntity.ok(localityResponses);
+    public ResponseEntity<Page<LocalityResponse>> getLocalitiesByMunicipality(
+            @PathVariable String municipalityId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<LocalityResponse> localities = localityService.getLocalitiesByMunicipalityId(municipalityId, pageable);
+
+        return ResponseEntity.ok(localities);
     }
+
 
     @Operation(summary = "Obtener una lista paginada de localidades.")
     @GetMapping
@@ -87,11 +94,5 @@ public class LocalityController {
     public ResponseEntity<?> deleteLocalityById(@Valid @PathVariable String id) {
         localityService.deleteLocalityById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private MunicipalityModel getMunicipalityById(String municipalityId) {
-        // Implement the logic to fetch the MunicipalityModel by ID
-        // This is just a placeholder, you need to provide the actual implementation
-        return new MunicipalityModel();
     }
 }

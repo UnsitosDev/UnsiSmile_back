@@ -1,14 +1,16 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.StreetMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
 import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class StreetService {
     private final IStreetRepository streetRepository;
     private final StreetMapper streetMapper;
     private final NeighborhoodService neighborhoodService;
+    private final INeighborhoodRepository neighborhoodRepository;
 
     @Transactional
     public StreetResponse createStreet(@NonNull StreetRequest streetRequest) {
@@ -69,15 +72,14 @@ public class StreetService {
     }
 
     @Transactional(readOnly = true)
-    public List<StreetResponse> getStreetsByNeighborhood(@NonNull Long neighborhoodId) {
+    public Page<StreetResponse> getStreetsByNeighborhood(Long neighborhoodId, Pageable pageable) {
         try {
-            NeighborhoodResponse neighborhood = neighborhoodService.getNeighborhoodById(neighborhoodId);
-            List<StreetModel> streetModels = streetRepository.findByNeighborhoodIdNeighborhood(
-                    neighborhood.getIdNeighborhood());
+            NeighborhoodModel neighborhood = neighborhoodRepository.findById(neighborhoodId)
+                    .orElseThrow(() -> new AppException("Neighborhood not found with ID: " + neighborhoodId, HttpStatus.NOT_FOUND));
 
-            return streetModels.stream()
-                    .map(streetMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<StreetModel> streetModels = streetRepository.findByNeighborhood(neighborhood, pageable);
+
+            return streetModels.map(streetMapper::toDto);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -86,16 +88,22 @@ public class StreetService {
     }
 
     @Transactional(readOnly = true)
-    public List<StreetResponse> getAllStreets() {
+    public Page<StreetResponse> getAllStreets(Pageable pageable, String keyword) {
         try {
-            List<StreetModel> allStreets = streetRepository.findAll();
-            return allStreets.stream()
-                    .map(streetMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<StreetModel> streetModels;
+
+            if (keyword == null || keyword.isBlank()) {
+                streetModels = streetRepository.findAll(pageable);
+            } else {
+                streetModels = streetRepository.findByKeyword(keyword, pageable);
+            }
+
+            return streetModels.map(streetMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch all streets", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch streets", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional
     public StreetResponse updateStreet(@NonNull Long idStreet, @NonNull StreetRequest updatedStreetRequest) {

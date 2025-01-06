@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/states")
+@RequestMapping("/unsismile/api/v1/states")
 public class StateController {
 
     private final StateService stateService;

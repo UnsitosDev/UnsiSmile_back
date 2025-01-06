@@ -1,10 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.addresses.MunicipalityMapper;
+import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.IMunicipalityRepository;
+import edu.mx.unsis.unsiSmile.repository.addresses.IStateRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,14 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.MunicipalityMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
-import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.IMunicipalityRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +27,7 @@ public class MunicipalityService {
     private final IMunicipalityRepository municipalityRepository;
     private final MunicipalityMapper municipalityMapper;
     private final StateService stateService;
+    private final IStateRepository stateRepository;
 
     @Transactional
     public MunicipalityResponse createMunicipality(@NonNull MunicipalityRequest municipalityRequest) {
@@ -73,16 +72,21 @@ public class MunicipalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<MunicipalityResponse> getMunicipalitiesByState(@NonNull StateModel state) {
+    public Page<MunicipalityResponse> getMunicipalitiesByStateId(@NonNull String stateId, @NonNull Pageable pageable) {
         try {
-            List<MunicipalityModel> municipalityModels = municipalityRepository.findByState(state);
-            return municipalityModels.stream()
-                    .map(municipalityMapper::toDto)
-                    .collect(Collectors.toList());
+            StateModel state = stateRepository.findById(stateId)
+                    .orElseThrow(() -> new AppException("State not found with ID: " + stateId, HttpStatus.NOT_FOUND));
+
+            Page<MunicipalityModel> municipalityModels = municipalityRepository.findByState(state, pageable);
+
+            return municipalityModels.map(municipalityMapper::toDto);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch municipalities by state", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch municipalities by state ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional(readOnly = true)
     public Page<MunicipalityResponse> getAllMunicipalities(Pageable pageable, String keyword) {

@@ -1,9 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.addresses.LocalityMapper;
+import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.ILocalityRepository;
+import edu.mx.unsis.unsiSmile.repository.addresses.IMunicipalityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,14 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.LocalityMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
-import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.ILocalityRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class LocalityService {
     private final ILocalityRepository localityRepository;
     private final LocalityMapper localityMapper;
     private final MunicipalityService municipalityService;
+    private final IMunicipalityRepository municipalityRepository;
 
     @Transactional
     public LocalityResponse createLocality(@NonNull LocalityRequest localityRequest) {
@@ -86,16 +86,21 @@ public class LocalityService {
     }
 
     @Transactional(readOnly = true)
-    public List<LocalityResponse> getLocalitiesByMunicipality(@NonNull MunicipalityModel municipality) {
+    public Page<LocalityResponse> getLocalitiesByMunicipalityId(@NonNull String municipalityId, @NonNull Pageable pageable) {
         try {
-            List<LocalityModel> localityModels = localityRepository.findByMunicipality(municipality);
-            return localityModels.stream()
-                    .map(localityMapper::toDto)
-                    .collect(Collectors.toList());
+            MunicipalityModel municipality = municipalityRepository.findById(municipalityId)
+                    .orElseThrow(() -> new AppException("Municipality not found with ID: " + municipalityId, HttpStatus.NOT_FOUND));
+
+            Page<LocalityModel> localityModels = localityRepository.findByMunicipality(municipality, pageable);
+
+            return localityModels.map(localityMapper::toDto);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch localities by municipality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch localities by municipality ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional(readOnly = true)
     public Page<LocalityResponse> getAllLocalities(Pageable pageable, String keyword) {

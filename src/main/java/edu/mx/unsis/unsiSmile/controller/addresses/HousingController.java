@@ -12,7 +12,7 @@ import edu.mx.unsis.unsiSmile.service.addresses.HousingService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/address/housing")
+@RequestMapping("/unsismile/api/v1/housing")
 public class HousingController {
 
     private final HousingService housingService;

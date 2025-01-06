@@ -1,23 +1,24 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.addresses.NeighborhoodMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
+import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.ILocalityRepository;
+import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.NeighborhoodMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class NeighborhoodService {
     private final INeighborhoodRepository neighborhoodRepository;
     private final NeighborhoodMapper neighborhoodMapper;
     private final LocalityService localityService;
+    private final ILocalityRepository localityRepository;
 
     @Transactional
     public NeighborhoodResponse createNeighborhood(@NonNull NeighborhoodRequest neighborhoodRequest) {
@@ -73,31 +75,38 @@ public class NeighborhoodService {
     }
 
     @Transactional(readOnly = true)
-    public List<NeighborhoodResponse> getNeighborhoodsByLocality(@NonNull String localityId) {
+    public Page<NeighborhoodResponse> getNeighborhoodsByLocalityId(@NonNull String localityId, @NonNull Pageable pageable) {
         try {
-            LocalityResponse locality = localityService.getLocalityById(localityId);
-            List<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocalityIdLocality(locality.getIdLocality());
-            return neighborhoodModels.stream()
-                    .map(neighborhoodMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (AppException ex){
+            LocalityModel locality = localityRepository.findById(localityId)
+                    .orElseThrow(() -> new AppException("Locality not found with ID: " + localityId, HttpStatus.NOT_FOUND));
+
+            Page<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocality(locality, pageable);
+
+            return neighborhoodModels.map(neighborhoodMapper::toDto);
+        } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch neighborhoods by locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch neighborhoods by locality ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<NeighborhoodResponse> getAllNeighborhoods() {
+    public Page<NeighborhoodResponse> getAllNeighborhoods(@NonNull Pageable pageable, String keyword) {
         try {
-            List<NeighborhoodModel> allNeighborhoods = neighborhoodRepository.findAll();
-            return allNeighborhoods.stream()
-                    .map(neighborhoodMapper::toDto)
-                    .collect(Collectors.toList());
+            Page<NeighborhoodModel> neighborhoodModels;
+
+            if (keyword == null || keyword.isBlank()) {
+                neighborhoodModels = neighborhoodRepository.findAll(pageable);
+            } else {
+                neighborhoodModels = neighborhoodRepository.findByKeyword(keyword, pageable);
+            }
+
+            return neighborhoodModels.map(neighborhoodMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch all neighborhoods", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch neighborhoods", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional
     public NeighborhoodResponse updateNeighborhood(@NonNull Long idNeighborhood, @NonNull NeighborhoodRequest updatedNeighborhoodRequest) {
