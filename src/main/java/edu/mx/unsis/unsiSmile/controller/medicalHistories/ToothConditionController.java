@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,14 +20,11 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.ToothConditionService;
 import jakarta.validation.Valid;
 
 @RestController
+@AllArgsConstructor         
 @RequestMapping("/unsismile/api/v1/medical-histories/tooth-conditions")
 public class ToothConditionController {
 
     private final ToothConditionService toothConditionService;
-
-    public ToothConditionController(ToothConditionService toothConditionService) {
-        this.toothConditionService = toothConditionService;
-    }
 
     @PostMapping
     public ResponseEntity<ToothConditionResponse> createToothCondition(@Valid @RequestBody ToothConditionRequest request) {
