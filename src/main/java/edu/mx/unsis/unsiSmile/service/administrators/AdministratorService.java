@@ -9,6 +9,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorsModel;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -36,13 +37,14 @@ public class AdministratorService {
     public AdministratorResponse createAdministrator(AdministratorRequest request) {
         try {
             // Create person
-            personService.createPerson(request.getPerson());
+            PersonModel personModel = personService.createPersonEntity(request.getPerson());
 
             // Create user with datas of person
             UserModel userModel = userService.createUser(setCredentials(request));
             // Map request to entity
             AdministratorsModel administratorModel = administratorMapper.toEntity(request);
             // set user
+            administratorModel.setPerson(personModel);
             administratorModel.setUser(userModel);
             // Save entity
             AdministratorsModel savedAdministrator = administratorRepository.save(administratorModel);
