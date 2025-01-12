@@ -3,6 +3,11 @@ CREATE TABLE
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
         fk_patient BINARY(16) NOT NULL,
         fk_form_section BIGINT NOT NULL unique,
+        created_at DATETIME(6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME(6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
         CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -10,20 +15,35 @@ CREATE TABLE
 CREATE TABLE
     tooth_faces (
         id_tooth_face VARCHAR(3) PRIMARY KEY,
-        description VARCHAR(255) NOT NULL
+        description VARCHAR(255) NOT NULL,
+        created_at DATETIME(6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME(6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL
     );
 
 CREATE TABLE
     teeth (
         id_tooth VARCHAR(3) PRIMARY KEY,
         is_adult BOOLEAN,
-        description VARCHAR(255) NOT NULL
+        description VARCHAR(255) NOT NULL,
+        created_at DATETIME(6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME(6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL
     );
 
 CREATE TABLE
     tooth_conditions (
         id_tooth_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
-        description VARCHAR(50) NOT NULL
+        description VARCHAR(50) NOT NULL,
+        created_at DATETIME(6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME(6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL
     );
 
 CREATE TABLE
@@ -31,6 +51,11 @@ CREATE TABLE
         odontogram_id BIGINT,
         tooth_id VARCHAR(3),
         tooth_condition_id BIGINT,
+        created_at DATETIME(6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME(6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
@@ -40,7 +65,12 @@ CREATE TABLE
 CREATE TABLE
     toothface_conditions (
                              id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
-                             description VARCHAR(50) NOT NULL
+                             description VARCHAR(50) NOT NULL,
+                             created_at DATETIME(6) DEFAULT NULL,
+                             created_by VARCHAR(255) DEFAULT NULL,
+                             status_key VARCHAR(255) DEFAULT NULL,
+                             updated_at DATETIME(6) DEFAULT NULL,
+                             updated_by VARCHAR(255) DEFAULT NULL
 );
 
 
@@ -50,6 +80,11 @@ CREATE TABLE
                                          tooth_face_id VARCHAR(3),
                                          toothface_condition_id BIGINT,
                                          tooth_id VARCHAR(3),
+                                         created_at DATETIME(6) DEFAULT NULL,
+                                         created_by VARCHAR(255) DEFAULT NULL,
+                                         status_key VARCHAR(255) DEFAULT NULL,
+                                         updated_at DATETIME(6) DEFAULT NULL,
+                                         updated_by VARCHAR(255) DEFAULT NULL,
                                          PRIMARY KEY (
                                                       odontogram_id,
                                                       tooth_face_id,
