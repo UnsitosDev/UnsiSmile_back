@@ -24,16 +24,7 @@ public class AuthController {
     private final AuthService authService;
     @PostMapping(value = "login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody LoginRequest request) {
-        AuthResponse authResponse = authService.login(request);
-
-        Map<String,Object> objects = new HashMap<>();
-        objects.put("token",authResponse.getToken());
-
-        ApiResponse<Object> response = ApiResponse.<Object>builder()
-                .response(objects)
-                .build();
-
-        return ResponseEntity.ok(response);
+        return authService.login(request);
     }
 
     @PostMapping(value = "register")

@@ -42,7 +42,7 @@ INSERT INTO roles (id, role) VALUES
 
 -- Inserción en user_app (UUID generado en Spring Boot)
 INSERT INTO user_app (id, password, status, username, role_id) VALUES
-    (UNHEX('A36E3B2FFADD4BDFEBD44BA2FDE5F35A'), '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW', 1, '2019060310', 2);
+    ('123e4567-e89b-12d3-a456-426614174000', '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW', 1, '2019060310', 2);
 
 -- Inserción de personas
 INSERT INTO people (curp, birth_date, email, first_lastname, first_name, phone, second_lastname, second_name, fk_gender) VALUES
@@ -51,4 +51,4 @@ INSERT INTO people (curp, birth_date, email, first_lastname, first_name, phone, 
 
 -- Inserción de estudiantes
 INSERT INTO students (enrollment, fk_person, fk_user, created_at, created_by, status_key, updated_at, updated_by) VALUES
-    ('2019060310', 'FIMJ011004HOCGRLA8', UNHEX('A36E3B2FFADD4BDFEBD44BA2FDE5F35A'), NULL, NULL, 'A', NULL, NULL);
+    ('2019060310', 'FIMJ011004HOCGRLA8', '123e4567-e89b-12d3-a456-426614174000', NULL, NULL, 'A', NULL, NULL);

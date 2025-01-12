@@ -22,10 +22,7 @@
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             CorsConfiguration config = new CorsConfiguration();
             config.setAllowCredentials(true);
-            config.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:8081",
-                "https://unsismile.unsis.edu.mx"
-        ));     
+            config.setAllowedOriginPatterns(Arrays.asList("*"));     
             config.setAllowedHeaders(Arrays.asList(
                     HttpHeaders.AUTHORIZATION,
                     HttpHeaders.CONTENT_TYPE,
@@ -45,7 +42,7 @@
 
         @Override
         public void addResourceHandlers(ResourceHandlerRegistry registry) {
-            registry.addResourceHandler("upload/**")
+                registry.addResourceHandler("upload/**")
                     .addResourceLocations("file:/upload/");
         }
     }
