@@ -37,6 +37,7 @@ public class UserModel implements UserDetails {
     @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
