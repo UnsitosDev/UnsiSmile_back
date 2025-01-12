@@ -1,20 +1,17 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
@@ -54,7 +51,6 @@ public class PatientService {
 
     private final IPatientRepository patientRepository;
     private final PatientMapper patientMapper;
-    private final PersonMapper personMapper;
     private final IGuardianRepository guardianRepository;
     private final GuardianMapper guardianMapper;
     private final IAddressRepository addressRepository;
@@ -69,8 +65,8 @@ public class PatientService {
     @Transactional
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
-            PersonModel person = createPersonEntity(patientRequest.getPerson());
-            PatientModel patientModel = preparePatientModel(patientRequest, person);
+            PersonModel personModel = personService.createPersonEntity(patientRequest.getPerson());
+            PatientModel patientModel = preparePatientModel(patientRequest, personModel);
             validateAndSetGuardian(patientRequest, patientModel);
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
@@ -138,13 +134,6 @@ public class PatientService {
     private AddressModel createAddressModel(AddressRequest addressRequest) {
         Assert.notNull(addressRequest, "AddressRequest cannot be null");
         return addressRepository.save(addressMapper.toEntity(addressRequest));
-    }
-
-    // Method to create a person entity
-    private PersonModel createPersonEntity(PersonRequest personRequest) {
-        Assert.notNull(personRequest, "PersonRequest cannot be null");
-        PersonResponse personResponse = personService.createPerson(personRequest);
-        return personMapper.toEntity(personResponse);
     }
 
     // Method to create a guardian entity

@@ -5,11 +5,11 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -36,17 +36,15 @@ public class StudentService {
     @Transactional
     public void createStudent(StudentRequest request) {
         try {
-            // Create user
             UserModel userModel = userService.createUser(setCredentials(request));
 
-            // create person
-            PersonResponse personResponse = personService.createPerson(request.getPerson());
-            // set the created person
-            request.getPerson().setCurp(personResponse.getCurp());
+            PersonModel personModel = personService.createPersonEntity(request.getPerson());
 
-            // set user
             StudentModel studentModel = studentMapper.toEntity(request);
+
             studentModel.setUser(userModel);
+            studentModel.setPerson(personModel);
+
             studentRepository.save(studentModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);

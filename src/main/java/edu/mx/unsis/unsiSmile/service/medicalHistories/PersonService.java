@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -16,6 +7,14 @@ import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +48,9 @@ public class PersonService {
     @Transactional(readOnly = true)
     public PersonResponse getPersonById(@NonNull String personId) {
         try {
-            // Find the person in the database
-            PersonModel personModel = personRepository.findById(personId)
-                    .orElseThrow(() -> new AppException("Person not found with ID: " + personId, HttpStatus.NOT_FOUND));
-
-            // Map the entity to a response DTO
-            return personMapper.toDto(personModel);
+            return personRepository.findById(personId)
+                    .map(personMapper::toDto)
+                    .orElse(null);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch person", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -119,5 +115,19 @@ public class PersonService {
         } catch (Exception ex) {
             throw new AppException("Failed to delete person", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional
+    public PersonModel createPersonEntity(PersonRequest personRequest) {
+        Assert.notNull(personRequest, "PersonRequest cannot be null");
+
+        PersonResponse existingPerson = this.getPersonById(personRequest.getCurp());
+
+        if (existingPerson != null) {
+            return personMapper.toEntity(existingPerson);
+        }
+
+        PersonResponse newPerson = this.createPerson(personRequest);
+        return personMapper.toEntity(newPerson);
     }
 }
