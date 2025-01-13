@@ -1,21 +1,26 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -24,14 +29,15 @@ import java.util.UUID;
 @Entity
 @Table(name = "user_App", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 public class UserModel implements UserDetails {
+
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "uuid2")
+    @Column(name = "id", length = 36, nullable = false, unique = true)
     private UUID id;
 
     @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -40,6 +46,13 @@ public class UserModel implements UserDetails {
     @Builder.Default
     @Column(nullable = false)
     private boolean status = true;
+
+    @PrePersist
+    public void generateId() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
 
     public String getIdAsString() {
         return id.toString();
