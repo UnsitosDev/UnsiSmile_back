@@ -39,8 +39,6 @@ VALUES
     ("Clasificación de angle", 12)
 ;
 
-select * from form_sections;
-
 -- insert para las secciones de historia clínica general
 INSERT INTO clinical_history_sections
 (fk_clinical_history_catalog,
