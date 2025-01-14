@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.dtos;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

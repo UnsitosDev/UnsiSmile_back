@@ -1,7 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.request;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequest {
-    private UUID idUser;
+    private String idUser;
     //@NotBlank(message = "The Username field cannot be null")
     //@NotBlank(message = "The Username field cannot be blank")
     private String username;
