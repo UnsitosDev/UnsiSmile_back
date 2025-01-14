@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequest {
-    private UUID idUser;
+    private String idUser;
     //@NotBlank(message = "The Username field cannot be null")
     //@NotBlank(message = "The Username field cannot be blank")
     private String username;

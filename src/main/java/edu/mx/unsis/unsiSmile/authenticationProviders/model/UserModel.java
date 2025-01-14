@@ -32,7 +32,7 @@ public class UserModel implements UserDetails {
 
     @Id
     @Column(name = "id", length = 36, nullable = false, unique = true)
-    private UUID id;
+    private String id;
 
     @Column(nullable = false)
     private String username;
@@ -50,16 +50,12 @@ public class UserModel implements UserDetails {
     @PrePersist
     public void generateId() {
         if (id == null) {
-            id = UUID.randomUUID();
+            id = UUID.randomUUID().toString();
         }
     }
 
     public String getIdAsString() {
         return id.toString();
-    }
-
-    public void setIdFromString(String id) {
-        this.id = UUID.fromString(id);
     }
 
     @Override
