@@ -22,7 +22,7 @@ public class AdministratorsModel extends AuditModel {
     @JoinColumn(name = "fk_person",nullable = false)
     private PersonModel person;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "fk_user",  nullable = false)
     private UserModel user;
 }
