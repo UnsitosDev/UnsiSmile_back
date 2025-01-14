@@ -1,10 +1,18 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import java.util.List;
-import java.util.UUID;
-
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
+import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.UserMapper;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.repository.IUserRepository;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +54,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getUserById(UUID id) {
+    public UserResponse getUserById(String id) {
         try {
             UserModel userModel = userRepository.findById(id)
                     .orElseThrow(() -> new AppException("User not found with ID: " + id, HttpStatus.NOT_FOUND));
