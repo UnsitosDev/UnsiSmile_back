@@ -136,13 +136,11 @@ public class ClinicalHistoryCatalogService {
     }
 
     private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(Object[] result) {
-        String patientId = result[3].toString();
-
         return PatientClinicalHistoryResponse.builder()
                 .id(((Number) result[0]).longValue())
                 .clinicalHistoryName((String) result[1])
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
-                .patientId(patientId)
+                .patientId(result[3] != null ? result[3].toString() : null)
                 .build();
     }
 }
