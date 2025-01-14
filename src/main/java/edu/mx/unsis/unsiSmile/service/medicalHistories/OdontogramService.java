@@ -226,6 +226,6 @@ public class OdontogramService {
 
     public Optional<Long> getLatestOdontogramIdByPatient(String patientId) {
         List<Long> results = odontogramRepository.findOdontogramIdsByPatient(patientId, PageRequest.of(0, 1));
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
     }
 }
