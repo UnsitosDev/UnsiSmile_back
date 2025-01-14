@@ -13,12 +13,11 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface IPatientRepository extends JpaRepository<PatientModel, UUID> {
+public interface IPatientRepository extends JpaRepository<PatientModel, String> {
 
-    Optional<PatientModel> findByIdPatient(UUID idPatient);
+    Optional<PatientModel> findByIdPatient(String idPatient);
 
     List<PatientModel> findByAdmissionDate(LocalDate admissionDate);
 

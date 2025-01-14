@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +43,7 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse findById(Long id, UUID patientId) {
+    public FormSectionResponse findById(Long id, String patientId) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
@@ -97,7 +96,7 @@ public class FormSectionService {
 
     @Transactional(readOnly = true)
     public List<FormSectionResponse> findAllByClinicalHistory(
-            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, UUID patientId) {
+            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, String patientId) {
         try {
             Set<Long> sectionIds = clinicalHistorySectionModels.stream()
                     .map(chsm -> chsm.getFormSectionModel().getIdFormSection())
@@ -114,7 +113,7 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse toResponse(FormSectionModel sectionModel, UUID patientId) {
+    public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId) {
         FormSectionResponse formSectionResponse = formSectionMapper.toDto(sectionModel);
 
         List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(), patientId);

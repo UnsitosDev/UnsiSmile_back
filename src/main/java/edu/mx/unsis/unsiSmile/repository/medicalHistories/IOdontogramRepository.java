@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {
@@ -28,6 +27,6 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
     List<ToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByOdontogramId(Long odontogramId);
 
     @Query("SELECT o.idOdontogram FROM OdontogramModel o WHERE o.patient.idPatient = :patientId ORDER BY o.createdAt DESC")
-    List<Long> findOdontogramIdsByPatient(@Param("patientId") UUID patientId, Pageable pageable);
+    List<Long> findOdontogramIdsByPatient(@Param("patientId") String patientId, Pageable pageable);
 
 }

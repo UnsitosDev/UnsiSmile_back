@@ -9,6 +9,6 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 
 
 @Repository
-public interface IUserRepository extends JpaRepository<UserModel, UUID> {
+public interface IUserRepository extends JpaRepository<UserModel, String> {
     UserModel findByUsername(String username);
 }

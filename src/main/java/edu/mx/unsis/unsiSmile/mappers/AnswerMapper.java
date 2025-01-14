@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -58,7 +57,7 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
 
-    public AnswerModel toEntityFromFile(UUID idPatient, Long idQuestion) {
+    public AnswerModel toEntityFromFile(String idPatient, Long idQuestion) {
         return AnswerModel.builder()
                 .patientModel(PatientModel.builder()
                         .idPatient(idPatient)

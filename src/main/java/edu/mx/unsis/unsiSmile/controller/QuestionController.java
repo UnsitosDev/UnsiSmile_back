@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(name = "QUESTION")
 @RestController
@@ -52,7 +51,7 @@ public class QuestionController {
     @Operation(summary = "Obtiene todas las preguntas con o sin respuesta que pertenecen a un formulario mediante el id.")
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<List<QuestionResponse>> findAllBySection(
-            @PathVariable Long sectionId, @RequestParam(required = false) UUID patientId) {
+            @PathVariable Long sectionId, @RequestParam(required = false) String patientId) {
         List<QuestionResponse> response = questionService.findAllBySection(sectionId, patientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

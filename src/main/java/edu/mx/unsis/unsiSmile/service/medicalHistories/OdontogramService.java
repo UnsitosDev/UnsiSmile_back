@@ -115,7 +115,7 @@ public class OdontogramService {
 
     }
 
-    public OdontogramResponse getOdontogramDetails(UUID patientId) {
+    public OdontogramResponse getOdontogramDetails(String patientId) {
 
         Long odontogramId = getLatestOdontogramIdByPatient(patientId).orElseThrow(
                 () -> new AppException("Odontogram not found with ID: " + patientId, HttpStatus.NOT_FOUND)
@@ -224,7 +224,7 @@ public class OdontogramService {
                 .build();
     }
 
-    public Optional<Long> getLatestOdontogramIdByPatient(UUID patientId) {
+    public Optional<Long> getLatestOdontogramIdByPatient(String patientId) {
         List<Long> results = odontogramRepository.findOdontogramIdsByPatient(patientId, PageRequest.of(0, 1));
         return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
     }

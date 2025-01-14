@@ -34,7 +34,7 @@ public class FileService {
     private final IAnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
 
-    public void upload(List<MultipartFile> files, UUID idPatient, Long idQuestion) {
+    public void upload(List<MultipartFile> files, String idPatient, Long idQuestion) {
         if (files.isEmpty() || idPatient == null || idQuestion == null) {
             throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
@@ -181,7 +181,7 @@ public class FileService {
         }
     }
 
-    private Long createFromFile(UUID idPatient, Long idQuestion) {
+    private Long createFromFile(String idPatient, Long idQuestion) {
         try {
             Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
                     idQuestion, idPatient

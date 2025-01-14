@@ -29,7 +29,7 @@ public class FileController {
             @RequestPart List<MultipartFile> files,
             @RequestPart @Validated String idPatient,
             @RequestPart @Validated String idQuestion) {
-        fileService.upload(files, UUID.fromString(idPatient), Long.parseLong(idQuestion));
+        fileService.upload(files, idPatient, Long.parseLong(idQuestion));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

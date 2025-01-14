@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Tag(name = "FORM SECTION")
 @RestController
@@ -31,7 +30,7 @@ public class FormSectionController {
 
     @Operation(summary = "Obtiene una sección y la configuración con el id de la historia clínica del paciente.")
     @GetMapping("/{id}")
-    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam UUID patientId) {
+    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam String patientId) {
         FormSectionResponse response = formSectionService.findById(id, patientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

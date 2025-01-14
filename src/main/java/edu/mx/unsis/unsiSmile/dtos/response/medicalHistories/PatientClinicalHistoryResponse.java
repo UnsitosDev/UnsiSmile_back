@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,5 +18,5 @@ public class PatientClinicalHistoryResponse {
     @Builder.Default
     private Long patientClinicalHistoryId = 0L;
 
-    private UUID patientId;
+    private String patientId;
 }

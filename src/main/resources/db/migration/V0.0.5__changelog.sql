@@ -1,7 +1,7 @@
 CREATE TABLE
     odontograms (
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
-        fk_patient BINARY(16) NOT NULL,
+        fk_patient CHAR(36) NOT NULL,
         fk_form_section BIGINT NOT NULL unique,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
