@@ -27,7 +27,7 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
 
     @Query("SELECT sp FROM StudentPatientModel sp where sp.patient.idPatient IN :patientsId AND" +
             " sp.statusKey='A' AND sp.student.statusKey = 'A'")
-    List<StudentPatientModel> findAllByPatientsId(@Param("patientsId") Set<UUID> patientsId);
+    List<StudentPatientModel> findAllByPatientsId(@Param("patientsId") Set<String> patientsId);
 
     @Query("SELECT p FROM StudentPatientModel p " +
             "JOIN p.patient patient " +

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/medical-histories/odontogram")
@@ -53,7 +52,7 @@ public class OdontogramController {
     }
 
     @GetMapping("/latest/{patientId}")
-    public OdontogramResponse getOdontogramDetails(@PathVariable UUID patientId) {
+    public OdontogramResponse getOdontogramDetails(@PathVariable String patientId) {
         return odontogramService.getOdontogramDetails(patientId);
     }
 }

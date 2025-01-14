@@ -8,14 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface IPatientClinicalHistoryRepository extends JpaRepository<PatientClinicalHistoryModel, Long> {
 
     @Query("SELECT pch FROM PatientClinicalHistoryModel pch where pch.patient.idPatient = :patientId")
-    List<PatientClinicalHistoryModel> findAllByPatientId(@Param("patientId") UUID patientId);
+    List<PatientClinicalHistoryModel> findAllByPatientId(@Param("patientId") String patientId);
 
     Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
-            UUID patientId, Long clinicalHistoryCatalogId);
+            String patientId, Long clinicalHistoryCatalogId);
 }

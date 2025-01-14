@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +16,7 @@ public class OdontogramRequest {
     @NotNull(message = "The request can't be null")
     private List<ToothRequest> tooths;
     @NotNull(message = "The patient id can't be null")
-    private UUID idPatient;
+    private String idPatient;
     @NotNull(message = "The odontogram idFormSection cannot be null")
     private Long idFormSection;
 }

@@ -48,7 +48,7 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long id, UUID idPatient) {
+    public ClinicalHistoryCatalogResponse findById(Long id, String idPatient) {
         try {
             Assert.notNull(id, "Clinical History Id cannot be null");
             if (id == 0) {
@@ -124,7 +124,7 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(UUID idPatient) {//falta validar que primero exista el paciente, si no devolver un error
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {//falta validar que primero exista el paciente, si no devolver un error
         try {
             List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
             if (results.isEmpty()) {
@@ -145,7 +145,7 @@ public class ClinicalHistoryCatalogService {
                 .id(((Number) result[0]).longValue())
                 .clinicalHistoryName((String) result[1])
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
-                .patientId(patientId)
+                .patientId(patientId.toString())
                 .build();
     }
 

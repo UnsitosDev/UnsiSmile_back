@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -122,7 +121,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionResponse> findAllBySection(Long sectionId, UUID patientId) {
+    public List<QuestionResponse> findAllBySection(Long sectionId, String patientId) {
         List<QuestionModel> questionList = questionRepository.findAllByFormSectionId(sectionId);
 
         Map<Long, AnswerResponse> answers = answerService.findAllBySectionAndPatientClinicalHistory(questionList, patientId);

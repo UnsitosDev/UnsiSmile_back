@@ -9,14 +9,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PatientResponse {
-    private UUID idPatient;
+    private String idPatient;
     private LocalDate admissionDate;
     private Long medicalRecordNumber;
     private Boolean isMinor;
