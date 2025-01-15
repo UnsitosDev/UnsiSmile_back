@@ -41,8 +41,8 @@ INSERT INTO roles (id, role) VALUES
                                  (2, 'ROLE_STUDENT');
 
 -- Inserción en user_app (UUID generado en Spring Boot)
-INSERT INTO user_app (id, password, status, username, role_id) VALUES
-    ('123e4567-e89b-12d3-a456-426614174000', '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW', 1, '2019060310', 2);
+INSERT INTO user_app (id, password, status, username, role_id, first_login) VALUES
+    ('123e4567-e89b-12d3-a456-426614174000', '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW', 1, '2019060310', 2, 1);
 
 -- Inserción de personas
 INSERT INTO people (curp, birth_date, email, first_lastname, first_name, phone, second_lastname, second_name, fk_gender) VALUES

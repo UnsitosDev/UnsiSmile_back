@@ -49,16 +49,16 @@ public class AuthService {
 
             String token = jwtService.getToken(user);
 
-        AuthResponse authResponse = AuthResponse.builder()
-                .token(token)
-                .build();
+            AuthResponse authResponse = AuthResponse.builder()
+                    .token(token)
+                    .build();
 
-        Map<String,Object> objects = new HashMap<>();
-        objects.put("token", authResponse.getToken());
+            Map<String,Object> objects = new HashMap<>();
+            objects.put("token", authResponse.getToken());
 
-        return ResponseEntity.ok(ApiResponse.<Object>builder()
-                .response(objects)
-                .build());
+            return ResponseEntity.ok(ApiResponse.<Object>builder()
+                    .response(objects)
+                    .build());
         }
 
         throw new AppException("Bad password", HttpStatus.BAD_REQUEST);
@@ -76,6 +76,7 @@ public class AuthService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
+                .firstLogin(true)
                 .build();
 
         try {
@@ -87,7 +88,6 @@ public class AuthService {
         } catch (Exception e) {
             throw new AppException("User already exists", HttpStatus.CONFLICT, e);
         }
-
     }
 
     public void updatePassword(PasswordUpdateRequest request) {
@@ -99,6 +99,8 @@ public class AuthService {
             validateNewPassword(currentUser, request.getNewPassword());
 
             currentUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            currentUser.setFirstLogin(false);
+
             userRepository.save(currentUser);
         } catch (AppException ex) {
             throw ex;
