@@ -190,7 +190,7 @@ CREATE TABLE answers (
 
 -- Files Table
 CREATE TABLE files (
-                       id_file BINARY(16) NOT NULL,
+                       id_file CHAR(36) NOT NULL,
                        file_name VARCHAR(255) NOT NULL,
                        file_path VARCHAR(255) NOT NULL,
                        file_type VARCHAR(50) NOT NULL,

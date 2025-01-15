@@ -1,5 +1,20 @@
 package edu.mx.unsis.unsiSmile.service.files;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -11,20 +26,6 @@ import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,15 +54,17 @@ public class FileService {
         for (MultipartFile file : files) {
             try {
                 byte[] bytes = file.getBytes();
-                UUID uuid = UUID.randomUUID();
-                Path path = Paths.get(Constants.UPLOAD_PATH + uuid);
+                String String = UUID.randomUUID().toString();
+                Path path = Paths.get(Constants.UPLOAD_PATH + String);
                 String fileName = file.getOriginalFilename();
-                assert fileName != null : "Filename is null";
+                if (fileName == null) {
+                    throw new AppException("Filename is null", HttpStatus.BAD_REQUEST);
+                }
                 String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
                 Files.write(path, bytes);
 
                 FileModel fileModel = FileModel.builder()
-                        .idFile(uuid)
+                        .idFile(String)
                         .filePath(path.toString())
                         .fileName(fileName)
                         .fileType(ext)
@@ -75,7 +78,7 @@ public class FileService {
         }
     }
 
-    public void deleteFile(UUID idFile) {
+    public void deleteFile(String idFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -89,7 +92,7 @@ public class FileService {
         }
     }
 
-    public FileModel updateFile(UUID idFile, MultipartFile newFile) {
+    public FileModel updateFile(String idFile, MultipartFile newFile) {
         FileModel fileModel = fileRepository.findById(idFile)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
@@ -98,10 +101,12 @@ public class FileService {
             Files.deleteIfExists(oldFilePath);  // Eliminar el archivo antiguo
 
             byte[] bytes = newFile.getBytes();
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            Path newPath = Paths.get(Constants.UPLOAD_PATH + uuid);
+            String String = UUID.randomUUID().toString().replace("-", "");
+            Path newPath = Paths.get(Constants.UPLOAD_PATH + String);
             String newFileName = newFile.getOriginalFilename();
-            assert newFileName != null : "New file name is null";
+            if (newFileName == null) {
+                throw new AppException("New file name is null", HttpStatus.BAD_REQUEST);
+            }
             String ext = newFileName.substring(newFileName.lastIndexOf(".") + 1);  // Extraer la nueva extensión
             Files.write(newPath, bytes);
 
@@ -117,7 +122,7 @@ public class FileService {
     }
 
     @Transactional(readOnly = true)
-    public FileResponse findById(UUID id) {
+    public FileResponse findById(String id) {
         try {
             Assert.notNull(id, "Id cannot be null");
 
@@ -164,7 +169,7 @@ public class FileService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadFileById(UUID id) {
+    public ResponseEntity<byte[]> downloadFileById(String id) {
         FileModel fileModel = fileRepository.findById(id)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
 
