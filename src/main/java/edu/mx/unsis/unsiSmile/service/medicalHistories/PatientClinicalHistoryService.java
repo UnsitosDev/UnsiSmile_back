@@ -24,11 +24,22 @@ public class PatientClinicalHistoryService {
     @Transactional
     public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
         try {
+            Optional<PatientClinicalHistoryModel> existingRecord =
+                    patientClinicalHistoryRepository.findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
+                                    idPatient, idClinicalHistory);
+
+            if (existingRecord.isPresent()) {
+                throw new AppException("The clinical history already exists for this patient", HttpStatus.CONFLICT);
+            }
+
             return patientClinicalHistoryRepository.save(toEntity(idPatient, idClinicalHistory));
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to save patient clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional(readOnly = true)
     public PatientClinicalHistoryModel findById(Long id) {
