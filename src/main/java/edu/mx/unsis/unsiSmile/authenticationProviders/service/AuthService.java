@@ -95,6 +95,7 @@ public class AuthService {
             UserModel currentUser = getCurrentUser();
 
             validateOldPassword(currentUser, request.getOldPassword());
+            validatePasswordsMatch(request.getNewPassword(), request.getConfirmPassword());
             validateNewPassword(currentUser, request.getNewPassword());
 
             currentUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -122,6 +123,12 @@ public class AuthService {
     private void validateOldPassword(UserModel user, String oldPassword) {
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new AppException("Invalid old password", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private void validatePasswordsMatch(String newPassword, String confirmPassword) {
+        if (newPassword == null || !newPassword.equals(confirmPassword)) {
+            throw new AppException("New password and confirm password do not match", HttpStatus.BAD_REQUEST);
         }
     }
 
