@@ -21,7 +21,7 @@ import lombok.*;
 public class PersonModel extends AuditModel {
 
     @Id
-    @Column(name = "curp", length = 20)
+    @Column(name = "curp", length = 20, unique = true, nullable = false)
     private String curp;
 
     @Column(name = "first_name",nullable = false, length = 50)

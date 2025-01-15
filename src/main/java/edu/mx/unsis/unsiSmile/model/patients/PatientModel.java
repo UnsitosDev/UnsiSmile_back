@@ -37,7 +37,7 @@ public class PatientModel extends AuditModel {
     @JoinColumn(name = "fk_nationality", referencedColumnName = "id_nationality")
     private NationalityModel nationality;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "fk_person", referencedColumnName = "curp", nullable = false)
     private PersonModel person;
 
