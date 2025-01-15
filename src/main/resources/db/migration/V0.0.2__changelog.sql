@@ -187,6 +187,7 @@ CREATE TABLE
         password VARCHAR(255) NOT NULL,
         status BIT (1) NOT NULL,
         username VARCHAR(255) NOT NULL,
+        first_login BIT(1),
         role_id BIGINT (20) DEFAULT NULL,
         PRIMARY KEY (id),
         UNIQUE KEY UK65kue06vu2g78mxpdfke453e5 (username),

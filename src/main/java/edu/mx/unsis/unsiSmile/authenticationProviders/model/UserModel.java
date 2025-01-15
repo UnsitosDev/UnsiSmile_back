@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user_App", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
+@Table(name = "user_app", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }) })
 public class UserModel implements UserDetails {
 
     @Id
@@ -39,6 +39,9 @@ public class UserModel implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "first_login", nullable = false)
+    private boolean firstLogin;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private RoleModel role;
