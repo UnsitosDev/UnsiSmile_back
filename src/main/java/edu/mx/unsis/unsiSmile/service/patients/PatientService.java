@@ -66,6 +66,13 @@ public class PatientService {
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
             PersonModel personModel = personService.createPersonEntity(patientRequest.getPerson());
+
+            Optional<PatientModel> existingPatient = patientRepository.findByPerson(personModel);
+
+            if (existingPatient.isPresent()) {
+                throw new AppException("A patient with the given person already exists", HttpStatus.CONFLICT);
+            }
+
             PatientModel patientModel = preparePatientModel(patientRequest, personModel);
             validateAndSetGuardian(patientRequest, patientModel);
             AddressModel addressModel = createAddressModel(patientRequest.getAddress());

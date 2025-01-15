@@ -27,7 +27,7 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
 
     List<PatientModel> findByNationality(NationalityModel nationality);
 
-    List<PatientModel> findByPerson(PersonModel person);
+    Optional<PatientModel> findByPerson(PersonModel person);
 
     List<PatientModel> findByAddress(AddressModel address);
 
