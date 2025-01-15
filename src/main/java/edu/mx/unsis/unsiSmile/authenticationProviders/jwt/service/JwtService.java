@@ -31,6 +31,7 @@ public class JwtService {
 
         extraClaims.put("role", user.getAuthorities());
         extraClaims.put("uuid", user.getIdAsString());
+        extraClaims.put("firstLogin", user.isFirstLogin());
 
         return Jwts.builder()
                 .setClaims(extraClaims)
