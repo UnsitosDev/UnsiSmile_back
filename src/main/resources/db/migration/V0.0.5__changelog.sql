@@ -3,10 +3,10 @@ CREATE TABLE
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
         fk_patient CHAR(36) NOT NULL,
         fk_form_section BIGINT NOT NULL unique,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
         CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
@@ -16,10 +16,10 @@ CREATE TABLE
     tooth_faces (
         id_tooth_face VARCHAR(3) PRIMARY KEY,
         description VARCHAR(255) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
     );
 
@@ -28,10 +28,10 @@ CREATE TABLE
         id_tooth VARCHAR(3) PRIMARY KEY,
         is_adult BOOLEAN,
         description VARCHAR(255) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
     );
 
@@ -39,10 +39,10 @@ CREATE TABLE
     tooth_conditions (
         id_tooth_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
         description VARCHAR(50) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
     );
 
@@ -51,10 +51,10 @@ CREATE TABLE
         odontogram_id BIGINT,
         tooth_id VARCHAR(3),
         tooth_condition_id BIGINT,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
@@ -64,59 +64,61 @@ CREATE TABLE
 
 CREATE TABLE
     toothface_conditions (
-                             id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
-                             description VARCHAR(50) NOT NULL,
-                             created_at DATETIME(6) DEFAULT NULL,
-                             created_by VARCHAR(255) DEFAULT NULL,
-                             status_key VARCHAR(255) DEFAULT NULL,
-                             updated_at DATETIME(6) DEFAULT NULL,
-                             updated_by VARCHAR(255) DEFAULT NULL
-);
-
+        id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
+        description VARCHAR(50) NOT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL
+    );
 
 CREATE TABLE
     toothface_conditions_assignments (
-                                         odontogram_id BIGINT,
-                                         tooth_face_id VARCHAR(3),
-                                         toothface_condition_id BIGINT,
-                                         tooth_id VARCHAR(3),
-                                         created_at DATETIME(6) DEFAULT NULL,
-                                         created_by VARCHAR(255) DEFAULT NULL,
-                                         status_key VARCHAR(255) DEFAULT NULL,
-                                         updated_at DATETIME(6) DEFAULT NULL,
-                                         updated_by VARCHAR(255) DEFAULT NULL,
-                                         PRIMARY KEY (
-                                                      odontogram_id,
-                                                      tooth_face_id,
-                                                      toothface_condition_id,
-                                                      tooth_id
-                                             ),
-                                         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
-                                         FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
-                                         FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions(id_toothface_conditions),
-                                         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-);
+        odontogram_id BIGINT,
+        tooth_face_id VARCHAR(3),
+        toothface_condition_id BIGINT,
+        tooth_id VARCHAR(3),
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (
+            odontogram_id,
+            tooth_face_id,
+            toothface_condition_id,
+            tooth_id
+        ),
+        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+        FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
+        FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions (id_toothface_conditions),
+        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
+    );
 
 INSERT INTO
-    tooth_conditions(description)
+    tooth_conditions (description)
 VALUES
-    ('Diente presente'),
-    ('Diente parcialmente erupcionado'),
-    ('Diente obturado'),
-    ('Diente con corona'),
-    ('Mantenedor de espacio con corona'),
-    ('Mantenedor de espacio con banda'),
     ('Prótesis removible'),
     ('Puente'),
     ('Diente extraido'),
     ('Fístula'),
     ('Diente con fluorosis'),
     ('Diente con hipoplasia'),
-    ('Diente obturado con caries'),
     ('Diente en mal posición derecha'),
     ('Diente en mal posición izquierda');
 
-INSERT INTO toothface_conditions(description) values ('Diente cariado'),('Diente con fractura');
+INSERT INTO
+    toothface_conditions (description)
+values
+    ('Diente parcialmente erupcionado'),
+    ('Diente con corona'),
+    ('Mantenedor de espacio con corona'),
+    ('Mantenedor de espacio con banda'),
+    ('Diente obturado con caries'),
+    ('Diente obturado'),
+    ('Diente cariado'),
+    ('Diente con fractura');
 
 INSERT INTO
     teeth (`description`, `is_adult`, `id_tooth`)
