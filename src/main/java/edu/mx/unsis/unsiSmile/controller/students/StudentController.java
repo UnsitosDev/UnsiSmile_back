@@ -11,8 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/students")
@@ -62,5 +64,12 @@ public class StudentController {
     public ResponseEntity<?> deleteStudentByEnrollment(@PathVariable String enrollment) {
         studentService.deleteStudentByEnrollment(enrollment);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Carga de alumnos mediante archivo.")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadExcel(@RequestParam("file") MultipartFile file) {
+        studentService.loadStudentsFromFile(file);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

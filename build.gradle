@@ -40,6 +40,9 @@ dependencies {
 
 	implementation("org.flywaydb:flyway-core:8.5.13")
 	implementation("org.flywaydb:flyway-mysql:8.5.13")
+
+	implementation 'org.apache.poi:poi:5.2.5'
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
 }
 
 bootBuildImage {
