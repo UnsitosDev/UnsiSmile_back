@@ -14,6 +14,7 @@ import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
+import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -46,6 +47,7 @@ public class StudentService {
     private final PersonService personService;
 
     private final UserService userService;
+    private final IUserRepository userRepository;
 
     @Transactional
     public void createStudent(StudentRequest request) {
@@ -185,6 +187,9 @@ public class StudentService {
                 }
             }
 
+            studentRepository.disableAllStudents();
+            userRepository.disableAllUsers(ERole.ROLE_STUDENT);
+
             processAndSaveStudents(studentsData);
 
         } catch (AppException ex) {
@@ -233,6 +238,8 @@ public class StudentService {
             Optional<StudentModel> existingStudent = studentRepository.findById(enrollment);
 
             if (existingStudent.isPresent()) {
+                studentRepository.enableStudent(enrollment);
+                userRepository.enableUserByStudentId(enrollment, ERole.ROLE_STUDENT);
                 continue;
             }
 

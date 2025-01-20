@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,12 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
                 @Param("keyword") String keyword,
                 @Param("keywordInt") Integer keywordInt,
                 Pageable pageable);
+
+        @Modifying
+        @Query("UPDATE StudentModel s SET s.statusKey = 'I'")
+        void disableAllStudents();
+
+        @Modifying
+        @Query("UPDATE StudentModel s SET s.statusKey = 'A' WHERE s.enrollment = :enrollment")
+        void enableStudent(@Param("enrollment") String enrollment);
 }
