@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
@@ -13,6 +14,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditi
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
+import edu.mx.unsis.unsiSmile.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +35,8 @@ public class OdontogramService {
     private final IToothFaceConditionAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final OdontogramMapper odontogramMapper;
+    private final AnswerService answerService;
+    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
 
     @Transactional(readOnly = true)
@@ -106,6 +110,16 @@ public class OdontogramService {
                 condition.setOdontogram(odontogram);
                 toothFaceConditionAssignmentRepository.save(condition);
             }
+            
+            var patientClinicalHistory = patientClinicalHistoryService.findByPatient(odontogramDTO.getIdPatient());
+
+            answerService.save(
+                AnswerRequest.builder()
+                .idQuestion(odontogramDTO.getIdFormSection())
+                .idPatientClinicalHistory(patientClinicalHistory.getFirst().getIdPatientClinicalHistory())
+                .answerText("")
+                .build()
+            );
 
         } catch (DataIntegrityViolationException e) {
             throw new AppException("Duplicate entry", HttpStatus.CONFLICT, e);
