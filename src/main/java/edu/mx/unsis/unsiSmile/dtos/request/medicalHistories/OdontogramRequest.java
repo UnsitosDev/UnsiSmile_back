@@ -21,4 +21,6 @@ public class OdontogramRequest {
     private Long idQuestion;
     @NotNull(message = "The id of clinical history of cannot be null")
     private Long idPatientClinicalHistory;
+    @NotNull(message = "The id of form section cannot be null")
+    private Long idFormSection;
 }

@@ -1,5 +1,20 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
@@ -16,16 +31,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignm
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.service.AnswerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +41,6 @@ public class OdontogramService {
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final OdontogramMapper odontogramMapper;
     private final AnswerService answerService;
-    private final PatientClinicalHistoryService patientClinicalHistoryService;
 
     @Transactional(readOnly = true)
     public OdontogramResponse getOdontogramById(@NonNull Long id) {
@@ -109,17 +113,14 @@ public class OdontogramService {
                 condition.setOdontogram(odontogram);
                 toothFaceConditionAssignmentRepository.save(condition);
             }
-            
-            var patientClinicalHistory = patientClinicalHistoryService.findByPatient(odontogramDTO.getIdPatient());
 
             answerService.saveBatch(
                     List.of(
                             AnswerRequest.builder()
-                                    .idQuestion(odontogramDTO.getIdFormSection())
+                                    .idQuestion(odontogramDTO.getIdQuestion())
                                     .idPatientClinicalHistory(
                                             odontogramDTO.getIdPatientClinicalHistory())
                                     .answerText("")
-                                    .idQuestion(null)
                                     .build()));
 
         } catch (DataIntegrityViolationException e) {
