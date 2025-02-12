@@ -153,14 +153,14 @@ INSERT INTO questions
  question_order,
  required)
 VALUES
-    ("Neoplasia (Cáncer)", 3, 5, 1, true),
-    ("Diabetes", 3, 5, 2, true),
-    ("Hipertensión Arterial", 3, 5, 3, true),
-    ("Padecimientos mentales/neurológicos", 3, 5, 4, true),
-    ("Obesidad", 3, 5, 5, true),
-    ("Padecimientos hematológicos", 3, 5, 6, true),
-    ("Malformaciones congénitas", 3, 5, 7, true),
-    ("Problemas cardiacos", 3, 5, 8, true);
+    ("Neoplasia (Cáncer)", 3, 5, 1, false),
+    ("Diabetes", 3, 5, 2, false),
+    ("Hipertensión Arterial", 3, 5, 3, false),
+    ("Padecimientos mentales/neurológicos", 3, 5, 4, false),
+    ("Obesidad", 3, 5, 5, false),
+    ("Padecimientos hematológicos", 3, 5, 6, false),
+    ("Malformaciones congénitas", 3, 5, 7, false),
+    ("Problemas cardiacos", 3, 5, 8, false);
 
 -- Antecedentes perso   nales no patológicos
 INSERT INTO questions
