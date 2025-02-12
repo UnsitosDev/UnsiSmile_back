@@ -304,8 +304,10 @@ CREATE TABLE
 CREATE TABLE
     semesters (
         id_semester BIGINT (20) NOT NULL AUTO_INCREMENT,
+        semester_name VARCHAR(255) DEFAULT NULL,
+        fecha_inicio DATETIME(6) DEFAULT NULL,
+        fecha_fin DATETIME(6) DEFAULT NULL,
         fk_cycle BIGINT (20) DEFAULT NULL,
-        fk_group BIGINT (20) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
@@ -313,9 +315,7 @@ CREATE TABLE
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_semester),
         KEY FK1jd8yrqhktltrn0mjc2mabd7t (fk_cycle),
-        KEY FK7xw362v78hao37tpjgwdecc2s (fk_group),
-        CONSTRAINT FK1jd8yrqhktltrn0mjc2mabd7t FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle),
-        CONSTRAINT FK7xw362v78hao37tpjgwdecc2s FOREIGN KEY (fk_group) REFERENCES groups (id_group)
+        CONSTRAINT FK1jd8yrqhktltrn0mjc2mabd7t FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE

@@ -12,9 +12,12 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.students.GroupModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -31,16 +34,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
     private final IStudentRepository studentRepository;
+    private final IStudentGroupRepository studentGroupRepository;
     private final IGenderRepository genderRepository;
     private final StudentMapper studentMapper;
     private final UserMapper userMapper;
@@ -48,6 +49,7 @@ public class StudentService {
 
     private final UserService userService;
     private final IUserRepository userRepository;
+    private final GroupService groupService;
 
     @Transactional
     public void createStudent(StudentRequest request) {
@@ -165,6 +167,7 @@ public class StudentService {
             String fileExtension = getFileExtension(Objects.requireNonNull(file.getOriginalFilename()));
 
             List<List<String>> studentsData = new ArrayList<>();
+            List<String> gruposData = new ArrayList<>();
 
             if (!fileExtension.equals("xlsx")) {
                 throw new AppException("Unsupported file type. Only .xlsx files are supported.", HttpStatus.BAD_REQUEST);
@@ -182,7 +185,7 @@ public class StudentService {
                         Cell cell = row.getCell(j);
                         rowData.add(getCellValueAsString(cell));
                     }
-
+                    gruposData.add(rowData.get(7));
                     studentsData.add(rowData);
                 }
             }
@@ -190,7 +193,9 @@ public class StudentService {
             studentRepository.disableAllStudents();
             userRepository.disableAllUsers(ERole.ROLE_STUDENT);
 
-            processAndSaveStudents(studentsData);
+            Map<String, GroupModel> groups = groupService.saveGroups(gruposData);
+
+            processAndSaveStudents(studentsData, groups);
 
         } catch (AppException ex) {
             throw ex;
@@ -231,15 +236,26 @@ public class StudentService {
         }
     }
 
-    private void processAndSaveStudents(List<List<String>> studentsData) {
+    private void processAndSaveStudents(List<List<String>> studentsData, Map<String, GroupModel> groups) {
         for (List<String> studentRow : studentsData) {
+            StudentGroupModel studentGroup = new StudentGroupModel();
+
             String enrollment = studentRow.get(3);
+
+            String groupKey = studentRow.get(7);
+
+            GroupModel groupModel = groups.get(groupKey);
 
             Optional<StudentModel> existingStudent = studentRepository.findById(enrollment);
 
             if (existingStudent.isPresent()) {
                 studentRepository.enableStudent(enrollment);
                 userRepository.enableUserByStudentId(enrollment, ERole.ROLE_STUDENT);
+
+                studentGroup.setStudent(existingStudent.get());
+                studentGroup.setGroup(groupModel);
+                studentGroupRepository.save(studentGroup);
+
                 continue;
             }
 
@@ -256,6 +272,10 @@ public class StudentService {
                     .build();
 
             studentRepository.save(studentModel);
+            
+            studentGroup.setStudent(studentModel);
+            studentGroup.setGroup(groupModel);
+            studentGroupRepository.save(studentGroup);
         }
     }
 
