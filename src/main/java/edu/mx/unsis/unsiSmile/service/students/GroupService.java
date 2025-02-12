@@ -1,6 +1,11 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,8 +17,11 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
+import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import edu.mx.unsis.unsiSmile.repository.students.IGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.students.ICareerRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +31,8 @@ public class GroupService {
 
     private final IGroupRepository groupRepository;
     private final GroupMapper groupMapper;
+    private final ICareerRepository careerRepository;
+    private final SemesterService semesterService;
 
     @Transactional
     public void createGroup(@NonNull GroupRequest request) {
@@ -86,6 +96,57 @@ public class GroupService {
             throw new AppException("Group not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
             throw new AppException("Failed to delete group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public Map<String, GroupModel> saveGroups(List<String> groups) {
+        Set<String> uniqueGroupsSet = new HashSet<>(groups);
+        return mapToGroupModels(uniqueGroupsSet);
+    }
+
+    private Map<String, GroupModel> mapToGroupModels(Set<String> uniqueGroups) {
+        Map<String, GroupModel> groupMap = new HashMap<>();
+
+        try {
+            for (String groupFormat : uniqueGroups) {
+                GroupModel groupModel = new GroupModel();
+
+                String[] parts = groupFormat.split("-");
+                String semester = parts[0].substring(0, parts[0].length() - 2);
+                String career = parts[0].substring(parts[0].length() - 2);
+                String group = parts[1];
+
+                groupModel.setGroupName(group);
+                groupModel.setSemesterNumber(semester);
+                
+
+                // Buscar la carrera
+                Optional<CareerModel> careerModel = careerRepository.findById(career);
+                if (careerModel.isEmpty()) {
+                    throw new AppException("Career not found for group: " + career, HttpStatus.NOT_FOUND);
+                }
+                groupModel.setCareer(careerModel.get());
+
+                // Obtener el semestre activo
+                Optional<SemesterModel> semesterModel = semesterService.getActiveSemester();
+                if (semesterModel.isEmpty()) {
+                    throw new AppException("Semester not found for group", HttpStatus.NOT_FOUND);
+                }
+                groupModel.setSemester(semesterModel.get());
+
+                // Guardar en la base de datos
+                GroupModel savedGroup = groupRepository.save(groupModel);
+
+                // Agregar el modelo guardado al HashMap
+                groupMap.put(groupFormat, savedGroup);
+            }
+
+            return groupMap;
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Error processing groups", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

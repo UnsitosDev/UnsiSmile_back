@@ -25,6 +25,9 @@ public class GroupModel extends AuditModel {
     @Column(name = "id_group")
     private Long idGroup;
 
+    @Column(name = "semester_number", nullable = false)
+    private String semesterNumber;
+
     @Column(name = "group_name", nullable = false, unique = true)
     private String groupName;
 
@@ -32,4 +35,7 @@ public class GroupModel extends AuditModel {
     @JoinColumn(name = "fk_career")
     private CareerModel career;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_semester")
+    private SemesterModel semester;
 }

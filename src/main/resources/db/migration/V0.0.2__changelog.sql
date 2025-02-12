@@ -247,8 +247,10 @@ CREATE TABLE
 CREATE TABLE
     groups (
         id_group BIGINT (20) NOT NULL AUTO_INCREMENT,
+        semester_number VARCHAR(2) NOT NULL,
         group_name VARCHAR(255) NOT NULL,
-        fk_career BIGINT (20) DEFAULT NULL,
+        fk_career VARCHAR (3) DEFAULT NULL,
+        fk_semester BIGINT (20) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
