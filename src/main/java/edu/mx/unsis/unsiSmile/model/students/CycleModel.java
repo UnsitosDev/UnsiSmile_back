@@ -24,7 +24,4 @@ public class CycleModel extends AuditModel {
     private Long idCycle;
     @Column(name = "cycle_name", nullable = false, unique = true)
     private String cycleName;
-
-    @Column(name = "status", nullable = false)
-    private Boolean status;
 }

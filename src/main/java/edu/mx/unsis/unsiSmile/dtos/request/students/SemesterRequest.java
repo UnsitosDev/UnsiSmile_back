@@ -13,16 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SemesterRequest {
-    private Long idSemester;
-
-    @NotNull(message = "The field SemesterName can't be null")
-    private String semesterName;
-
     @NotNull(message = "The field fechaInicio can't be null")
-    private LocalDate fechaInicio;
+    private LocalDate starDate;
 
     @NotNull(message = "The field fechaFin can't be null")
-    private LocalDate fechaFin;
+    private LocalDate endDate;
 
     @NotNull(message = "The field Cycle can't be null")
     private CycleRequest cycle;

@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,9 @@ public class SemesterService {
             Assert.notNull(request, "SemesterRequest cannot be null");
 
             SemesterModel semesterModel = semesterMapper.toEntity(request);
+
+            String semesterName = this.getSemesterName(request.getStarDate(), request.getEndDate(), request.getCycle().getCycleName());
+            semesterModel.setSemesterName(semesterName);
 
             semesterRepository.disableAllSemesters();
 
@@ -99,6 +103,22 @@ public class SemesterService {
             return semesterRepository.findActiveSemester();
         } catch (Exception ex) {
             throw new AppException("Failed to fetch active semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private String getSemesterName(LocalDate starDate, LocalDate endDate, String cycle) {
+
+        try {
+            Assert.notNull(starDate, "Fecha de inicio cannot be null");
+            Assert.notNull(endDate, "Fecha de fin cannot be null");
+            String[] inicio = starDate.toString().split("-");
+            String[] fin = endDate.toString().split("-");
+            
+            String semesterName = inicio[0] + "-" + fin[0] + "-" + cycle;
+            
+            return semesterName;
+        } catch (Exception ex) {
+            throw new AppException("Failed to get semester name", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

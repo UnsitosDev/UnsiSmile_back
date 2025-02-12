@@ -15,7 +15,6 @@ CREATE TABLE
     cycles (
         id_cycle BIGINT (20) NOT NULL AUTO_INCREMENT,
         cycle_name VARCHAR(255) NOT NULL,
-        status BIT (1) NOT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
