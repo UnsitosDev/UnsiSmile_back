@@ -107,7 +107,6 @@ public class SemesterService {
     }
 
     private String getSemesterName(LocalDate starDate, LocalDate endDate, String cycle) {
-
         try {
             Assert.notNull(starDate, "Fecha de inicio cannot be null");
             Assert.notNull(endDate, "Fecha de fin cannot be null");
