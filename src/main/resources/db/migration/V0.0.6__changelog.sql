@@ -172,16 +172,16 @@ INSERT INTO questions
  placeholder,
  fk_catalog)
 VALUES
-    ("Come frutas y verduras", 4, 1, 1, true, null, null),
-    ("Come carnes (Res, puerco o pollo)", 4, 1, 2, true, null, null),
-    ("Come cereales (Pan, Cereal, etc.)", 4, 1, 3, true, null, null),
-    ("Come alimentos chatarra (Dulces, botanas, etc.)", 4, 1, 4, true, null, null),
-    ("Toma o bebe 2 litros de agua al día", 4, 1, 5, true, null, null),
-    ("Toma o bebe uno o más refrescos al día", 4, 1, 6, true, null, null),
+    ("Come frutas y verduras", 4, 1, 1, false, null, null),
+    ("Come carnes (Res, puerco o pollo)", 4, 1, 2, false, null, null),
+    ("Come cereales (Pan, Cereal, etc.)", 4, 1, 3, false, null, null),
+    ("Come alimentos chatarra (Dulces, botanas, etc.)", 4, 1, 4, false, null, null),
+    ("Toma o bebe 2 litros de agua al día", 4, 1, 5, false, null, null),
+    ("Toma o bebe uno o más refrescos al día", 4, 1, 6, false, null, null),
     ("Horas que duerme al día", 4, 2, 7, true, "Indique horas de sueño", null),
     ("¿Cuántas veces a la semana se baña?", 4, 2, 8, true, "Indique frecuencia de baño", null),
     ("¿Cuántas veces al día cepilla sus dientes?", 4, 2, 9, true, "Indique frecuencia de cepillado", null),
-    ("¿Su vivienda tiene piso?", 4, 1, 10, true, null, null),
+    ("¿Su vivienda tiene piso?", 4, 1, 10, false, null, null),
     ("Su vivienda esta hecha de:", 4, 4, 11, true, null, 4)
 ;
 
