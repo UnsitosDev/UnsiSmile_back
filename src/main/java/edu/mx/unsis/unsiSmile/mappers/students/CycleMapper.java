@@ -17,7 +17,6 @@ public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, Cycl
         return CycleModel.builder()
                 .idCycle(dto.getIdCycle())
                 .cycleName(dto.getCycleName())
-                .status(dto.getStatus())
                 .build();
     }
     @Override
@@ -25,7 +24,6 @@ public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, Cycl
         return CycleResponse.builder()
                 .idCycle(entity.getIdCycle())
                 .cycleName(entity.getCycleName())
-                .status(entity.getStatus())
                 .build();
         }
 
@@ -39,6 +37,5 @@ public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, Cycl
     @Override
     public void updateEntity(CycleRequest request, CycleModel entity) {
         entity.setCycleName(request.getCycleName());
-        entity.setStatus(request.getStatus());
     }
 }

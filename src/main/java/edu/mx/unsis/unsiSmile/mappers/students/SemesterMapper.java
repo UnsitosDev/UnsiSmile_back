@@ -23,10 +23,8 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
             return null;
         }
         return SemesterModel.builder()
-                .idSemester(dto.getIdSemester())
-                .semesterName(dto.getSemesterName())
-                .fechaInicio(dto.getFechaInicio())
-                .fechaFin(dto.getFechaFin())
+                .starDate(dto.getStarDate())
+                .endDate(dto.getEndDate())
                 .cycle(cycleMapper.toEntity(dto.getCycle()))
                 .build();
     }
@@ -39,8 +37,8 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         return SemesterResponse.builder()
                 .idSemester(entity.getIdSemester())
                 .semesterName(entity.getSemesterName())
-                .fechaInicio(entity.getFechaInicio())
-                .fechaFin(entity.getFechaFin())
+                .fechaInicio(entity.getStarDate())
+                .fechaFin(entity.getEndDate())
                 .cycle(cycleMapper.toDto(entity.getCycle()))
                 .build();
     }
@@ -60,9 +58,8 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         if (request == null || entity == null) {
             return;
         }
-        entity.setSemesterName(request.getSemesterName());
-        entity.setFechaInicio(request.getFechaInicio());
-        entity.setFechaFin(request.getFechaFin());
+        entity.setStarDate(request.getStarDate());
+        entity.setEndDate(request.getEndDate());
         entity.setCycle(cycleMapper.toEntity(request.getCycle()));
     }
 }

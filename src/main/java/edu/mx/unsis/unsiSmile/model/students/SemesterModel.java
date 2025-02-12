@@ -31,10 +31,10 @@ public class SemesterModel extends AuditModel {
     private String semesterName;
 
     @Column(name = "fecha_inicio", nullable = false)
-    private LocalDate fechaInicio;
+    private LocalDate starDate;
 
     @Column(name = "fecha_fin", nullable = false)
-    private LocalDate fechaFin;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "fk_cycle")
