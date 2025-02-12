@@ -1,6 +1,6 @@
 CREATE TABLE
     careers (
-        id_career BIGINT (20) NOT NULL AUTO_INCREMENT,
+        id_career VARCHAR(2) NOT NULL,
         career VARCHAR(255) NOT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
@@ -198,14 +198,14 @@ CREATE TABLE
 CREATE TABLE
     people (
         curp VARCHAR(20) NOT NULL,
-        birth_date DATE NOT NULL,
-        email VARCHAR(200) DEFAULT NULL,
-        first_lastname VARCHAR(50) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
-        phone VARCHAR(10) DEFAULT NULL,
-        second_lastname VARCHAR(50) DEFAULT NULL,
         second_name VARCHAR(50) DEFAULT NULL,
+        first_lastname VARCHAR(50) NOT NULL,
+        second_lastname VARCHAR(50) DEFAULT NULL,
+        birth_date DATE NOT NULL,
         fk_gender BIGINT (20) DEFAULT NULL,
+        email VARCHAR(200) DEFAULT NULL,
+        phone VARCHAR(10) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
@@ -247,8 +247,10 @@ CREATE TABLE
 CREATE TABLE
     groups (
         id_group BIGINT (20) NOT NULL AUTO_INCREMENT,
+        semester_number VARCHAR(2) NOT NULL,
         group_name VARCHAR(255) NOT NULL,
-        fk_career BIGINT (20) DEFAULT NULL,
+        fk_career VARCHAR (3) DEFAULT NULL,
+        fk_semester BIGINT (20) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
@@ -302,8 +304,10 @@ CREATE TABLE
 CREATE TABLE
     semesters (
         id_semester BIGINT (20) NOT NULL AUTO_INCREMENT,
+        semester_name VARCHAR(255) DEFAULT NULL,
+        fecha_inicio DATETIME(6) DEFAULT NULL,
+        fecha_fin DATETIME(6) DEFAULT NULL,
         fk_cycle BIGINT (20) DEFAULT NULL,
-        fk_group BIGINT (20) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
@@ -311,9 +315,7 @@ CREATE TABLE
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_semester),
         KEY FK1jd8yrqhktltrn0mjc2mabd7t (fk_cycle),
-        KEY FK7xw362v78hao37tpjgwdecc2s (fk_group),
-        CONSTRAINT FK1jd8yrqhktltrn0mjc2mabd7t FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle),
-        CONSTRAINT FK7xw362v78hao37tpjgwdecc2s FOREIGN KEY (fk_group) REFERENCES groups (id_group)
+        CONSTRAINT FK1jd8yrqhktltrn0mjc2mabd7t FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
