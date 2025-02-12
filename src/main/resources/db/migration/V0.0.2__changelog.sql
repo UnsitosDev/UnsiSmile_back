@@ -1,6 +1,6 @@
 CREATE TABLE
     careers (
-        id_career BIGINT (20) NOT NULL AUTO_INCREMENT,
+        id_career VARCHAR(2) NOT NULL,
         career VARCHAR(255) NOT NULL,
         created_at DATETIME(6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,

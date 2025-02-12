@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CareerResponse {
-    private Long idCareer;
+    private String idCareer;
     private String career;
 }
