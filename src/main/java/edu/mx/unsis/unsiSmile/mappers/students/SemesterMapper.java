@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequest, SemesterModel> {
 
-    private final GroupMapper groupMapper;
     private final CycleMapper cycleMapper;
 
     @Override
@@ -25,7 +24,9 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         }
         return SemesterModel.builder()
                 .idSemester(dto.getIdSemester())
-                .group(groupMapper.toEntity(dto.getGroup()))
+                .semesterName(dto.getSemesterName())
+                .fechaInicio(dto.getFechaInicio())
+                .fechaFin(dto.getFechaFin())
                 .cycle(cycleMapper.toEntity(dto.getCycle()))
                 .build();
     }
@@ -37,7 +38,9 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         }
         return SemesterResponse.builder()
                 .idSemester(entity.getIdSemester())
-                .group(groupMapper.toDto(entity.getGroup()))
+                .semesterName(entity.getSemesterName())
+                .fechaInicio(entity.getFechaInicio())
+                .fechaFin(entity.getFechaFin())
                 .cycle(cycleMapper.toDto(entity.getCycle()))
                 .build();
     }
@@ -57,7 +60,9 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
         if (request == null || entity == null) {
             return;
         }
-        entity.setGroup(groupMapper.toEntity(request.getGroup()));
+        entity.setSemesterName(request.getSemesterName());
+        entity.setFechaInicio(request.getFechaInicio());
+        entity.setFechaFin(request.getFechaFin());
         entity.setCycle(cycleMapper.toEntity(request.getCycle()));
     }
 }

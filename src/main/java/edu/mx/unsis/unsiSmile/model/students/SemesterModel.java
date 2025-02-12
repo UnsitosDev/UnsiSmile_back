@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.students;
 
+import java.time.LocalDate;
+
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,9 +27,14 @@ public class SemesterModel extends AuditModel {
     @Column(name = "id_semester")
     private Long idSemester;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_group")
-    private GroupModel group;
+    @Column(name = "semester_name", nullable = false, unique = true)
+    private String semesterName;
+
+    @Column(name = "fecha_inicio", nullable = false)
+    private LocalDate fechaInicio;
+
+    @Column(name = "fecha_fin", nullable = false)
+    private LocalDate fechaFin;
 
     @ManyToOne
     @JoinColumn(name = "fk_cycle")

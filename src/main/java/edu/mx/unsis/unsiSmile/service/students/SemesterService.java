@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ public class SemesterService {
             Assert.notNull(request, "SemesterRequest cannot be null");
 
             SemesterModel semesterModel = semesterMapper.toEntity(request);
+
+            semesterRepository.disableAllSemesters();
+
             semesterRepository.save(semesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -86,6 +90,15 @@ public class SemesterService {
             throw new AppException("Semester not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
             throw new AppException("Failed to delete semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<SemesterModel> getActiveSemester() {
+        try {
+            return semesterRepository.findActiveSemester();
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch active semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
