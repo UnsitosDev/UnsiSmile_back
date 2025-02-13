@@ -119,12 +119,8 @@ public class FormSectionService {
         List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(), patientId);
         formSectionResponse.setQuestions(questions);
 
-        System.out.println("questions: " + questions);
-
         boolean hasAnsweredQuestions = questions.stream().anyMatch(question -> question.getAnswer() != null);
         formSectionResponse.setIsAnswered(hasAnsweredQuestions);
-
-        System.out.println("hasAnsweredQuestions: " + hasAnsweredQuestions);
 
         List<FormSectionModel> subSections = getSubFormSectionModel(sectionModel.getIdFormSection());
         if (subSections != null && !subSections.isEmpty()) {
