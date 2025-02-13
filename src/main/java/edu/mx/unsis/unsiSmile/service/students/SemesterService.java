@@ -33,7 +33,7 @@ public class SemesterService {
 
             SemesterModel semesterModel = semesterMapper.toEntity(request);
 
-            String semesterName = this.getSemesterName(request.getStarDate(), request.getEndDate(), request.getCycle().getCycleName());
+            String semesterName = this.getSemesterName(request.getStartDate(), request.getEndDate(), request.getCycle().getCycleName());
             semesterModel.setSemesterName(semesterName);
 
             semesterRepository.disableAllSemesters();
@@ -106,11 +106,11 @@ public class SemesterService {
         }
     }
 
-    private String getSemesterName(LocalDate starDate, LocalDate endDate, String cycle) {
+    private String getSemesterName(LocalDate startDate, LocalDate endDate, String cycle) {
         try {
-            Assert.notNull(starDate, "Fecha de inicio cannot be null");
+            Assert.notNull(startDate, "Fecha de inicio cannot be null");
             Assert.notNull(endDate, "Fecha de fin cannot be null");
-            String[] inicio = starDate.toString().split("-");
+            String[] inicio = startDate.toString().split("-");
             String[] fin = endDate.toString().split("-");
             
             String semesterName = inicio[0] + "-" + fin[0] + "-" + cycle;
