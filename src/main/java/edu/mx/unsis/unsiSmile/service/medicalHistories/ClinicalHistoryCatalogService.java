@@ -108,7 +108,7 @@ public class ClinicalHistoryCatalogService {
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
                 .findByClinicalHistoryId(patientClinicalHistory.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient());
+        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
 
         ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
 

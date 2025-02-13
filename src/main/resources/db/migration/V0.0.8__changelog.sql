@@ -15,7 +15,7 @@ INSERT INTO
     section_order
 )
 VALUES
-    (3, 20, 1),
+    (3, 1, 1),
     (3, 21, 2),
     (3, 22, 3),
     (3, 23, 4),

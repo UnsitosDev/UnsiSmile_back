@@ -129,13 +129,17 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, String patientId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, String patientId, Long patientClinicalHistoryId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
                     .collect(Collectors.toSet());
-
-            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId);
+            
+            //System.err.println("QuestionIds: " + questionIds);
+            
+            List<AnswerModel> answerModelList = (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)
+                ? answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId) 
+                : answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId, patientClinicalHistoryId);
 
             Map<Long, AnswerResponse> answerMap = new HashMap<>();
 
