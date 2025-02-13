@@ -106,15 +106,15 @@ VALUES
     ('Diente con fluorosis'),
     ('Diente con hipoplasia'),
     ('Diente en mal posición derecha'),
-    ('Diente en mal posición izquierda');
+    ('Diente en mal posición izquierda'),
+    ('Diente parcialmente erupcionado'),
+    ('Diente con corona'),
+    ('Mantenedor de espacio con corona'),
+    ('Mantenedor de espacio con banda');
 
 INSERT INTO
     toothface_conditions (description)
 values
-    ('Diente parcialmente erupcionado'),
-    ('Diente con corona'),
-    ('Mantenedor de espacio con corona'),
-    ('Mantenedor de espacio con banda'),
     ('Diente obturado con caries'),
     ('Diente obturado'),
     ('Diente cariado'),

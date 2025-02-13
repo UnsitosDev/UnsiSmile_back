@@ -369,6 +369,17 @@ INSERT INTO questions
 (question_text,
  fk_form_section,
  fk_answer_type,
+ question_order,
+ required,
+ placeholder)
+VALUES
+("Observaciones", 6, 8, 1, true, ""),
+("Observaciones", 7, 8, 1, true, "");
+
+INSERT INTO questions
+(question_text,
+ fk_form_section,
+ fk_answer_type,
  fk_catalog,
  question_order,
  required,

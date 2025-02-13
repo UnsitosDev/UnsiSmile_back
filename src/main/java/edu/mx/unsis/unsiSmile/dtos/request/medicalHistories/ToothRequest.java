@@ -18,9 +18,6 @@ public class ToothRequest {
     @NotNull(message = "The tooth ID cannot be null.")
     private Long idTooth;
 
-    @NotNull(message = "Whether the tooth is an adult must be specified.")
-    private Boolean isAdult;
-
     @NotNull(message = "At least one condition must be associated with the tooth.")
     @Size(min = 1, message = "At least one condition must be associated with the tooth.")
     private List<ConditionRequest> conditions;
