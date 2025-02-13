@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SemesterRequest {
     @NotNull(message = "The field startDate can't be null")
-    private LocalDate starDate;
+    private LocalDate startDate;
 
     @NotNull(message = "The field endDate can't be null")
     private LocalDate endDate;
