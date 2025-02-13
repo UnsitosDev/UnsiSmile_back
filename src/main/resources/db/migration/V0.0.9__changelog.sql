@@ -14,7 +14,7 @@ INSERT INTO
     section_order
 )
 VALUES
-    (4, 20, 1),
+    (4, 1, 1),
     (4, 21, 2),
     (4, 5, 3), -- antecedentes personales patológicos
     (4, 41, 4),
