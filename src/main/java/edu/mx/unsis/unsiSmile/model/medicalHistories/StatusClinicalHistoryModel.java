@@ -4,6 +4,8 @@ import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,8 +32,9 @@ public class StatusClinicalHistoryModel extends AuditModel {
     @Column(name = "id_status_clinical_history")
     private Long idStatusClinicalHistory;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 100)
-    private String status;
+    private ClinicalHistoryStatus status;
 
     @Column(name = "message", columnDefinition = "LONGTEXT")
     private String message;

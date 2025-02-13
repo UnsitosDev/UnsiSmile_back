@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "STATUS_CLINICAL_HISTORIES")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/medicalHistories/status")
+@RequestMapping("/unsismile/api/v1/medicalHistories/status")
 public class StatusClinicalHistoryController {
 
     private final StatusClinicalHistoryService statusClinicalHistoryService;
@@ -27,7 +27,7 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente_histria_clínica")
+    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente_historia_clínica")
     @GetMapping("/{idPatientClinicalHistory}")
     public ResponseEntity<StatusClinicalHistoryResponse> getStatusByPatientClinicalHistoryId(
             @PathVariable Long idPatientClinicalHistory) {
@@ -35,11 +35,18 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Eliminar el estado de la historia clínica por ID del paciente_histria_clínica")
+    @Operation(summary = "Eliminar el estado de la historia clínica por ID del paciente_historia_clínica")
     @DeleteMapping("/{idPatientClinicalHistory}")
     public ResponseEntity<Void> deleteStatusByPatientClinicalHistoryId(
             @PathVariable Long idPatientClinicalHistory) {
         statusClinicalHistoryService.deleteStatusByPatientClinicalHistoryId(idPatientClinicalHistory);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Enviar una historia clínica a revisión")
+    @PutMapping("/sendToReview/{idPatientClinicalHistory}")
+    public ResponseEntity<Void> sendToReview(@PathVariable Long idPatientClinicalHistory) {
+        statusClinicalHistoryService.sendToReview(idPatientClinicalHistory);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistor
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
 
 @Component
@@ -16,7 +17,7 @@ public class StatusClinicalHistoryMapper implements BaseMapper<StatusClinicalHis
     @Override
     public StatusClinicalHistoryModel toEntity(StatusClinicalHistoryRequest dto) {
         return StatusClinicalHistoryModel.builder()
-                .status(dto.getStatus())
+                .status(ClinicalHistoryStatus.valueOf(dto.getStatus()))
                 .message(dto.getMessage())
                 .patientClinicalHistory(PatientClinicalHistoryModel.builder()
                         .idPatientClinicalHistory(dto.getIdPatientClinicalHistory())
@@ -28,7 +29,7 @@ public class StatusClinicalHistoryMapper implements BaseMapper<StatusClinicalHis
     public StatusClinicalHistoryResponse toDto(StatusClinicalHistoryModel entity) {
         return StatusClinicalHistoryResponse.builder()
                 .idStatusClinicalHistory(entity.getIdStatusClinicalHistory())
-                .status(entity.getStatus())
+                .status(entity.getStatus().toString())
                 .message(entity.getMessage())
                 .idPatientClinicalHistory(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                 .build();

@@ -10,6 +10,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistor
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.StatusClinicalHistoryMapper;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IStatusClinicalHistoryRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class StatusClinicalHistoryService {
 
             if (existingStatus.isPresent()) {
                 statusModel = existingStatus.get();
-                statusModel.setStatus(request.getStatus());
+                statusModel.setStatus(ClinicalHistoryStatus.valueOf(request.getStatus()));
                 statusModel.setMessage(request.getMessage());
             } else {
                 statusModel = statusClinicalHistoryMapper.toEntity(request);
@@ -74,6 +76,31 @@ public class StatusClinicalHistoryService {
             throw e;
         } catch (Exception e) {
             throw new AppException("Error while deleting the status of the clinical history", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Transactional
+    public void sendToReview(Long idPatientClinicalHistory) {
+        try {
+            StatusClinicalHistoryModel statusModel = 
+                statusClinicalHistoryRepository.findByPatientClinicalHistory_IdPatientClinicalHistory(idPatientClinicalHistory)
+                    .orElseGet(() -> {
+                        PatientClinicalHistoryModel patientClinicalHistory = new PatientClinicalHistoryModel();
+                        patientClinicalHistory.setIdPatientClinicalHistory(idPatientClinicalHistory);
+                        
+                        return StatusClinicalHistoryModel.builder()
+                            .patientClinicalHistory(patientClinicalHistory)
+                            .status(ClinicalHistoryStatus.IN_REVIEW)
+                            .build();
+                    });
+
+            statusModel.setStatus(ClinicalHistoryStatus.IN_REVIEW);
+            statusModel.setMessage("The clinical history has been sent to review");
+
+            statusClinicalHistoryRepository.save(statusModel);
+
+        } catch (Exception e) {
+            throw new AppException("Error while sending the clinical history to review", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 }
