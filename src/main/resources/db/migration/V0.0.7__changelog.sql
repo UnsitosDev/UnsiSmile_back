@@ -114,13 +114,13 @@ INSERT INTO
 VALUES
     ("Motivo de la consulta", 21, 8, 1, true),
     ("Padecimiento Actual", 21, 8, 2, true),
-    ("¿Goza usted de buena salud?", 21, 1, 3, true),
+    ("¿Goza usted de buena salud?", 21, 1, 3, false),
     (
         "¿Está siendo atendido actualmente por un médico?",
         21,
         1,
         4,
-        true
+        false
     ),
     (
         "Fecha de su último examen físico",
@@ -134,44 +134,44 @@ VALUES
         21,
         5,
         6,
-        true
+        false
     ),
     (
         "¿Hay alguna medicina que usted no pueda tomar?",
         21,
         5,
         7,
-        true
+        false
     ),
     (
         "¿Alguna vez ha sufrido una reacción inusual a una droga/medicamento?",
         21,
         5,
         8,
-        true
+        false
     ),
     (
         "¿Ha tenido complicaciones con la anestesia local?",
         21,
         5,
         9,
-        true
+        false
     ),
     (
         "¿Existe alguna otra información que deba ser conocida acerca de su salud?",
         21,
         5,
         10,
-        true
+        false
     ),
     (
         "¿Padece alguna enfermedad infecciosa? (Fiebre reumática, hepatitis, paludismo, sífilis):",
         21,
         5,
         11,
-        true
+        false
     ),
-    ("¿Sufre de ataques epilépticos?", 21, 1, 12, true),
+    ("¿Sufre de ataques epilépticos?", 21, 1, 12, false),
     (
         "Acerca de sus consultas odontológicas previas",
         21,
@@ -184,7 +184,7 @@ VALUES
         21,
         5,
         14,
-        true
+        false
     );
 
 INSERT INTO
@@ -196,14 +196,14 @@ INSERT INTO
     required
 )
 VALUES
-    ("Materia alba", 22, 1, 1, true),
-    ("Placa bacteriana", 22, 1, 2, true),
-    ("Sarro", 22, 1, 3, true),
-    ("Gingivitis", 22, 1, 4, true),
-    ("Bolsas periodontales", 22, 1, 5, true),
-    ("Absceso periodontal", 22, 1, 6, true),
-    ("Reabsorción ósea", 22, 1, 7, true),
-    ("Movilidad dental", 22, 1, 8, true);
+    ("Materia alba", 22, 1, 1, false),
+    ("Placa bacteriana", 22, 1, 2, false),
+    ("Sarro", 22, 1, 3, false),
+    ("Gingivitis", 22, 1, 4, false),
+    ("Bolsas periodontales", 22, 1, 5, false),
+    ("Absceso periodontal", 22, 1, 6, false),
+    ("Reabsorción ósea", 22, 1, 7, false),
+    ("Movilidad dental", 22, 1, 8, false);
 
 INSERT INTO
     questions (
