@@ -35,7 +35,7 @@ public class CareerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CareerResponse> getCareerById(@Valid @PathVariable Long id) {
+    public ResponseEntity<CareerResponse> getCareerById(@Valid @PathVariable String id) {
         CareerResponse careerResponse = careerService.getCareerById(id);
         return ResponseEntity.ok(careerResponse);
     }
@@ -47,14 +47,14 @@ public class CareerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CareerResponse> updateCareer(@Valid @PathVariable Long id,
+    public ResponseEntity<CareerResponse> updateCareer(@Valid @PathVariable String id,
             @Valid @RequestBody CareerRequest updatedCareerRequest) {
         CareerResponse updatedCareer = careerService.updateCareer(id, updatedCareerRequest);
         return ResponseEntity.ok(updatedCareer);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCareerById(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> deleteCareerById(@Valid @PathVariable String id) {
 
         careerService.deleteCareerById(id);
         return ResponseEntity.noContent().build();

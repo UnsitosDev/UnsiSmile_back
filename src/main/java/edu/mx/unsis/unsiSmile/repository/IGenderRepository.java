@@ -1,8 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository;
 
+import edu.mx.unsis.unsiSmile.model.GenderModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.mx.unsis.unsiSmile.model.GenderModel;
+import java.util.Optional;
 
-public interface IGenderRepository extends JpaRepository<GenderModel,Long> {
+public interface IGenderRepository extends JpaRepository<GenderModel, Long> {
+    Optional<GenderModel> findByGender(String gender);
 }

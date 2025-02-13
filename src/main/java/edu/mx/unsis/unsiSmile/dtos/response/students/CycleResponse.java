@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CycleResponse {
     private Long idCycle;
     private String cycleName;
-    private Boolean status;
 }

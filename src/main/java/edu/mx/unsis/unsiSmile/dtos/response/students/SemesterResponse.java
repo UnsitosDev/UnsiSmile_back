@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.response.students;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SemesterResponse {
     private Long idSemester;
-    private GroupResponse group;
+    private String semesterName;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private CycleResponse cycle;
 }

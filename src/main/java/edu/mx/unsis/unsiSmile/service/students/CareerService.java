@@ -44,7 +44,7 @@ public class CareerService {
     }
 
     @Transactional(readOnly = true)
-    public CareerResponse getCareerById(@NonNull Long id) {
+    public CareerResponse getCareerById(@NonNull String id) {
         try {
 
             // Find the career in the database
@@ -53,8 +53,8 @@ public class CareerService {
 
             // Map the entity to a response DTO
             return careerMapper.toDto(careerModel);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new AppException("Career not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch career", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -73,7 +73,7 @@ public class CareerService {
     }
 
     @Transactional
-    public CareerResponse updateCareer(@NonNull Long id, @NonNull CareerRequest updatedCareerRequest) {
+    public CareerResponse updateCareer(@NonNull String id, @NonNull CareerRequest updatedCareerRequest) {
         try {
             // Assert.hasText(id, "Career ID cannot be null or empty");
             Assert.notNull(updatedCareerRequest, "Updated CareerRequest cannot be null");
@@ -96,7 +96,7 @@ public class CareerService {
     }
 
     @Transactional
-    public void deleteCareerById(@NonNull Long id) {
+    public void deleteCareerById(@NonNull String id) {
         try {
             // Assert.hasText(id, "Career ID cannot be null or empty");
 

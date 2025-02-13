@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +32,12 @@ public class SemesterService {
             Assert.notNull(request, "SemesterRequest cannot be null");
 
             SemesterModel semesterModel = semesterMapper.toEntity(request);
+
+            String semesterName = this.getSemesterName(request.getStarDate(), request.getEndDate(), request.getCycle().getCycleName());
+            semesterModel.setSemesterName(semesterName);
+
+            semesterRepository.disableAllSemesters();
+
             semesterRepository.save(semesterModel);
         } catch (Exception ex) {
             throw new AppException("Failed to create semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -86,6 +94,30 @@ public class SemesterService {
             throw new AppException("Semester not found with ID: " + id, HttpStatus.NOT_FOUND, ex);
         } catch (Exception ex) {
             throw new AppException("Failed to delete semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<SemesterModel> getActiveSemester() {
+        try {
+            return semesterRepository.findActiveSemester();
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch active semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private String getSemesterName(LocalDate starDate, LocalDate endDate, String cycle) {
+        try {
+            Assert.notNull(starDate, "Fecha de inicio cannot be null");
+            Assert.notNull(endDate, "Fecha de fin cannot be null");
+            String[] inicio = starDate.toString().split("-");
+            String[] fin = endDate.toString().split("-");
+            
+            String semesterName = inicio[0] + "-" + fin[0] + "-" + cycle;
+            
+            return semesterName;
+        } catch (Exception ex) {
+            throw new AppException("Failed to get semester name", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
