@@ -97,7 +97,7 @@ INSERT INTO
 )
 VALUES
     ("Peso", 20, 2, 1, true),
-    ("T/A", 20, 2, 2, true),
+    ("T/A", 20, 3, 2, true),
     ("Pulso", 20, 2, 3, true),
     ("Temperatura", 20, 2, 4, true),
     ("Glucosa", 20, 2, 5, true);
@@ -356,3 +356,14 @@ values
     ("Prótesis fija", 24, 3, 8, true),
     ("Raíces", 24, 3, 9, true),
     ("Prótesis removible", 24, 3, 10, true);
+
+INSERT INTO question_validations
+(fk_question,
+ fk_validation)
+VALUES
+    (111, 1), 
+    (112, 6), 
+    (113, 4), 
+    (114, 3),
+    (115, 8)
+    ;

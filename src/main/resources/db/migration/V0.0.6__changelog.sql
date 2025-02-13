@@ -423,6 +423,7 @@ VALUES
      "Frecuencia respiratoria debe estar entre 12 y 30 rpm.", 1),
     ("^(90|[1-2]\\d{2})\\/(60|[6-9]\\d|1[0-1]\\d|120)$", "Presión arterial debe estar en formato sistólica/diastólica", 1),
     ("^(?:[9][0-9]|100)$", "Saturación de oxígeno debe estar entre 90 y 100%.", 1),
+    ("^(0|[1-9]\d{0,2}|[1-9]\d{0,2})$|^(1000)$","El valor de glucosa debe estar entre 0 y 1000 mg/dL", 1),
     ("1", "", 4),
     ("2", "", 4),
     ("6", "", 4),
