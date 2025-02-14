@@ -28,7 +28,7 @@ public class GroupModel extends AuditModel {
     @Column(name = "semester_number", nullable = false)
     private String semesterNumber;
 
-    @Column(name = "group_name", nullable = false, unique = true)
+    @Column(name = "group_name", nullable = false)
     private String groupName;
 
     @ManyToOne
