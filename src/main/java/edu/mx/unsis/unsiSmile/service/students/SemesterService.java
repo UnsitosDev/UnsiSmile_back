@@ -120,4 +120,19 @@ public class SemesterService {
             throw new AppException("Failed to get semester name", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional(readOnly = true)
+    public SemesterResponse getCurrentSemester() {
+        try {
+            Optional<SemesterModel> activeSemester = getActiveSemester();
+            if (activeSemester.isEmpty()) {
+                throw new AppException("No active semester found", HttpStatus.NOT_FOUND);
+            }
+            return semesterMapper.toDto(activeSemester.get());
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch current semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

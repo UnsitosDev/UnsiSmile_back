@@ -55,4 +55,10 @@ public class SemesterController {
         semesterService.deleteSemesterById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/current-semester")
+    public ResponseEntity<SemesterResponse> getCurrentSemester() {
+        SemesterResponse currentSemester = semesterService.getCurrentSemester();
+        return ResponseEntity.ok(currentSemester);
+    }
 }
