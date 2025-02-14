@@ -256,7 +256,6 @@ CREATE TABLE
         updated_at DATETIME(6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_group),
-        UNIQUE KEY UK_7o859iyhxd19rv4hywgdvu2v4 (group_name),
         KEY FK2r3h2ds7hdwal6t2gdwbs7xq9 (fk_career),
         CONSTRAINT FK2r3h2ds7hdwal6t2gdwbs7xq9 FOREIGN KEY (fk_career) REFERENCES careers (id_career)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
