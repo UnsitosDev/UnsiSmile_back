@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/unsismile/api/v1/medical-histories/odontogram")
-public class OdontogramController {
+@RequestMapping("/unsismile/api/v1/medical-histories/odontograms")
+public class OdontogramController { 
 
     private final OdontogramService odontogramService;
 

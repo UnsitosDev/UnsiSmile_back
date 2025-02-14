@@ -52,7 +52,7 @@ public class QuestionController {
     @GetMapping("/section/{sectionId}")
     public ResponseEntity<List<QuestionResponse>> findAllBySection(
             @PathVariable Long sectionId, @RequestParam(required = false) String patientId) {
-        List<QuestionResponse> response = questionService.findAllBySection(sectionId, patientId);
+        List<QuestionResponse> response = questionService.findAllBySection(sectionId, patientId, null);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

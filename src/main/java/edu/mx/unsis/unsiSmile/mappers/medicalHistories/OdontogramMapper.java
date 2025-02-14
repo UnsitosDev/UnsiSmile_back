@@ -1,17 +1,27 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.*;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
-import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.*;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FaceRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothFaceConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {
@@ -56,7 +66,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                 .build();
 
         // Mapeo de ToothConditionAssignments
-        List<ToothConditionAssignmentModel> toothConditionAssignments = dto.getTooths().stream()
+        List<ToothConditionAssignmentModel> toothConditionAssignments = dto.getTeeth().stream()
                 .flatMap(toothDTO -> toothDTO.getConditions().stream()
                         .map(conditionDTO -> mapToToothConditionAssignmentModel(toothDTO, conditionDTO)))
                 .collect(Collectors.toList());
@@ -64,7 +74,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         odontogramModel.setToothConditionAssignments(toothConditionAssignments);
 
         // Mapeo de ToothFaceConditions
-        List<ToothfaceConditionsAssignmentModel> toothFaceConditionsAssignments = dto.getTooths().stream()
+        List<ToothfaceConditionsAssignmentModel> toothFaceConditionsAssignments = dto.getTeeth().stream()
                 .flatMap(toothDTO -> toothDTO.getFaces().stream()
                         .flatMap(faceDTO -> faceDTO.getConditions().stream()
                                 .map(conditionDTO -> mapToToothfaceConditionsAssignmentModel(toothDTO, faceDTO, conditionDTO))))
@@ -97,7 +107,6 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
     private static ToothModel mapToToothModel(ToothRequest toothDTO) {
         return ToothModel.builder()
                 .idTooth(toothDTO.getIdTooth().toString())
-                .isAdult(toothDTO.getIsAdult())
                 .build();
     }
 

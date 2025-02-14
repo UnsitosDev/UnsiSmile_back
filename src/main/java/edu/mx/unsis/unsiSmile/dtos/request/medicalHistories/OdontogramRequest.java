@@ -14,9 +14,13 @@ import java.util.List;
 @Builder
 public class OdontogramRequest {
     @NotNull(message = "The request can't be null")
-    private List<ToothRequest> tooths;
+    private List<ToothRequest> teeth;
     @NotNull(message = "The patient id can't be null")
     private String idPatient;
-    @NotNull(message = "The odontogram idFormSection cannot be null")
+    @NotNull(message = "The id question cannot be null")
+    private Long idQuestion;
+    @NotNull(message = "The id of clinical history of cannot be null")
+    private Long idPatientClinicalHistory;
+    @NotNull(message = "The id of form section cannot be null")
     private Long idFormSection;
 }
