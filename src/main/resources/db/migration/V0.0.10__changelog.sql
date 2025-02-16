@@ -64,15 +64,17 @@ INSERT INTO
     required
 )
 values
-    ("Fecha de última consulta médica (agregar motivo)", 44, 9, 1, true),
-    ("Fecha de ultima consulta dental (agregar motivo)", 44, 9, 2, true),
-    ("Si es mujer, ¿Está embarazada?", 44, 1, 3, false),
-    ("Si es mujer, ¿Está lactando?", 44, 1, 5, false),
-    ("Examen Radiológico", 44, 3, 6, true),
-    ("Técnicas de Anestesia", 44, 3, 7, true),
-    ("Instrumental", 44, 3, 8, true),
-    ("Dientes Extraídos", 44, 2, 9, true),
-    ("Estado del Paciente", 44, 3, 10, true)
+    ("Fecha de última consulta médica", 44, 9, 1, true),
+    ("Motivo de última consulta médica", 44, 8, 2, true),
+    ("Fecha de ultima consulta dental", 44, 9, 3, true),
+    ("Motivo de última consulta dental", 44, 8, 4, true),
+    ("Si es mujer, ¿Está embarazada?", 44, 1, 5, false),
+    ("Si es mujer, ¿Está lactando?", 44, 1, 7, false),
+    ("Examen Radiológico", 44, 3, 8, true),
+    ("Técnicas de Anestesia", 44, 3, 9, true),
+    ("Instrumental", 44, 3, 10, true),
+    ("Dientes Extraídos", 44, 2, 11, true),
+    ("Estado del Paciente", 44, 3, 12, true)
 ;
 
 INSERT INTO
@@ -85,7 +87,7 @@ INSERT INTO
     required
 )
 VALUES
-    ("Tipo de Sangrado", 44, 4,11, 4, false); -- catalog
+    ("Tipo de Sangrado", 44, 4,11, 6, false); -- catalog
 
 INSERT INTO
     questions (
