@@ -9,6 +9,11 @@ Este es el repositorio del backend de UnsiSmile, una aplicación para la gestió
 
 ## Configuración
 
+### ignorar el archivo docker-compose
+```sh
+git update-index --skip-worktree docker-compose.yml
+```
+
 ### Variables de Entorno
 
 Asegúrate de configurar las siguientes variables de entorno en tu archivo `docker-compose.yml`:
