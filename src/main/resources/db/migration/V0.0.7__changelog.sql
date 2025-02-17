@@ -112,71 +112,71 @@ INSERT INTO
     required
 )
 VALUES
-    ("Motivo de la consulta", 21, 8, 1, true),
-    ("Padecimiento Actual", 21, 8, 2, true),
-    ("¿Goza usted de buena salud?", 21, 1, 3, false),
+    ("Motivo de la consulta", 21, 8, 3, true),
+    ("Padecimiento Actual", 21, 8, 4, true),
+    ("¿Goza usted de buena salud?", 21, 1, 6, false),
     (
         "¿Está siendo atendido actualmente por un médico?",
         21,
         1,
-        4,
+        7,
         false
     ),
     (
         "Fecha de su último examen físico",
         21,
         9,
-        5,
+        1,
         true
     ),
     (
         "¿Está recibiendo en este momento cualquier tipo de medicación (prescrita o no prescrita) o droga? Si este es el caso, indique los nombres de los medicamentos y las razones por las cuales las usa.",
         21,
         5,
-        6,
+        8,
         false
     ),
     (
         "¿Hay alguna medicina que usted no pueda tomar?",
         21,
         5,
-        7,
+        9,
         false
     ),
     (
         "¿Alguna vez ha sufrido una reacción inusual a una droga/medicamento?",
         21,
         5,
-        8,
+        10,
         false
     ),
     (
         "¿Ha tenido complicaciones con la anestesia local?",
         21,
         5,
-        9,
+        11,
         false
     ),
     (
         "¿Existe alguna otra información que deba ser conocida acerca de su salud?",
         21,
         5,
-        10,
+        12,
         false
     ),
     (
         "¿Padece alguna enfermedad infecciosa? (Fiebre reumática, hepatitis, paludismo, sífilis):",
         21,
         5,
-        11,
+        13,
         false
     ),
-    ("¿Sufre de ataques epilépticos?", 21, 1, 12, false),
+    ("¿Sufre de ataques epilépticos?", 21, 1, 5, false),
     (
         "Acerca de sus consultas odontológicas previas",
         21,
         8,
-        13,
+        2,
         true
     ),
     (
