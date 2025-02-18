@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/unsismile/api/v1/medical-histories/odontograms")
@@ -55,4 +58,12 @@ public class OdontogramController {
     public OdontogramResponse getOdontogramDetails(@PathVariable String patientId) {
         return odontogramService.getOdontogramDetails(patientId);
     }
+
+    //obtener un odontograma por el id del formulario y el id del paciente
+    @GetMapping("/form-section/{formSectionId}/patient/{patientId}")
+    public ResponseEntity<OdontogramResponse> getOdontogramByFormSectionIdAndPatientId(@PathVariable Long formSectionId, @PathVariable String patientId) {
+        OdontogramResponse odontogramResponse = odontogramService.getOdontogramByFormSectionId(formSectionId, patientId);
+        return ResponseEntity.ok(odontogramResponse);
+    }
+    
 }

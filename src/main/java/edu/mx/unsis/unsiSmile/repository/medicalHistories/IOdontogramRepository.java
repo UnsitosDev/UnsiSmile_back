@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {
@@ -28,5 +29,8 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
 
     @Query("SELECT o.idOdontogram FROM OdontogramModel o WHERE o.patient.idPatient = :patientId ORDER BY o.createdAt DESC")
     List<Long> findOdontogramIdsByPatient(@Param("patientId") String patientId, Pageable pageable);
+
+    @Query("SELECT o FROM OdontogramModel o WHERE o.formSection.id = :formSectionId AND o.patient.id = :patientId")
+    Optional<OdontogramModel> findByFormSectionIdAndPatientId(@Param("formSectionId") Long formSectionId, @Param("patientId") String patientId);
 
 }

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "odontograms")
+@Table(name = "odontograms", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"fk_patient", "fk_form_section"})
+})
 public class OdontogramModel extends AuditModel {
 
     @Id
@@ -40,7 +43,7 @@ public class OdontogramModel extends AuditModel {
     private PatientModel patient;
 
     @ManyToOne
-    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section", unique = true)
+    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
     private FormSectionModel formSection;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
