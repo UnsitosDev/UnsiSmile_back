@@ -248,21 +248,7 @@ INSERT INTO
     required
 )
 values
-    ("Nombre del alumno", 29, 3, 1, true),
-    ("Semestre", 29, 3, 2, true),
-    ("Grupo", 29, 3, 3, true),
-    ("Indicaciones", 29, 8, 4, true),
-    ("No. de recibo", 29, 2, 5, true),
-    ("Costo total:", 29, 2, 6, true),
-    (
-        "Nombre del catedrático responsable",
-        29,
-        3,
-        7,
-        true
-    ),
-    ("C.D.", 29, 8, 8, true),
-    ("Observaciones", 29, 8, 9, false);
+    ("Recibo", 29, 6, 1, true);
 
 INSERT INTO
     questions (
