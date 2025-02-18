@@ -6,7 +6,8 @@ VALUES
     ("Prótesis bucal"),
     ("Periodoncia"),
     ("Operatoria dental"),
-    ("Cirugía bucal");
+    ("Cirugía bucal"),
+    ("Odontología preventiva y salud pública");
 
 -- secciones padre
 INSERT INTO form_sections
@@ -220,16 +221,21 @@ marcapasos/ bypass", 5, 1, 13, false, null),
     ("Tuberculosis o vive con persona(s) con este padecimiento", 5, 1, 22, false, null),
     ("Enfermedades de la piel", 5, 1, 23, false, null),
     ("Trasplantes de órganos", 5, 1, 24, false, null),
-    ("¿Has sido hospitalizado? ¿Cuál fue el motivo?(en mujeres también anotar datos de parto)", 5, 3, 25, true,
+    ("SIDA", 5, 1, 25, false, null),
+    ("Alergias", 5, 1, 26, false, null),
+    ("Lesiones en cabeza o cuello", 5, 1, 27, false, null),
+    ("Sinusitis", 5, 1, 28, false, null),
+    ("Fiebre Reumática", 5, 1, 29, false, null),
+    ("¿Has sido hospitalizado? ¿Cuál fue el motivo?(en mujeres también anotar datos de parto)", 5, 3, 30, true,
      "Indique motivo de hospitalización"),
-    ("¿Ha tomado algún medicamento recientemente?¿Cuál y por qué motivo?", 5, 3, 26, true,
+    ("¿Ha tomado algún medicamento recientemente?¿Cuál y por qué motivo?", 5, 3, 31, true,
      "Indique medicamentos recientes"),
-    ("¿Ha tenido algún problema con la anestesia dental o anestesia general?, ¿Cuál?", 5, 3, 27, true,
+    ("¿Ha tenido algún problema con la anestesia dental o anestesia general?, ¿Cuál?", 5, 3, 32, true,
      "Indique problemas con anestesia"),
-    ("¿Es alérgico a algún medicamento o sustancia?, ¿Cuál?", 5, 3, 28, true, "Indique alergias"),
-    ("(Solo para mujeres) ¿Está embarazada?, Anotar meses de embarazo", 5, 3, 29, false, "Indique meses de embarazo"),
-    ("Ampliar respuestas", 5, 3, 30, false, "Indique más detalles si es necesario"),
-    ("Firma del paciente", 5, 6, 31, true, null);
+    ("¿Es alérgico a algún medicamento o sustancia?, ¿Cuál?", 5, 3, 33, true, "Indique alergias"),
+    ("(Solo para mujeres) ¿Está embarazada?, Anotar meses de embarazo", 5, 3, 34, false, "Indique meses de embarazo"),
+    ("Ampliar respuestas", 5, 3, 35, false, "Indique más detalles si es necesario"),
+    ("Firma del paciente", 5, 6, 36, true, null);
 
 -- Examen clínico
 INSERT INTO questions

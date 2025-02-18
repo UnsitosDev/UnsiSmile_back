@@ -186,6 +186,13 @@ VALUES
         5,
         14,
         false
+    ),
+    (   
+        "¿Usa usted marca paso cardiaco?", 
+        21, 
+        5, 
+        15, 
+        false
     );
 
 INSERT INTO
@@ -223,7 +230,12 @@ values
     ("Proceso residual", 23, 3, 6, true),
     ("Áreas edéntulas", 23, 3, 7, true),
     ("Mucosa bucal:", 23, 3, 8, true),
-    ("Articulación temporomandibular", 23, 3, 9, true);
+    ("Articulación temporomandibular", 23, 3, 9, true),
+    ("Tejidos Blandos", 23, 3, 10, true),
+    ("Tejidos Óseos", 23, 3, 11, true),
+    ("Diagnóstico", 23, 3, 12, true),
+    ("Estudio de Laboratorio y Gabinete", 23, 3, 12, false),
+    ("Indicaciones de interconsulta Médica u Odontológica", 23, 3, 13, false);
 
 INSERT INTO
     questions (
