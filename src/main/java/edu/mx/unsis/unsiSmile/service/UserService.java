@@ -141,4 +141,18 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void deleteUser(String username) {
+        try {
+            UserModel userModel = userRepository.findByUsername(username);
+            if (userModel == null) {
+                throw new AppException("User not found with username: " + username, HttpStatus.NOT_FOUND);
+            }
+            userModel.setStatus(false);
+            userRepository.save(userModel);
+        } catch (Exception ex) {
+            throw new AppException("Failed to delete user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }
