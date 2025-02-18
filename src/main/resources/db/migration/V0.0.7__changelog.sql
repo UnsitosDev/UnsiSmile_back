@@ -186,6 +186,13 @@ VALUES
         5,
         14,
         false
+    ),
+    (   
+        "¿Usa usted marca paso cardiaco?", 
+        21, 
+        5, 
+        15, 
+        false
     );
 
 INSERT INTO
