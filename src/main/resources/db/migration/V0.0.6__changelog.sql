@@ -6,7 +6,8 @@ VALUES
     ("Prótesis bucal"),
     ("Periodoncia"),
     ("Operatoria dental"),
-    ("Cirugía bucal");
+    ("Cirugía bucal"),
+    ("Odontología preventiva y salud pública");
 
 -- secciones padre
 INSERT INTO form_sections
