@@ -373,8 +373,8 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-("Observaciones", 6, 8, 1, true, ""),
-("Observaciones", 7, 8, 1, true, "");
+("Observaciones", 6, 8, 1, false, ""),
+("Observaciones", 7, 8, 1, false, "");
 
 INSERT INTO questions
 (question_text,
@@ -406,6 +406,30 @@ VALUES
     ("Pronóstico", 16, 8, 6, true, "Indique pronóstico"),
     ("Tratamiento y manejo integral", 16, 8, 7, true, "Indique tratamiento integral"),
     ("Firma", 16, 6, 8, true, null)
+;
+
+-- consentimiento informado
+INSERT INTO questions
+(question_text,
+ fk_form_section,
+ fk_answer_type,
+ question_order,
+ required,
+ placeholder)
+VALUES
+    ("Consentimiento informado", 17, 6, 1, true, null)
+;
+
+-- nota de evolución
+INSERT INTO questions
+(question_text,
+ fk_form_section,
+ fk_answer_type,
+ question_order,
+ required,
+ placeholder)
+VALUES
+    ("Nota de evolución", 18, 6, 1, true, null)
 ;
 
 INSERT INTO validation_types (validation_code)

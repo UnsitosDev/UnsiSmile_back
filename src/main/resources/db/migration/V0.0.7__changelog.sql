@@ -11,6 +11,7 @@ VALUES
     ("Exámen de dientes pilares"),
     ("Exámen radiográfico de dientes pilares"), -- tiene hijos
     ("Exámen de organo dentario"), -- tiene hijos
+    ("Odontograma prótesis bucal"),
     ("Plan de tratamiento"),
     ("Recibo"),
     ("Autorización de tratamiento"),
@@ -24,8 +25,7 @@ VALUES
     ("Zona apical", 25),
     ("Conducto radicular", 25),
     ("Número de conductos", 26),
-    ("Proporción corona-raíz", 26),
-    ("Odontograma", 26);
+    ("Proporción corona-raíz", 26);
 
 INSERT INTO
     clinical_history_sections (
@@ -45,7 +45,8 @@ VALUES
     (2, 28, 9),
     (2, 29, 10),
     (2, 30, 11),
-    (2, 31, 12);
+    (2, 31, 12),
+    (2, 32, 13);
 
 INSERT INTO
     catalogs (catalog_name)
@@ -233,10 +234,10 @@ INSERT INTO
     required
 )
 values
-    ("Fecha de inicio", 27, 9, 1, true),
-    ("Fecha de terminado", 27, 9, 2, true),
-    ("Observaciones", 27, 8, 3, true),
-    ("Control post-operatorio", 27, 8, 4, true);
+    ("Fecha de inicio", 28, 9, 1, true),
+    ("Fecha de terminado", 28, 9, 2, true),
+    ("Observaciones", 28, 8, 3, false),
+    ("Control post-operatorio", 28, 8, 4, true);
 
 INSERT INTO
     questions (
@@ -247,21 +248,7 @@ INSERT INTO
     required
 )
 values
-    ("Nombre del alumno", 28, 3, 1, true),
-    ("Semestre", 28, 3, 2, true),
-    ("Grupo", 28, 3, 3, true),
-    ("Indicaciones", 28, 8, 4, true),
-    ("No. de recibo", 28, 2, 5, true),
-    ("Costo total:", 28, 2, 6, true),
-    (
-        "Nombre del catedrático responsable",
-        28,
-        3,
-        7,
-        true
-    ),
-    ("C.D.", 28, 8, 8, true),
-    ("Observaciones", 28, 8, 9, true);
+    ("Recibo", 29, 6, 1, true);
 
 INSERT INTO
     questions (
@@ -274,7 +261,7 @@ INSERT INTO
 values
     (
         "Firma de autorización de tratamiento",
-        29,
+        30,
         6,
         1,
         true
@@ -289,7 +276,7 @@ INSERT INTO
     required
 )
 values
-    ("Evolución", 30, 6, 1, true);
+    ("Evolución", 31, 6, 1, true);
 
 INSERT INTO
     questions (
@@ -302,7 +289,7 @@ INSERT INTO
 values
     (
         "Carta de consentimiento informado para prótesis bucal",
-        31,
+        32,
         6,
         1,
         true
@@ -319,9 +306,9 @@ INSERT INTO
     required
 )
 VALUES
-    ("Cámara pulpar", 32, 4, 6, 1, true),
-    ("Zona apical", 33, 4, 7, 2, true),
-    ("Conducto radicular", 34, 4, 8, 3, true);
+    ("Cámara pulpar", 33, 4, 6, 1, true),
+    ("Zona apical", 34, 4, 7, 2, true),
+    ("Conducto radicular", 35, 4, 8, 3, true);
 
 
 INSERT INTO
@@ -334,8 +321,8 @@ INSERT INTO
     required
 )
 VALUES
-    ("Número de conductos", 35, 4, 9, 1, true),
-    ("Proporción corona-raíz", 36, 4, 10, 2, true);
+    ("Número de conductos", 36, 4, 9, 1, true),
+    ("Proporción corona-raíz", 37, 4, 10, 2, true);
 
 INSERT INTO
     questions (

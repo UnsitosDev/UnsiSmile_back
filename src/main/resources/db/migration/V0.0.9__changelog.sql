@@ -14,13 +14,13 @@ INSERT INTO
     section_order
 )
 VALUES
-    (4, 1, 1),
-    (4, 21, 2),
-    (4, 5, 3), -- antecedentes personales patológicos
-    (4, 41, 4),
-    (4, 28, 5), -- recibo
-    (4, 42, 6)
--- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
+    (4, 1, 1), 
+    (4, 21, 2), 
+    (4, 5, 3), 
+    (4, 23, 4), 
+    (4, 28, 5), 
+    (4, 29, 6), 
+    (4, 32, 7) -- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
 ;
 
 INSERT INTO
