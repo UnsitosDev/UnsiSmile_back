@@ -134,11 +134,10 @@ INSERT INTO
     required
 )
 VALUES
-    ("Aplicación Tópica de Flúor", 52, 9, 1, false);
+    ("Aplicación Tópica de Flúor", 52, 9, 1, false),
     ("Nombre del operador", 52, 3, 2, false),
     ("Nombre del asistente", 52, 3, 3, false),
-    ("Docente que autoriza", 52, 3, 4, false),
-;
+    ("Docente que autoriza", 52, 3, 4, false);
 
 -- PROFILAXIS / DETARTRAJE
 INSERT INTO questions
