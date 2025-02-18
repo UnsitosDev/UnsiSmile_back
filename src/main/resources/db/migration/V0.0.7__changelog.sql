@@ -236,7 +236,7 @@ INSERT INTO
 values
     ("Fecha de inicio", 28, 9, 1, true),
     ("Fecha de terminado", 28, 9, 2, true),
-    ("Observaciones", 28, 8, 3, true),
+    ("Observaciones", 28, 8, 3, false),
     ("Control post-operatorio", 28, 8, 4, true);
 
 INSERT INTO
@@ -262,7 +262,7 @@ values
         true
     ),
     ("C.D.", 29, 8, 8, true),
-    ("Observaciones", 29, 8, 9, true);
+    ("Observaciones", 29, 8, 9, false);
 
 INSERT INTO
     questions (

@@ -373,8 +373,8 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-("Observaciones", 6, 8, 1, true, ""),
-("Observaciones", 7, 8, 1, true, "");
+("Observaciones", 6, 8, 1, false, ""),
+("Observaciones", 7, 8, 1, false, "");
 
 INSERT INTO questions
 (question_text,
