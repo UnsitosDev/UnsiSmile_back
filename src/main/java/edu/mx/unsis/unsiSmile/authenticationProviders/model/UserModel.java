@@ -40,8 +40,9 @@ public class UserModel implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Builder.Default
     @Column(name = "first_login", nullable = false)
-    private boolean firstLogin;
+    private boolean firstLogin = true;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private RoleModel role;
