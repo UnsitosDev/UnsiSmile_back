@@ -27,18 +27,39 @@ VALUES
     (6, 51, 4),
     (6, 52, 5);
 
+    -- catalogo estado civil
+
+INSERT INTO catalogs
+(catalog_name)
+VALUES
+    ("Estados civiles");
+
+
 -- datos personales
 INSERT INTO 
     questions (
     question_text,
     fk_form_section,
     fk_answer_type,
+    fk_catalog,
     question_order,
-    required 
+    required,
+    placeholder
 )
 VALUES
-    ("Estado civil de los padres", 48, 3, 1, false),
-    ("Nombre del pediatra o médico familiar", 48, 3, 2, false);
+    ("Estado civil de los padres (si es menor de edad)", 48, 4, 12, 1, false, null),
+    ("Nombre del pediatra o médico familiar", 48, 3, null, 2, false, "Nombre");
+
+INSERT INTO catalog_options
+(fk_catalog,
+ option_name)
+VALUES
+    (12, "Casados"),
+    (12, "Divorciados"),
+    (12, "Separados"),
+    (12, "Viudos"),
+    (12, "Unión libre"),
+    (12, "Solteros");
 
 
 -- Indice de Higiene Oral Simplificado (IHOS)
@@ -134,7 +155,7 @@ INSERT INTO
     required
 )
 VALUES
-    ("Aplicación Tópica de Flúor", 52, 9, 1, false),
+    ("Fecha Aplicación Tópica de Flúor ", 52, 9, 1, false),
     ("Nombre del operador", 52, 3, 2, false),
     ("Nombre del asistente", 52, 3, 3, false),
     ("Docente que autoriza", 52, 3, 4, false);
