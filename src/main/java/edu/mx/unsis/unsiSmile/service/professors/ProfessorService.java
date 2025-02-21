@@ -21,6 +21,7 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,7 +33,7 @@ public class ProfessorService {
     private final PersonService personService;
 
     @Transactional
-    public void createProfessor(ProfessorRequest request) {
+    public void createProfessor(@NotNull ProfessorRequest request) {
         try {
             PersonModel personModel = personService.createPersonEntity(request.getPerson());
 

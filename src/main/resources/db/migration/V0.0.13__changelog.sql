@@ -41,8 +41,8 @@ CREATE TABLE clinical_areas (
     PRIMARY KEY (id_clinical_area)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-CREATE TABLE professor_responsibility (
-    id_professor_responsibility BIGINT(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE professor_clinical_areas (
+    id_professor_clinical_area BIGINT(20) NOT NULL AUTO_INCREMENT,
     fk_clinical_area BIGINT(20) NOT NULL,
     fk_professor VARCHAR(15) NOT NULL,
     start_date DATE NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE professor_responsibility (
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    PRIMARY KEY (id_professor_responsibility),
+    PRIMARY KEY (id_professor_clinical_area),
     FOREIGN KEY (fk_clinical_area) REFERENCES clinical_areas (id_clinical_area),
     FOREIGN KEY (fk_professor) REFERENCES professors (id_professor)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
