@@ -60,4 +60,10 @@ public class ProfessorClinicalAreaController {
         professorClinicalAreaService.deleteProfessorClinicalArea(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}/toggle-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleProfessorClinicalAreaStatus(@PathVariable Long id) {
+        professorClinicalAreaService.toggleProfessorClinicalAreaStatus(id);
+    }
 }

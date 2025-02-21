@@ -34,7 +34,8 @@ VALUES
 INSERT INTO catalogs
 (catalog_name)
 VALUES
-    ("Estados civiles");
+    ("Estados civiles"),
+    ("Catedráticos responsables de área");
 
 
 -- datos personales
@@ -50,7 +51,8 @@ INSERT INTO
 )
 VALUES
     ("Estado civil de los padres (si es menor de edad)", 48, 4, 12, 1, false, null),
-    ("Nombre del pediatra o médico familiar", 48, 3, null, 2, false, "Nombre");
+    ("Nombre del pediatra o médico familiar", 48, 3, null, 2, false, "Nombre"),
+    ("Catedrático responsable", 29, 4, 13, 2, true, null);
 
 INSERT INTO catalog_options
 (fk_catalog,

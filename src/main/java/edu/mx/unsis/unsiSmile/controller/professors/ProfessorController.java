@@ -62,4 +62,10 @@ public class ProfessorController {
         professorService.deleteProfessor(employeeNumber);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{employeeNumber}/toggle-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleProfessorStatus(@PathVariable String employeeNumber) {
+        professorService.toggleProfessorStatus(employeeNumber);
+    }
 }
