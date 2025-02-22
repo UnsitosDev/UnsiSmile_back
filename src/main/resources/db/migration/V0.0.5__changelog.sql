@@ -224,7 +224,7 @@ CREATE TABLE
     surface_evaluation (
         id_surface_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
         fk_tooth_evaluation BIGINT NOT NULL,
-        surface ENUM ('vestibular', 'lingual', 'mesial', 'distal') NOT NULL,
+        surface ENUM ('vestibular', 'palatino', 'lingual', 'vestibular_inferior') NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,

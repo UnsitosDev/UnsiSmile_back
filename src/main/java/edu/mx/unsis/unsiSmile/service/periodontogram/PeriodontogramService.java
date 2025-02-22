@@ -15,10 +15,10 @@ import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.PeriodontogramRespon
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceEvaluationResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceMeasurementResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.ToothEvaluationResponse;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms.PeriodontogramModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms.SurfaceEvaluationModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms.SurfaceMeasurementModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms.ToothEvaluationModel;
+import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
+import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceEvaluationModel;
+import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceMeasurementModel;
+import edu.mx.unsis.unsiSmile.model.periodontograms.ToothEvaluationModel;
 import edu.mx.unsis.unsiSmile.repository.periodontogram.IPeriodontogramRepository;
 import lombok.AllArgsConstructor;
 

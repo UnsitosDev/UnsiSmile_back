@@ -1,18 +1,17 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms;
+package edu.mx.unsis.unsiSmile.model.periodontograms;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -28,26 +27,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "periodontogram")
-public class PeriodontogramModel extends AuditModel {
+@Table(name = "surface_evaluation")
+public class SurfaceEvaluationModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_periodontogram")
-    private Long idPeriodontogram;
+    private Long idSurfaceEvaluation;
 
     @ManyToOne
-    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
-    private PatientModel patient;
+    @JoinColumn(name = "fk_tooth_evaluation", nullable = false)
+    private ToothEvaluationModel toothEvaluation;
 
-    private Double plaqueIndex;
-    private Double bleedingIndex;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LocalDateTime evaluationDate;
+    private Surface surface;
 
-    @Lob
-    private String notes;
+    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SurfaceMeasurementModel> surfaceMeasurements;
 
-    @OneToMany(mappedBy = "periodontogram", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothEvaluationModel> toothEvaluations;
+    public enum Surface {
+        VESTIBULAR, PALATINO, LINGUAL, VESTIBULAR_INFERIOR
+    }
 }

@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms;
+package edu.mx.unsis.unsiSmile.model.periodontograms;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
