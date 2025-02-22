@@ -14,6 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class SurfaceEvaluationRequest {
-    private String surface;
+    private SurfaceType surface;
     private List<SurfaceMeasurementRequest> surfaceMeasurements;
 }

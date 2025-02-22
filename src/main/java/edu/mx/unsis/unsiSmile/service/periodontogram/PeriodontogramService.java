@@ -123,7 +123,7 @@ public class PeriodontogramService {
 
     private SurfaceEvaluationModel convertToSurfaceEvaluationEntity(SurfaceEvaluationRequest surfaceEvaluationRequest) {
         SurfaceEvaluationModel surfaceEvaluation = new SurfaceEvaluationModel();
-        surfaceEvaluation.setSurface(SurfaceEvaluationModel.Surface.valueOf(surfaceEvaluationRequest.getSurface()));
+        surfaceEvaluation.setSurface(SurfaceEvaluationModel.Surface.valueOf(surfaceEvaluationRequest.getSurface().name()));
         surfaceEvaluation.setSurfaceMeasurements(surfaceEvaluationRequest.getSurfaceMeasurements().stream()
                 .map(this::convertToSurfaceMeasurementEntity)
                 .collect(Collectors.toList()));
@@ -144,7 +144,7 @@ public class PeriodontogramService {
 
     private SurfaceMeasurementModel convertToSurfaceMeasurementEntity(SurfaceMeasurementRequest surfaceMeasurementRequest) {
         SurfaceMeasurementModel surfaceMeasurement = new SurfaceMeasurementModel();
-        surfaceMeasurement.setToothPosition(SurfaceMeasurementModel.ToothPosition.valueOf(surfaceMeasurementRequest.getToothPosition()));
+        surfaceMeasurement.setToothPosition(SurfaceMeasurementModel.ToothPosition.valueOf(surfaceMeasurementRequest.getToothPosition().name()));
         surfaceMeasurement.setPocketDepth(surfaceMeasurementRequest.getPocketDepth());
         surfaceMeasurement.setLesionLevel(surfaceMeasurementRequest.getLesionLevel());
         surfaceMeasurement.setPlaque(surfaceMeasurementRequest.getPlaque());

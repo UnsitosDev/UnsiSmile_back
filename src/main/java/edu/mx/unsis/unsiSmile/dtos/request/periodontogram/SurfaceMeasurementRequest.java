@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.periodontogram;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class SurfaceMeasurementRequest {
-    private String toothPosition;
+    private ToothPosition toothPosition;
     private Double pocketDepth;
     private Double lesionLevel;
     private Boolean plaque;
