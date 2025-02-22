@@ -185,3 +185,69 @@ VALUES
     ('3', "derecha"),
     ('4', "abajo"),
     ('5', "izquierda");
+
+-- 1. Tabla principal para la evaluación periodontal global
+CREATE TABLE
+    periodontogram (
+        id_periodontogram BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_patient CHAR(36) NOT NULL,
+        plaque_index DECIMAL(5, 2),
+        bleeding_index DECIMAL(5, 2),
+        evaluation_date DATETIME NOT NULL,
+        notes TEXT,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
+    );
+
+-- 2. Tabla secundaria para registrar los datos de cada diente evaluado
+CREATE TABLE
+    tooth_evaluation (
+        id_tooth_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_periodontogram BIGINT NOT NULL,
+        id_tooth VARCHAR(3) NOT NULL,
+        mobility INT,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (fk_periodontogram) REFERENCES periodontogram (id_periodontogram),
+        FOREIGN KEY (id_tooth) REFERENCES teeth (id_tooth)
+    );
+
+-- 3. Tabla para las superficies de cada diente evaluado
+CREATE TABLE
+    surface_evaluation (
+        id_surface_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_tooth_evaluation BIGINT NOT NULL,
+        surface ENUM ('vestibular', 'lingual', 'mesial', 'distal') NOT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (fk_tooth_evaluation) REFERENCES tooth_evaluation (id_tooth_evaluation)
+    );
+
+-- 4. Tabla para registrar las mediciones en cada superficie
+CREATE TABLE
+    surface_measurement (
+        id_surface_measurement BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_surface_evaluation BIGINT NOT NULL,
+        tooth_position ENUM ('mesial', 'central', 'distal') NOT NULL, -- posición de medición en la superficie
+        pocket_depth DECIMAL(5, 2), -- Profundidad de sondaje en mm
+        lesion_level DECIMAL(5, 2), -- Nivel de inserción o recesión en mm
+        plaque BOOLEAN, -- TRUE si hay placa en ese punto
+        bleeding BOOLEAN, -- TRUE si hay sangrado en ese punto
+        calculus BOOLEAN, -- TRUE si hay cálculo en ese punto
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (fk_surface_evaluation) REFERENCES surface_evaluation (id_surface_evaluation)
+    );
