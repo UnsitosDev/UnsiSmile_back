@@ -17,9 +17,6 @@ public class ClinicalAreaMapper implements BaseMapper<ClinicalAreaResponse, Clin
     
     @Override
     public ClinicalAreaModel toEntity(ClinicalAreaRequest dto) {
-        if (dto == null) {
-            return null;
-        }
         return ClinicalAreaModel.builder()
                 .idClinicalArea(dto.getIdClinicalArea())
                 .clinicalArea(dto.getClinicalArea())
@@ -28,9 +25,6 @@ public class ClinicalAreaMapper implements BaseMapper<ClinicalAreaResponse, Clin
 
     @Override
     public ClinicalAreaResponse toDto(ClinicalAreaModel entity) {
-        if (entity == null) {
-            return null;
-        }
         return ClinicalAreaResponse.builder()
                 .idClinicalArea(entity.getIdClinicalArea())
                 .clinicalArea(entity.getClinicalArea())
@@ -39,9 +33,6 @@ public class ClinicalAreaMapper implements BaseMapper<ClinicalAreaResponse, Clin
 
     @Override
     public List<ClinicalAreaResponse> toDtos(List<ClinicalAreaModel> entities) {
-        if (entities == null) {
-            return null;
-        }
         return entities.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -49,9 +40,6 @@ public class ClinicalAreaMapper implements BaseMapper<ClinicalAreaResponse, Clin
     
     @Override
     public void updateEntity(ClinicalAreaRequest request, ClinicalAreaModel entity) {
-        if (request == null || entity == null) {
-            return;
-        }
         entity.setIdClinicalArea(request.getIdClinicalArea());
         entity.setClinicalArea(request.getClinicalArea());
     }

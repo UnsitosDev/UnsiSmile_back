@@ -20,9 +20,6 @@ public class ProfessorClinicalAreaMapper implements BaseMapper<ProfessorClinical
 
     @Override
     public ProfessorClinicalAreaModel toEntity(ProfessorClinicalAreaRequest dto) {
-        if (dto == null) {
-            return null;
-        }
         return ProfessorClinicalAreaModel.builder()
                 .idProfessorClinicalArea(dto.getIdProfessorClinicalArea())
                 .professor(ProfessorModel.builder()
@@ -37,9 +34,6 @@ public class ProfessorClinicalAreaMapper implements BaseMapper<ProfessorClinical
 
     @Override
     public ProfessorClinicalAreaResponse toDto(ProfessorClinicalAreaModel entity) {
-        if (entity == null) {
-            return null;
-        }
         return ProfessorClinicalAreaResponse.builder()
                 .idProfessorClinicalArea(entity.getIdProfessorClinicalArea())
                 .professorName(entity.getProfessor().getPerson().getFirstName() 
@@ -52,9 +46,6 @@ public class ProfessorClinicalAreaMapper implements BaseMapper<ProfessorClinical
 
     @Override
     public List<ProfessorClinicalAreaResponse> toDtos(List<ProfessorClinicalAreaModel> entities) {
-        if (entities == null) {
-            return null;
-        }
         return entities.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -62,9 +53,6 @@ public class ProfessorClinicalAreaMapper implements BaseMapper<ProfessorClinical
     
     @Override
     public void updateEntity(ProfessorClinicalAreaRequest request, ProfessorClinicalAreaModel entity) {
-        if (request == null || entity == null) {
-            return;
-        }
         entity.setProfessor(ProfessorModel.builder()
             .idProfessor(request.getIdProfessor())
             .build());
