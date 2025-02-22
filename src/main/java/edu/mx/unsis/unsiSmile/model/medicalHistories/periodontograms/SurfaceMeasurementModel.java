@@ -23,14 +23,14 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "surface_measurement")
-public class SurfaceMeasurement {
+public class SurfaceMeasurementModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSurfaceMeasurement;
 
     @ManyToOne
     @JoinColumn(name = "fk_surface_evaluation", nullable = false)
-    private SurfaceEvaluation surfaceEvaluation;
+    private SurfaceEvaluationModel surfaceEvaluation;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

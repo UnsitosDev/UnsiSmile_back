@@ -6,6 +6,8 @@ import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,22 +27,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_evaluation")
-public class ToothEvaluation extends AuditModel {
-
+@Table(name = "surface_evaluation")
+public class SurfaceEvaluationModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idToothEvaluation;
+    private Integer idSurfaceEvaluation;
 
     @ManyToOne
-    @JoinColumn(name = "fk_periodontogram", nullable = false)
-    private Periodontogram periodontogram;
+    @JoinColumn(name = "fk_tooth_evaluation", nullable = false)
+    private ToothEvaluationModel toothEvaluation;
 
-    @Column(nullable = false, length = 3)
-    private String idTooth;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Surface surface;
 
-    private Integer mobility;
+    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SurfaceMeasurementModel> surfaceMeasurements;
 
-    @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SurfaceEvaluation> surfaceEvaluations;
+    public enum Surface {
+        VESTIBULAR, LINGUAL, MESIAL, DISTAL
+    }
 }
