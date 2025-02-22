@@ -33,7 +33,7 @@ public class PeriodontogramModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_periodontogram")
-    private Integer idPeriodontogram;
+    private Long idPeriodontogram;
 
     @ManyToOne
     @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")

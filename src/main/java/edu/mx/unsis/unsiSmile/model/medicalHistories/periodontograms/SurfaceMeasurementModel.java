@@ -26,7 +26,7 @@ import lombok.Setter;
 public class SurfaceMeasurementModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSurfaceMeasurement;
+    private Long idSurfaceMeasurement;
 
     @ManyToOne
     @JoinColumn(name = "fk_surface_evaluation", nullable = false)

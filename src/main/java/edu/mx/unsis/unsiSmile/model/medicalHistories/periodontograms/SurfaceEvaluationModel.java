@@ -31,7 +31,7 @@ import lombok.Setter;
 public class SurfaceEvaluationModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSurfaceEvaluation;
+    private Long idSurfaceEvaluation;
 
     @ManyToOne
     @JoinColumn(name = "fk_tooth_evaluation", nullable = false)
