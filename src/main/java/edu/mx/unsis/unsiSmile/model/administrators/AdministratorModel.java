@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "administrators")
-public class AdministratorsModel extends AuditModel {
+public class AdministratorModel extends AuditModel {
     @Id
     @Column(name = "employee_number", length = 15, nullable = false, unique = true)
     private String employeeNumber;

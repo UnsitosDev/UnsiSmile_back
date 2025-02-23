@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.administrators;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
@@ -10,10 +11,12 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
-import edu.mx.unsis.unsiSmile.model.administrators.AdministratorsModel;
+import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
+import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -30,26 +33,22 @@ public class AdministratorService {
     private final AdministratorMapper administratorMapper;
     private final PersonService personService;
     private final UserService userService;
-
     private final UserMapper userMapper;
+    private final IUserRepository userRepository;
 
     @Transactional
-    public AdministratorResponse createAdministrator(AdministratorRequest request) {
+    public AdministratorResponse createAdministrator(@NonNull AdministratorRequest request) {
         try {
-            // Create person
             PersonModel personModel = personService.createPersonEntity(request.getPerson());
 
-            // Create user with datas of person
             UserModel userModel = userService.createUser(setCredentials(request));
-            // Map request to entity
-            AdministratorsModel administratorModel = administratorMapper.toEntity(request);
-            // set user
+            AdministratorModel administratorModel = administratorMapper.toEntity(request);
+
             administratorModel.setPerson(personModel);
             administratorModel.setUser(userModel);
-            // Save entity
-            AdministratorsModel savedAdministrator = administratorRepository.save(administratorModel);
 
-            // Return response
+            AdministratorModel savedAdministrator = administratorRepository.save(administratorModel);
+
             return administratorMapper.toDto(savedAdministrator);
         } catch (Exception ex) {
             throw new AppException("Failed to create administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -57,9 +56,9 @@ public class AdministratorService {
     }
 
     @Transactional(readOnly = true)
-    public AdministratorResponse getAdministratorByEmployeeNumber(String employeeNumber) {
+    public AdministratorResponse getAdministratorByEmployeeNumber(@NonNull String employeeNumber) {
         try {
-            AdministratorsModel administratorModel = administratorRepository.findById(employeeNumber)
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
                     .orElseThrow(() -> new AppException(
                             "Administrator not found with employee number: " + employeeNumber, HttpStatus.NOT_FOUND));
             return administratorMapper.toDto(administratorModel);
@@ -69,11 +68,11 @@ public class AdministratorService {
     }
 
     @Transactional(readOnly = true)
-    public AdministratorResponse getAdministratorByUser(UserRequest userRequest) {
+    public AdministratorResponse getAdministratorByUser(@NonNull UserRequest userRequest) {
         try {
             UserModel userModel = userMapper.toEntity(userRequest);
 
-            AdministratorsModel administratorModel = administratorRepository.findByUser(userModel)
+            AdministratorModel administratorModel = administratorRepository.findByUser(userModel)
                     .orElseThrow(() -> new AppException("Administrator not found for user: " + userRequest,
                             HttpStatus.NOT_FOUND));
             return administratorMapper.toDto(administratorModel);
@@ -85,7 +84,7 @@ public class AdministratorService {
     @Transactional(readOnly = true)
     public Page<AdministratorResponse> getAllAdministrators(Pageable pageable, String keyword) {
         try {
-            Page<AdministratorsModel> administrators;
+            Page<AdministratorModel> administrators;
 
             if (keyword != null && !keyword.isEmpty()) {
                 administrators = administratorRepository.findByKeyword(keyword, pageable);
@@ -100,16 +99,16 @@ public class AdministratorService {
     }
 
     @Transactional
-    public AdministratorResponse updateAdministrator(String employeeNumber,
-            AdministratorRequest updatedAdministratorRequest) {
+    public AdministratorResponse updateAdministrator(@NonNull String employeeNumber,
+            @NonNull AdministratorRequest updatedAdministratorRequest) {
         try {
-            AdministratorsModel administratorModel = administratorRepository.findById(employeeNumber)
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
                     .orElseThrow(() -> new AppException(
                             "Administrator not found with employee number: " + employeeNumber, HttpStatus.NOT_FOUND));
 
             administratorMapper.updateEntity(updatedAdministratorRequest, administratorModel);
 
-            AdministratorsModel updatedAdministrator = administratorRepository.save(administratorModel);
+            AdministratorModel updatedAdministrator = administratorRepository.save(administratorModel);
 
             return administratorMapper.toDto(updatedAdministrator);
         } catch (Exception ex) {
@@ -118,7 +117,7 @@ public class AdministratorService {
     }
 
     @Transactional
-    public void deleteAdministratorByEmployeeNumber(String employeeNumber) {
+    public void deleteAdministratorByEmployeeNumber(@NonNull String employeeNumber) {
         try {
             if (!administratorRepository.existsById(employeeNumber)) {
                 throw new AppException("Administrator not found with employee number: " + employeeNumber,
@@ -134,11 +133,30 @@ public class AdministratorService {
     }
 
     private RegisterRequest setCredentials(AdministratorRequest request) {
-
         return RegisterRequest.builder()
                 .password(request.getPerson().getCurp())
                 .username(request.getEmployeeNumber())
                 .role(ERole.ROLE_ADMIN.toString())
                 .build();
+    }
+
+    @Transactional
+    public void updateAdministratorStatus(@NonNull String employeeNumber) {
+        try {
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber).orElseThrow(()
+                    -> new AppException("Administrator not found with employeeNumber: " + employeeNumber, HttpStatus.NOT_FOUND));
+
+            administratorModel.setStatusKey(Constants.ACTIVE.equals(administratorModel.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
+
+            UserModel userModel = administratorModel.getUser();
+            userModel.setStatus(!userModel.isStatus());
+
+            userRepository.save(userModel);
+            administratorRepository.save(administratorModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException("Fail to update administrator status", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

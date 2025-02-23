@@ -15,4 +15,5 @@ public class AdministratorResponse {
     private String employeeNumber;
     private PersonResponse person;
     private UserResponse user;
+    private String administratorStatus;
 }
