@@ -57,4 +57,11 @@ public class AdministratorController {
         administratorService.deleteAdministratorByEmployeeNumber(employeeNumber);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Cambiar estado de activo/inactivo de un administrador")
+    @PatchMapping("/{employeeNumber}/toggle-status")
+    public ResponseEntity<Void> updateAdministratorStatus(@PathVariable String employeeNumber) {
+        administratorService.updateAdministratorStatus(employeeNumber);
+        return ResponseEntity.noContent().build();
+    }
 }
