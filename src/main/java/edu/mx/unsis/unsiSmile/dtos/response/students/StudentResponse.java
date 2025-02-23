@@ -16,5 +16,6 @@ public class StudentResponse {
     private String enrollment;
     private UserResponse user;
     private PersonResponse person;
+    private String studentStatus;
 }
 
