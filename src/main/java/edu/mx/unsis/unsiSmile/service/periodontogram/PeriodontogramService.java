@@ -93,7 +93,7 @@ public class PeriodontogramService {
         periodontogram.setEvaluationDate(LocalDateTime.now());
         periodontogram.setNotes(periodontogramRequest.getNotes());
         FormSectionModel formSection = new FormSectionModel();
-        formSection.setIdFormSection(periodontogramRequest.getFormSectionId());
+        formSection.setIdFormSection(periodontogramRequest.getFormSection().getId());
         periodontogram.setFormSection(formSection);
         periodontogram.setToothEvaluations(periodontogramRequest.getToothEvaluations().stream()
                 .map(te -> convertToToothEvaluationEntity(te, periodontogram))

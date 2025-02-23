@@ -40,5 +40,5 @@ public class PeriodontogramRequest {
     private List<ToothEvaluationRequest> toothEvaluations;
 
     @NotNull(message = "Form section ID cannot be null")
-    private Long formSectionId;
+    private PeriodontogramsFormSection formSection;
 }
