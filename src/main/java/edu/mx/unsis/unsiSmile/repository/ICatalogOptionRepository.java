@@ -7,10 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ICatalogOptionRepository extends JpaRepository<CatalogOptionModel, Long> {
 
-    @Query("SELECT co FROM CatalogOptionModel co WHERE co.catalogModel.idCatalog = :catalogId")
-    List<CatalogOptionModel> findAllByCatalogId(@Param("catalogId") Long catalogId);
+    @Query("SELECT co FROM CatalogOptionModel co WHERE co.catalogModel.idCatalog = :catalogId AND co.statusKey = :statusKey")
+    List<CatalogOptionModel> findAllByCatalogIdAndStatusKey(@Param("catalogId") Long catalogId, @Param("statusKey") String statusKey);
+
+    Optional<CatalogOptionModel> findByOptionName(String option);
 }

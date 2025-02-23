@@ -91,7 +91,7 @@ public class CatalogOptionService {
     @Transactional(readOnly = true)
     public List<CatalogOptionResponse> getOptionsByCatalog(Long catalogId) {
         try {
-            List<CatalogOptionModel> optionModelList = catalogOptionRepository.findAllByCatalogId(catalogId);
+            List<CatalogOptionModel> optionModelList = catalogOptionRepository.findAllByCatalogIdAndStatusKey(catalogId, Constants.ACTIVE);
             return optionModelList.stream()
                     .map(catalogOptionMapper::toDto)
                     .collect(Collectors.toList());
