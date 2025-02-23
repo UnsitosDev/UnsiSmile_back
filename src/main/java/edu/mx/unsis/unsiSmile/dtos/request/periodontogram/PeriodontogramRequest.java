@@ -38,4 +38,7 @@ public class PeriodontogramRequest {
     @NotNull(message = "Tooth evaluations cannot be null")
     @Size(min = 1, message = "There must be at least one tooth evaluation")
     private List<ToothEvaluationRequest> toothEvaluations;
+
+    @NotNull(message = "Form section ID cannot be null")
+    private Long formSectionId;
 }

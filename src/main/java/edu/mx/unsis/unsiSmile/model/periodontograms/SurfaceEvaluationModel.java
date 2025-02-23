@@ -41,7 +41,7 @@ public class SurfaceEvaluationModel extends AuditModel {
     @Column(nullable = false)
     private Surface surface;
 
-    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<SurfaceMeasurementModel> surfaceMeasurements;
 
     public enum Surface {

@@ -19,6 +19,7 @@ import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceEvaluationModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceMeasurementModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.ToothEvaluationModel;
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.periodontogram.IPeriodontogramRepository;
 import lombok.AllArgsConstructor;
@@ -91,6 +92,9 @@ public class PeriodontogramService {
         periodontogram.setBleedingIndex(periodontogramRequest.getBleedingIndex());
         periodontogram.setEvaluationDate(LocalDateTime.now());
         periodontogram.setNotes(periodontogramRequest.getNotes());
+        FormSectionModel formSection = new FormSectionModel();
+        formSection.setIdFormSection(periodontogramRequest.getFormSectionId());
+        periodontogram.setFormSection(formSection);
         periodontogram.setToothEvaluations(periodontogramRequest.getToothEvaluations().stream()
                 .map(te -> convertToToothEvaluationEntity(te, periodontogram))
                 .collect(Collectors.toList()));

@@ -41,6 +41,6 @@ public class ToothEvaluationModel extends AuditModel {
 
     private Integer mobility;
 
-    @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<SurfaceEvaluationModel> surfaceEvaluations;
 }

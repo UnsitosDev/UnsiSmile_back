@@ -200,7 +200,10 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
+        fk_form_section BIGINT NOT NULL,
+        FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
+        CONSTRAINT FK_periodontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
+        UNIQUE (fk_patient, fk_form_section)
     );
 
 -- 2. Tabla secundaria para registrar los datos de cada diente evaluado
@@ -237,7 +240,6 @@ CREATE TABLE
 CREATE TABLE
     surface_measurement (
         id_surface_measurement BIGINT PRIMARY KEY AUTO_INCREMENT,
-        fk_surface_evaluation BIGINT NOT NULL,
         tooth_position ENUM ('mesial', 'central', 'distal') NOT NULL, -- posición de medición en la superficie
         pocket_depth DECIMAL(5, 2), -- Profundidad de sondaje en mm
         lesion_level DECIMAL(5, 2), -- Nivel de inserción o recesión en mm
@@ -249,5 +251,6 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
+        fk_surface_evaluation BIGINT NOT NULL,
         FOREIGN KEY (fk_surface_evaluation) REFERENCES surface_evaluation (id_surface_evaluation)
     );
