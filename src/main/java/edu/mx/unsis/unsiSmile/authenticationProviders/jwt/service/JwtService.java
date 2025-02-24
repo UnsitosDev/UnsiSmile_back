@@ -27,6 +27,21 @@ public class JwtService {
         return getToken(new HashMap<>(), user);
     }
 
+    public String getToken( UserModel user, Long timeExpiration){
+        HashMap<String, Object> extraClaims = new HashMap<>();
+
+        extraClaims.put("role", user.getAuthorities());
+        extraClaims.put("uuid", user.getIdAsString());
+
+        return Jwts.builder()
+                .setClaims(extraClaims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + timeExpiration))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     private String getToken(HashMap<String, Object> extraClaims, UserModel user){
 
         extraClaims.put("role", user.getAuthorities());

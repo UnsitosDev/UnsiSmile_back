@@ -16,7 +16,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class RefreshTokenService {
-
+    
     @Value("${jwt.refresh.token.expiration}")
     private String refreshTokenDurationMs;
 
@@ -36,29 +36,59 @@ public class RefreshTokenService {
             refreshToken.setExpiryDate(Instant.now().plusMillis(Long.parseLong(refreshTokenDurationMs)));
             return refreshTokenRepository.save(refreshToken);
         } catch (Exception e) {
-            throw new RuntimeException("Error creating refresh token", e);
+            throw new AppException("Error creating refresh token", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
     public TokenRefreshResponse findByToken(String token) {
         try {
             RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-            .orElseThrow( () -> new AppException("Refresh token not found", HttpStatus.NOT_FOUND));
+            .orElseThrow(() -> new AppException("Refresh token not found", HttpStatus.NOT_FOUND));
 
             verifyExpiration(refreshToken);
 
-        UserModel user = refreshToken.getUser();
-        String newAccessToken = jwtService.getToken(user);
+            UserModel user = refreshToken.getUser();
+            String newAccessToken = jwtService.getToken(user);
 
-        return TokenRefreshResponse.builder()
-            .token(newAccessToken)
-            .refreshToken(token)
-            .build();
+            return TokenRefreshResponse.builder()
+                .token(newAccessToken)
+                .refreshToken(token)
+                .build();
 
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error finding refresh token", e);
+            throw new AppException("Error finding refresh token", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    public TokenRefreshResponse refreshToken(String token) {
+        try {
+            RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new AppException("Refresh token not found", HttpStatus.NOT_FOUND));
+
+            // Verificar expiración
+            verifyExpiration(refreshToken);
+
+            UserModel user = refreshToken.getUser();
+            
+            // Elimina el token usado
+            refreshTokenRepository.delete(refreshToken);
+
+            // Crea un nuevo refresh token para el usuario
+            RefreshToken newRefreshToken = createRefreshToken(user);
+            
+            // Genera un nuevo access token
+            String newAccessToken = jwtService.getToken(user);
+
+            return TokenRefreshResponse.builder()
+                    .token(newAccessToken)
+                    .refreshToken(newRefreshToken.getToken())
+                    .build();
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Error refreshing token", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -66,11 +96,13 @@ public class RefreshTokenService {
         try {
             if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
                 refreshTokenRepository.delete(token);
-                throw new RuntimeException("Refresh token expired. Please sign in again.");
+                throw new AppException("Refresh token expired. Please sign in again.", HttpStatus.UNAUTHORIZED);
             }
             return token;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error verifying refresh token expiration", e);
+            throw new AppException("Error verifying refresh token expiration", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -79,7 +111,7 @@ public class RefreshTokenService {
         try {
             return refreshTokenRepository.deleteByUserId(userId);
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting refresh token by user ID", e);
+            throw new AppException("Error deleting refresh token by user ID", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 }

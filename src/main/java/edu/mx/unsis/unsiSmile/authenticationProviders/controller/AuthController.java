@@ -23,6 +23,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Controlador de autenticación para la aplicación UnsiSmile.
+ */
 @RestController
 @RequestMapping("/unsismile/api/v1/auth")
 @RequiredArgsConstructor
@@ -32,17 +35,35 @@ public class AuthController {
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
 
+    /**
+     * Inicia sesión en la aplicación.
+     *
+     * @param request Objeto que contiene las credenciales de inicio de sesión.
+     * @return ResponseEntity con la respuesta de la API.
+     */
     @Operation(summary = "Inicia sesión en la aplicación.")
     @PostMapping(value = "login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody @Valid LoginRequest request) {
         return authService.login(request);
     }
 
+    /**
+     * Registra un nuevo usuario en la aplicación.
+     *
+     * @param request Objeto que contiene la información de registro del usuario.
+     * @return ResponseEntity con la respuesta de autenticación.
+     */
     @PostMapping(value = "register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request){
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
+    /**
+     * Actualiza la contraseña del usuario autenticado.
+     *
+     * @param passwordUpdateRequest Objeto que contiene la nueva contraseña.
+     * @return ResponseEntity con el estado de la operación.
+     */
     @PatchMapping("/updatePassword")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest) {
@@ -50,9 +71,14 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * Refresca el token de autenticación.
+     *
+     * @param request Objeto que contiene el token de refresco.
+     * @return ResponseEntity con la respuesta del nuevo token.
+     */
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
-        String requestRefreshToken = request.getRefreshToken();
-        return ResponseEntity.ok(refreshTokenService.findByToken(requestRefreshToken));
+        return ResponseEntity.ok(refreshTokenService.refreshToken(request.getRefreshToken()));
     }
 }
