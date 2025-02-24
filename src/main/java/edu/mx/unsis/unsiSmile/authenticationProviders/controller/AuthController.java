@@ -1,20 +1,11 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.controller;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.service.AuthService;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
@@ -80,5 +71,18 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
         return ResponseEntity.ok(refreshTokenService.refreshToken(request.getRefreshToken()));
+    }
+
+    @Operation(summary = "Enviar solicitud de restablecimiento de contraseña")
+    @PostMapping("/password-recovery")
+    public ResponseEntity<?> sendPasswordRecoveryEmail(@RequestParam("enrollment") String enrollment) {
+        authService.initiatePasswordRecovery(enrollment);
+        return ResponseEntity.ok("Se ha enviado un enlace a tu correo electrónico");
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody PasswordChangeRequest request) {
+        authService.processPasswordChange(request);
+        return ResponseEntity.ok("Password changed successfully");
     }
 }
