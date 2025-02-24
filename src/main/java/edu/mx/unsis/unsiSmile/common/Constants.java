@@ -15,4 +15,6 @@ public class Constants {
     //upload files path
     public static final String UPLOAD_PATH = "uploads/";
 
+    // Cambio de contraseña
+    public static final String CHANGE_PASSWORD = "Establece tu nueva contraseña de UnsiSmile";
 }

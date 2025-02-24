@@ -26,6 +26,9 @@ public class JwtService {
     @Value("${jwt.refresh.token.expiration}")
     private String refreshExpiration;
 
+    @Value("${email.time.expiration}")
+    private String emailTimeExpiration;
+
     public String getToken(UserModel user) {
         return getToken(new HashMap<>(), user);
     }
@@ -116,4 +119,12 @@ public class JwtService {
         return getExpiration(token).before(new Date());
     }
 
+    public String getTokenEmail(UserModel user) {
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(emailTimeExpiration)))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
 }

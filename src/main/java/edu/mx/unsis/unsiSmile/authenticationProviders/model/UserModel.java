@@ -51,6 +51,9 @@ public class UserModel implements UserDetails {
     @Column(nullable = false)
     private boolean status = true;
 
+    @Column(name = "password_token")
+    private String passwordToken;
+
     @PrePersist
     public void generateId() {
         if (id == null) {
