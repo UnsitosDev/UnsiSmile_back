@@ -123,7 +123,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(emailTimeExpiration)))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(emailTimeExpiration)))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
