@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -21,7 +22,11 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
 
     List<PatientModel> findByAdmissionDate(LocalDate admissionDate);
 
-    List<PatientModel> findByIsMinor(Boolean isMinor);
+    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate > :cutoffDate")
+    List<PatientModel> findMinorPatients(@Param("cutoffDate") LocalDate cutoffDate);
+
+    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate <= :cutoffDate")
+    List<PatientModel> findAdultPatients(@Param("cutoffDate") LocalDate cutoffDate);
 
     List<PatientModel> findByHasDisability(Boolean hasDisability);
 

@@ -31,7 +31,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     public PatientModel toEntity(PatientRequest dto) {
         return PatientModel.builder()
                 .admissionDate(LocalDate.now())
-                .isMinor(dto.getIsMinor())
                 .hasDisability(dto.getHasDisability())
                 .nationality(NationalityModel.builder().idNationality(dto.getNationalityId()).build())
                 .person(personMapper.toEntity(dto.getPerson()))
@@ -51,7 +50,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 .idPatient(entity.getIdPatient())
                 .admissionDate(entity.getAdmissionDate())
                 .medicalRecordNumber(entity.getMedicalRecordNumber())
-                .isMinor(entity.getIsMinor())
                 .hasDisability(entity.getHasDisability())
                 .nationality(nationalityMapper.toDto(entity.getNationality()))
                 .person(personMapper.toDto(entity.getPerson()))
@@ -74,7 +72,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     @Override
     public void updateEntity(PatientRequest request, PatientModel entity) {
         entity.setAdmissionDate(LocalDate.now());
-        entity.setIsMinor(request.getIsMinor());
         entity.setHasDisability(request.getHasDisability());
         entity.setNationality(NationalityModel.builder().idNationality(request.getNationalityId()).build());
         entity.setPerson(personMapper.toEntity(request.getPerson()));

@@ -265,7 +265,6 @@ CREATE TABLE
         id_patient CHAR(36) NOT NULL,
         admission_date DATE DEFAULT NULL,
         has_disability BIT (1) DEFAULT NULL,
-        is_minor BIT (1) DEFAULT NULL,
         medical_record_number BIGINT (20),
         fk_address BIGINT (20) NOT NULL,
         fk_ethnic_group BIGINT (20) DEFAULT NULL,
