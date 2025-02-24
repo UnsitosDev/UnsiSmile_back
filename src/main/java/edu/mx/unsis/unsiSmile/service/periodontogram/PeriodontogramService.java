@@ -2,9 +2,9 @@ package edu.mx.unsis.unsiSmile.service.periodontogram;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import edu.mx.unsis.unsiSmile.dtos.request.periodontogram.PeriodontogramRequest;
@@ -15,12 +15,13 @@ import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.PeriodontogramRespon
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceEvaluationResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceMeasurementResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.ToothEvaluationResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceEvaluationModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceMeasurementModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.ToothEvaluationModel;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.periodontogram.IPeriodontogramRepository;
 import lombok.AllArgsConstructor;
 
@@ -31,41 +32,90 @@ public class PeriodontogramService {
     private final IPeriodontogramRepository periodontogramRepository;
 
     public List<PeriodontogramResponse> findAll() {
-        return periodontogramRepository.findAll().stream()
-                .map(this::convertToResponse)
-                .collect(Collectors.toList());
+        try {
+            return periodontogramRepository.findAll().stream()
+                    .map(this::convertToResponse)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new AppException("Error fetching periodontograms", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
-    public Optional<PeriodontogramResponse> findById(Long id) {
-        return periodontogramRepository.findById(id)
-                .map(this::convertToResponse);
+    public PeriodontogramResponse findById(Long id) {
+        try {
+            return periodontogramRepository.findByIdWithFetch(id)
+                    .map(this::convertToResponse)
+                    .orElseThrow(() -> new AppException("Periodontogram not found", HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Error fetching periodontogram by ID", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    public PeriodontogramResponse findByPatientIdAndFormSectionId(Long patientId, Long formSectionId) {
+        try {
+            return periodontogramRepository.findByPatientIdAndFormSectionId(patientId, formSectionId)
+                    .map(this::convertToResponse)
+                    .orElseThrow(() -> new AppException("Periodontogram not found", HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Error fetching periodontogram by patient ID and form section ID",
+                    HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    public PeriodontogramResponse findMostRecentByPatientId(Long patientId) {
+        try {
+            return periodontogramRepository.findMostRecentByPatientId(patientId)
+                    .map(this::convertToResponse)
+                    .orElseThrow(() -> new AppException("Periodontogram not found", HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Error fetching most recent periodontogram by patient ID",
+                    HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     public PeriodontogramResponse save(PeriodontogramRequest periodontogramRequest) {
-        PeriodontogramModel periodontogram = convertToEntity(periodontogramRequest);
-        return convertToResponse(periodontogramRepository.save(periodontogram));
+        try {
+            PeriodontogramModel periodontogram = convertToEntity(periodontogramRequest);
+            return convertToResponse(periodontogramRepository.save(periodontogram));
+        } catch (Exception e) {
+            throw new AppException("Error saving periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     public PeriodontogramResponse update(Long id, PeriodontogramRequest periodontogramRequest) {
-        return periodontogramRepository.findById(id).map(periodontogram -> {
-            if (periodontogram.getPatient() == null) {
-                periodontogram.setPatient(new PatientModel());
-            }
-            periodontogram.getPatient().setIdPatient(periodontogramRequest.getPatientId());
-            periodontogram.setPlaqueIndex(periodontogramRequest.getPlaqueIndex());
-            periodontogram.setBleedingIndex(periodontogramRequest.getBleedingIndex());
-            periodontogram.setEvaluationDate(LocalDateTime.now());
-            periodontogram.setNotes(periodontogramRequest.getNotes());
-            return convertToResponse(periodontogramRepository.save(periodontogram));
-        }).orElseGet(() -> {
-            PeriodontogramModel periodontogram = convertToEntity(periodontogramRequest);
-            periodontogram.setIdPeriodontogram(id);
-            return convertToResponse(periodontogramRepository.save(periodontogram));
-        });
+        try {
+            return periodontogramRepository.findById(id).map(periodontogram -> {
+                if (periodontogram.getPatient() == null) {
+                    periodontogram.setPatient(new PatientModel());
+                }
+                periodontogram.getPatient().setIdPatient(periodontogramRequest.getPatientId());
+                periodontogram.setPlaqueIndex(periodontogramRequest.getPlaqueIndex());
+                periodontogram.setBleedingIndex(periodontogramRequest.getBleedingIndex());
+                periodontogram.setEvaluationDate(LocalDateTime.now());
+                periodontogram.setNotes(periodontogramRequest.getNotes());
+                return convertToResponse(periodontogramRepository.save(periodontogram));
+            }).orElseGet(() -> {
+                PeriodontogramModel periodontogram = convertToEntity(periodontogramRequest);
+                periodontogram.setIdPeriodontogram(id);
+                return convertToResponse(periodontogramRepository.save(periodontogram));
+            });
+        } catch (Exception e) {
+            throw new AppException("Error updating periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     public void delete(Long id) {
-        periodontogramRepository.deleteById(id);
+        try {
+            periodontogramRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new AppException("Error deleting periodontogram", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     private PeriodontogramResponse convertToResponse(PeriodontogramModel periodontogram) {
@@ -112,14 +162,15 @@ public class PeriodontogramService {
                 .build();
     }
 
-    private ToothEvaluationModel convertToToothEvaluationEntity(ToothEvaluationRequest toothEvaluationRequest, PeriodontogramModel periodontogram) {
+    private ToothEvaluationModel convertToToothEvaluationEntity(ToothEvaluationRequest toothEvaluationRequest,
+            PeriodontogramModel periodontogram) {
         ToothEvaluationModel toothEvaluation = new ToothEvaluationModel();
         toothEvaluation.setIdTooth(toothEvaluationRequest.getIdTooth());
         toothEvaluation.setMobility(toothEvaluationRequest.getMobility());
         toothEvaluation.setPeriodontogram(periodontogram);
         toothEvaluation.setSurfaceEvaluations(toothEvaluationRequest.getSurfaceEvaluations().stream()
                 .map(se -> convertToSurfaceEvaluationEntity(se, toothEvaluation))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
         return toothEvaluation;
     }
 
@@ -133,15 +184,16 @@ public class PeriodontogramService {
                 .build();
     }
 
-    private SurfaceEvaluationModel convertToSurfaceEvaluationEntity(SurfaceEvaluationRequest surfaceEvaluationRequest, ToothEvaluationModel toothEvaluation) {
+    private SurfaceEvaluationModel convertToSurfaceEvaluationEntity(SurfaceEvaluationRequest surfaceEvaluationRequest,
+            ToothEvaluationModel toothEvaluation) {
         SurfaceEvaluationModel surfaceEvaluation = new SurfaceEvaluationModel();
-        surfaceEvaluation.setSurface(SurfaceEvaluationModel.Surface.valueOf(surfaceEvaluationRequest.getSurface().name()));
+        surfaceEvaluation.setSurface(
+                SurfaceEvaluationModel.Surface.valueOf(surfaceEvaluationRequest.getSurface().name().toUpperCase()));
         surfaceEvaluation.setToothEvaluation(toothEvaluation);
         surfaceEvaluation.setSurfaceMeasurements(
-            surfaceEvaluationRequest.getSurfaceMeasurements().stream()
-                .map(sm -> convertToSurfaceMeasurementEntity(sm, surfaceEvaluation))
-                .collect(Collectors.toList())
-        );
+                surfaceEvaluationRequest.getSurfaceMeasurements().stream()
+                        .map(sm -> convertToSurfaceMeasurementEntity(sm, surfaceEvaluation))
+                        .collect(Collectors.toSet()));
         return surfaceEvaluation;
     }
 
@@ -157,9 +209,11 @@ public class PeriodontogramService {
                 .build();
     }
 
-    private SurfaceMeasurementModel convertToSurfaceMeasurementEntity(SurfaceMeasurementRequest surfaceMeasurementRequest, SurfaceEvaluationModel surfaceEvaluation) {
+    private SurfaceMeasurementModel convertToSurfaceMeasurementEntity(
+            SurfaceMeasurementRequest surfaceMeasurementRequest, SurfaceEvaluationModel surfaceEvaluation) {
         SurfaceMeasurementModel surfaceMeasurement = new SurfaceMeasurementModel();
-        surfaceMeasurement.setToothPosition(SurfaceMeasurementModel.ToothPosition.valueOf(surfaceMeasurementRequest.getToothPosition().name()));
+        surfaceMeasurement.setToothPosition(
+                SurfaceMeasurementModel.ToothPosition.valueOf(surfaceMeasurementRequest.getToothPosition().name()));
         surfaceMeasurement.setPocketDepth(surfaceMeasurementRequest.getPocketDepth());
         surfaceMeasurement.setLesionLevel(surfaceMeasurementRequest.getLesionLevel());
         surfaceMeasurement.setPlaque(surfaceMeasurementRequest.getPlaque());

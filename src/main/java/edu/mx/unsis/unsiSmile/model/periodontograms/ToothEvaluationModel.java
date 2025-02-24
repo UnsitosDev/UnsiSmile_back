@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.periodontograms;
 
-import java.util.List;
+import java.util.Set;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
@@ -41,6 +41,6 @@ public class ToothEvaluationModel extends AuditModel {
 
     private Integer mobility;
 
-    @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<SurfaceEvaluationModel> surfaceEvaluations;
+    @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SurfaceEvaluationModel> surfaceEvaluations;
 }

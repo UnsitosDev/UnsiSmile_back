@@ -44,5 +44,5 @@ public class SurfaceMeasurementModel {
 
     public enum ToothPosition {
         MESIAL, CENTRAL, DISTAL
-    }
+    }       
 }

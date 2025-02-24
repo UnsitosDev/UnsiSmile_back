@@ -56,7 +56,7 @@ public class PeriodontogramModel extends AuditModel {
     @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
     private PatientModel patient;
 
-    @OneToMany(mappedBy = "periodontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "periodontogram", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ToothEvaluationModel> toothEvaluations;
 
 }

@@ -227,7 +227,7 @@ CREATE TABLE
     surface_evaluation (
         id_surface_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
         fk_tooth_evaluation BIGINT NOT NULL,
-        surface ENUM ('vestibular', 'palatino', 'lingual', 'vestibular_inferior') NOT NULL,
+        surface ENUM ('VESTIBULAR', 'PALATINO', 'LINGUAL', 'VESTIBULAR_INFERIOR') NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
@@ -240,7 +240,7 @@ CREATE TABLE
 CREATE TABLE
     surface_measurement (
         id_surface_measurement BIGINT PRIMARY KEY AUTO_INCREMENT,
-        tooth_position ENUM ('mesial', 'central', 'distal') NOT NULL, -- posición de medición en la superficie
+        tooth_position ENUM ('MESIAL', 'CENTRAL', 'DISTAL') NOT NULL, -- posición de medición en la superficie
         pocket_depth DECIMAL(5, 2), -- Profundidad de sondaje en mm
         lesion_level DECIMAL(5, 2), -- Nivel de inserción o recesión en mm
         plaque BOOLEAN, -- TRUE si hay placa en ese punto

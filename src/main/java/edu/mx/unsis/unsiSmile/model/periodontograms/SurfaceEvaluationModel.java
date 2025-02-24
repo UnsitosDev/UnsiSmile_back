@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.periodontograms;
 
-import java.util.List;
+import java.util.Set;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
@@ -41,8 +41,8 @@ public class SurfaceEvaluationModel extends AuditModel {
     @Column(nullable = false)
     private Surface surface;
 
-    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<SurfaceMeasurementModel> surfaceMeasurements;
+    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SurfaceMeasurementModel> surfaceMeasurements;
 
     public enum Surface {
         VESTIBULAR, PALATINO, LINGUAL, VESTIBULAR_INFERIOR
