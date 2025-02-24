@@ -1,8 +1,9 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms;
+package edu.mx.unsis.unsiSmile.model.periodontograms;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
@@ -16,6 +17,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,16 +30,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "periodontogram")
-public class Periodontogram extends AuditModel {
+@Table(name = "periodontogram", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"fk_patient", "fk_form_section"})
+})
+public class PeriodontogramModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_periodontogram")
-    private Integer idPeriodontogram;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
-    private PatientModel patient;
+    private Long idPeriodontogram;
 
     private Double plaqueIndex;
     private Double bleedingIndex;
@@ -48,6 +48,15 @@ public class Periodontogram extends AuditModel {
     @Lob
     private String notes;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
+    private FormSectionModel formSection;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
+    private PatientModel patient;
+
     @OneToMany(mappedBy = "periodontogram", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ToothEvaluation> toothEvaluations;
+    private List<ToothEvaluationModel> toothEvaluations;
+
 }

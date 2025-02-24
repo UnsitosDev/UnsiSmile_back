@@ -379,8 +379,10 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-("Observaciones", 6, 8, 1, false, ""),
-("Observaciones", 7, 8, 1, false, "");
+("odontograma", 6, 1, 1, false, ""), -- pregunta que funciona como bandera para saber si en odontograma ha sido llenado
+("odontograma", 7, 1, 1, false, ""), -- pregunta que funciona como bandera para saber si en odontograma ha sido llenado
+("periodontograma", 8, 1, 1, false, "") -- pregunta que funciona como bandera para saber si en periodontograma ha sido llenado
+;
 
 INSERT INTO questions
 (question_text,

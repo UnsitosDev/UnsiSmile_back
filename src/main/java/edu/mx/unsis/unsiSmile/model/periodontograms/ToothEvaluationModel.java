@@ -1,6 +1,6 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms;
+package edu.mx.unsis.unsiSmile.model.periodontograms;
 
-import java.util.List;
+import java.util.Set;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "tooth_evaluation")
-public class ToothEvaluation extends AuditModel {
+public class ToothEvaluationModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class ToothEvaluation extends AuditModel {
 
     @ManyToOne
     @JoinColumn(name = "fk_periodontogram", nullable = false)
-    private Periodontogram periodontogram;
+    private PeriodontogramModel periodontogram;
 
     @Column(nullable = false, length = 3)
     private String idTooth;
@@ -42,5 +42,5 @@ public class ToothEvaluation extends AuditModel {
     private Integer mobility;
 
     @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SurfaceEvaluation> surfaceEvaluations;
+    private Set<SurfaceEvaluationModel> surfaceEvaluations;
 }

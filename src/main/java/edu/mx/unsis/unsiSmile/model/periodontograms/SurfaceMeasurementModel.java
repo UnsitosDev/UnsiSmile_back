@@ -1,9 +1,5 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.periodontograms;
+package edu.mx.unsis.unsiSmile.model.periodontograms;
 
-import java.util.List;
-
-import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,24 +22,27 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "surface_evaluation")
-public class SurfaceEvaluation extends AuditModel {
+@Table(name = "surface_measurement")
+public class SurfaceMeasurementModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSurfaceEvaluation;
+    private Long idSurfaceMeasurement;
 
     @ManyToOne
-    @JoinColumn(name = "fk_tooth_evaluation", nullable = false)
-    private ToothEvaluation toothEvaluation;
+    @JoinColumn(name = "fk_surface_evaluation", nullable = false)
+    private SurfaceEvaluationModel surfaceEvaluation;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Surface surface;
+    private ToothPosition toothPosition;
 
-    @OneToMany(mappedBy = "surfaceEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SurfaceMeasurement> surfaceMeasurements;
+    private Double pocketDepth;
+    private Double lesionLevel;
+    private Boolean plaque;
+    private Boolean bleeding;
+    private Boolean calculus;
 
-    public enum Surface {
-        VESTIBULAR, LINGUAL, MESIAL, DISTAL
-    }
+    public enum ToothPosition {
+        MESIAL, CENTRAL, DISTAL
+    }       
 }
