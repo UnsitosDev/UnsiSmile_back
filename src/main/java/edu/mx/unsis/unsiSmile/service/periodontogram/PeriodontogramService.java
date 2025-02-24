@@ -66,7 +66,7 @@ public class PeriodontogramService {
         }
     }
 
-    public PeriodontogramResponse findMostRecentByPatientId(Long patientId) {
+    public PeriodontogramResponse findMostRecentByPatientId(String patientId) {
         try {
             return periodontogramRepository.findMostRecentByPatientId(patientId)
                     .map(this::convertToResponse)

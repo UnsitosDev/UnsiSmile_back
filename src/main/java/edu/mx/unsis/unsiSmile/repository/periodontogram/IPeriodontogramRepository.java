@@ -32,5 +32,5 @@ public interface IPeriodontogramRepository extends JpaRepository<PeriodontogramM
            "left join fetch s.surfaceMeasurements " +
            "where p.patient.idPatient = :patientId " +
            "order by p.evaluationDate desc")
-    Optional<PeriodontogramModel> findMostRecentByPatientId(@Param("patientId") Long patientId);
+    Optional<PeriodontogramModel> findMostRecentByPatientId(@Param("patientId") String patientId);
 }

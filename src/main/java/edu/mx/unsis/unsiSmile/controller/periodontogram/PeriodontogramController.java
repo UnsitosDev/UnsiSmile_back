@@ -51,7 +51,7 @@ public class PeriodontogramController {
 
     @GetMapping("/patient/{patientId}/current")
     @Operation(summary = "Get most recent periodontogram by patient ID", description = "Retrieve the most recent periodontogram by patient ID")
-    public ResponseEntity<PeriodontogramResponse> getMostRecentPeriodontogramByPatientId(@PathVariable Long patientId) {
+    public ResponseEntity<PeriodontogramResponse> getMostRecentPeriodontogramByPatientId(@PathVariable String patientId) {
         PeriodontogramResponse periodontogram = periodontogramService.findMostRecentByPatientId(patientId);
         return ResponseEntity.ok(periodontogram);
     }
