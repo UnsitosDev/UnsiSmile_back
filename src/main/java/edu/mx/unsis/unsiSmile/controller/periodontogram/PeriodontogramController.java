@@ -19,7 +19,7 @@ import edu.mx.unsis.unsiSmile.service.periodontogram.PeriodontogramService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("unsismie/api/v1/periodontograms")
+@RequestMapping("unsismile/api/v1/medical-records/periodontograms")
 @AllArgsConstructor
 public class PeriodontogramController {
 
