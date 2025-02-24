@@ -1,19 +1,20 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service;
 
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.function.Function;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -22,6 +23,8 @@ public class JwtService {
     private String key;
     @Value("${jwt.time.expiration}")
     private String timeExpiration;
+    @Value("${jwt.refresh.token.expiration}")
+    private String refreshExpiration;
 
     public String getToken(UserModel user) {
         return getToken(new HashMap<>(), user);
@@ -53,6 +56,17 @@ public class JwtService {
                 .setSubject(user.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + Long.valueOf(timeExpiration)))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // Nuevo método para emitir refresh tokens JWT con jti
+    public String getRefreshToken(UserModel user, String jti) {
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("jti", jti)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(refreshExpiration.trim())))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

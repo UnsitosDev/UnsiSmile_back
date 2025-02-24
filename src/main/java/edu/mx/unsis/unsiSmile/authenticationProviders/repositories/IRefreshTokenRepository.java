@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RefreshToken;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.RefreshTokenModel;
 
-public interface IRefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-    Optional<RefreshToken> findByToken(String token);
+public interface IRefreshTokenRepository extends JpaRepository<RefreshTokenModel, Long> {
+    Optional<RefreshTokenModel> findByToken(String token);
     int deleteByUserId(String userId);
 }
