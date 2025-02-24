@@ -68,7 +68,7 @@ public class PatientController {
 
     @GetMapping("/isMinor/{isMinor}")
     public ResponseEntity<List<PatientResponse>> getPatientsByIsMinor(@PathVariable Boolean isMinor) {
-        List<PatientResponse> patients = patientService.getPatientsByIsMinor(isMinor);
+        List<PatientResponse> patients = patientService.getPatientsByMinorStatus(isMinor);
         return ResponseEntity.ok(patients);
     }
 
