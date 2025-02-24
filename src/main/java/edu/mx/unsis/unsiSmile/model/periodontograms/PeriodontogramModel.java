@@ -31,7 +31,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "periodontogram", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"fk_patient", "fk_form_section"})
+        @UniqueConstraint(columnNames = { "fk_patient", "fk_form_section" })
 })
 public class PeriodontogramModel extends AuditModel {
     @Id

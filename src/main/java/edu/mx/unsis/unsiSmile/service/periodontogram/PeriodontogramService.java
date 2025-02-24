@@ -43,7 +43,7 @@ public class PeriodontogramService {
 
     public PeriodontogramResponse findById(Long id) {
         try {
-            return periodontogramRepository.findByIdWithFetch(id)
+            return periodontogramRepository.findById(id)
                     .map(this::convertToResponse)
                     .orElseThrow(() -> new AppException("Periodontogram not found", HttpStatus.NOT_FOUND));
         } catch (AppException e) {
@@ -53,7 +53,7 @@ public class PeriodontogramService {
         }
     }
 
-    public PeriodontogramResponse findByPatientIdAndFormSectionId(Long patientId, Long formSectionId) {
+    public PeriodontogramResponse findByPatientIdAndFormSectionId(String patientId, Long formSectionId) {
         try {
             return periodontogramRepository.findByPatientIdAndFormSectionId(patientId, formSectionId)
                     .map(this::convertToResponse)

@@ -2,6 +2,9 @@ package edu.mx.unsis.unsiSmile.model.periodontograms;
 
 import java.util.Set;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,5 +45,6 @@ public class ToothEvaluationModel extends AuditModel {
     private Integer mobility;
 
     @OneToMany(mappedBy = "toothEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private Set<SurfaceEvaluationModel> surfaceEvaluations;
 }

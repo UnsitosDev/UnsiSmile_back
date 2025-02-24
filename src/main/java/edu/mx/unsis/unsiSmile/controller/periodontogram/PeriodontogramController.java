@@ -43,7 +43,7 @@ public class PeriodontogramController {
     @GetMapping("/patient/{patientId}/form-section/{formSectionId}")
     @Operation(summary = "Get periodontogram by patient ID and form section ID", description = "Retrieve a periodontogram by patient ID and form section ID")
     public ResponseEntity<PeriodontogramResponse> getPeriodontogramByPatientIdAndFormSectionId(
-            @PathVariable Long patientId, @PathVariable Long formSectionId) {
+            @PathVariable String patientId, @PathVariable Long formSectionId) {
         PeriodontogramResponse periodontogram = periodontogramService.findByPatientIdAndFormSectionId(patientId,
                 formSectionId);
         return ResponseEntity.ok(periodontogram);
@@ -51,7 +51,8 @@ public class PeriodontogramController {
 
     @GetMapping("/patient/{patientId}/current")
     @Operation(summary = "Get most recent periodontogram by patient ID", description = "Retrieve the most recent periodontogram by patient ID")
-    public ResponseEntity<PeriodontogramResponse> getMostRecentPeriodontogramByPatientId(@PathVariable String patientId) {
+    public ResponseEntity<PeriodontogramResponse> getMostRecentPeriodontogramByPatientId(
+            @PathVariable String patientId) {
         PeriodontogramResponse periodontogram = periodontogramService.findMostRecentByPatientId(patientId);
         return ResponseEntity.ok(periodontogram);
     }
