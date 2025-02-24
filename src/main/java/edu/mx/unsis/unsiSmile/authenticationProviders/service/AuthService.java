@@ -1,18 +1,8 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.service;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
-import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,8 +12,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
+import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
+import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
     public ResponseEntity<ApiResponse<Object>> login(LoginRequest request) {
 
@@ -48,13 +51,16 @@ public class AuthService {
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 
             String token = jwtService.getToken(user);
+            String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
 
             AuthResponse authResponse = AuthResponse.builder()
                     .token(token)
+                    .refreshToken(refreshToken)
                     .build();
 
             Map<String,Object> objects = new HashMap<>();
             objects.put("token", authResponse.getToken());
+            objects.put("refreshToken", authResponse.getRefreshToken());
 
             return ResponseEntity.ok(ApiResponse.<Object>builder()
                     .response(objects)
