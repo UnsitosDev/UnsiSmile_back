@@ -10,11 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,8 +23,8 @@ public class ProfessorGroupModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_professor_groups")
-    private Long idStudentGroups;
+    @Column(name = "id_professor_group")
+    private Long idProfessorGroup;
 
     @ManyToOne
     @JoinColumn(name = "fk_professor")

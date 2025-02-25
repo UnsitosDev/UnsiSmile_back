@@ -17,7 +17,7 @@ CREATE TABLE
 
 CREATE TABLE
     professor_groups(
-        id_professor_groups BIGINT (20) NOT NULL AUTO_INCREMENT,
+        id_professor_group BIGINT (20) NOT NULL AUTO_INCREMENT,
         fk_professor VARCHAR(15) NOT NULL,
         fk_group BIGINT(20) DEFAULT NULL,
         created_at DATETIME(6) DEFAULT NULL,
