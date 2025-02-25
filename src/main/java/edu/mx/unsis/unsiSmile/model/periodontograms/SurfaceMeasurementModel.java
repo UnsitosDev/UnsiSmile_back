@@ -22,7 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "surface_measurement")
+@Table(name = "surface_measurements")
 public class SurfaceMeasurementModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
