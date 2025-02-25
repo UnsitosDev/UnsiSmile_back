@@ -30,7 +30,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "periodontogram", uniqueConstraints = {
+@Table(name = "periodontograms", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "fk_patient", "fk_form_section" })
 })
 public class PeriodontogramModel extends AuditModel {

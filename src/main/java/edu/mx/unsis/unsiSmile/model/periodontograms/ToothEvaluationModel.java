@@ -28,7 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_evaluation")
+@Table(name = "tooth_evaluations")
 public class ToothEvaluationModel extends AuditModel {
 
     @Id

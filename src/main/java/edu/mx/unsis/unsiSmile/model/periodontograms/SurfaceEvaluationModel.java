@@ -27,7 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "surface_evaluation")
+@Table(name = "surface_evaluations")
 public class SurfaceEvaluationModel extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
