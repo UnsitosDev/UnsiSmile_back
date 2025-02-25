@@ -16,6 +16,9 @@ public class GroupRequest {
     @NotNull(message = "The field group can't be null")
     @NotBlank(message = "The field group can't be blank")
     private String groupName;
+    @NotNull(message = "The field semester number can't be null")
+    @NotBlank(message = "The field semester number can't be blank")
+    private String semesterNumber;
     @NotNull(message = "The field Career can't be null")
     private CareerRequest career;
 }
