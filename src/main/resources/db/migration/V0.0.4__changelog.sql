@@ -39,16 +39,3 @@ INSERT INTO `religions` VALUES (133100,'Adventistas del Séptimo Día', null, nu
 INSERT INTO roles (id, role) VALUES
                                  (1, 'ROLE_ADMIN'),
                                  (2, 'ROLE_STUDENT');
-
--- Inserción en user_app (UUID generado en Spring Boot)
-INSERT INTO user_app (id, password, status, username, role_id, first_login) VALUES
-    ('123e4567-e89b-12d3-a456-426614174000', '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW', 1, '2019060310', 2, 0);
-
--- Inserción de personas
-INSERT INTO people (curp, birth_date, email, first_lastname, first_name, phone, second_lastname, second_name, fk_gender) VALUES
-                                                                                                                             ('AOPS011028HOCNRLA9', '2003-06-04', 'example@gmail.com', 'ANTONIO', 'JUAN', '5645123541', 'Martíez', 'LUIS', 1),
-                                                                                                                             ('FIMJ011004HOCGRLA8', '2001-10-04', 'froste@gmail.com', 'Figueroa', 'Joel', '5018221525', 'Martinez', 'Francisco', 1);
-
--- Inserción de estudiantes
-INSERT INTO students (enrollment, fk_person, fk_user, created_at, created_by, status_key, updated_at, updated_by) VALUES
-    ('2019060310', 'FIMJ011004HOCGRLA8', '123e4567-e89b-12d3-a456-426614174000', NULL, NULL, 'A', NULL, NULL);

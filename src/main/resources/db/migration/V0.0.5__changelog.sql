@@ -9,8 +9,7 @@ CREATE TABLE
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
-        UNIQUE (fk_patient, fk_form_section)
+        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -227,7 +226,12 @@ CREATE TABLE
     surface_evaluation (
         id_surface_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
         fk_tooth_evaluation BIGINT NOT NULL,
-        surface ENUM ('VESTIBULAR', 'PALATINO', 'LINGUAL', 'VESTIBULAR_INFERIOR') NOT NULL,
+        surface ENUM (
+            'VESTIBULAR',
+            'PALATINO',
+            'LINGUAL',
+            'VESTIBULAR_INFERIOR'
+        ) NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
