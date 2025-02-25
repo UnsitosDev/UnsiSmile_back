@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ILocalityRepository extends JpaRepository<LocalityModel, String> {
+public interface ILocalityRepository extends JpaRepository<LocalityModel, Long> {
 
-    Optional<LocalityModel> findByIdLocality(String idLocality);
+    Optional<LocalityModel> findByIdLocality(Long idLocality);
 
     List<LocalityModel> findByName(String name);
 

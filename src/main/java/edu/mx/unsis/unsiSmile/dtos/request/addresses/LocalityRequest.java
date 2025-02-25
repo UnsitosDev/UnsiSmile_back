@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LocalityRequest {
-    @NotBlank(message = "Locality ID cannot be blank")
-    @Size(min = 5, max = 5, message = "Locality ID must be 5 characters long")
-    private String idLocality;
+    private Long idLocality;
 
     @NotBlank(message = "Locality name cannot be blank")
     @Size(max = 50, message = "Locality name must be at most 50 characters long")

@@ -48,7 +48,7 @@ public class LocalityService {
     }
 
     @Transactional(readOnly = true)
-    public LocalityResponse getLocalityById(@NonNull String idLocality) {
+    public LocalityResponse getLocalityById(@NonNull Long idLocality) {
         try {
             LocalityModel localityModel = localityRepository.findByIdLocality(idLocality)
                     .orElseThrow(() -> new AppException("Locality not found with ID: " + idLocality, HttpStatus.NOT_FOUND));
@@ -120,7 +120,7 @@ public class LocalityService {
     }
 
     @Transactional
-    public LocalityResponse updateLocality(@NonNull String idLocality, @NonNull LocalityRequest updatedLocalityRequest) {
+    public LocalityResponse updateLocality(@NonNull Long idLocality, @NonNull LocalityRequest updatedLocalityRequest) {
         try {
             Assert.notNull(updatedLocalityRequest, "Updated LocalityRequest cannot be null");
 
@@ -142,7 +142,7 @@ public class LocalityService {
     }
 
     @Transactional
-    public void deleteLocalityById(@NonNull String idLocality) {
+    public void deleteLocalityById(@NonNull Long idLocality) {
         try {
             // Check if the locality exists
             if (!localityRepository.existsById(idLocality)) {
