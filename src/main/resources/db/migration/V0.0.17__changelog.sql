@@ -62,7 +62,7 @@ CREATE TABLE
         lesion_level DECIMAL(5, 2),
         plaque BOOLEAN,
         bleeding BOOLEAN,
-        calculus BOOLEAN,
+        calculus BOOLEAN,   
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,

@@ -21,7 +21,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE
     teeth (
@@ -33,7 +33,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE
     tooth_conditions (
@@ -44,7 +44,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE
     tooth_condition_assignments (
@@ -60,7 +60,7 @@ CREATE TABLE
         FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
         FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition)
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE
     toothface_conditions (
@@ -71,7 +71,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE
     toothface_conditions_assignments (
@@ -94,7 +94,7 @@ CREATE TABLE
         FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
         FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions (id_toothface_conditions),
         FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-    );
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO
     tooth_conditions (description)
