@@ -33,7 +33,7 @@ public class LocalityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LocalityResponse> getLocalityById(@Valid @PathVariable String id) {
+    public ResponseEntity<LocalityResponse> getLocalityById(@Valid @PathVariable Long id) {
         LocalityResponse localityResponse = localityService.getLocalityById(id);
         return ResponseEntity.ok(localityResponse);
     }
@@ -85,13 +85,13 @@ public class LocalityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LocalityResponse> updateLocality(@Valid @PathVariable String id, @Valid @RequestBody LocalityRequest updatedLocalityRequest) {
+    public ResponseEntity<LocalityResponse> updateLocality(@Valid @PathVariable Long id, @Valid @RequestBody LocalityRequest updatedLocalityRequest) {
         LocalityResponse updatedLocality = localityService.updateLocality(id, updatedLocalityRequest);
         return ResponseEntity.ok(updatedLocality);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLocalityById(@Valid @PathVariable String id) {
+    public ResponseEntity<?> deleteLocalityById(@Valid @PathVariable Long id) {
         localityService.deleteLocalityById(id);
         return ResponseEntity.noContent().build();
     }

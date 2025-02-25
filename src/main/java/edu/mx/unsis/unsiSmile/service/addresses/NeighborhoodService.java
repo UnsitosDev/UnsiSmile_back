@@ -75,7 +75,7 @@ public class NeighborhoodService {
     }
 
     @Transactional(readOnly = true)
-    public Page<NeighborhoodResponse> getNeighborhoodsByLocalityId(@NonNull String localityId, @NonNull Pageable pageable) {
+    public Page<NeighborhoodResponse> getNeighborhoodsByLocalityId(@NonNull Long localityId, @NonNull Pageable pageable) {
         try {
             LocalityModel locality = localityRepository.findById(localityId)
                     .orElseThrow(() -> new AppException("Locality not found with ID: " + localityId, HttpStatus.NOT_FOUND));
@@ -148,7 +148,7 @@ public class NeighborhoodService {
         try {
             Assert.notNull(neighborhoodRequest, "NeighborhoodRequest cannot be null");
 
-            String localityId = neighborhoodRequest.getLocality().getIdLocality();
+            Long localityId = neighborhoodRequest.getLocality().getIdLocality();
             String neighborhoodName = neighborhoodRequest.getName();
 
             if (localityId != null) {
