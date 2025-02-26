@@ -20,35 +20,28 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
 
     @Override
     public GroupModel toEntity(GroupRequest dto) {
-        if (dto == null) {
-            return null;
-        }
-        // mapear carrera
         CareerModel careerMaped = careerMapper.toEntity(dto.getCareer());
         return GroupModel.builder()
                 .idGroup(dto.getId())
                 .groupName(dto.getGroupName())
+                .semesterNumber(dto.getSemesterNumber())
                 .career(careerMaped)
                 .build();
     }
 
     @Override
     public GroupResponse toDto(GroupModel entity) {
-        if (entity == null) {
-            return null;
-        }
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
-                .groupName(entity.getGroupName())
-                .career(careerMapper.toDto(entity.getCareer()))
+                .groupName(entity.getSemesterNumber() +
+                        entity.getCareer().getIdCareer() +
+                        "-" +
+                        entity.getGroupName())
                 .build();
     }
 
     @Override
     public List<GroupResponse> toDtos(List<GroupModel> entities) {
-        if (entities == null) {
-            return null;
-        }
         return entities.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -56,9 +49,6 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
 
     @Override
     public void updateEntity(GroupRequest request, GroupModel entity) {
-        if (request == null || entity == null) {
-            return;
-        }
         entity.setGroupName(request.getGroupName());
     }
 }

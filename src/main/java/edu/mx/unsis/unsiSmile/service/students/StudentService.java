@@ -180,15 +180,31 @@ public class StudentService {
 
                 for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                     Row row = sheet.getRow(i);
-                    if (row == null) continue;
-
+                    if (row == null || row.getPhysicalNumberOfCells() == 0) {
+                        continue;
+                    }
                     List<String> rowData = new ArrayList<>();
+                    short validCellCounter = 0;
+
                     for (int j = 0; j < row.getLastCellNum(); j++) {
                         Cell cell = row.getCell(j);
-                        rowData.add(getCellValueAsString(cell));
+                        String cellValue = getCellValueAsString(cell);
+
+                        if (cellValue != null && !cellValue.trim().isEmpty()) {
+                            validCellCounter++;
+                        }
+
+                        rowData.add(cellValue);
                     }
-                    gruposData.add(rowData.get(7));
-                    studentsData.add(rowData);
+
+                    if (validCellCounter > 6) {
+                        String group = rowData.get(7).trim();
+                        if (!group.isEmpty()) {
+                            gruposData.add(group);
+                        }
+
+                        studentsData.add(rowData);
+                    }
                 }
             }
 
@@ -198,7 +214,6 @@ public class StudentService {
             Map<String, GroupModel> groups = groupService.saveGroups(gruposData);
 
             processAndSaveStudents(studentsData, groups);
-
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
