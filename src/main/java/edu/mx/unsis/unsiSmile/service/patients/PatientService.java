@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
@@ -12,7 +11,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
@@ -20,10 +18,10 @@ import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
@@ -53,8 +51,7 @@ public class PatientService {
     private final PatientMapper patientMapper;
     private final IGuardianRepository guardianRepository;
     private final GuardianMapper guardianMapper;
-    private final IAddressRepository addressRepository;
-    private final AddressMapper addressMapper;
+    private final AddressService addressService;
     private final UserService userService;
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
@@ -75,7 +72,7 @@ public class PatientService {
 
             PatientModel patientModel = preparePatientModel(patientRequest, personModel);
             validateAndSetGuardian(patientRequest, patientModel);
-            AddressModel addressModel = createAddressModel(patientRequest.getAddress());
+            AddressModel addressModel = addressService.findOrCreateAddress(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
             relateStudentPatient(savedPatient);
@@ -135,12 +132,6 @@ public class PatientService {
         } catch (Exception e) {
             throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
-    }
-
-    // Method to create an address entity
-    private AddressModel createAddressModel(AddressRequest addressRequest) {
-        Assert.notNull(addressRequest, "AddressRequest cannot be null");
-        return addressRepository.save(addressMapper.toEntity(addressRequest));
     }
 
     // Method to create a guardian entity
