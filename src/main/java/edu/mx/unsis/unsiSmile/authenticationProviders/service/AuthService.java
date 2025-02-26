@@ -69,7 +69,7 @@ public class AuthService {
 
     }
 
-    public String updatePassword(PasswordUpdateRequest request) {
+    public void updatePassword(PasswordUpdateRequest request) {
         try {
             UserModel currentUser = getCurrentUser();
 
@@ -81,8 +81,6 @@ public class AuthService {
             currentUser.setFirstLogin(false);
 
             userRepository.save(currentUser);
-
-            return ResponseMessages.PASSWORD_UPDATED;
         } catch (AppException ex) {
             throw ex;
         } catch (Exception e) {
