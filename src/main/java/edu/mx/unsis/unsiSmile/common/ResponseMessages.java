@@ -1,0 +1,43 @@
+package edu.mx.unsis.unsiSmile.common;
+
+public class ResponseMessages {
+    public static final String SUCCESS = "Operación exitosa";
+    public static final String ERROR = "Ocurrió un error";
+    public static final String NOT_FOUND = "No se encontró el recurso solicitado";
+    public static final String BAD_REQUEST = "Petición incorrecta";
+    public static final String UNAUTHORIZED = "No autorizado";
+    public static final String FORBIDDEN = "Prohibido";
+    public static final String INTERNAL_SERVER_ERROR = "Error interno del servidor";
+    public static final String METHOD_NOT_ALLOWED = "Método no permitido";
+    public static final String CONFLICT = "Conflicto";
+    public static final String UNSUPPORTED_MEDIA_TYPE = "Tipo de medio no soportado";
+    public static final String TOO_MANY_REQUESTS = "Demasiadas peticiones";
+    public static final String SERVICE_UNAVAILABLE = "Servicio no disponible";
+    public static final String GONE = "Recurso no disponible";
+    public static final String PAYLOAD_TOO_LARGE = "Carga útil demasiado grande";
+    public static final String NOT_IMPLEMENTED = "No implementado";
+    public static final String NOT_ACCEPTABLE = "No aceptable";
+    public static final String REQUEST_TIMEOUT = "Tiempo de espera agotado";
+    public static final String CREATED = "Recurso creado";
+    public static final String NO_CONTENT = "Sin contenido";
+    public static final String RESET_CONTENT = "Contenido restablecido";
+    public static final String MOVED_PERMANENTLY = "Movido permanentemente";
+    public static final String MOVED_TEMPORARILY = "Movido temporalmente";
+    public static final String FOUND = "Encontrado";
+    public static final String SEE_OTHER = "Ver otro";
+    public static final String TEMPORARY_REDIRECT = "Redirección temporal";
+    public static final String PERMANENT_REDIRECT = "Redirección permanente";
+    public static final String BAD_GATEWAY = "Puerta de enlace incorrecta";
+    public static final String GATEWAY_TIMEOUT = "Tiempo de espera de la puerta de enlace";
+    public static final String VERSION_NOT_SUPPORTED = "Versión no soportada";
+    public static final String NETWORK_AUTHENTICATION_REQUIRED = "Se requiere autenticación de red";
+    public static final String PRECONDITION_FAILED = "Falló la condición previa";
+    public static final String LOGIN_ERROR = "Usuario o contraseña incorrectos";
+    public static final String USER_NOT_FOUND = "Usuario no encontrado";
+    public static final String USER_ALREADY_EXISTS = "El usuario ya existe";
+    public static final String EMAIL_ALREADY_EXISTS = "El correo electrónico ya está registrado";
+    public static final String BAD_PASSWORD = "Contraseña incorrecta";
+    public static final String PASSWORDS_DO_NOT_MATCH = "Las contraseñas no coinciden";
+    public static final String PASSWORD_UPDATED = "Contraseña actualizada";
+    public static final String PASSWORD_UPDATE_ERROR = "Error al actualizar la contraseña";
+}

@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
@@ -45,17 +43,6 @@ public class AuthController {
     @PostMapping(value = "login")
     public ResponseEntity<ApiResponse<Object>> login(@RequestBody @Valid LoginRequest request) {
         return authService.login(request);
-    }
-
-    /**
-     * Registra un nuevo usuario en la aplicación.
-     *
-     * @param request Objeto que contiene la información de registro del usuario.
-     * @return ResponseEntity con la respuesta de autenticación.
-     */
-    @PostMapping(value = "register")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid RegisterRequest request) {
-        return ResponseEntity.ok(authService.register(request));
     }
 
     /**
