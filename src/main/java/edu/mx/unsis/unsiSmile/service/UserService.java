@@ -205,6 +205,34 @@ public class UserService {
         }
     }
 
+        }
+    }
+
+    @Transactional
+    public void createOrUpdateProfilePicture(MultipartFile profilePicture) {
+        UserResponse currentUser = getCurrentUser();
+        UserModel owner = userRepository.findByUsername(currentUser.getUsername());
+
+        // Verificar si el usuario ya tiene una foto de perfil
+        ProfilePictureModel existingProfilePicture = owner.getProfilePicture();
+        if (existingProfilePicture != null) {
+            // Eliminar el archivo antiguo
+            fileStorageService.deleteFile(existingProfilePicture.getUrl());
+        }
+
+        // Almacenar el nuevo archivo
+        String pictureName = fileStorageService.storeFile(profilePicture);
+
+        // Crear o actualizar el modelo de la foto de perfil
+        ProfilePictureModel profilePictureModel = new ProfilePictureModel();
+        profilePictureModel.setUrl(pictureName);
+        profilePictureModel.setExtentionPicture(fileStorageService.getFileExtension(profilePicture.getOriginalFilename()));
+
+        owner.setProfilePicture(profilePictureModel);
+
+        userRepository.save(owner);
+    }
+
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> getProfilePicture() {
         UserResponse currentUser = getCurrentUser();
