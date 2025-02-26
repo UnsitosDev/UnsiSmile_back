@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface IProfessorGroupRepository extends JpaRepository<ProfessorGroupModel, Long> {
     @Query("SELECT p FROM ProfessorGroupModel p " +
             "WHERE (p.professor.person.firstName LIKE %:keyword% " +
@@ -15,4 +17,8 @@ public interface IProfessorGroupRepository extends JpaRepository<ProfessorGroupM
             "OR p.professor.person.secondLastName LIKE %:keyword% " +
             "OR p.group.groupName LIKE %:keyword%) AND p.statusKey = 'A'")
     Page<ProfessorGroupModel> findAllBySearchInput(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT p FROM ProfessorGroupModel p WHERE p.professor.idProfessor = :employeeNumber " +
+            "AND p.group.statusKey = :status")
+    List<ProfessorGroupModel> findByProfessorAndGroupStatus(@Param("employeeNumber") String employeeNumber, @Param("status") String status);
 }

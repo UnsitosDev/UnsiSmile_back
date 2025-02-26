@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Repository
@@ -44,4 +45,11 @@ public interface IStudentRepository extends JpaRepository<StudentModel, String> 
         @Modifying
         @Query("UPDATE StudentModel s SET s.statusKey = 'A' WHERE s.enrollment = :enrollment")
         void enableStudent(@Param("enrollment") String enrollment);
+
+        @Query("SELECT COUNT(s) FROM StudentModel s WHERE s.statusKey = :status")
+        Long countTotalStudents(@Param("status") String status);
+
+        @Query("SELECT COUNT(s) FROM StudentModel s WHERE s.createdAt >= :lastMonth AND s.statusKey = :status")
+        Long countStudentsRegisteredSince(@Param("lastMonth") Timestamp lastMonth,
+                                          @Param("status") String status);
 }
