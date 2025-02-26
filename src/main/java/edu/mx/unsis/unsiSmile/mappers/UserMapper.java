@@ -37,6 +37,7 @@ public class UserMapper implements BaseMapper<UserResponse, UserRequest, UserMod
                 .username(entity.getUsername())
                 .role(roleMapper.toDto(entity.getRole()))
                 .status(entity.isStatus())
+                .profilePictureId(entity.getProfilePicture() != null ? entity.getProfilePicture().getIdProfilePicture() : null)
                 .build();
     }
 

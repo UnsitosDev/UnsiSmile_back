@@ -2,10 +2,10 @@ CREATE TABLE
     careers (
         id_career VARCHAR(2) NOT NULL,
         career VARCHAR(255) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_career),
         UNIQUE (career)
@@ -15,10 +15,10 @@ CREATE TABLE
     cycles (
         id_cycle BIGINT (20) NOT NULL AUTO_INCREMENT,
         cycle_name VARCHAR(255) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_cycle),
         UNIQUE KEY UK_a25l70ifwyh0blql4041ckiwq (cycle_name)
@@ -28,10 +28,10 @@ CREATE TABLE
     ethnic_groups (
         id_ethnic_group BIGINT (20) NOT NULL,
         ethnic_group VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_ethnic_group),
         UNIQUE KEY UK_bjgrghisvu03pru7u2m1lds75 (ethnic_group)
@@ -41,10 +41,10 @@ CREATE TABLE
     genders (
         id_gender BIGINT (20) NOT NULL AUTO_INCREMENT,
         gender VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_gender),
         UNIQUE KEY UK_k38wg3gipsif7ipes44cf5ak5 (gender)
@@ -57,10 +57,10 @@ CREATE TABLE
         first_name VARCHAR(50) DEFAULT NULL,
         last_name VARCHAR(50) DEFAULT NULL,
         phone VARCHAR(20) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_guardian),
         UNIQUE KEY UK_c4gd8eub8nnr1e5nhvuapmasm (phone)
@@ -70,10 +70,10 @@ CREATE TABLE
     housings (
         id_housing VARCHAR(2) NOT NULL,
         category TEXT DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_housing)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -82,10 +82,10 @@ CREATE TABLE
     marital_statuses (
         id_marital_status BIGINT (20) NOT NULL,
         marital_status VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_marital_status),
         UNIQUE KEY UK_95a7iwl5gxn6hu82lvenflrjb (marital_status)
@@ -103,10 +103,10 @@ CREATE TABLE
     occupations (
         id_occupation BIGINT (20) NOT NULL,
         occupation VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_occupation),
         UNIQUE KEY UK_elbul8ai2woincjektcvtwb2q (occupation)
@@ -116,10 +116,10 @@ CREATE TABLE
     religions (
         id_religion BIGINT (20) NOT NULL,
         religion VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_religion),
         UNIQUE KEY UK_rm2yg4113s5nhv6hqqw98r65v (religion)
@@ -180,18 +180,32 @@ CREATE TABLE
         CONSTRAINT FKqdulr8m8up4rj2d5lpgm3nvp8 FOREIGN KEY (fk_neighborhood) REFERENCES neighborhoods (id_neighborhood)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+create table profile_pictures (
+    id_profile_picture CHAR(36) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    extention_picture VARCHAR(6) NOT NULL,
+    created_at DATETIME (6) DEFAULT NULL,
+    created_by VARCHAR(255) DEFAULT NULL,
+    status_key VARCHAR(255) DEFAULT NULL,
+    updated_at DATETIME (6) DEFAULT NULL,
+    updated_by VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (id_profile_picture)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
 CREATE TABLE
     user_app (
         id CHAR(36) NOT NULL,
         password VARCHAR(255) NOT NULL,
         status BIT (1) NOT NULL,
         username VARCHAR(255) NOT NULL,
-        first_login BIT(1),
+        first_login BIT (1),
         role_id BIGINT (20) DEFAULT NULL,
+        profile_picture_id CHAR(36) DEFAULT NULL,
         PRIMARY KEY (id),
         UNIQUE KEY UK65kue06vu2g78mxpdfke453e5 (username),
         KEY FKbl4c0iar4dskgpsjiydh639i6 (role_id),
-        CONSTRAINT FKbl4c0iar4dskgpsjiydh639i6 FOREIGN KEY (role_id) REFERENCES roles (id)
+        CONSTRAINT FKbl4c0iar4dskgpsjiydh639i6 FOREIGN KEY (role_id) REFERENCES roles (id),
+        CONSTRAINT FK_profile_picture FOREIGN KEY (profile_picture_id) REFERENCES profile_pictures (id_profile_picture)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -205,10 +219,10 @@ CREATE TABLE
         fk_gender BIGINT (20) DEFAULT NULL,
         email VARCHAR(200) DEFAULT NULL,
         phone VARCHAR(10) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (curp),
         UNIQUE KEY UK_sw73blrfiqs1etfk8qecdieyx (email),
@@ -233,10 +247,10 @@ CREATE TABLE
         employee_number VARCHAR(15) NOT NULL,
         fk_person VARCHAR(20) NOT NULL,
         fk_user CHAR(36) NOT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (employee_number),
         FOREIGN KEY (fk_user) REFERENCES user_app (id),
@@ -248,12 +262,12 @@ CREATE TABLE
         id_group BIGINT (20) NOT NULL AUTO_INCREMENT,
         semester_number VARCHAR(2) NOT NULL,
         group_name VARCHAR(255) NOT NULL,
-        fk_career VARCHAR (3) DEFAULT NULL,
+        fk_career VARCHAR(3) DEFAULT NULL,
         fk_semester BIGINT (20) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_group),
         KEY FK2r3h2ds7hdwal6t2gdwbs7xq9 (fk_career),
@@ -274,10 +288,10 @@ CREATE TABLE
         fk_occupation BIGINT (20) DEFAULT NULL,
         fk_person VARCHAR(20) NOT NULL,
         fk_religion BIGINT (20) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_patient),
         KEY FKdlvldb52keb39yb2ffnxvhucy (fk_address),
@@ -302,13 +316,13 @@ CREATE TABLE
     semesters (
         id_semester BIGINT (20) NOT NULL AUTO_INCREMENT,
         semester_name VARCHAR(255) DEFAULT NULL,
-        fecha_inicio DATETIME(6) DEFAULT NULL,
-        fecha_fin DATETIME(6) DEFAULT NULL,
+        fecha_inicio DATETIME (6) DEFAULT NULL,
+        fecha_fin DATETIME (6) DEFAULT NULL,
         fk_cycle BIGINT (20) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_semester),
         KEY FK1jd8yrqhktltrn0mjc2mabd7t (fk_cycle),
@@ -337,10 +351,10 @@ CREATE TABLE
         id_student_patient BIGINT (20) NOT NULL AUTO_INCREMENT,
         fk_patient CHAR(36) DEFAULT NULL,
         fk_student VARCHAR(255) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_student_patient),
         KEY FKghwwjdkti37jnwnwrtiepotgr (fk_patient),
@@ -354,10 +368,10 @@ CREATE TABLE
         id_student_semester BIGINT (20) NOT NULL AUTO_INCREMENT,
         fk_semester BIGINT (20) DEFAULT NULL,
         fk_student VARCHAR(255) DEFAULT NULL,
-        created_at DATETIME(6) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME(6) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id_student_semester),
         KEY FK1ngs2h47y6743rfr8fk9gi0bw (fk_semester),

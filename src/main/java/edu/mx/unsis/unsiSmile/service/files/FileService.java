@@ -8,9 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +21,11 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +39,7 @@ public class FileService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
-        if (files.isEmpty() || idPatientClinicalHistory ==null || idQuestion == null) {
+        if (files.isEmpty() || idPatientClinicalHistory == null || idQuestion == null) {
             throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
 
@@ -63,17 +62,17 @@ public class FileService {
         for (MultipartFile file : files) {
             try {
                 byte[] bytes = file.getBytes();
-                String String = UUID.randomUUID().toString();
-                Path path = Paths.get(Constants.UPLOAD_PATH + String);
+                String fileId = UUID.randomUUID().toString();
+                Path path = Paths.get(Constants.UPLOAD_PATH + fileId);
                 String fileName = file.getOriginalFilename();
                 if (fileName == null) {
                     throw new AppException("Filename is null", HttpStatus.BAD_REQUEST);
                 }
-                String ext = fileName.substring(fileName.lastIndexOf(".") + 1);  // Extraer la extensión sin el punto
+                String ext = fileName.substring(fileName.lastIndexOf(".") + 1); // Extraer la extensión sin el punto
                 Files.write(path, bytes);
 
                 FileModel fileModel = FileModel.builder()
-                        .idFile(String)
+                        .idFile(fileId)
                         .filePath(path.toString())
                         .fileName(fileName)
                         .fileType(ext)
@@ -93,9 +92,9 @@ public class FileService {
 
         try {
             Path filePath = Paths.get(fileModel.getFilePath());
-            Files.deleteIfExists(filePath);  // Eliminar el archivo físico
+            Files.deleteIfExists(filePath); // Eliminar el archivo físico
 
-            fileRepository.delete(fileModel);  // Eliminar el registro de la base de datos
+            fileRepository.delete(fileModel); // Eliminar el registro de la base de datos
         } catch (Exception e) {
             throw new AppException("Error while deleting file", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -107,7 +106,7 @@ public class FileService {
 
         try {
             Path oldFilePath = Paths.get(fileModel.getFilePath());
-            Files.deleteIfExists(oldFilePath);  // Eliminar el archivo antiguo
+            Files.deleteIfExists(oldFilePath); // Eliminar el archivo antiguo
 
             byte[] bytes = newFile.getBytes();
             String String = UUID.randomUUID().toString().replace("-", "");
@@ -116,7 +115,7 @@ public class FileService {
             if (newFileName == null) {
                 throw new AppException("New file name is null", HttpStatus.BAD_REQUEST);
             }
-            String ext = newFileName.substring(newFileName.lastIndexOf(".") + 1);  // Extraer la nueva extensión
+            String ext = newFileName.substring(newFileName.lastIndexOf(".") + 1); // Extraer la nueva extensión
             Files.write(newPath, bytes);
 
             // Actualizar el modelo con la nueva información
@@ -124,7 +123,7 @@ public class FileService {
             fileModel.setFileName(newFileName);
             fileModel.setFileType(ext);
 
-            return fileRepository.save(fileModel);  // Guardar los cambios en la base de datos
+            return fileRepository.save(fileModel); // Guardar los cambios en la base de datos
         } catch (Exception e) {
             throw new AppException("Error while updating file", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -139,9 +138,9 @@ public class FileService {
                     .orElseThrow(() -> new AppException("File not found with id: " + id, HttpStatus.NOT_FOUND));
 
             return fileMapper.toDto(fileModel);
-        }catch (AppException ex){
+        } catch (AppException ex) {
             throw ex;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new AppException("Failed to find file with id: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
@@ -184,7 +183,7 @@ public class FileService {
 
         try {
             Path filePath = Paths.get(fileModel.getFilePath());
-            byte[] fileBytes = Files.readAllBytes(filePath);  // Leer los bytes del archivo
+            byte[] fileBytes = Files.readAllBytes(filePath); // Leer los bytes del archivo
 
             return ResponseEntity.status(HttpStatus.OK)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getFileName() + "\"")
@@ -202,11 +201,11 @@ public class FileService {
 
             if (idPatientClinicalHistory != null) {
                 patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
-                        .orElseThrow(() -> new AppException("Patient Clinical History not found", HttpStatus.NOT_FOUND));
+                        .orElseThrow(
+                                () -> new AppException("Patient Clinical History not found", HttpStatus.NOT_FOUND));
 
                 existingAnswer = answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
-                        idQuestion, patientClinicalHistoryModel.getPatient().getIdPatient()
-                );
+                        idQuestion, patientClinicalHistoryModel.getPatient().getIdPatient());
             } else {
                 existingAnswer = answerRepository.findByQuestionModel_IdQuestion(idQuestion);
             }
