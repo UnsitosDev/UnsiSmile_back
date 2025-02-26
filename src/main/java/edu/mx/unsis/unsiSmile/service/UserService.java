@@ -32,6 +32,7 @@ import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
+import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ public class UserService {
     private final IAdministratorRepository administratorRepository;
     private final AdministratorMapper administratorMapper;
     private final FileStorageService fileStorageService;
+    private final IProfilePictureRepository profilePictureRepository;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -178,9 +180,11 @@ public class UserService {
 
         // Verificar si el usuario ya tiene una foto de perfil
         ProfilePictureModel existingProfilePicture = owner.getProfilePicture();
+        String oldPicture = null;
         if (existingProfilePicture != null) {
             // Eliminar el archivo antiguo
             fileStorageService.deleteFile(existingProfilePicture.getUrl());
+            oldPicture = existingProfilePicture.getIdProfilePicture();
         }
 
         // Almacenar el nuevo archivo
@@ -194,6 +198,11 @@ public class UserService {
         owner.setProfilePicture(profilePictureModel);
 
         userRepository.save(owner);
+
+        // Eliminar el archivo antiguo de la base de datos
+        if (oldPicture != null) {
+            profilePictureRepository.deleteById(oldPicture);
+        }
     }
 
     @Transactional(readOnly = true)
