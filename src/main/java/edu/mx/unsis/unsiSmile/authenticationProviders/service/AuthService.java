@@ -69,7 +69,7 @@ public class AuthService {
 
     }
 
-    public void updatePassword(PasswordUpdateRequest request) {
+    public String updatePassword(PasswordUpdateRequest request) {
         try {
             UserModel currentUser = getCurrentUser();
 
@@ -81,6 +81,8 @@ public class AuthService {
             currentUser.setFirstLogin(false);
 
             userRepository.save(currentUser);
+
+            return ResponseMessages.PASSWORD_UPDATED;
         } catch (AppException ex) {
             throw ex;
         } catch (Exception e) {
@@ -114,20 +116,48 @@ public class AuthService {
     }
 
     private void validateNewPassword(UserModel user, String newPassword) {
-        if (passwordEncoder.matches(newPassword, user.getPassword())) {
-            throw new AppException("The new password cannot be the same as the current password",
-                    HttpStatus.BAD_REQUEST);
-        }
+        try {
+            if (passwordEncoder.matches(newPassword, user.getPassword())) {
+                throw new AppException(ResponseMessages.PASSWORD_SAME_AS_OLD, HttpStatus.BAD_REQUEST);
+            }
 
-        if (!isPasswordStrong(newPassword)) {
-            throw new AppException(
-                    "Weak password: must include at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character",
-                    HttpStatus.BAD_REQUEST);
+            String passwordError = getPasswordError(newPassword);
+            if (passwordError != null) {
+                throw new AppException(passwordError, HttpStatus.BAD_REQUEST);
+            }
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ResponseMessages.PASSWORD_INVALID_CHARACTER, HttpStatus.BAD_REQUEST, e);
+        } catch (Exception e) {
+            throw e;
         }
     }
 
-    private boolean isPasswordStrong(String password) {
-        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-        return password.matches(passwordPattern);
+    private String getPasswordError(String password) {
+        if (password.length() < 8) {
+            return ResponseMessages.PASSWORD_WEAK_LENGTH;
+        }
+
+        if (!password.matches(".*[a-z].*")) {
+            return ResponseMessages.PASSWORD_WEAK_LOWERCASE;
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            return ResponseMessages.PASSWORD_WEAK_UPPERCASE;
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            return ResponseMessages.PASSWORD_WEAK_NUMBER;
+        }
+
+        if (!password.matches(".*[@$!%*?&].*")) {
+            return ResponseMessages.PASSWORD_WEAK_SPECIAL_CHAR;
+        }
+
+        for (char c : password.toCharArray()) {
+            if (!Character.isLetterOrDigit(c) && !"@$!%*?&".contains(String.valueOf(c))) {
+                return String.format(ResponseMessages.PASSWORD_INVALID_SPECIFIC_CHAR, c);
+            }
+        }
+        return null;
     }
 }

@@ -53,9 +53,9 @@ public class AuthController {
      */
     @PatchMapping("/updatePassword")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest) {
-        authService.updatePassword(passwordUpdateRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<String> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest) {
+        String message = authService.updatePassword(passwordUpdateRequest); // Llamamos al servicio y obtenemos el mensaje
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
 
     /**

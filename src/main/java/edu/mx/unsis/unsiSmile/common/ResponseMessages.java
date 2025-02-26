@@ -37,7 +37,17 @@ public class ResponseMessages {
     public static final String USER_ALREADY_EXISTS = "El usuario ya existe";
     public static final String EMAIL_ALREADY_EXISTS = "El correo electrónico ya está registrado";
     public static final String BAD_PASSWORD = "Contraseña incorrecta";
-    public static final String PASSWORDS_DO_NOT_MATCH = "Las contraseñas no coinciden";
-    public static final String PASSWORD_UPDATED = "Contraseña actualizada";
+    public static final String PASSWORDS_DO_NOT_MATCH = "Las nuevas contraseñas no coinciden";
+    public static final String PASSWORD_UPDATED = "Contrase\u00F1a actualizada";
     public static final String PASSWORD_UPDATE_ERROR = "Error al actualizar la contraseña";
+
+    public static final String PASSWORD_SAME_AS_OLD = "La nueva contraseña no puede ser la misma que la contraseña actual";
+    public static final String PASSWORD_INVALID_CHARACTER = "Carácter inválido o no reconocido en la contraseña";
+    public static final String PASSWORD_WEAK_LENGTH = "Contraseña débil: debe incluir al menos 8 caracteres";
+    public static final String PASSWORD_WEAK_LOWERCASE = "Contraseña débil: debe incluir al menos una letra minúscula";
+    public static final String PASSWORD_WEAK_UPPERCASE = "Contraseña débil: debe incluir al menos una letra mayúscula";
+    public static final String PASSWORD_WEAK_NUMBER = "Contraseña débil: debe incluir al menos un número";
+    public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
+    public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
+
 }
