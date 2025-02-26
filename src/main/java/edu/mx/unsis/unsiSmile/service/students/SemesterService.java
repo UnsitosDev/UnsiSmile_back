@@ -31,6 +31,10 @@ public class SemesterService {
         try {
             Assert.notNull(request, "SemesterRequest cannot be null");
 
+            if (request.getEndDate().isBefore(request.getStartDate())) {
+                throw new AppException("End date cannot be before start date", HttpStatus.BAD_REQUEST);
+            }
+
             SemesterModel semesterModel = semesterMapper.toEntity(request);
 
             String semesterName = this.getSemesterName(request.getStartDate(), request.getEndDate(), request.getCycle().getCycleName());
@@ -39,6 +43,8 @@ public class SemesterService {
             semesterRepository.disableAllSemesters();
 
             semesterRepository.save(semesterModel);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to create semester", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

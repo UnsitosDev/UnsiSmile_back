@@ -72,4 +72,11 @@ public class StudentController {
         studentService.loadStudentsFromFile(file);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @Operation(summary = "Cambiar estado de activo/inactivo de un estudiante")
+    @PatchMapping("/{enrollment}/toggle-status")
+    public ResponseEntity<Void> updateStudentStatus(@PathVariable String enrollment) {
+        studentService.updateStudentStatus(enrollment);
+        return ResponseEntity.noContent().build();
+    }
 }

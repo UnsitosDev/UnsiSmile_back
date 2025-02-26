@@ -1,14 +1,25 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDate;
-import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -25,10 +36,6 @@ public class PatientModel extends AuditModel {
 
     @Column(name = "admission_date")
     private LocalDate admissionDate;
-
-
-    @Column(name = "is_minor")
-    private Boolean isMinor;
 
     @Column(name = "has_disability")
     private Boolean hasDisability;

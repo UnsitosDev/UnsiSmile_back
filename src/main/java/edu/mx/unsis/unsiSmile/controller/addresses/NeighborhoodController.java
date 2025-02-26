@@ -47,7 +47,7 @@ public class NeighborhoodController {
     @Operation(summary = "Obtiene una lista paginada de colonias de una localidad")
     @GetMapping("/locality/{localityId}")
     public ResponseEntity<Page<NeighborhoodResponse>> getNeighborhoodsByLocality(
-            @PathVariable String localityId,
+            @PathVariable Long localityId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String order,

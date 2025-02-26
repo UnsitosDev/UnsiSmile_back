@@ -19,7 +19,7 @@ public interface INeighborhoodRepository extends JpaRepository<NeighborhoodModel
 
     List<NeighborhoodModel> findByName(String name);
 
-    List<NeighborhoodModel> findByLocalityIdLocality(String idLocality);
+    List<NeighborhoodModel> findByLocalityIdLocality(Long idLocality);
 
     Page<NeighborhoodModel> findByLocality(LocalityModel locality, Pageable pageable);
 
@@ -27,6 +27,6 @@ public interface INeighborhoodRepository extends JpaRepository<NeighborhoodModel
     Page<NeighborhoodModel> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT n FROM NeighborhoodModel n WHERE n.name = :name AND n.locality.idLocality = :localityId")
-    Optional<NeighborhoodModel> findByLocalityIdAndName(@Param("localityId") String localityId,
+    Optional<NeighborhoodModel> findByLocalityIdAndName(@Param("localityId") Long localityId,
                                                         @Param("name") String name);
 }

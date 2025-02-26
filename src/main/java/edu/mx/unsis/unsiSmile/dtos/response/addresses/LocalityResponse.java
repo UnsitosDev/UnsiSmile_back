@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LocalityResponse {
-    private String idLocality;
+    private Long idLocality;
     private String name;
     private String postalCode;
     private MunicipalityResponse municipality;

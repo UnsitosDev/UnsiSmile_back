@@ -151,7 +151,7 @@ CREATE TABLE
 
 CREATE TABLE
     localities (
-        id_locality VARCHAR(5) NOT NULL,
+        id_locality BIGINT (20) NOT NULL AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL,
         postal_code VARCHAR(5) DEFAULT NULL,
         fk_municipality VARCHAR(4) NOT NULL,
@@ -164,7 +164,7 @@ CREATE TABLE
     neighborhoods (
         id_neighborhood BIGINT (20) NOT NULL AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL,
-        fk_locality VARCHAR(5) NOT NULL,
+        fk_locality BIGINT (20) NOT NULL,
         PRIMARY KEY (id_neighborhood),
         KEY FKcnju14or3j0n7jsu0983icv60 (fk_locality),
         CONSTRAINT FKcnju14or3j0n7jsu0983icv60 FOREIGN KEY (fk_locality) REFERENCES localities (id_locality)
@@ -265,7 +265,6 @@ CREATE TABLE
         id_patient CHAR(36) NOT NULL,
         admission_date DATE DEFAULT NULL,
         has_disability BIT (1) DEFAULT NULL,
-        is_minor BIT (1) DEFAULT NULL,
         medical_record_number BIGINT (20),
         fk_address BIGINT (20) NOT NULL,
         fk_ethnic_group BIGINT (20) DEFAULT NULL,

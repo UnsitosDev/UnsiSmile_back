@@ -19,9 +19,6 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
 
     @Override
     public SemesterModel toEntity(SemesterRequest dto) {
-        if (dto == null) {
-            return null;
-        }
         return SemesterModel.builder()
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
@@ -31,9 +28,6 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
 
     @Override
     public SemesterResponse toDto(SemesterModel entity) {
-        if (entity == null) {
-            return null;
-        }
         return SemesterResponse.builder()
                 .idSemester(entity.getIdSemester())
                 .semesterName(entity.getSemesterName())
@@ -45,9 +39,6 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
 
     @Override
     public List<SemesterResponse> toDtos(List<SemesterModel> entities) {
-        if (entities == null) {
-            return null;
-        }
         return entities.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
@@ -55,9 +46,6 @@ public class SemesterMapper implements BaseMapper<SemesterResponse, SemesterRequ
 
     @Override
     public void updateEntity(SemesterRequest request, SemesterModel entity) {
-        if (request == null || entity == null) {
-            return;
-        }
         entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
         entity.setCycle(cycleMapper.toEntity(request.getCycle()));

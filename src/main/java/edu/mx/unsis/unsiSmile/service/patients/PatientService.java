@@ -85,7 +85,7 @@ public class PatientService {
     }
 
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
-        if (patientRequest.getIsMinor() || isMinor(patientRequest.getPerson().getBirthDate())) {
+        if (isMinor(patientRequest.getPerson().getBirthDate())) {
             GuardianModel guardianModel = Optional.ofNullable(patientRequest.getGuardian())
                     .map(this::createGuardianEntity)
                     .orElseThrow(() -> new AppException("The patient needs to have a guardian", HttpStatus.BAD_REQUEST));
@@ -246,9 +246,14 @@ public class PatientService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientResponse> getPatientsByIsMinor(@NonNull Boolean isMinor) {
+    public List<PatientResponse> getPatientsByMinorStatus(@NonNull Boolean isMinor) {
         try {
-            List<PatientModel> patients = patientRepository.findByIsMinor(isMinor);
+            List<PatientModel> patients;
+            if (isMinor) {
+                patients = patientRepository.findMinorPatients(LocalDate.now().minusYears(18));
+            } else {
+                patients = patientRepository.findAdultPatients(LocalDate.now().minusYears(18));
+            }
             return patients.stream()
                     .map(patientMapper::toDto)
                     .collect(Collectors.toList());

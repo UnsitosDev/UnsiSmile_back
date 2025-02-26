@@ -8,15 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class PatientRequest {
-    @NotNull(message = "isMinor cannot be null")
-    private Boolean isMinor;
 
     @NotNull(message = "hasDisability cannot be null")
     private Boolean hasDisability;

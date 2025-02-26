@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.students;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
@@ -21,6 +22,7 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -52,7 +54,7 @@ public class StudentService {
     private final GroupService groupService;
 
     @Transactional
-    public void createStudent(StudentRequest request) {
+    public void createStudent(@NonNull StudentRequest request) {
         try {
             UserModel userModel = userService.createUser(
                     setCredentials(request.getEnrollment(), request.getPerson().getCurp())
@@ -72,7 +74,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public StudentResponse getStudentByEnrollment(String enrollment) {
+    public StudentResponse getStudentByEnrollment(@NonNull String enrollment) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
@@ -84,7 +86,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public StudentResponse getStudentByUser(UserRequest userRequest) {
+    public StudentResponse getStudentByUser(@NonNull UserRequest userRequest) {
         try {
             UserModel userModel = userMapper.toEntity(userRequest);
 
@@ -125,7 +127,7 @@ public class StudentService {
     }
 
     @Transactional
-    public void updateStudent(String enrollment, StudentRequest updatedStudentRequest) {
+    public void updateStudent(@NonNull String enrollment, @NonNull StudentRequest updatedStudentRequest) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
@@ -140,7 +142,7 @@ public class StudentService {
     }
 
     @Transactional
-    public void deleteStudentByEnrollment(String enrollment) {
+    public void deleteStudentByEnrollment(@NonNull String enrollment) {
         try {
             if (!studentRepository.existsById(enrollment)) {
                 throw new AppException("Student not found with enrollment: " + enrollment, HttpStatus.NOT_FOUND);
@@ -162,7 +164,7 @@ public class StudentService {
     }
 
     @Transactional
-    public void loadStudentsFromFile(MultipartFile file) {
+    public void loadStudentsFromFile(@NonNull MultipartFile file) {
         try (InputStream inputStream = file.getInputStream()) {
             String fileExtension = getFileExtension(Objects.requireNonNull(file.getOriginalFilename()));
 
@@ -329,5 +331,25 @@ public class StudentService {
                         .gender(genderModel.getGender())
                         .build())
                 .orElseThrow(() -> new AppException("Gender not found for CURP", HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional
+    public void updateStudentStatus(@NonNull String enrollment) {
+        try {
+            StudentModel studentModel = studentRepository.findById(enrollment).orElseThrow(()
+                    -> new AppException("Student not found with enrollment: " + enrollment, HttpStatus.NOT_FOUND));
+
+            studentModel.setStatusKey(Constants.ACTIVE.equals(studentModel.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
+
+            UserModel userModel = studentModel.getUser();
+            userModel.setStatus(!userModel.isStatus());
+
+            userRepository.save(userModel);
+            studentRepository.save(studentModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException("Fail to update student status", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

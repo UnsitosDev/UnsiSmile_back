@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.utils.ClinicalHistorySectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistorySectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,12 +32,12 @@ public class ClinicalHistorySectionService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistorySectionModel findById(Long id) {
+    public ClinicalHistorySectionModel findById(ClinicalHistorySectionModelPk  clinicalHistorySectionModelPk) {
         try {
-            return clinicalHistorySectionRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Clinical history section not found with ID: " + id, HttpStatus.NOT_FOUND));
+            return clinicalHistorySectionRepository.findById(clinicalHistorySectionModelPk)
+                    .orElseThrow(() -> new AppException("Clinical history section not found with ID: " + clinicalHistorySectionModelPk, HttpStatus.NOT_FOUND));
         } catch (Exception ex) {
-            throw new AppException("Failed to find clinical history section with ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to find clinical history section with ID: " + clinicalHistorySectionModelPk, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -54,20 +55,20 @@ public class ClinicalHistorySectionService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(ClinicalHistorySectionModelPk clinicalHistorySectionModelPk) {
         try {
-            Optional<ClinicalHistorySectionModel> sectionOptional = clinicalHistorySectionRepository.findById(id);
+            Optional<ClinicalHistorySectionModel> sectionOptional = clinicalHistorySectionRepository.findById(clinicalHistorySectionModelPk);
             sectionOptional.ifPresentOrElse(
                     section -> {
                         section.setStatusKey(Constants.INACTIVE);
                         clinicalHistorySectionRepository.save(section);
                     },
                     () -> {
-                        throw new AppException("Clinical history section not found with ID: " + id, HttpStatus.NOT_FOUND);
+                        throw new AppException("Clinical history section not found with ID: " + clinicalHistorySectionModelPk, HttpStatus.NOT_FOUND);
                     }
             );
         } catch (Exception ex) {
-            throw new AppException("Failed to delete clinical history section with ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to delete clinical history section with ID: " + clinicalHistorySectionModelPk, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

@@ -34,7 +34,8 @@ VALUES
 INSERT INTO catalogs
 (catalog_name)
 VALUES
-    ("Estados civiles");
+    ("Estados civiles"),
+    ("Catedráticos responsables de área");
 
 
 -- datos personales
@@ -141,13 +142,14 @@ INSERT INTO
     fk_form_section,
     fk_answer_type,
     question_order,
-    required
+    required,
+    fk_catalog
 )
 VALUES
-    ("Fecha Aplicación Tópica de Flúor ", 53, 9, 1, false),
-    ("Nombre del operador", 53, 3, 2, false),
-    ("Nombre del asistente", 53, 3, 3, false),
-    ("Docente que autoriza", 53, 3, 4, false);
+    ("Fecha Aplicación Tópica de Flúor ", 53, 9, 1, false, null),
+    ("Nombre del operador", 53, 3, 2, false, null),
+    ("Nombre del asistente", 53, 3, 3, false, null),
+    ("Docente que autoriza", 53, 4, 4, true, 13);
 
 -- PROFILAXIS / DETARTRAJE
 INSERT INTO questions

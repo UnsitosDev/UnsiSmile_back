@@ -1,12 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.professors;
 
-import java.util.Optional;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
@@ -17,11 +10,19 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +31,11 @@ public class ProfessorService {
     private final UserService userService;
     private final ProfessorMapper professorMapper;
     private final PersonService personService;
+    private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
+    private final ProfessorClinicalAreaService professorClinicalAreaService;
 
     @Transactional
-    public void createProfessor(ProfessorRequest request) {
+    public void createProfessor(@NotNull ProfessorRequest request) {
         try {
             PersonModel personModel = personService.createPersonEntity(request.getPerson());
 
@@ -129,5 +132,29 @@ public class ProfessorService {
                 .username(employeeNumber)
                 .role(ERole.ROLE_PROFESSOR.toString())
                 .build();
+    }
+
+    @Transactional
+    public void toggleProfessorStatus(String employeeNumber) {
+        try {
+            ProfessorModel professorModel = professorRepository.findById(employeeNumber)
+                    .orElseThrow(() -> new AppException("Professor not found", HttpStatus.NOT_FOUND));
+
+            boolean isCurrentlyActive = Constants.ACTIVE.equals(professorModel.getStatusKey());
+            String newStatus = isCurrentlyActive ? Constants.INACTIVE : Constants.ACTIVE;
+
+            if (isCurrentlyActive) {
+                professorClinicalAreaRepository.findByProfessorAndStatusKey(professorModel, Constants.ACTIVE)
+                        .ifPresent(clinicalArea -> professorClinicalAreaService.toggleProfessorClinicalAreaStatus(
+                                clinicalArea.getIdProfessorClinicalArea()));
+            }
+
+            professorModel.setStatusKey(newStatus);
+            professorRepository.save(professorModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException("Fail to toggle professor status", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 }
