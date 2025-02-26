@@ -32,9 +32,9 @@ public class FileController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> upload(
             @RequestPart List<MultipartFile> files,
-            @RequestPart @Validated String idPatient,
+            @RequestPart @Validated String idPatientClinicalHistory,
             @RequestPart @Validated String idQuestion) {
-        fileService.upload(files, idPatient, Long.parseLong(idQuestion));
+        fileService.upload(files, Long.parseLong(idPatientClinicalHistory), Long.parseLong(idQuestion));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -51,4 +51,12 @@ public class FileController {
         return fileService.downloadFileById(id);
     }
 
+    @Operation(summary = "Carga los archivos generales para descarga y llenado (consentimiento/asentimiento informado)")
+    @PostMapping("/general")
+    public ResponseEntity<Void> uploadGeneralFiles(
+            @RequestPart List<MultipartFile> files,
+            @RequestPart @Validated String idQuestion) {
+        fileService.uploadGeneralFiles(files, Long.parseLong(idQuestion));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +37,17 @@ public class FileService {
     private final FileMapper fileMapper;
     private final IAnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
+    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
-    public void upload(List<MultipartFile> files, String idPatient, Long idQuestion) {
-        if (files.isEmpty() || idPatient == null || idQuestion == null) {
+    public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
+        if (files.isEmpty() || idPatientClinicalHistory ==null || idQuestion == null) {
             throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
         }
+
+        this.uploadFile(files, idPatientClinicalHistory, idQuestion);
+    }
+
+    private void uploadFile(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
 
         Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
         if (!Files.exists(uploadDir)) {
@@ -49,7 +58,7 @@ public class FileService {
             }
         }
 
-        Long answerId = this.createFromFile(idPatient, idQuestion);
+        Long answerId = this.createFromFile(idPatientClinicalHistory, idQuestion);
 
         for (MultipartFile file : files) {
             try {
@@ -186,17 +195,27 @@ public class FileService {
         }
     }
 
-    private Long createFromFile(String idPatient, Long idQuestion) {
+    private Long createFromFile(Long idPatientClinicalHistory, Long idQuestion) {
         try {
-            Optional<AnswerModel> existingAnswer =  answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
-                    idQuestion, idPatient
-            );
+            Optional<AnswerModel> existingAnswer;
+            PatientClinicalHistoryModel patientClinicalHistoryModel = null;
+
+            if (idPatientClinicalHistory != null) {
+                patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+                        .orElseThrow(() -> new AppException("Patient Clinical History not found", HttpStatus.NOT_FOUND));
+
+                existingAnswer = answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
+                        idQuestion, patientClinicalHistoryModel.getPatient().getIdPatient()
+                );
+            } else {
+                existingAnswer = answerRepository.findByQuestionModel_IdQuestion(idQuestion);
+            }
 
             if (existingAnswer.isPresent()) {
                 return existingAnswer.get().getIdAnswer();
             }
 
-            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(idPatient, idQuestion);
+            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(patientClinicalHistoryModel, idQuestion);
 
             newAnswerModel = answerRepository.save(newAnswerModel);
 
@@ -206,4 +225,17 @@ public class FileService {
         }
     }
 
+    public void uploadGeneralFiles(List<MultipartFile> files, Long idQuestion) {
+        try {
+            if (files.isEmpty() || idQuestion == null) {
+                throw new AppException("Empty file or idQuestion", HttpStatus.BAD_REQUEST);
+            }
+
+            this.uploadFile(files, null, idQuestion);
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Failed to upload general files", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }
