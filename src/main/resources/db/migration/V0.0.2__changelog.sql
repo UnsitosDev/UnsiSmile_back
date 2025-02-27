@@ -57,6 +57,8 @@ CREATE TABLE
         first_name VARCHAR(50) DEFAULT NULL,
         last_name VARCHAR(50) DEFAULT NULL,
         phone VARCHAR(20) DEFAULT NULL,
+        fk_parental_status BIGINT (20) NOT NULL,
+        doctor_name VARCHAR(100) DEFAULT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
