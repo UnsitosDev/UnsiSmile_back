@@ -54,15 +54,14 @@ VALUES
     ("Nombre del pediatra o médico familiar", 48, 3, null, 2, false, "Nombre");
 
 INSERT INTO catalog_options
-(fk_catalog,
- option_name)
+(fk_catalog, option_name, status_key)
 VALUES
-    (12, "Casados"),
-    (12, "Divorciados"),
-    (12, "Separados"),
-    (12, "Viudos"),
-    (12, "Unión libre"),
-    (12, "Solteros");
+    (12, "Casados", "A"),
+    (12, "Divorciados", "A"),
+    (12, "Separados", "A"),
+    (12, "Viudos", "A"),
+    (12, "Unión libre", "A"),
+    (12, "Solteros", "A");
 
 
 -- profilaxis dental - Indice de Higiene Oral Simplificado (IHOS)

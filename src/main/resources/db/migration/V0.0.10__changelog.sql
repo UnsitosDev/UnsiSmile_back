@@ -16,10 +16,10 @@ VALUES
 ;
 
 INSERT INTO
-    catalog_options (fk_catalog, option_name)
+    catalog_options (fk_catalog, option_name, status_key)
 VALUES
-    (11, "Normal"),
-    (11, "Prolongado");
+    (11, "Normal", "A"),
+    (11, "Prolongado", "A");
 
 INSERT INTO
     clinical_history_sections (
