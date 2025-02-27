@@ -58,33 +58,33 @@ VALUES
     ("Proporción corona-raíz");
 
 INSERT INTO
-    catalog_options (fk_catalog, option_name)
+    catalog_options (fk_catalog, option_name, status_key)
 VALUES
-    (6, "Normal"),
-    (6, "Amplio"),
-    (6, "Estrecho"),
-    (6, "Nódulos"),
-    (6, "Calcificada"),
-    (7, "Periodonto normal"),
-    (7, "Periodonto ensanchado"),
-    (7, "Reabsorción apical"),
-    (7, "Cementosis"),
-    (7, "Osteoesclerosis"),
-    (8, "Normal"),
-    (8, "Amplio"),
-    (8, "Estrecho"),
-    (8, "Agujas cálcicas"),
-    (8, "Calcificado"),
-    (9, "1"),
-    (9, "2"),
-    (9, "3"),
-    (9, "4"),
-    (10, "1 a 3"),
-    (10, "1 a 2"),
-    (10, "1 a 1"),
-    (10, "Reabsorción interna"),
-    (10, "Reabsorción externa"),
-    (10, "Obturado");
+    (6, "Normal", "A"),
+    (6, "Amplio", "A"),
+    (6, "Estrecho", "A"),
+    (6, "Nódulos", "A"),
+    (6, "Calcificada", "A"),
+    (7, "Periodonto normal", "A"),
+    (7, "Periodonto ensanchado", "A"),
+    (7, "Reabsorción apical", "A"),
+    (7, "Cementosis", "A"),
+    (7, "Osteoesclerosis", "A"),
+    (8, "Normal", "A"),
+    (8, "Amplio", "A"),
+    (8, "Estrecho", "A"),
+    (8, "Agujas cálcicas", "A"),
+    (8, "Calcificado", "A"),
+    (9, "1", "A"),
+    (9, "2", "A"),
+    (9, "3", "A"),
+    (9, "4", "A"),
+    (10, "1 a 3", "A"),
+    (10, "1 a 2", "A"),
+    (10, "1 a 1", "A"),
+    (10, "Reabsorción interna", "A"),
+    (10, "Reabsorción externa", "A"),
+    (10, "Obturado", "A");
 
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3,  ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- SIGNOS VITALES
