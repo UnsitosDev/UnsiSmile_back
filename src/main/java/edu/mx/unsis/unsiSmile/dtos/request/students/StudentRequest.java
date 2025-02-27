@@ -13,6 +13,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class StudentRequest extends StudentReq{
     private UserRequest user;
-    @NotNull(message = "The person field cannot be null")
+    @NotNull(message = "The person field can not be null")
     private PersonRequest person;
+    @NotNull(message = "The group field can not be null")
+    private GroupRequest group;
 }
