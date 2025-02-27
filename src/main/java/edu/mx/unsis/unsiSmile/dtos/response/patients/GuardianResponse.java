@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.response.patients;
 
+import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,6 @@ public class GuardianResponse {
     private String lastName;
     private String phone;
     private String email;
-    private String parentalStatus;  
+    private CatalogOptionResponse parentalStatus;
     private String doctorName; 
 }

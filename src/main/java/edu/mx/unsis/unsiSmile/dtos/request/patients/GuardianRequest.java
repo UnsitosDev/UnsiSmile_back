@@ -1,7 +1,9 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
+import edu.mx.unsis.unsiSmile.dtos.request.CatalogOptionRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +34,10 @@ public class GuardianRequest {
     @Size(max = 50, message = "Email must be at most 50 characters long")
     private String email;
 
-    @Size(max = 50, message = "Parental status must be at most 50 characters long")
-    private String parentalStatus;  
-    
+    @NotBlank(message = "Parental status cannot be blank")
+    @NotNull(message = "Parental status is required")
+    private CatalogOptionRequest parentalStatus;
+
     @Size(max = 100, message = "Doctor name must be at most 100 characters long")
     private String doctorName; 
 }
