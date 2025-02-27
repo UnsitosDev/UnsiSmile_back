@@ -62,6 +62,8 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME(6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
+        parental_status VARCHAR(50) DEFAULT NULL,  
+        doctor_name VARCHAR(100) DEFAULT NULL,
         PRIMARY KEY (id_guardian),
         UNIQUE KEY UK_c4gd8eub8nnr1e5nhvuapmasm (phone)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -309,7 +311,7 @@ CREATE TABLE
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME(6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL, 
         PRIMARY KEY (id_semester),
         KEY FK1jd8yrqhktltrn0mjc2mabd7t (fk_cycle),
         CONSTRAINT FK1jd8yrqhktltrn0mjc2mabd7t FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle)

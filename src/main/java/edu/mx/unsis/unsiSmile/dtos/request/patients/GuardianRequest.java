@@ -31,4 +31,10 @@ public class GuardianRequest {
     @Email(message = "Email must be a valid email address")
     @Size(max = 50, message = "Email must be at most 50 characters long")
     private String email;
+
+    @Size(max = 50, message = "Parental status must be at most 50 characters long")
+    private String parentalStatus;  
+    
+    @Size(max = 100, message = "Doctor name must be at most 100 characters long")
+    private String doctorName; 
 }

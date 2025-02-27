@@ -15,4 +15,6 @@ public class GuardianResponse {
     private String lastName;
     private String phone;
     private String email;
+    private String parentalStatus;  
+    private String doctorName; 
 }

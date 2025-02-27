@@ -21,6 +21,8 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
                 .lastName(dto.getLastName())
                 .phone(dto.getPhone())
                 .email(dto.getEmail())
+                .parentalStatus(dto.getParentalStatus()) 
+                .doctorName(dto.getDoctorName())          
                 .build();
     }
 
@@ -32,6 +34,8 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
                 .lastName(entity.getLastName())
                 .phone(entity.getPhone())
                 .email(entity.getEmail())
+                .parentalStatus(entity.getParentalStatus())  
+                .doctorName(entity.getDoctorName())          
                 .build();
     }
 
@@ -48,5 +52,7 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
         entity.setLastName(request.getLastName());
         entity.setPhone(request.getPhone());
         entity.setEmail(request.getEmail());
+        entity.setParentalStatus(request.getParentalStatus());  
+        entity.setDoctorName(request.getDoctorName());          
     }
 }
