@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -43,4 +44,23 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
             "AND patient.statusKey = 'A' " +
             "ORDER BY person.firstName ASC")
     List<StudentPatientModel> findAllBySearchInput(String enrollment, String keyword, Pageable pageable);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
+            "sp.student.statusKey = :status")
+    Long countPatientsForStudent(@Param("studentId") String studentId, @Param("status") String status);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
+            "sp.student.statusKey = :status AND sp.patient.hasDisability = true")
+    Long countPatientsWithDisabilityByStudent(@Param("studentId") String studentId, @Param("status") String status);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
+            "sp.student.statusKey = :status AND sp.patient.createdAt >= :lastMonth")
+    Long countPatientsRegisteredSinceByStudent(@Param("studentId") String studentId,
+                                               @Param("lastMonth") Timestamp lastMonth,
+                                               @Param("status") String status);
+
+    @Query("SELECT sp.patient.nationality.nationality, COUNT(sp) FROM StudentPatientModel sp WHERE " +
+            "sp.student.enrollment = :studentId AND sp.student.statusKey = :status GROUP BY sp.patient.nationality")
+    List<Object[]> countPatientsByNationalityByStudent(@Param("studentId") String studentId,
+                                                       @Param("status") String status);
 }

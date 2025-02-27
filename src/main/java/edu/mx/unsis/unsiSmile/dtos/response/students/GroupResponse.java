@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class GroupResponse {
     private Long idGroup;
     private String groupName;
-    private CareerResponse career;
 }

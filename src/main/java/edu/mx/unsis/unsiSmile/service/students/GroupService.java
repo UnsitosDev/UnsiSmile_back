@@ -102,6 +102,7 @@ public class GroupService {
     @Transactional
     public Map<String, GroupModel> saveGroups(List<String> groups) {
         Set<String> uniqueGroupsSet = new HashSet<>(groups);
+        groupRepository.disableAllGroups();
         return mapToGroupModels(uniqueGroupsSet);
     }
 
@@ -120,25 +121,20 @@ public class GroupService {
                 groupModel.setGroupName(group);
                 groupModel.setSemesterNumber(semester);
                 
-
-                // Buscar la carrera
                 Optional<CareerModel> careerModel = careerRepository.findById(career);
                 if (careerModel.isEmpty()) {
                     throw new AppException("Career not found for group: " + career, HttpStatus.NOT_FOUND);
                 }
                 groupModel.setCareer(careerModel.get());
 
-                // Obtener el semestre activo
                 Optional<SemesterModel> semesterModel = semesterService.getActiveSemester();
                 if (semesterModel.isEmpty()) {
                     throw new AppException("Semester not found for group", HttpStatus.NOT_FOUND);
                 }
                 groupModel.setSemester(semesterModel.get());
 
-                // Guardar en la base de datos
                 GroupModel savedGroup = groupRepository.save(groupModel);
 
-                // Agregar el modelo guardado al HashMap
                 groupMap.put(groupFormat, savedGroup);
             }
 

@@ -148,8 +148,16 @@ public class NeighborhoodService {
         try {
             Assert.notNull(neighborhoodRequest, "NeighborhoodRequest cannot be null");
 
+            Long neighborhoodId = neighborhoodRequest.getIdNeighborhood();
             Long localityId = neighborhoodRequest.getLocality().getIdLocality();
             String neighborhoodName = neighborhoodRequest.getName();
+
+            if (neighborhoodId != null && neighborhoodId != 0) {
+                NeighborhoodModel existingNeighborhoodById = neighborhoodRepository.findById(neighborhoodId).orElse(null);
+                if (existingNeighborhoodById != null) {
+                    return existingNeighborhoodById;
+                }
+            }
 
             if (localityId != null) {
                 NeighborhoodModel existingNeighborhood = neighborhoodRepository

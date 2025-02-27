@@ -16,6 +16,7 @@ import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,12 +135,16 @@ public class AnswerService {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
                     .collect(Collectors.toSet());
-            
-            //System.err.println("QuestionIds: " + questionIds);
-            
-            List<AnswerModel> answerModelList = (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)
-                ? answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId) 
-                : answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId, patientClinicalHistoryId);
+
+            List<AnswerModel> answerModelList;
+
+            if (StringUtils.isBlank(patientId) && (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)) {
+                answerModelList = answerRepository.findByQuestion_Ids(questionIds);
+            } else {
+                answerModelList = (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)
+                        ? answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId)
+                        : answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId, patientClinicalHistoryId);
+            }
 
             Map<Long, AnswerResponse> answerMap = new HashMap<>();
 

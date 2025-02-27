@@ -57,11 +57,13 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
 
-    public AnswerModel toEntityFromFile(String idPatient, Long idQuestion) {
+    public AnswerModel toEntityFromFile(PatientClinicalHistoryModel patientClinicalHistory, Long idQuestion) {
         return AnswerModel.builder()
-                .patientModel(PatientModel.builder()
-                        .idPatient(idPatient)
-                        .build())
+                .patientModel(patientClinicalHistory != null ?
+                        PatientModel.builder()
+                                .idPatient(patientClinicalHistory.getPatient().getIdPatient())
+                                .build() : null)
+                .patientClinicalHistoryModel(patientClinicalHistory)
                 .questionModel(QuestionModel.builder()
                         .idQuestion(idQuestion)
                         .build())

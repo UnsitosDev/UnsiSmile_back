@@ -92,23 +92,22 @@ VALUES
 
 
 INSERT INTO catalog_options
-(fk_catalog,
- option_name)
+(fk_catalog, option_name, status_key)
 VALUES
-    ( 1, "Recto"),
-    ( 1, "Cóncavo"),
-    ( 1, "Convexo"),
-    ( 2, "Braquifacial"),
-    ( 2, "Normofacial"),
-    ( 2, "Dolicofacial"),
-    (3, "Clase I"),
-    (3, "Clase II"),
-    (3, "Clase III"),
-    (4, "Ladrillo"),
-    (4, "Adobe"),
-    (4, "Madera"),
-    (4, "Lámina"),
-    (4, "Otro")
+    ( 1, "Recto", "A"),
+    ( 1, "Cóncavo", "A"),
+    ( 1, "Convexo", "A"),
+    ( 2, "Braquifacial", "A"),
+    ( 2, "Normofacial", "A"),
+    ( 2, "Dolicofacial", "A"),
+    (3, "Clase I", "A"),
+    (3, "Clase II", "A"),
+    (3, "Clase III", "A"),
+    (4, "Ladrillo", "A"),
+    (4, "Adobe", "A"),
+    (4, "Madera", "A"),
+    (4, "Lámina", "A"),
+    (4, "Otro", "A")
 ;
 
 
@@ -348,14 +347,13 @@ VALUES
 ;
 
 INSERT INTO catalog_options
-(fk_catalog,
- option_name)
+(fk_catalog, option_name, status_key)
 VALUES
-    (5, "Biometria hemática"),
-    (5, "TP: Tiempo de protrombina"),
-    (5, "TPT: Tiempo de tromboplastina parcial"),
-    (5, "INR: Índice internacional normalizado"),
-    (5, "TT: Tiempo de trombina")
+    (5, "Biometria hemática", "A"),
+    (5, "TP: Tiempo de protrombina", "A"),
+    (5, "TPT: Tiempo de tromboplastina parcial", "A"),
+    (5, "INR: Índice internacional normalizado", "A"),
+    (5, "TT: Tiempo de trombina", "A")
 ;
 
 INSERT INTO questions

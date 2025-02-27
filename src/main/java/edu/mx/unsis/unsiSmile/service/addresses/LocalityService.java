@@ -159,8 +159,16 @@ public class LocalityService {
         try {
             Assert.notNull(localityRequest, "LocalityRequest cannot be null");
 
+            Long localityId = localityRequest.getIdLocality();
             String municipalityId = localityRequest.getMunicipality().getIdMunicipality();
             String localityName = localityRequest.getName();
+
+            if (localityId != null && localityId != 0) {
+                LocalityModel existingLocalityById = localityRepository.findById(localityId).orElse(null);
+                if (existingLocalityById != null) {
+                    return existingLocalityById;
+                }
+            }
 
             if (municipalityId != null) {
                 LocalityModel existingLocality = localityRepository.findByMunicipalityIdAndName(municipalityId, localityName)

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -59,4 +60,17 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
 
     @Query("SELECT MAX(medicalRecordNumber) FROM PatientModel")
     Long findMaxFileNumber();
+
+    @Query("SELECT COUNT(p) FROM PatientModel p WHERE p.statusKey = :status")
+    Long countTotalPatients(@Param("status") String status);
+
+    @Query("SELECT COUNT(p) FROM PatientModel p WHERE p.hasDisability = true AND p.statusKey = :status")
+    Long countPatientsWithDisability(@Param("status") String status);
+
+    @Query("SELECT p.nationality.nationality, COUNT(p) FROM PatientModel p WHERE p.statusKey = :status " +
+            "GROUP BY p.nationality")
+    List<Object[]> countPatientsByNationality(@Param("status") String status);
+
+    @Query("SELECT COUNT(p) FROM PatientModel p WHERE p.createdAt >= :lastMonth AND p.statusKey = :status")
+    Long countPatientsRegisteredSince(@Param("lastMonth") Timestamp lastMonth, @Param("status") String status);
 }

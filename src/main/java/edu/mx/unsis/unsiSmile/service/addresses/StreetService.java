@@ -145,12 +145,19 @@ public class StreetService {
         try {
             Assert.notNull(streetRequest, "StreetRequest cannot be null");
 
+            Long streetId = streetRequest.getIdStreet();
             Long neighborhoodId = streetRequest.getNeighborhood().getIdNeighborhood();
             String streetName = streetRequest.getName();
 
+            if (streetId != null) {
+                StreetModel existingStreetById = streetRepository.findById(streetId).orElse(null);
+                if (existingStreetById != null) {
+                    return existingStreetById;
+                }
+            }
+
             if (neighborhoodId != null) {
                 StreetModel existingStreet = streetRepository.findByNeighborhoodIdAndName(neighborhoodId, streetName).orElse(null);
-
                 if (existingStreet != null) {
                     return existingStreet;
                 }
