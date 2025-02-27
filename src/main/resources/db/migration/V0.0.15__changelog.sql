@@ -15,7 +15,7 @@ INSERT INTO
     placeholder
 )
 VALUES
-    ("Archivos requeridos para autorización", 56, 7, 1, false, null);
+    ("Archivos requeridos para autorización", 55, 7, 1, false, null);
 
 CREATE TABLE refresh_tokens (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,

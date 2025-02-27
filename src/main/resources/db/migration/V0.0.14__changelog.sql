@@ -3,7 +3,6 @@
 INSERT INTO
     form_sections (form_name)
 VALUES
-    ("Datos personales"),
     ("Profilaxis Dental"), -- tiene hijos
     ("Profilaxis Dental - Sesiones"),
     ("Fluorosis"),
