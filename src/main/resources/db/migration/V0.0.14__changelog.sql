@@ -13,8 +13,8 @@ VALUES
 INSERT INTO
     form_sections (form_name, fk_parent_section) 
 VALUES  
-    ("Indice de Higiene Oral Simplificado (IHOS)", 49),
-    ("Profilaxis / Detartraje", 53);
+    ("Indice de Higiene Oral Simplificado (IHOS)", 48),
+    ("Profilaxis / Detartraje", 52);
 
 INSERT INTO clinical_history_sections
 (fk_clinical_history_catalog,
@@ -25,8 +25,7 @@ VALUES
     (6, 49, 2),
     (6, 50, 3),
     (6, 51, 3),
-    (6, 52, 4),
-    (6, 53, 5);
+    (6, 52, 4);
 
 -- catalogo estado civil
 
