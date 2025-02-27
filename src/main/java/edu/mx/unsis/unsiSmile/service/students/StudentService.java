@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.students.StudentGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -52,6 +53,7 @@ public class StudentService {
     private final UserService userService;
     private final IUserRepository userRepository;
     private final GroupService groupService;
+    private final StudentGroupService studentGroupService;
 
     @Transactional
     public void createStudent(@NonNull StudentRequest request) {
@@ -68,6 +70,7 @@ public class StudentService {
             studentModel.setPerson(personModel);
 
             studentRepository.save(studentModel);
+            studentGroupService.createStudentGroup(this.toSGRequest(request.getEnrollment(), request.getGroup().getId()));
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -366,5 +369,12 @@ public class StudentService {
         } catch (Exception ex) {
             throw new AppException("Fail to update student status", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private StudentGroupRequest toSGRequest(String enrollment, Long groupId) {
+        return StudentGroupRequest.builder()
+                .enrollment(enrollment)
+                .groupId(groupId)
+                .build();
     }
 }

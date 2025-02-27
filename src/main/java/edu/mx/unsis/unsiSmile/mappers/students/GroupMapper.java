@@ -20,12 +20,11 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
 
     @Override
     public GroupModel toEntity(GroupRequest dto) {
-        CareerModel careerMaped = careerMapper.toEntity(dto.getCareer());
         return GroupModel.builder()
                 .idGroup(dto.getId())
                 .groupName(dto.getGroupName())
                 .semesterNumber(dto.getSemesterNumber())
-                .career(careerMaped)
+                .career(careerMapper.toEntity(dto.getCareer()))
                 .build();
     }
 
@@ -33,10 +32,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
     public GroupResponse toDto(GroupModel entity) {
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
-                .groupName(entity.getSemesterNumber() +
-                        entity.getCareer().getIdCareer() +
-                        "-" +
-                        entity.getGroupName())
+                .groupName(entity.getGroupName())
                 .build();
     }
 
