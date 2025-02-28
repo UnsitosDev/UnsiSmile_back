@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +52,8 @@ public class UserService {
     private final AdministratorMapper administratorMapper;
     private final FileStorageService fileStorageService;
     private final IProfilePictureRepository profilePictureRepository;
+
+    private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -178,6 +182,12 @@ public class UserService {
         UserResponse currentUser = getCurrentUser();
         UserModel owner = userRepository.findByUsername(currentUser.getUsername());
 
+        // Validar el tipo de archivo
+        String contentType = profilePicture.getContentType();
+        if (!ALLOWED_FILE_TYPES.contains(contentType)) {
+            throw new AppException("Tipo de archivo no permitido. Solo se permiten archivos JPEG, PNG y GIF.", HttpStatus.BAD_REQUEST);
+        }
+
         // Verificar si el usuario ya tiene una foto de perfil
         ProfilePictureModel existingProfilePicture = owner.getProfilePicture();
         String oldPicture = null;
@@ -192,6 +202,7 @@ public class UserService {
 
         // Crear o actualizar el modelo de la foto de perfil
         ProfilePictureModel profilePictureModel = new ProfilePictureModel();
+        profilePictureModel.setIdProfilePicture(UUID.randomUUID().toString());
         profilePictureModel.setUrl(pictureName);
         profilePictureModel.setExtentionPicture(fileStorageService.getFileExtension(profilePicture.getOriginalFilename()));
 
