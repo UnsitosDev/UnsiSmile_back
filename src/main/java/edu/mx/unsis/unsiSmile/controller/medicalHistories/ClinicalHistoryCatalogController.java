@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -82,4 +84,14 @@ public class ClinicalHistoryCatalogController {
         ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Crea un registro de nota de evolución.")
+    @PostMapping(value = "/progress-notes", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> createProgressNote(@RequestPart List<MultipartFile>  progressNoteFiles,
+                                                   @RequestParam String patientId) {
+        clinicalHistoryCatalogService.createProgressNote(progressNoteFiles, patientId);
+        return ResponseEntity.ok().build();
+    }
+
+   
 }
