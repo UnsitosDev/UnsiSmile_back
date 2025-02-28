@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
@@ -11,6 +12,10 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistorySer
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -93,5 +98,19 @@ public class ClinicalHistoryCatalogController {
         return ResponseEntity.ok().build();
     }
 
-   
+    @Operation(summary = "Obtener una lista paginada de notas de evolución de un paciente")
+    @GetMapping("/progress-notes/{patientId}")
+    public ResponseEntity<Page<ProgressNoteResponse>> getProgressNotesByPatient(
+            @PathVariable String patientId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String order,
+            @RequestParam(defaultValue = "false") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<ProgressNoteResponse> progressNotes = clinicalHistoryCatalogService.getProgressNotesByPatient(patientId, pageable);
+
+        return ResponseEntity.ok(progressNotes);
+    }
 }

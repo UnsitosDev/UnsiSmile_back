@@ -6,8 +6,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatal
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
@@ -19,6 +21,8 @@ import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +44,7 @@ public class ClinicalHistoryCatalogService {
 
     private final IPatientRepository patientRepository;
     private final IProgressNoteRepository progressNoteRepository;
+    private final ProgressNoteMapper progressNoteMapper;
     private final FileStorageService fileStorageService;
 
     @Transactional
@@ -182,6 +187,28 @@ public class ClinicalHistoryCatalogService {
             throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProgressNoteResponse> getProgressNotesByPatient(String patientId, Pageable pageable) {
+        try {
+            if (patientId == null || patientId.trim().isEmpty()) {
+                throw new AppException(ResponseMessages.PATIENT_ID_CANNOT_BE_EMPTY, HttpStatus.BAD_REQUEST);
+            }
+
+            PatientModel patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId,
+                            HttpStatus.NOT_FOUND));
+
+            Page<ProgressNoteModel> progressNotes = progressNoteRepository.findByPatient(patient, pageable);
+
+            return progressNotes.map(progressNoteMapper::toDto);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

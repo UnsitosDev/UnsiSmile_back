@@ -50,4 +50,9 @@ public class ResponseMessages {
     public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
     public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
 
+    public static final String PATIENT_NOT_FOUND = "Paciente no encontrado";
+    public static final String ERROR_CREATING_PROGRESS_NOTE = "Error al crear la nota de evolución.";
+    public static final String ERROR_FETCHING_PROGRESS_NOTES = "Error al obtener las notas de evolución del paciente.";
+    public static final String PATIENT_NOT_FOUND_PROGRESS_NOTES = "No se encontraron notas de evolución para el paciente con ID: ";
+    public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
 }
