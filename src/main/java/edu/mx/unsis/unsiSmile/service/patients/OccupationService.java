@@ -7,8 +7,14 @@ import edu.mx.unsis.unsiSmile.mappers.patients.OccupationMapper;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IOccupationRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -72,6 +78,29 @@ public class OccupationService {
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all occupations", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OccupationResponse> getAllOccupations(int page, int size, String order, boolean asc, String keyword) {
+        // Validate the order parameter
+        List<String> validFields = Arrays.asList("occupation");
+        if (order != null && !order.isEmpty() && !validFields.contains(order)) {
+            throw new AppException("Invalid order field: " + order, HttpStatus.BAD_REQUEST);
+        }
+
+        Sort sort = (order == null || order.isEmpty())
+                ? Sort.unsorted()
+                : (asc ? Sort.by(order).ascending() : Sort.by(order).descending());
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<OccupationModel> occupationPage;
+        
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            occupationPage = occupationRepository.findAllBySearchInput(keyword, pageable);
+        } else {
+            occupationPage = occupationRepository.findAll(pageable);
+        }
+        
+        return occupationPage.map(occupationMapper::toDto);
     }
 
     @Transactional
