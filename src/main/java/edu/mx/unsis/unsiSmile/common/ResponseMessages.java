@@ -50,4 +50,6 @@ public class ResponseMessages {
     public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
     public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
 
+    public static final String PERSON_NOT_FOUND = "Persona no encontrada";
+    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado con número de empleado: ";
 }

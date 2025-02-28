@@ -4,12 +4,14 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.professors.ProfessorRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
+import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -88,14 +90,13 @@ public class ProfessorService {
     }
 
     @Transactional
-    public void updateProfessor(ProfessorRequest request) {
+    public void updateProfessor(String professorId, ProfessorRequest request) {
         try {
-            ProfessorModel professorModel = professorRepository.findById(request.getEmployeeNumber())
-                .orElseThrow(() -> new AppException("Professor not found", HttpStatus.NOT_FOUND));
+            ProfessorModel professorModel = professorRepository.findById(professorId)
+                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND +
+                        professorId, HttpStatus.NOT_FOUND));
 
-            personService.updatePerson(request.getPerson().getCurp(), request.getPerson());
-
-            professorMapper.updateEntity(request, professorModel);
+            updateProfessorDetails(professorModel, request);
 
             professorRepository.save(professorModel);
         } catch (AppException e) {
@@ -157,6 +158,17 @@ public class ProfessorService {
             throw e;
         } catch (Exception e) {
             throw new AppException("Fail to toggle professor status", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private void updateProfessorDetails(ProfessorModel professorModel, ProfessorRequest request) {
+        if (request.getCareer() != null && request.getCareer().getIdCareer() != null) {
+            professorModel.setCareer(CareerModel.builder().idCareer(request.getCareer().getIdCareer()).build());
+        }
+
+        if (request.getPerson() != null) {
+            PersonModel updatedPerson = personService.updatedPerson(professorModel.getPerson().getCurp(), request.getPerson());
+            professorModel.setPerson(updatedPerson);
         }
     }
 }

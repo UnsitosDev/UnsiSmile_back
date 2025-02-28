@@ -68,13 +68,15 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
 
     @Override
     public void updateEntity(PersonRequest request, PersonModel entity) {
-        entity.setFirstName(request.getFirstName());
-        entity.setSecondName(request.getSecondName());
-        entity.setFirstLastName(request.getFirstLastName());
-        entity.setSecondLastName(request.getSecondLastName());
-        entity.setPhone(request.getPhone());
-        entity.setBirthDate(request.getBirthDate());
-        entity.setEmail(request.getEmail());
-        entity.setGender(GenderModel.builder().idGender(request.getGender().getIdGender()).build());
+        entity.setFirstName((request.getFirstName() != null && !request.getFirstName().isBlank()) ? request.getFirstName() : entity.getFirstName());
+        entity.setSecondName((request.getSecondName() != null && !request.getSecondName().isBlank()) ? request.getSecondName() : entity.getSecondName());
+        entity.setFirstLastName((request.getFirstLastName() != null && !request.getFirstLastName().isBlank()) ? request.getFirstLastName() : entity.getFirstLastName());
+        entity.setSecondLastName((request.getSecondLastName() != null && !request.getSecondLastName().isBlank()) ? request.getSecondLastName() : entity.getSecondLastName());
+        entity.setPhone((request.getPhone() != null && !request.getPhone().isBlank()) ? request.getPhone() : entity.getPhone());
+        entity.setBirthDate(request.getBirthDate() != null ? request.getBirthDate() : entity.getBirthDate());
+        entity.setEmail((request.getEmail() != null && !request.getEmail().isBlank()) ? request.getEmail() : entity.getEmail());
+        entity.setGender((request.getGender() != null && request.getGender().getIdGender() != null)
+                ? GenderModel.builder().idGender(request.getGender().getIdGender()).build()
+                : entity.getGender());
     }
 }
