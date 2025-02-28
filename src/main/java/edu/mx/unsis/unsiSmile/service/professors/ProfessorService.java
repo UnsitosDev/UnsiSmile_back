@@ -92,7 +92,9 @@ public class ProfessorService {
         try {
             ProfessorModel professorModel = professorRepository.findById(request.getEmployeeNumber())
                 .orElseThrow(() -> new AppException("Professor not found", HttpStatus.NOT_FOUND));
-            
+
+            personService.updatePerson(request.getPerson().getCurp(), request.getPerson());
+
             professorMapper.updateEntity(request, professorModel);
 
             professorRepository.save(professorModel);

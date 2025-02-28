@@ -1,14 +1,14 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.model.GenderModel;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, PersonModel> {
@@ -68,13 +68,13 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
 
     @Override
     public void updateEntity(PersonRequest request, PersonModel entity) {
-        // entity.setFirstName(request.getFirstName());
-        // entity.setSecondName(request.getSecondName());
-        // entity.setFirstLastName(request.getFirstLastName());
-        // entity.setSecondLastName(request.getSecondLastName());
-        // entity.setPhone(request.getPhone());
-        // entity.setBirthDate(request.getBirthDate());
-        // entity.setEmail(request.getEmail());
-        // entity.setGender(GenderModel.builder().id(request.getGenderId()).build());
+        entity.setFirstName(request.getFirstName());
+        entity.setSecondName(request.getSecondName());
+        entity.setFirstLastName(request.getFirstLastName());
+        entity.setSecondLastName(request.getSecondLastName());
+        entity.setPhone(request.getPhone());
+        entity.setBirthDate(request.getBirthDate());
+        entity.setEmail(request.getEmail());
+        entity.setGender(GenderModel.builder().idGender(request.getGender().getIdGender()).build());
     }
 }
