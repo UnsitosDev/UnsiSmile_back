@@ -1,34 +1,22 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IProgressNoteRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
-import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,11 +29,6 @@ public class ClinicalHistoryCatalogService {
     private final ClinicalHistorySectionService clinicalHistorySectionService;
     private final FormSectionService formSectionService;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
-
-    private final IPatientRepository patientRepository;
-    private final IProgressNoteRepository progressNoteRepository;
-    private final ProgressNoteMapper progressNoteMapper;
-    private final FileStorageService fileStorageService;
 
     @Transactional
     public void save(ClinicalHistoryCatalogRequest request) {
@@ -159,56 +142,5 @@ public class ClinicalHistoryCatalogService {
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
                 .patientId(result[3] != null ? result[3].toString() : null)
                 .build();
-    }
-
-    @Transactional
-    public void createProgressNote(List<MultipartFile>  progressNoteFiles, String patientId) {
-        try {
-            PatientModel patient = patientRepository.findById(patientId)
-                    .orElseThrow(() -> new AppException(
-                            ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId,
-                            HttpStatus.NOT_FOUND));
-
-            List<ProgressNoteModel> progressNotes = new ArrayList<>();
-
-            for (MultipartFile file : progressNoteFiles) {
-                String fileName = fileStorageService.storeFile(file);
-
-                ProgressNoteModel newProgressNote = new ProgressNoteModel();
-                newProgressNote.setUrl(fileName);
-                newProgressNote.setExtention(fileStorageService.getFileExtension(file.getOriginalFilename()));
-                newProgressNote.setPatient(patient);
-
-                progressNotes.add(newProgressNote);
-            }
-
-            progressNoteRepository.saveAll(progressNotes);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ProgressNoteResponse> getProgressNotesByPatient(String patientId, Pageable pageable) {
-        try {
-            if (patientId == null || patientId.trim().isEmpty()) {
-                throw new AppException(ResponseMessages.PATIENT_ID_CANNOT_BE_EMPTY, HttpStatus.BAD_REQUEST);
-            }
-
-            PatientModel patient = patientRepository.findById(patientId)
-                    .orElseThrow(() -> new AppException(
-                            ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId,
-                            HttpStatus.NOT_FOUND));
-
-            Page<ProgressNoteModel> progressNotes = progressNoteRepository.findByPatient(patient, pageable);
-
-            return progressNotes.map(progressNoteMapper::toDto);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 }
