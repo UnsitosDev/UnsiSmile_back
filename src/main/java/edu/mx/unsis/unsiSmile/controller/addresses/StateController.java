@@ -11,10 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/states")
+@Validated
 public class StateController {
 
     private final StateService stateService;
@@ -30,13 +32,13 @@ public class StateController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StateResponse> getStateById(@Valid @PathVariable String id) {
+    public ResponseEntity<StateResponse> getStateById(@PathVariable String id) {
         StateResponse stateResponse = stateService.getStateById(id);
         return ResponseEntity.ok(stateResponse);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<StateResponse> getStateByName(@Valid @PathVariable String name) {
+    public ResponseEntity<StateResponse> getStateByName(@PathVariable String name) {
         StateResponse stateResponse = stateService.getStateByName(name);
         return ResponseEntity.ok(stateResponse);
     }
@@ -57,13 +59,13 @@ public class StateController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StateResponse> updateState(@Valid @PathVariable String id, @Valid @RequestBody StateRequest updatedStateRequest) {
+    public ResponseEntity<StateResponse> updateState(@PathVariable String id, @Valid @RequestBody StateRequest updatedStateRequest) {
         StateResponse updatedState = stateService.updateState(id, updatedStateRequest);
         return ResponseEntity.ok(updatedState);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteStateById(@Valid @PathVariable String id) {
+    public ResponseEntity<?> deleteStateById(@PathVariable String id) {
         stateService.deleteStateById(id);
         return ResponseEntity.noContent().build();
     }
