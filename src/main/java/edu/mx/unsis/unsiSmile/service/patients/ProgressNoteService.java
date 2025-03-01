@@ -1,0 +1,164 @@
+package edu.mx.unsis.unsiSmile.service.patients;
+
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;
+import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentModel;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteFileRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
+import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ProgressNoteService {
+    private final IProgressNoteRepository progressNoteRepository;
+    private final IProgressNoteFileRepository progressNoteFileRepository;
+    private final IPatientRepository patientRepository;
+    private final IStudentRepository studentRepository;
+    private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
+    private final ProgressNoteMapper progressNoteMapper;
+    private final FileStorageService fileStorageService;
+    private final UserService userService;
+    private final ProgressNoteFileMapper progressNoteFileMapper;
+
+    @Transactional
+    public ProgressNoteResponse createProgressNote(@NonNull ProgressNoteRequest request) {
+        try {
+            Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
+
+            PatientModel patient = patientRepository.findById(request.getPatientId())
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: "
+                            + request.getPatientId(), HttpStatus.NOT_FOUND));
+
+            UserResponse user = userService.getCurrentUser();
+
+            StudentModel student = studentRepository.findById(user.getUsername())
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: "
+                            + user.getUsername(), HttpStatus.NOT_FOUND));
+
+            ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(
+                    request.getProfessorClinicalAreaId())
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND
+                            + " con ID: " + request.getProfessorClinicalAreaId(), HttpStatus.NOT_FOUND));
+
+            ProgressNoteModel progressNote = progressNoteMapper.toEntity(request);
+
+            progressNote.setPatient(patient);
+            progressNote.setStudent(student);
+            progressNote.setProfessor(professorClinicalArea.getProfessor());
+
+            return progressNoteMapper.toDto(progressNoteRepository.save(progressNote));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public void uploadProgressNote(List<MultipartFile> progressNoteFiles, String progressNoteId) {
+        try {
+            ProgressNoteModel progressNote = progressNoteRepository.findById(progressNoteId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + progressNoteId,
+                            HttpStatus.NOT_FOUND));
+
+            List<ProgressNoteFileModel> progressNotes = new ArrayList<>();
+
+            for (MultipartFile file : progressNoteFiles) {
+                String fileName = fileStorageService.storeFile(file);
+
+                ProgressNoteFileModel newProgressNote = new ProgressNoteFileModel();
+                newProgressNote.setUrl(fileName);
+                newProgressNote.setExtension(fileStorageService.getFileExtension(file.getOriginalFilename()));
+                newProgressNote.setProgressNote(progressNote);
+
+                progressNotes.add(newProgressNote);
+            }
+
+            progressNoteFileRepository.saveAll(progressNotes);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProgressNoteResponse> getProgressNotesByPatient(String patientId, Pageable pageable) {
+        try {
+            if (patientId == null || patientId.trim().isEmpty()) {
+                throw new AppException(ResponseMessages.PATIENT_ID_CANNOT_BE_EMPTY, HttpStatus.BAD_REQUEST);
+            }
+
+            PatientModel patient = patientRepository.findById(patientId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId,
+                            HttpStatus.NOT_FOUND));
+
+            Page<ProgressNoteModel> progressNotes = progressNoteRepository.findByPatient(patient, pageable);
+
+            List<ProgressNoteResponse> progressNoteResponses = progressNotes.stream().map(progressNote -> {
+                ProgressNoteResponse progressNoteResponse = progressNoteMapper.toDto(progressNote);
+                List<ProgressNoteFileModel> files = progressNoteFileRepository.findByProgressNote(progressNote);
+
+                List<ProgressNoteFileResponse> fileResponses = files.stream()
+                        .map(file -> progressNoteFileMapper.toDto(file, progressNote.getCreatedAt()))
+                        .collect(Collectors.toList());
+
+                progressNoteResponse.setFiles(fileResponses);
+
+                String studentName = getFullName(progressNote.getStudent().getPerson());
+                String professorName = getFullName(progressNote.getProfessor().getPerson());
+                String patientName = getFullName(patient.getPerson());
+
+                progressNoteResponse.setStudent(studentName);
+                progressNoteResponse.setProfessor(professorName);
+                progressNoteResponse.getPatient().setName(patientName);
+
+                return progressNoteResponse;
+            }).collect(Collectors.toList());
+
+            return new PageImpl<>(progressNoteResponses, pageable, progressNotes.getTotalElements());
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private String getFullName(PersonModel person) {
+        return person.getFirstName() + " " +
+                (person.getSecondName() != null ? person.getSecondName() + " " : "") +
+                person.getFirstLastName() + " " +
+                person.getSecondLastName();
+    }
+}
