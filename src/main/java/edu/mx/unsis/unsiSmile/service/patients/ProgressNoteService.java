@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
@@ -9,6 +10,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
@@ -26,12 +28,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,9 +104,12 @@ public class ProgressNoteService {
                 String fileName = fileStorageService.storeFile(file);
 
                 ProgressNoteFileModel newProgressNote = new ProgressNoteFileModel();
-                newProgressNote.setUrl(fileName);
+                newProgressNote.setUrl(Constants.UPLOAD_PATH + fileName);
                 newProgressNote.setExtension(fileStorageService.getFileExtension(file.getOriginalFilename()));
                 newProgressNote.setProgressNote(progressNote);
+                String fName = fileName.substring(0, fileName.lastIndexOf("."));
+
+                newProgressNote.setIdProgressNoteFile(fName);
 
                 progressNotes.add(newProgressNote);
             }
@@ -160,5 +170,22 @@ public class ProgressNoteService {
                 (person.getSecondName() != null ? person.getSecondName() + " " : "") +
                 person.getFirstLastName() + " " +
                 person.getSecondLastName();
+    }
+
+    public ResponseEntity<byte[]> downloadProgressNoteById(String id) {
+        ProgressNoteFileModel fileModel = progressNoteFileRepository.findById(id)
+                .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+        try {
+            Path filePath = Paths.get(fileModel.getUrl());
+            byte[] fileBytes = Files.readAllBytes(filePath);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getUrl() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
+                    .body(fileBytes);
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_WHILE_DOWNLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 }

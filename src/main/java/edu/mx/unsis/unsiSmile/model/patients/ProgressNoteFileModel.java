@@ -26,11 +26,4 @@ public class ProgressNoteFileModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_progress_note", nullable = false)
     private ProgressNoteModel progressNote;
-
-    @PrePersist
-    public void generateId() {
-        if (idProgressNoteFile == null) {
-            idProgressNoteFile = UUID.randomUUID().toString();
-        }
-    }
 }

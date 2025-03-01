@@ -54,4 +54,10 @@ public class ProgressNoteController {
         progressNoteService.uploadProgressNote(progressNoteFiles, progressNoteId);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Obtiene un archivo para su descarga")
+    @GetMapping("files/{id}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
+        return progressNoteService.downloadProgressNoteById(id);
+    }
 }
