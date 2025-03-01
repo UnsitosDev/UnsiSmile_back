@@ -71,6 +71,7 @@ public class ResponseMessages {
     public static final String NEIGHBORHOOD_NAME_NULL = "El nombre del vecindario no puede ser nulo.";
     public static final String NEIGHBORHOOD_NAME_SIZE = "El nombre del vecindario debe tener como máximo 50 caracteres.";
     public static final String NEIGHBORHOOD_CREATE_FAILED = "Error al buscar o crear el vecindario";
+    public static final String NEIGHBORHOODS_FETCH_FAILED = "Error al obtener los vecindarios";
 
     public static final String LOCALITY_NULL = "La localidad no puede ser nula.";
     public static final String LOCALITY_NAME_BLANK = "El nombre de la localidad no puede estar vacío.";
