@@ -171,6 +171,8 @@ public class StreetService {
 
             return streetRepository.save(streetModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to find or create street", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

@@ -187,6 +187,8 @@ public class LocalityService {
 
             return localityRepository.save(localityModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to find or create locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

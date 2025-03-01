@@ -166,6 +166,8 @@ public class MunicipalityService {
 
             return municipalityRepository.save(municipalityModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to find or create municipality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

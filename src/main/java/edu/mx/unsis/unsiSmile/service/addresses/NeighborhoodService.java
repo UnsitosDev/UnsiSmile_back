@@ -177,6 +177,8 @@ public class NeighborhoodService {
 
             return neighborhoodRepository.save(neighborhoodModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to find or create neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
