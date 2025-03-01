@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StreetRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -143,7 +144,7 @@ public class StreetService {
     @Transactional
     public StreetModel findOrCreateStreet(@NonNull StreetRequest streetRequest) {
         try {
-            Assert.notNull(streetRequest, "StreetRequest cannot be null");
+            Assert.notNull(streetRequest, ResponseMessages.STREET_NULL);
 
             Long streetId = streetRequest.getIdStreet();
             Long neighborhoodId = streetRequest.getNeighborhood().getIdNeighborhood();
@@ -174,7 +175,7 @@ public class StreetService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create street", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.STREET_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

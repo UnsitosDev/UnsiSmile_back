@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -146,7 +147,7 @@ public class NeighborhoodService {
     @Transactional
     public NeighborhoodModel findOrCreateNeighborhood(@NonNull NeighborhoodRequest neighborhoodRequest) {
         try {
-            Assert.notNull(neighborhoodRequest, "NeighborhoodRequest cannot be null");
+            Assert.notNull(neighborhoodRequest, ResponseMessages.NEIGHBORHOOD_NULL);
 
             Long neighborhoodId = neighborhoodRequest.getIdNeighborhood();
             Long localityId = neighborhoodRequest.getLocality().getIdLocality();
@@ -180,7 +181,7 @@ public class NeighborhoodService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.NEIGHBORHOOD_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
