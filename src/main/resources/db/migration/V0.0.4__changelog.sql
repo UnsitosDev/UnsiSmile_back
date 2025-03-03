@@ -26,6 +26,7 @@ INSERT INTO `localities` (name, postal_code, fk_municipality) VALUES ('El Tunill
 
 INSERT INTO `nationalities` VALUES (1,'Mexicana'),(2,'Estadounidense'),(3,'Canadiense'),(4,'Española'),(5,'Francesa');
 
+INSERT INTO `neighborhoods` (name) values('S/C');
 INSERT INTO `neighborhoods` (name, fk_locality) VALUES ('Dolores', 928), ('Cañada Dolores', 928), ('Abajo', 928), ('Arriba', 928), ('Benito Juárez', 928), ('Chico', 928), ('La Merced', 928), ('Loma Linda', 928), ('San Francisco', 928), ('Santa Cecilia', 928), ('Centro', 928), ('Porfirio Díaz', 928), ('20 de Noviembre', 928), ('San Juan Bosco', 928), ('Del Higo', 928), ('San Isidro', 928), ('Emiliano Zapata', 928), ('El Gueche', 928), ('Feliciano García', 928), ('San Antonio', 928), ('Piloto Popular', 928), ('Ampliación Benito Juárez', 928), ('Labor del Rosario', 928), ('3 de Octubre', 928), ('Universitaria', 928), ('Tierra Negra', 928), ('Deportiva', 928), ('Labor de Medina', 928), ('Manuel Altamirano', 928), ('Aurora', 928), ('San Martín Caballero', 928), ('Lachindo', 928), ('Televisa', 928), ('Arenal', 928), ('El Paraíso', 928), ('Miel del Valle', 928), ('San Ignacio', 928), ('Los Arcos', 928), ('La Esperanza', 928);
 
 INSERT INTO `streets` VALUES (1,'Calle Juárez',20),(2,'Avenida Reforma',7),(3,'Francisco I. Madero',13);

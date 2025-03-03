@@ -12,12 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/neighborhoods")
+@Validated
 public class NeighborhoodController {
 
     private final NeighborhoodService neighborhoodService;
@@ -33,13 +35,13 @@ public class NeighborhoodController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NeighborhoodResponse> getNeighborhoodById(@Valid @PathVariable Long id) {
+    public ResponseEntity<NeighborhoodResponse> getNeighborhoodById(@PathVariable Long id) {
         NeighborhoodResponse neighborhoodResponse = neighborhoodService.getNeighborhoodById(id);
         return ResponseEntity.ok(neighborhoodResponse);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<NeighborhoodResponse>> getNeighborhoodsByName(@Valid @PathVariable String name) {
+    public ResponseEntity<List<NeighborhoodResponse>> getNeighborhoodsByName(@PathVariable String name) {
         List<NeighborhoodResponse> neighborhoodResponses = neighborhoodService.getNeighborhoodsByName(name);
         return ResponseEntity.ok(neighborhoodResponses);
     }
@@ -80,13 +82,13 @@ public class NeighborhoodController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NeighborhoodResponse> updateNeighborhood(@Valid @PathVariable Long id, @Valid @RequestBody NeighborhoodRequest updatedNeighborhoodRequest) {
+    public ResponseEntity<NeighborhoodResponse> updateNeighborhood(@PathVariable Long id, @Valid @RequestBody NeighborhoodRequest updatedNeighborhoodRequest) {
         NeighborhoodResponse updatedNeighborhood = neighborhoodService.updateNeighborhood(id, updatedNeighborhoodRequest);
         return ResponseEntity.ok(updatedNeighborhood);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteNeighborhoodById(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> deleteNeighborhoodById(@PathVariable Long id) {
         neighborhoodService.deleteNeighborhoodById(id);
         return ResponseEntity.noContent().build();
     }

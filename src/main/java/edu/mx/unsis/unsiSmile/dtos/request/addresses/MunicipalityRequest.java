@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,14 +15,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MunicipalityRequest {
-    @NotBlank(message = "Municipality ID cannot be blank")
-    @Size(min = 4, max = 4, message = "Municipality ID must be 4 characters long")
+    @NotBlank(message = ResponseMessages.MUNICIPALITY_ID_BLANK)
+    @Size(min = 4, max = 4, message = ResponseMessages.MUNICIPALITY_ID_SIZE)
     private String idMunicipality;
 
-    @NotBlank(message = "Municipality name cannot be blank")
-    @Size(max = 50, message = "Municipality name must be at most 50 characters long")
+    @NotBlank(message = ResponseMessages.MUNICIPALITY_NAME_BLANK)
+    @Size(max = 50, message = ResponseMessages.MUNICIPALITY_NAME_SIZE)
     private String name;
 
-    @NotNull(message = "State cannot be null")
+    @NotNull(message = ResponseMessages.STATE_NULL)
+    @Valid
     private StateRequest state;
 }

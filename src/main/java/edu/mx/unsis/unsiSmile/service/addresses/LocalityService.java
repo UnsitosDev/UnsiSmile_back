@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.LocalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -157,7 +158,7 @@ public class LocalityService {
     @Transactional
     public LocalityModel findOrCreateLocality(@NonNull LocalityRequest localityRequest) {
         try {
-            Assert.notNull(localityRequest, "LocalityRequest cannot be null");
+            Assert.notNull(localityRequest, ResponseMessages.LOCALITY_NULL);
 
             Long localityId = localityRequest.getIdLocality();
             String municipalityId = localityRequest.getMunicipality().getIdMunicipality();
@@ -187,8 +188,10 @@ public class LocalityService {
 
             return localityRepository.save(localityModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create locality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.LOCALITY_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

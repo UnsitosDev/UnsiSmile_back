@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -10,6 +11,7 @@ import edu.mx.unsis.unsiSmile.repository.addresses.ILocalityRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.INeighborhoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -17,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,13 +84,24 @@ public class NeighborhoodService {
             LocalityModel locality = localityRepository.findById(localityId)
                     .orElseThrow(() -> new AppException("Locality not found with ID: " + localityId, HttpStatus.NOT_FOUND));
 
+            Optional<NeighborhoodModel> specialNeighborhoodOpt = getSpecialNeighborhood();
+
             Page<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocality(locality, pageable);
 
-            return neighborhoodModels.map(neighborhoodMapper::toDto);
+            List<NeighborhoodModel> combinedNeighborhoods = new ArrayList<>();
+
+            specialNeighborhoodOpt.ifPresent(combinedNeighborhoods::add);
+
+
+            combinedNeighborhoods.addAll(neighborhoodModels.getContent());
+
+            return new PageImpl<>(combinedNeighborhoods.stream()
+                    .map(neighborhoodMapper::toDto)
+                    .collect(Collectors.toList()), pageable, combinedNeighborhoods.size());
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch neighborhoods by locality ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.NEIGHBORHOODS_FETCH_FAILED + "para la localidad con ID: " + localityId, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -100,10 +115,21 @@ public class NeighborhoodService {
             } else {
                 neighborhoodModels = neighborhoodRepository.findByKeyword(keyword, pageable);
             }
+            List<NeighborhoodModel> combinedNeighborhoods = new ArrayList<>(neighborhoodModels.getContent());
 
-            return neighborhoodModels.map(neighborhoodMapper::toDto);
+            if (pageable.getPageNumber() == 0) {
+                getSpecialNeighborhood().ifPresent(combinedNeighborhoods::addFirst);
+            }
+
+            return new PageImpl<>(
+                    combinedNeighborhoods.stream()
+                            .map(neighborhoodMapper::toDto)
+                            .collect(Collectors.toList()),
+                    pageable,
+                    combinedNeighborhoods.size()
+            );
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch neighborhoods", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.NEIGHBORHOODS_FETCH_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -146,7 +172,7 @@ public class NeighborhoodService {
     @Transactional
     public NeighborhoodModel findOrCreateNeighborhood(@NonNull NeighborhoodRequest neighborhoodRequest) {
         try {
-            Assert.notNull(neighborhoodRequest, "NeighborhoodRequest cannot be null");
+            Assert.notNull(neighborhoodRequest, ResponseMessages.NEIGHBORHOOD_NULL);
 
             Long neighborhoodId = neighborhoodRequest.getIdNeighborhood();
             Long localityId = neighborhoodRequest.getLocality().getIdLocality();
@@ -177,9 +203,34 @@ public class NeighborhoodService {
 
             return neighborhoodRepository.save(neighborhoodModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create neighborhood", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.NEIGHBORHOOD_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private Optional<NeighborhoodModel> getSpecialNeighborhood() {
+        Optional<Object[]> firstNeighborhoodOpt = neighborhoodRepository.findFirst();
+
+        return firstNeighborhoodOpt.flatMap(dataArray -> {
+            // Validamos que el array no esté vacío antes de acceder a índices
+            if (dataArray.length == 0) {
+                return Optional.empty();
+            }
+
+            Object[] neighborhoodData = (Object[]) dataArray[0];
+
+            Long idNeighborhood = ((Number) neighborhoodData[0]).longValue();
+            String name = (String) neighborhoodData[1];
+
+            return Optional.of(
+                    NeighborhoodModel.builder()
+                            .idNeighborhood(idNeighborhood)
+                            .name(name)
+                            .build()
+            );
+        });
     }
 
 }

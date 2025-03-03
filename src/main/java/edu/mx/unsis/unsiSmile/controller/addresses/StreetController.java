@@ -12,12 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/streets")
+@Validated
 public class StreetController {
 
     private final StreetService streetService;
@@ -33,13 +35,13 @@ public class StreetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StreetResponse> getStreetById(@Valid @PathVariable Long id) {
+    public ResponseEntity<StreetResponse> getStreetById(@PathVariable Long id) {
         StreetResponse streetResponse = streetService.getStreetById(id);
         return ResponseEntity.ok(streetResponse);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<StreetResponse>> getStreetsByName(@Valid @PathVariable String name) {
+    public ResponseEntity<List<StreetResponse>> getStreetsByName(@PathVariable String name) {
         List<StreetResponse> streetResponses = streetService.getStreetsByName(name);
         return ResponseEntity.ok(streetResponses);
     }
@@ -81,13 +83,13 @@ public class StreetController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<StreetResponse> updateStreet(@Valid @PathVariable Long id, @Valid @RequestBody StreetRequest updatedStreetRequest) {
+    public ResponseEntity<StreetResponse> updateStreet(@PathVariable Long id, @Valid @RequestBody StreetRequest updatedStreetRequest) {
         StreetResponse updatedStreet = streetService.updateStreet(id, updatedStreetRequest);
         return ResponseEntity.ok(updatedStreet);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteStreetById(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> deleteStreetById(@PathVariable Long id) {
         streetService.deleteStreetById(id);
         return ResponseEntity.noContent().build();
     }
