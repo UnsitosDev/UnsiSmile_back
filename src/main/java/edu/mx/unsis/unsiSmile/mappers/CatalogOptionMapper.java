@@ -15,6 +15,7 @@ public class CatalogOptionMapper implements BaseMapper<CatalogOptionResponse, Ca
     @Override
     public CatalogOptionModel toEntity(CatalogOptionRequest dto) {
         return CatalogOptionModel.builder()
+                .idCatalogOption(dto.getIdCatalogOption())
                 .optionName(dto.getOptionName())
                 .catalogModel(CatalogModel.builder()
                         .idCatalog(dto.getIdCatalog())

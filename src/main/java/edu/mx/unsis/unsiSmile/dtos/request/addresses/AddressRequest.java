@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,16 +17,18 @@ import lombok.NoArgsConstructor;
 public class AddressRequest {
     private Long idAddress;
 
-    @NotBlank(message = "Street number cannot be blank")
-    @Size(max = 2, message = "Street number must be at most 2 characters long")
+    @NotBlank(message = ResponseMessages.STREET_NUMBER_BLANK)
+    @Size(max = 2, message = ResponseMessages.STREET_NUMBER_SIZE)
     private String streetNumber;
 
-    @Size(max = 2, message = "Interior number must be at most 2 characters long")
+    @Size(max = 2, message = ResponseMessages.INTERIOR_NUMBER_SIZE)
     private String interiorNumber;
 
-    @NotNull(message = "Housing cannot be null")
+    @NotNull(message = ResponseMessages.HOUSING_NULL)
+    @Valid
     private HousingRequest housing;
 
-    @NotNull(message = "Street cannot be null")
+    @NotNull(message = ResponseMessages.STREET_NULL)
+    @Valid
     private StreetRequest street;
 }

@@ -12,12 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/locality")
+@Validated
 public class LocalityController {
 
     private final LocalityService localityService;
@@ -33,19 +35,19 @@ public class LocalityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LocalityResponse> getLocalityById(@Valid @PathVariable Long id) {
+    public ResponseEntity<LocalityResponse> getLocalityById(@PathVariable Long id) {
         LocalityResponse localityResponse = localityService.getLocalityById(id);
         return ResponseEntity.ok(localityResponse);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<LocalityResponse>> getLocalitiesByName(@Valid @PathVariable String name) {
+    public ResponseEntity<List<LocalityResponse>> getLocalitiesByName(@PathVariable String name) {
         List<LocalityResponse> localityResponses = localityService.getLocalitiesByName(name);
         return ResponseEntity.ok(localityResponses);
     }
 
     @GetMapping("/postal-code/{postalCode}")
-    public ResponseEntity<List<LocalityResponse>> getLocalitiesByPostalCode(@Valid @PathVariable String postalCode) {
+    public ResponseEntity<List<LocalityResponse>> getLocalitiesByPostalCode(@PathVariable String postalCode) {
         List<LocalityResponse> localityResponses = localityService.getLocalitiesByPostalCode(postalCode);
         return ResponseEntity.ok(localityResponses);
     }
@@ -85,13 +87,13 @@ public class LocalityController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LocalityResponse> updateLocality(@Valid @PathVariable Long id, @Valid @RequestBody LocalityRequest updatedLocalityRequest) {
+    public ResponseEntity<LocalityResponse> updateLocality(@PathVariable Long id, @Valid @RequestBody LocalityRequest updatedLocalityRequest) {
         LocalityResponse updatedLocality = localityService.updateLocality(id, updatedLocalityRequest);
         return ResponseEntity.ok(updatedLocality);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteLocalityById(@Valid @PathVariable Long id) {
+    public ResponseEntity<?> deleteLocalityById(@PathVariable Long id) {
         localityService.deleteLocalityById(id);
         return ResponseEntity.noContent().build();
     }

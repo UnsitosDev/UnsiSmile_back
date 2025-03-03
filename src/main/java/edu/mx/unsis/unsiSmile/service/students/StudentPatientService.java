@@ -3,7 +3,9 @@ package edu.mx.unsis.unsiSmile.service.students;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
@@ -12,6 +14,7 @@ import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -33,6 +36,7 @@ public class StudentPatientService {
     private final IPatientRepository patientRepository;
     private final IStudentPatientRepository studentPatientRepository;
     private final StudentPatientMapper studentPatientMapper;
+    private final StudentMapper studentMapper;
 
     @Transactional
     public void createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
@@ -137,6 +141,26 @@ public class StudentPatientService {
             return studentPatients.stream()
                     .map(studentPatientMapper::toResponse)
                     .collect(Collectors.toList());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentResponse> getStudentsByPatient(Pageable pageable, String patientId) {
+        try {
+            Assert.notNull(patientId, "El campo patientId no puede ser null.");
+            if (!patientRepository.existsById(patientId)) {
+                throw new AppException("Paciente no encontrado con Id: " + patientId, HttpStatus.NOT_FOUND);
+            }
+            Page<StudentPatientModel> studentPatientPage = studentPatientRepository.findByPatientId(patientId, pageable);
+
+            return studentPatientPage.map(studentPatient -> {
+                StudentModel student = studentPatient.getStudent();
+                return studentMapper.toDto(student);
+            });
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException("Error al obtener los estudiantes del paciente", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

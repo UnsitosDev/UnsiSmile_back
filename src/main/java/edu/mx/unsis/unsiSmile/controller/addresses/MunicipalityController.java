@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/municipalities")
+@Valid
 public class MunicipalityController {
 
     private final MunicipalityService municipalityService;
@@ -33,13 +34,13 @@ public class MunicipalityController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MunicipalityResponse> getMunicipalityById(@Valid @PathVariable String id) {
+    public ResponseEntity<MunicipalityResponse> getMunicipalityById(@PathVariable String id) {
         MunicipalityResponse municipalityResponse = municipalityService.getMunicipalityById(id);
         return ResponseEntity.ok(municipalityResponse);
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<MunicipalityResponse>> getMunicipalitiesByName(@Valid @PathVariable String name) {
+    public ResponseEntity<List<MunicipalityResponse>> getMunicipalitiesByName(@PathVariable String name) {
         List<MunicipalityResponse> municipalityResponses = municipalityService.getMunicipalitiesByName(name);
         return ResponseEntity.ok(municipalityResponses);
     }
@@ -82,13 +83,13 @@ public class MunicipalityController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<MunicipalityResponse> updateMunicipality(@Valid @PathVariable String id, @Valid @RequestBody MunicipalityRequest updatedMunicipalityRequest) {
+    public ResponseEntity<MunicipalityResponse> updateMunicipality(@PathVariable String id, @Valid @RequestBody MunicipalityRequest updatedMunicipalityRequest) {
         MunicipalityResponse updatedMunicipality = municipalityService.updateMunicipality(id, updatedMunicipalityRequest);
         return ResponseEntity.ok(updatedMunicipality);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMunicipalityById(@Valid @PathVariable String id) {
+    public ResponseEntity<?> deleteMunicipalityById(@PathVariable String id) {
         municipalityService.deleteMunicipalityById(id);
         return ResponseEntity.noContent().build();
     }

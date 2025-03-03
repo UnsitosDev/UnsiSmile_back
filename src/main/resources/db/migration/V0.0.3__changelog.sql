@@ -204,3 +204,9 @@ CREATE TABLE files (
                        KEY fk_answer (fk_answer),
                        CONSTRAINT fk_answer FOREIGN KEY (fk_answer) REFERENCES answers (id_answer) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE guardians
+    ADD CONSTRAINT fk_guardians_parental_status
+        FOREIGN KEY (fk_parental_status)
+            REFERENCES catalog_options (id_catalog_option)
+            ON DELETE CASCADE;

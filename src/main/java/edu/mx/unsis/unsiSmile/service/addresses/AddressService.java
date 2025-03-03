@@ -3,6 +3,9 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.repository.addresses.IHousingRepository;
+import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class AddressService {
 
     private final IAddressRepository addressRepository;
+    private final IHousingRepository housingRepository;
+    private final IStreetRepository streetRepository;
     private final AddressMapper addressMapper;
     private final HousingService housingService;
     private final StreetService streetService;
@@ -36,6 +41,8 @@ public class AddressService {
             AddressModel savedAddress = this.findOrCreateAddress(addressRequest);
 
             return addressMapper.toDto(savedAddress);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to create address", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -78,20 +85,27 @@ public class AddressService {
     }
 
     @Transactional(readOnly = true)
-    public List<AddressResponse> getAddressesByHousing(@NonNull HousingModel housing) {
+    public List<AddressResponse> getAddressesByHousing(@NonNull String housingId) {
         try {
+            HousingModel housing = housingRepository.findById(housingId)
+                    .orElseThrow(() -> new AppException("Housing not found with ID: " + housingId, HttpStatus.NOT_FOUND));
             List<AddressModel> addressModels = addressRepository.findByHousing(housing);
             return addressModels.stream()
                     .map(addressMapper::toDto)
                     .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch addresses by housing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<AddressResponse> getAddressesByStreet(@NonNull StreetModel street) {
+    public List<AddressResponse> getAddressesByStreet(@NonNull Long streetId) {
         try {
+            StreetModel street = streetRepository.findById(streetId)
+                    .orElseThrow(() -> new AppException("Street not found with ID: " + streetId, HttpStatus.NOT_FOUND));
+
             List<AddressModel> addressModels = addressRepository.findByStreet(street);
             return addressModels.stream()
                     .map(addressMapper::toDto)
@@ -151,7 +165,7 @@ public class AddressService {
     @Transactional
     public AddressModel findOrCreateAddress(@NonNull AddressRequest addressRequest) {
         try {
-            Assert.notNull(addressRequest, "AddressRequest cannot be null");
+            Assert.notNull(addressRequest, ResponseMessages.ADDRESS_REQUEST_NULL);
 
             String streetNumber = addressRequest.getStreetNumber();
             String interiorNumber = addressRequest.getInteriorNumber();
@@ -174,10 +188,10 @@ public class AddressService {
             addressModel.setStreet(street);
 
             return addressRepository.save(addressModel);
-
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create address", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.ADDRESS_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }

@@ -1,12 +1,8 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
+import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -34,5 +30,12 @@ public class GuardianModel extends AuditModel {
 
     @Column(name = "email", length = 50)
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_parental_status")
+    private CatalogOptionModel parentalStatus;
+
+    @Column(name = "doctor_name", length = 100) 
+    private String doctorName;
 
 }

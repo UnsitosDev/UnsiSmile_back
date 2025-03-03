@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -16,10 +18,12 @@ public class NeighborhoodRequest {
     
     private Long idNeighborhood;
 
-    @NotBlank(message = "Neighborhood name cannot be blank")
-    @Size(max = 50, message = "Neighborhood name must be at most 50 characters long")
+    @NotBlank(message = ResponseMessages.NEIGHBORHOOD_NAME_BLANK)
+    @NotNull(message = ResponseMessages.NEIGHBORHOOD_NAME_NULL)
+    @Size(max = 50, message = ResponseMessages.NEIGHBORHOOD_NAME_SIZE)
     private String name;
 
-    @NotNull(message = "Locality cannot be null")
+    @NotNull(message = ResponseMessages.LOCALITY_NULL)
+    @Valid
     private LocalityRequest locality;
 }

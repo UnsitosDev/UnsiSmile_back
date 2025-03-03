@@ -50,10 +50,10 @@ public class ProfessorController {
         return ResponseEntity.ok(professorResponses);
     }
 
-    @PutMapping
+    @PatchMapping("/{professorId}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateProfessor(@RequestBody ProfessorRequest request) {
-        professorService.updateProfessor(request);
+    public void updateProfessor(@PathVariable String professorId , @RequestBody ProfessorRequest request) {
+        professorService.updateProfessor(professorId, request);
     }
 
     @DeleteMapping("/{employeeNumber}")

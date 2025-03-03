@@ -29,4 +29,7 @@ public interface INeighborhoodRepository extends JpaRepository<NeighborhoodModel
     @Query("SELECT n FROM NeighborhoodModel n WHERE n.name = :name AND n.locality.idLocality = :localityId")
     Optional<NeighborhoodModel> findByLocalityIdAndName(@Param("localityId") Long localityId,
                                                         @Param("name") String name);
+
+    @Query("SELECT n.idNeighborhood, n.name FROM NeighborhoodModel n WHERE n.idNeighborhood = 1")
+    Optional<Object[]> findFirst();
 }

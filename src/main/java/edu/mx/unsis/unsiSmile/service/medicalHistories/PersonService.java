@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -87,18 +88,7 @@ public class PersonService {
         try {
             Assert.notNull(updatedPersonRequest, "Updated PersonRequest cannot be null");
 
-            // Find the person in the database
-            PersonModel personModel = personRepository.findById(personId)
-                    .orElseThrow(() -> new AppException("Person not found with ID: " + personId, HttpStatus.NOT_FOUND));
-
-            // Update the person entity with the new data
-            personMapper.updateEntity(updatedPersonRequest, personModel);
-
-            // Save the updated entity
-            PersonModel updatedPerson = personRepository.save(personModel);
-
-            // Map the updated entity back to a response DTO
-            return personMapper.toDto(updatedPerson);
+            return personMapper.toDto(updatedPerson(personId, updatedPersonRequest));
         } catch (Exception ex) {
             throw new AppException("Failed to update person", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -129,5 +119,16 @@ public class PersonService {
 
         PersonResponse newPerson = this.createPerson(personRequest);
         return personMapper.toEntity(newPerson);
+    }
+
+    @Transactional
+    public PersonModel updatedPerson(String personId, PersonRequest request) {
+        PersonModel personModel = personRepository.findById(personId)
+                .orElseThrow(() -> new AppException(ResponseMessages.PERSON_NOT_FOUND +
+                        " con curp: " + personId,
+                        HttpStatus.NOT_FOUND));
+        personMapper.updateEntity(request, personModel);
+
+        return personRepository.save(personModel);
     }
 }
