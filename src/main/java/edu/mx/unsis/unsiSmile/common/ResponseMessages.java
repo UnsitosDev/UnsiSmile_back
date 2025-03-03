@@ -50,6 +50,9 @@ public class ResponseMessages {
     public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
     public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
 
+    public static final String PERSON_NOT_FOUND = "Persona no encontrada";
+    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado con número de empleado: ";
+
     // ADDRESS VALIDATION REQUEST
     public static final String HOUSING_NULL = "La vivienda no puede ser nula.";
     public static final String ID_HOUSING_BLANK = "El ID de la vivienda no puede estar vacío.";
@@ -98,5 +101,5 @@ public class ResponseMessages {
     public static final String STATE_FIND_FAILED = "Error al buscar el estado";
 
     public static final String ADDRESS_REQUEST_NULL = "La solicitud de dirección no puede ser nula";
-    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección";
+    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección"
 }

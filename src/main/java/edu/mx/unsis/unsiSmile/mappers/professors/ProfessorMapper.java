@@ -1,10 +1,5 @@
 package edu.mx.unsis.unsiSmile.mappers.professors;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.professors.ProfessorRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
@@ -13,6 +8,10 @@ import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.CareerMapper;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -50,6 +49,6 @@ public class ProfessorMapper implements BaseMapper<ProfessorResponse, ProfessorR
     @Override
     public void updateEntity(ProfessorRequest request, ProfessorModel entity) {
         entity.setPerson(personMapper.toEntity(request.getPerson()));
+        entity.setCareer(careerMapper.toEntity(request.getCareer()));
     }
-    
 }
