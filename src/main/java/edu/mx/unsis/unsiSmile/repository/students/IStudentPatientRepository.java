@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.repository.students;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentPatientModel;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -63,4 +64,7 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
             "sp.student.enrollment = :studentId AND sp.student.statusKey = :status GROUP BY sp.patient.nationality")
     List<Object[]> countPatientsByNationalityByStudent(@Param("studentId") String studentId,
                                                        @Param("status") String status);
+
+    @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId")
+    Page<StudentPatientModel> findByPatientId(@Param("patientId")  String patientId, Pageable pageable);
 }
