@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -143,7 +144,7 @@ public class MunicipalityService {
     @Transactional
     public MunicipalityModel findOrCreateMunicipality(@NonNull MunicipalityRequest municipalityRequest) {
         try {
-            Assert.notNull(municipalityRequest, "MunicipalityRequest cannot be null");
+            Assert.notNull(municipalityRequest, ResponseMessages.MUNICIPALITY_NULL);
 
             String stateId = municipalityRequest.getState().getIdState();
             String municipalityName = municipalityRequest.getName();
@@ -166,8 +167,10 @@ public class MunicipalityService {
 
             return municipalityRepository.save(municipalityModel);
 
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create municipality", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.MUNICIPALITY_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

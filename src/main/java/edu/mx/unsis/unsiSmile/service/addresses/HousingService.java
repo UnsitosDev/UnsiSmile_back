@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -119,7 +120,7 @@ public class HousingService {
     @Transactional
     public HousingModel findOrCreateHousing(@NonNull HousingRequest housingRequest) {
         try {
-            Assert.notNull(housingRequest, "HousingRequest cannot be null");
+            Assert.notNull(housingRequest, ResponseMessages.HOUSING_NULL);
 
             HousingModel existingHousing = housingRepository.findByCategory(housingRequest.getCategory()).orElse(null);
 
@@ -132,7 +133,7 @@ public class HousingService {
             return housingRepository.save(housingModel);
 
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create housing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.HOUSING_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -119,7 +120,7 @@ public class StateService {
     @Transactional
     public StateModel findOrCreateState(@NonNull StateRequest stateRequest) {
         try {
-            Assert.notNull(stateRequest, "StateRequest cannot be null");
+            Assert.notNull(stateRequest, ResponseMessages.STATE_NULL);
 
             if (stateRequest.getIdState() != null) {
                 StateModel existingState = stateRepository
@@ -139,13 +140,12 @@ public class StateService {
                 return existingState;
             }
 
-            StateModel stateModel = stateMapper.toEntity(stateRequest);
-
-            return stateRepository.save(stateModel);
-
+            throw new AppException(ResponseMessages.STATE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to find or create state", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.STATE_FIND_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-    }
 
+    }
 }

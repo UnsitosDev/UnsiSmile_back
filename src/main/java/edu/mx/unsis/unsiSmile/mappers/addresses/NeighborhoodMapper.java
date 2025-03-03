@@ -33,7 +33,7 @@ public class NeighborhoodMapper implements BaseMapper<NeighborhoodResponse, Neig
         return NeighborhoodResponse.builder()
                 .idNeighborhood(entity.getIdNeighborhood())
                 .name(entity.getName())
-                .locality(localityMapper.toDto(entity.getLocality()))
+                .locality(entity.getLocality() != null ? localityMapper.toDto(entity.getLocality()) : null)
                 .build();
     }
 
