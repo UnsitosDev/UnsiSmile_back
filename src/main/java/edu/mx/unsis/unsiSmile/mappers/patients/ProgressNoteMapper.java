@@ -10,8 +10,11 @@ import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -48,6 +51,7 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
                 .prognosis(entity.getPrognosis())
                 .treatment(entity.getTreatment())
                 .indications(entity.getIndications())
+                .creationDate(formatTimestamp(entity.getCreatedAt()))
                 .build();
     }
 
@@ -85,5 +89,11 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
 
     private String mapGuardianName(GuardianResponse guardianResponse) {
         return String.format("%s %s", guardianResponse.getFirstName(), guardianResponse.getLastName());
+    }
+
+    private String formatTimestamp(Timestamp timestamp) {
+        LocalDateTime dateTime = (timestamp != null) ? timestamp.toLocalDateTime() : LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTime.format(formatter);
     }
 }

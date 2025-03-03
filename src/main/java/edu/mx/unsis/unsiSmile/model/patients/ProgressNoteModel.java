@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
-import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -51,10 +50,6 @@ public class ProgressNoteModel extends AuditModel {
 
     @Column(name = "indications", columnDefinition = "LONGTEXT")
     private String indications;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_student", nullable = false)
-    private StudentModel student;
 
     @ManyToOne
     @JoinColumn(name = "fk_professor", nullable = false)

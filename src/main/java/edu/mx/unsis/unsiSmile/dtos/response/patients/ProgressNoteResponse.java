@@ -27,4 +27,5 @@ public class ProgressNoteResponse {
     private String professor;
     private List<ProgressNoteFileResponse> files;
     private PatientRes patient;
+    private String creationDate;
 }

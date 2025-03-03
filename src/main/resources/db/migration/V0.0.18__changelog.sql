@@ -10,7 +10,6 @@ CREATE TABLE progress_notes (
                                 prognosis TEXT NOT NULL,
                                 treatment LONGTEXT NOT NULL,
                                 indications LONGTEXT DEFAULT NULL,
-                                fk_student VARCHAR(255) NOT NULL,
                                 fk_professor VARCHAR(15) NOT NULL,
                                 created_at DATETIME(6),
                                 created_by VARCHAR(255) DEFAULT NULL,
@@ -19,7 +18,6 @@ CREATE TABLE progress_notes (
                                 updated_by VARCHAR(255) DEFAULT NULL,
                                 PRIMARY KEY (id_progress_note),
                                 FOREIGN KEY (fk_patient) REFERENCES patients(id_patient),
-                                FOREIGN KEY (fk_student) REFERENCES students(enrollment),
                                 FOREIGN KEY (fk_professor) REFERENCES professors(id_professor)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 

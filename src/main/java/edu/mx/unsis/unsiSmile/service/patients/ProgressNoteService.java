@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
@@ -10,16 +11,17 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
-import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteFileRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
@@ -50,6 +52,7 @@ public class ProgressNoteService {
     private final IProgressNoteFileRepository progressNoteFileRepository;
     private final IPatientRepository patientRepository;
     private final IStudentRepository studentRepository;
+    private final IProfessorRepository professorRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final ProgressNoteMapper progressNoteMapper;
     private final FileStorageService fileStorageService;
@@ -79,7 +82,6 @@ public class ProgressNoteService {
             ProgressNoteModel progressNote = progressNoteMapper.toEntity(request);
 
             progressNote.setPatient(patient);
-            progressNote.setStudent(student);
             progressNote.setProfessor(professorClinicalArea.getProfessor());
 
             return progressNoteMapper.toDto(progressNoteRepository.save(progressNote));
@@ -146,11 +148,10 @@ public class ProgressNoteService {
 
                 progressNoteResponse.setFiles(fileResponses);
 
-                String studentName = getFullName(progressNote.getStudent().getPerson());
                 String professorName = getFullName(progressNote.getProfessor().getPerson());
                 String patientName = getFullName(patient.getPerson());
 
-                progressNoteResponse.setStudent(studentName);
+                progressNoteResponse.setStudent(this.getStudent(progressNote.getCreatedBy()));
                 progressNoteResponse.setProfessor(professorName);
                 progressNoteResponse.getPatient().setName(patientName);
 
@@ -186,6 +187,24 @@ public class ProgressNoteService {
                     .body(fileBytes);
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_WHILE_DOWNLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private String getStudent(String userId) {
+        UserResponse user = userService.getUserById(userId);
+        String role = user.getRole().getRole().toString();
+        String username = user.getUsername();
+
+        if (ERole.ROLE_PROFESSOR.toString().equals(role)) {
+            ProfessorModel professor = professorRepository.findById(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+            return this.getFullName(professor.getPerson());
+        } else if (ERole.ROLE_STUDENT.toString().equals(role)) {
+            StudentModel student = studentRepository.findById(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+            return this.getFullName(student.getPerson());
+        } else {
+            throw new AppException(ResponseMessages.INVALID_ROLE, HttpStatus.BAD_REQUEST);
         }
     }
 }
