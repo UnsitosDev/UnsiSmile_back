@@ -266,15 +266,15 @@ public class StudentService {
 
             GroupModel groupModel = groups.get(groupKey);
 
+            StudentGroupRequest studentGroupRequest = toSGRequest(enrollment, groupModel.getIdGroup());
+
             Optional<StudentModel> existingStudent = studentRepository.findById(enrollment);
 
             if (existingStudent.isPresent()) {
                 studentRepository.enableStudent(enrollment);
                 userRepository.enableUserByStudentId(enrollment, ERole.ROLE_STUDENT);
 
-                studentGroup.setStudent(existingStudent.get());
-                studentGroup.setGroup(groupModel);
-                studentGroupRepository.save(studentGroup);
+                studentGroupService.createStudentGroup(studentGroupRequest);
 
                 continue;
             }
@@ -292,10 +292,8 @@ public class StudentService {
                     .build();
 
             studentRepository.save(studentModel);
-            
-            studentGroup.setStudent(studentModel);
-            studentGroup.setGroup(groupModel);
-            studentGroupRepository.save(studentGroup);
+
+            studentGroupService.createStudentGroup(studentGroupRequest);
         }
     }
 
