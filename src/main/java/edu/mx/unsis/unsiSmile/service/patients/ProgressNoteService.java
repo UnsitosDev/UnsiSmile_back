@@ -197,7 +197,8 @@ public class ProgressNoteService {
 
         if (ERole.ROLE_PROFESSOR.toString().equals(role)) {
             ProfessorModel professor = professorRepository.findById(username)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(String.format(ResponseMessages.PROFESSOR_NOT_FOUND, username),
+                            HttpStatus.NOT_FOUND));
             return this.getFullName(professor.getPerson());
         } else if (ERole.ROLE_STUDENT.toString().equals(role)) {
             StudentModel student = studentRepository.findById(username)

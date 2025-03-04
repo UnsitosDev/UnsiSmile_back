@@ -63,11 +63,13 @@ public class ResponseMessages {
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
     public static final String ERROR_WHILE_DOWNLOAD_FILE = "Error durante la descarga del archivo.";
 
-    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado";
+    public static final String PROFESSOR_NOT_FOUND = "El profesor con ID '%s' no fue encontrado.";
+    public static final String CLINICAL_AREA_NOT_FOUND = "El área clínica con ID '%s' no fue encontrado.";
+    public static final String ERROR_CREATING_RELATION = "Error inesperado al crear la relación profesor-área clínica.";
+
     public static final String INVALID_ROLE = "Rol no válido";
   
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
-    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado con número de empleado: ";
 
     // ADDRESS VALIDATION REQUEST
     public static final String HOUSING_NULL = "La vivienda no puede ser nula.";
@@ -117,5 +119,5 @@ public class ResponseMessages {
     public static final String STATE_FIND_FAILED = "Error al buscar el estado";
 
     public static final String ADDRESS_REQUEST_NULL = "La solicitud de dirección no puede ser nula";
-    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección"
+    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección";
 }

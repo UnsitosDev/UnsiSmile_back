@@ -93,8 +93,8 @@ public class ProfessorService {
     public void updateProfessor(String professorId, ProfessorRequest request) {
         try {
             ProfessorModel professorModel = professorRepository.findById(professorId)
-                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND +
-                        professorId, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(String.format(ResponseMessages.PROFESSOR_NOT_FOUND, professorId),
+                        HttpStatus.NOT_FOUND));
 
             updateProfessorDetails(professorModel, request);
 

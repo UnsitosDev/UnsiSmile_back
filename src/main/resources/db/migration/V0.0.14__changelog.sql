@@ -32,8 +32,7 @@ VALUES
 INSERT INTO catalogs
 (catalog_name)
 VALUES
-    ("Estados civiles"),
-    ("Catedráticos responsables de área");
+    ("Estados civiles");
 
 
 INSERT INTO catalog_options
