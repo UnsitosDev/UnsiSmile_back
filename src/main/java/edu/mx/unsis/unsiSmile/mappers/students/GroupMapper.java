@@ -1,22 +1,21 @@
 package edu.mx.unsis.unsiSmile.mappers.students;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
 public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, GroupModel> {
 
     private final CareerMapper careerMapper;
+    private final SemesterMapper semesterMapper;
 
     @Override
     public GroupModel toEntity(GroupRequest dto) {
@@ -33,6 +32,8 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
                 .groupName(entity.getGroupName())
+                .career(careerMapper.toDto(entity.getCareer()))
+                .semester(semesterMapper.toDto(entity.getSemester()))
                 .build();
     }
 

@@ -1,8 +1,9 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +26,26 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "AND s.idStudentGroups = (SELECT MAX(s2.idStudentGroups) FROM StudentGroupModel s2 " +
             "WHERE s2.student.enrollment = :enrollment)")
     void deactivateLatestStudentGroup(@Param("enrollment") String enrollment);
+
+    @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.statusKey = 'A'")
+    Page<StudentGroupModel> findAllActive(Pageable pageable);
+
+    @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
+            "(sg.student.enrollment LIKE %:keyword% " +
+            "OR sg.student.person.curp LIKE %:keyword% " +
+            "OR sg.student.person.firstName LIKE %:keyword% " +
+            "OR sg.student.person.secondName LIKE %:keyword% " +
+            "OR sg.student.person.firstLastName LIKE %:keyword% " +
+            "OR sg.student.person.secondLastName LIKE %:keyword% " +
+            "OR sg.student.person.phone LIKE %:keyword% " +
+            "OR sg.student.person.email LIKE %:keyword% " +
+            "OR sg.student.person.gender.gender LIKE %:keyword% " +
+            "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
+            "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
+            "OR DAY(sg.student.person.birthDate) = :keywordInt)) " +
+            "AND sg.statusKey = 'A'")
+    Page<StudentGroupModel> findAllBySearchInput(
+            @Param("keyword") String keyword,
+            @Param("keywordInt") Integer keywordInt,
+            Pageable pageable);
 }

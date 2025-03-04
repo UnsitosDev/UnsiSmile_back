@@ -11,6 +11,8 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,32 @@ public class StudentGroupService {
                 .student(StudentModel.builder().enrollment(request.getEnrollment()).build())
                 .group(GroupModel.builder().idGroup(request.getGroupId()).build())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentGroupModel> getAllStudentsInGroups(Pageable pageable, String keyword) {
+        try {
+            Page<StudentGroupModel> allStudentGroups;
+
+            if (keyword == null || keyword.isEmpty()) {
+                allStudentGroups = studentGroupRepository.findAllActive(pageable);
+            } else {
+                Integer keywordInt = null;
+                if (keyword.matches("\\d+")) {
+                    keywordInt = Integer.parseInt(keyword);
+                } else if (!keyword.matches("[a-zA-Z]+")) {
+                    throw new AppException(ResponseMessages.INVALID_INPUT,
+                            HttpStatus.BAD_REQUEST);
+                }
+
+                allStudentGroups = studentGroupRepository.findAllBySearchInput(keyword, keywordInt, pageable);
+            }
+
+            return allStudentGroups;
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_STUDENTS_IN_GROUPS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 }
