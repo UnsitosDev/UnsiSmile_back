@@ -68,12 +68,6 @@ public class ProgressNoteService {
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: "
                             + request.getPatientId(), HttpStatus.NOT_FOUND));
 
-            UserResponse user = userService.getCurrentUser();
-
-            StudentModel student = studentRepository.findById(user.getUsername())
-                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: "
-                            + user.getUsername(), HttpStatus.NOT_FOUND));
-
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(
                     request.getProfessorClinicalAreaId())
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND
