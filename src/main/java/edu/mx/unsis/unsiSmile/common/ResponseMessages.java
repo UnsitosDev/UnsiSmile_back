@@ -101,5 +101,13 @@ public class ResponseMessages {
     public static final String STATE_FIND_FAILED = "Error al buscar el estado";
 
     public static final String ADDRESS_REQUEST_NULL = "La solicitud de dirección no puede ser nula";
-    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección"
+    public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección";
+
+    public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
+    public static final String GROUP_NOT_FOUND = "Grupo no encontrado";
+    public static final String ERROR_CREATING_STUDENT_GROUP = "Ocurrió un error al agregar un estudiante a un grupo.";
+
+    public static final String INVALID_INPUT = "La entrada no es válida. Debe ser un número o una cadena.";
+    public static final String FAILED_FETCH_STUDENTS_IN_GROUPS = "Error al obtener los estudiantes en los grupos.";
+    public static final String FAILED_TO_FETCH_STUDENTS = "Error al obtener los estudiantes.";
 }
