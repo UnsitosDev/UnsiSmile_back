@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
@@ -58,6 +59,7 @@ public class ProgressNoteService {
     private final FileStorageService fileStorageService;
     private final UserService userService;
     private final ProgressNoteFileMapper progressNoteFileMapper;
+    private final ValidationUtils validationUtils;
 
     @Transactional
     public ProgressNoteResponse createProgressNote(@NonNull ProgressNoteRequest request) {
@@ -148,8 +150,8 @@ public class ProgressNoteService {
 
                 progressNoteResponse.setFiles(fileResponses);
 
-                String professorName = getFullName(progressNote.getProfessor().getPerson());
-                String patientName = getFullName(patient.getPerson());
+                String professorName = validationUtils.getFullNameFromPerson(progressNote.getProfessor().getPerson());
+                String patientName = validationUtils.getFullNameFromPerson(patient.getPerson());
 
                 progressNoteResponse.setStudent(this.getStudent(progressNote.getCreatedBy()));
                 progressNoteResponse.setProfessor(professorName);
@@ -164,13 +166,6 @@ public class ProgressNoteService {
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private String getFullName(PersonModel person) {
-        return person.getFirstName() + " " +
-                (person.getSecondName() != null ? person.getSecondName() + " " : "") +
-                person.getFirstLastName() + " " +
-                person.getSecondLastName();
     }
 
     public ResponseEntity<byte[]> downloadProgressNoteById(String id) {
@@ -198,11 +193,11 @@ public class ProgressNoteService {
         if (ERole.ROLE_PROFESSOR.toString().equals(role)) {
             ProfessorModel professor = professorRepository.findById(username)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
-            return this.getFullName(professor.getPerson());
+            return validationUtils.getFullNameFromPerson(professor.getPerson());
         } else if (ERole.ROLE_STUDENT.toString().equals(role)) {
             StudentModel student = studentRepository.findById(username)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-            return this.getFullName(student.getPerson());
+            return validationUtils.getFullNameFromPerson(student.getPerson());
         } else {
             throw new AppException(ResponseMessages.INVALID_ROLE, HttpStatus.BAD_REQUEST);
         }
