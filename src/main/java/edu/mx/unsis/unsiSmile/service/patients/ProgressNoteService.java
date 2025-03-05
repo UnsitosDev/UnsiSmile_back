@@ -77,8 +77,8 @@ public class ProgressNoteService {
 
             progressNote.setPatient(patient);
             progressNote.setProfessor(professorClinicalArea.getProfessor());
-
-            return progressNoteMapper.toDto(progressNoteRepository.save(progressNote));
+            ProgressNoteModel saved = progressNoteRepository.save(progressNote);
+            return progressNoteMapper.toDto(saved);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
