@@ -1,12 +1,18 @@
 package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
+import edu.mx.unsis.unsiSmile.model.CatalogModel;
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
+import edu.mx.unsis.unsiSmile.repository.ICatalogRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +27,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CatalogOptionService {
     private final ICatalogOptionRepository catalogOptionRepository;
+    private final ICatalogRepository catalogRepository;
+    private final IProfessorRepository professorRepository;
     private final CatalogOptionMapper catalogOptionMapper;
+    private final ValidationUtils validationUtils;
 
     @Transactional
     public void save(CatalogOptionRequest request) {
@@ -91,12 +100,32 @@ public class CatalogOptionService {
     @Transactional(readOnly = true)
     public List<CatalogOptionResponse> getOptionsByCatalog(Long catalogId) {
         try {
+            CatalogModel catalogModel = catalogRepository.findById(catalogId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.CATALOG_NOT_FOUND, HttpStatus.NOT_FOUND));
+
             List<CatalogOptionModel> optionModelList = catalogOptionRepository.findAllByCatalogIdAndStatusKey(catalogId, Constants.ACTIVE);
+
+            if ("Catedráticos responsables de área".equals(catalogModel.getCatalogName())) {
+                processProfessorOptions(optionModelList);
+            }
+
             return optionModelList.stream()
                     .map(catalogOptionMapper::toDto)
                     .collect(Collectors.toList());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new AppException("Failed to fetch catalog options", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private void processProfessorOptions(List<CatalogOptionModel> optionModelList) {
+        for (CatalogOptionModel option : optionModelList) {
+            ProfessorModel professor = professorRepository.findById(option.getOptionName())
+                    .stream().findFirst().orElse(null);
+
+            if (professor != null) {
+                String fullName = validationUtils.getFullNameFromPerson(professor.getPerson());
+                option.setOptionName(fullName);
+            }
         }
     }
 }

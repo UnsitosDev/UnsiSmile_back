@@ -13,5 +13,4 @@ public class ProfessorClinicalAreaResponse {
     private Long idProfessorClinicalArea;
     private String professorName;
     private ClinicalAreaResponse clinicalArea;
-    
 }

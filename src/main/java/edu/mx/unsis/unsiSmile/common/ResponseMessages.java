@@ -50,8 +50,23 @@ public class ResponseMessages {
     public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
     public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
 
+    public static final String PATIENT_NOT_FOUND = "Paciente no encontrado";
+    public static final String ERROR_CREATING_PROGRESS_NOTE = "Error al crear la nota de evolución. ";
+    public static final String ERROR_FETCHING_PROGRESS_NOTES = "Error al obtener las notas de evolución del paciente.";
+    public static final String PATIENT_NOT_FOUND_PROGRESS_NOTES = "No se encontraron notas de evolución para el paciente con ID: ";
+    public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
+    public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser nulL.";
+
+    public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
+    public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado,";
+
+    public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
+    public static final String ERROR_WHILE_DOWNLOAD_FILE = "Error durante la descarga del archivo.";
+
+    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado";
+    public static final String INVALID_ROLE = "Rol no válido";
+  
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
-    public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado con número de empleado: ";
 
     // ADDRESS VALIDATION REQUEST
     public static final String HOUSING_NULL = "La vivienda no puede ser nula.";
@@ -102,6 +117,10 @@ public class ResponseMessages {
 
     public static final String ADDRESS_REQUEST_NULL = "La solicitud de dirección no puede ser nula";
     public static final String ADDRESS_CREATE_FAILED = "Error al buscar o crear la dirección";
+
+    public static final String CANNOT_ENABLE_CLINICAL_AREA_PROFESSOR_INACTIVE = "No se puede habilitar el área clínica porque el profesor está inactivo.";
+    public static final String FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA = "Error al habilitar el área clínica del profesor.";
+    public static final String CATALOG_NOT_FOUND = "Catálogo no encontrado.";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String GROUP_NOT_FOUND = "Grupo no encontrado";
