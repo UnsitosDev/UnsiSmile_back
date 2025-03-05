@@ -40,7 +40,7 @@ public class StudentController {
     public ResponseEntity<Page<StudentResponse>> getAllStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Field key for filter", example = "person.email, enrollment")
+            @Parameter(description = "Field key for filter", example = "student.person.email")
             @RequestParam(defaultValue = "student.person.firstName") String order,
             @RequestParam(defaultValue = "true") boolean asc,
             @Parameter(description = "Optional parameter to specify a search criterion.")

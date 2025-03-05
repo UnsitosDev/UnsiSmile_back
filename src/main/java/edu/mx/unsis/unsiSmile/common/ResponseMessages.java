@@ -42,7 +42,7 @@ public class ResponseMessages {
     public static final String PASSWORD_UPDATE_ERROR = "Error al actualizar la contraseña";
 
     public static final String PASSWORD_SAME_AS_OLD = "La nueva contraseña no puede ser la misma que la contraseña actual";
-    public static final String PASSWORD_INVALID_CHARACTER = "Carácter inválido o no reconocido en la contraseña";
+    public static final String PASSWORD_INVALID_CHARACTER = "Caracter inválido o no reconocido en la contraseña";
     public static final String PASSWORD_WEAK_LENGTH = "Contraseña débil: debe incluir al menos 8 caracteres";
     public static final String PASSWORD_WEAK_LOWERCASE = "Contraseña débil: debe incluir al menos una letra minúscula";
     public static final String PASSWORD_WEAK_UPPERCASE = "Contraseña débil: debe incluir al menos una letra mayúscula";
@@ -58,7 +58,7 @@ public class ResponseMessages {
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser nulL.";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
-    public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado,";
+    public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado";
 
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
     public static final String ERROR_WHILE_DOWNLOAD_FILE = "Error durante la descarga del archivo.";
@@ -122,7 +122,6 @@ public class ResponseMessages {
     public static final String FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA = "Error al habilitar el área clínica del profesor.";
     public static final String CATALOG_NOT_FOUND = "Catálogo no encontrado.";
 
-    public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String GROUP_NOT_FOUND = "Grupo no encontrado";
     public static final String ERROR_CREATING_STUDENT_GROUP = "Ocurrió un error al agregar un estudiante a un grupo.";
 
