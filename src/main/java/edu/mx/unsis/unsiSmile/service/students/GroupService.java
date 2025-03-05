@@ -132,7 +132,15 @@ public class GroupService {
                     throw new AppException("Semester not found for group", HttpStatus.NOT_FOUND);
                 }
                 groupModel.setSemester(semesterModel.get());
-
+                Optional<GroupModel> existingGroup = groupRepository
+                        .findByGroupNameAndSemesterNumberAndCareerAndSemester(group,
+                                semester,
+                                careerModel.get(),
+                                semesterModel.get());
+                if (existingGroup.isPresent()) {
+                    groupMap.put(groupFormat, existingGroup.get());
+                    continue;
+                }
                 GroupModel savedGroup = groupRepository.save(groupModel);
 
                 groupMap.put(groupFormat, savedGroup);

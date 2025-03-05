@@ -41,7 +41,7 @@ public class StudentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "Field key for filter", example = "person.email, enrollment")
-            @RequestParam(defaultValue = "person.firstName") String order,
+            @RequestParam(defaultValue = "student.person.firstName") String order,
             @RequestParam(defaultValue = "true") boolean asc,
             @Parameter(description = "Optional parameter to specify a search criterion.")
             @RequestParam(required = false) String keyword) {

@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
@@ -12,6 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
@@ -54,6 +56,7 @@ public class StudentService {
     private final IUserRepository userRepository;
     private final GroupService groupService;
     private final StudentGroupService studentGroupService;
+    private final GroupMapper groupMapper;
 
     @Transactional
     public void createStudent(@NonNull StudentRequest request) {
@@ -105,27 +108,18 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentResponse> getAllStudents(Pageable pageable, String keyword) {
         try {
-            Page<StudentModel> allStudents;
+            Page<StudentGroupModel> allStudentGroups = studentGroupService.getAllStudentsInGroups(pageable, keyword);
 
-            if (keyword == null || keyword.isEmpty()) {
-                allStudents = studentRepository.findAll(pageable);
-            } else {
-                Integer keywordInt = null;
-                if (keyword.matches("\\d+")) {
-                    keywordInt = Integer.parseInt(keyword);
-                } else if (!keyword.matches("[a-zA-Z]+")) {
-                    throw new AppException("The input is not valid. It must be a number or a string.",
-                    HttpStatus.BAD_REQUEST);
-                }
-
-                allStudents = studentRepository.findAllBySearchInput(keyword, keywordInt, pageable);
-            }
-
-            return allStudents.map(studentMapper::toDto);
+            return allStudentGroups.map(studentGroup -> {
+                StudentModel student = studentGroup.getStudent();
+                StudentResponse  studentResponse = studentMapper.toDto(student);
+                studentResponse.setGroup(groupMapper.toDto(studentGroup.getGroup()));
+                return studentResponse;
+            });
         } catch (AppException ex) {
-          throw ex;
+            throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch students", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_STUDENTS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -266,15 +260,15 @@ public class StudentService {
 
             GroupModel groupModel = groups.get(groupKey);
 
+            StudentGroupRequest studentGroupRequest = toSGRequest(enrollment, groupModel.getIdGroup());
+
             Optional<StudentModel> existingStudent = studentRepository.findById(enrollment);
 
             if (existingStudent.isPresent()) {
                 studentRepository.enableStudent(enrollment);
                 userRepository.enableUserByStudentId(enrollment, ERole.ROLE_STUDENT);
 
-                studentGroup.setStudent(existingStudent.get());
-                studentGroup.setGroup(groupModel);
-                studentGroupRepository.save(studentGroup);
+                studentGroupService.createStudentGroup(studentGroupRequest);
 
                 continue;
             }
@@ -292,10 +286,8 @@ public class StudentService {
                     .build();
 
             studentRepository.save(studentModel);
-            
-            studentGroup.setStudent(studentModel);
-            studentGroup.setGroup(groupModel);
-            studentGroupRepository.save(studentGroup);
+
+            studentGroupService.createStudentGroup(studentGroupRequest);
         }
     }
 
