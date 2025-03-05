@@ -20,7 +20,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(value = {AppException.class})
     @ResponseBody
     public ResponseEntity<ErrorDto> handleAppException(AppException ex) {
-        log.error("AppException: {}", ex.getFullMessage(), ex);
+        log.error("AppException occurred at {}: {}", ex.getTimestamp(), ex.getFullMessage(), ex);
 
         ErrorDto errorResponse = new ErrorDto(
                 ex.getHttpStatus().value(),
@@ -35,7 +35,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     @ResponseBody
     public ResponseEntity<ErrorDto> handleGenericException(Exception ex) {
-        log.error("Unhandled exception: {}", ex.getMessage(), ex);
+        log.error("Unhandled exception occurred at {}: {}", LocalDateTime.now(), ex.getMessage(), ex);
 
         ErrorDto errorResponse = new ErrorDto(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
