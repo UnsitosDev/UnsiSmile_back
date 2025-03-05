@@ -32,7 +32,8 @@ VALUES
 INSERT INTO catalogs
 (catalog_name)
 VALUES
-    ("Estados civiles");
+    ("Estados civiles"),
+    ("Catedráticos responsables de área");
 
 
 INSERT INTO catalog_options
@@ -129,7 +130,8 @@ INSERT INTO
 VALUES
     ("Fecha Aplicación Tópica de Flúor ", 52, 9, 1, false, null),
     ("Nombre del operador", 52, 3, 2, false, null),
-    ("Nombre del asistente", 52, 3, 3, false, null);
+    ("Nombre del asistente", 52, 3, 3, false, null),
+    ("Docente que autoriza", 52, 4, 4, true, 13);
 
 -- PROFILAXIS / DETARTRAJE
 INSERT INTO questions

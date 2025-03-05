@@ -2,15 +2,18 @@ package edu.mx.unsis.unsiSmile.service.professors;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.professors.ProfessorClinicalAreaRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorClinicalAreaResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorClinicalAreaMapper;
+import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
-import edu.mx.unsis.unsiSmile.repository.professors.IClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
+import edu.mx.unsis.unsiSmile.repository.ICatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
-import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -19,34 +22,26 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProfessorClinicalAreaService {
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
-    private final IProfessorRepository professorRepository;
-    private final IClinicalAreaRepository clinicalAreaRepository;
     private final ProfessorClinicalAreaMapper professorClinicalAreaMapper;
+    private final CatalogOptionMapper catalogOptionMapper;
+    private final ICatalogOptionRepository catalogOptionRepository;
+    private final ICatalogRepository catalogRepository;
 
     @Transactional
     public void createProfessorClinicalArea(@NotNull ProfessorClinicalAreaRequest request) {
         try {
-            if (!professorRepository.existsById(request.getIdProfessor())) {
-                throw new AppException(String.format(ResponseMessages.PROFESSOR_NOT_FOUND, request.getIdProfessor()),
-                        HttpStatus.NOT_FOUND);
-            }
-
-            if (!clinicalAreaRepository.existsById(request.getIdClinicalArea())) {
-                throw new AppException(String.format(ResponseMessages.CLINICAL_AREA_NOT_FOUND, request.getIdClinicalArea()),
-                        HttpStatus.NOT_FOUND);
-            }
-
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaMapper.toEntity(request);
-            professorClinicalAreaRepository.save(professorClinicalAreaModel);
+            ProfessorClinicalAreaModel professorClinicalAreaSaved = professorClinicalAreaRepository.save(professorClinicalAreaModel);
 
-        } catch (AppException e) {
-            throw e;
+            createCatalogOptionForProfessor(professorClinicalAreaSaved);
         } catch (Exception e) {
-            throw new RuntimeException(ResponseMessages.ERROR_CREATING_RELATION, e);
+            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -59,7 +54,7 @@ public class ProfessorClinicalAreaService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Fail to get professor clinical area by id", e);
+            throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -74,7 +69,7 @@ public class ProfessorClinicalAreaService {
             }
             return professorClinicalAreas.map(professorClinicalAreaMapper::toDto);
         } catch (Exception e) {
-            throw new RuntimeException("Fail to get all professor clinical areas", e);
+            throw new AppException(ResponseMessages.ERROR_FETCHING_PROGRESS_NOTES, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -88,7 +83,7 @@ public class ProfessorClinicalAreaService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Fail to update professor clinical area", e);
+            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -102,7 +97,41 @@ public class ProfessorClinicalAreaService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Fail to delete professor clinical area", e);
+            throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void createCatalogOptionForProfessor(ProfessorClinicalAreaModel professorClinicalAreaSaved) {
+        String professorId = professorClinicalAreaSaved.getProfessor().getIdProfessor();
+        Optional<CatalogOptionModel> existingOptionOpt = catalogOptionRepository.findByOptionName(professorId);
+
+        if(existingOptionOpt.isPresent()){
+            CatalogOptionModel existingOption = existingOptionOpt.get();
+            existingOption.setStatusKey(Constants.ACTIVE);
+            catalogOptionRepository.save(existingOption);
+        } else {
+            Long idCatalog = catalogRepository.findIdByCatalogName("Catedráticos responsables de área")
+                    .orElseThrow(() -> new AppException(ResponseMessages.CATALOG_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            CatalogOptionModel catalogOptionModel = catalogOptionMapper.toEntity(
+                    CatalogOptionRequest.builder()
+                            .optionName(professorId)
+                            .idCatalog(idCatalog)
+                            .build()
+            );
+            catalogOptionRepository.save(catalogOptionModel);
+        }
+    }
+
+    private void toggleCatalogOptionForProfessor(ProfessorClinicalAreaModel professorClinicalAreaModel) {
+        String professorId = professorClinicalAreaModel.getProfessor().getIdProfessor();
+        Optional<CatalogOptionModel> existingOptionOpt = catalogOptionRepository.findByOptionName(professorId);
+
+        if (existingOptionOpt.isPresent()) {
+            CatalogOptionModel existingOption = existingOptionOpt.get();
+            String newStatus = Constants.ACTIVE.equals(existingOption.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE;
+            existingOption.setStatusKey(newStatus);
+            catalogOptionRepository.save(existingOption);
         }
     }
 
@@ -110,22 +139,25 @@ public class ProfessorClinicalAreaService {
     public void toggleProfessorClinicalAreaStatus(@NotNull Long id) {
         try {
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Professor clinical area not found", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             ProfessorModel professor = professorClinicalAreaModel.getProfessor();
 
             if (!Constants.ACTIVE.equals(professor.getStatusKey())) {
-                throw new AppException("Cannot enable clinical area because the professor is inactive.", HttpStatus.BAD_REQUEST);
+                throw new AppException(ResponseMessages.CANNOT_ENABLE_CLINICAL_AREA_PROFESSOR_INACTIVE, HttpStatus.BAD_REQUEST);
             }
 
             String newStatus = Constants.ACTIVE.equals(professorClinicalAreaModel.getStatusKey())
                     ? Constants.INACTIVE : Constants.ACTIVE;
             professorClinicalAreaModel.setStatusKey(newStatus);
             professorClinicalAreaRepository.save(professorClinicalAreaModel);
+
+            toggleCatalogOptionForProfessor(professorClinicalAreaModel);
+
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Fail to enable professor clinical area", e);
+            throw new AppException(ResponseMessages.FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

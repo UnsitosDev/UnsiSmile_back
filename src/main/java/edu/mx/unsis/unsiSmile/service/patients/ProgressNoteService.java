@@ -68,6 +68,12 @@ public class ProgressNoteService {
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: "
                             + request.getPatientId(), HttpStatus.NOT_FOUND));
 
+            UserResponse user = userService.getCurrentUser();
+
+            StudentModel student = studentRepository.findById(user.getUsername())
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: "
+                            + user.getUsername(), HttpStatus.NOT_FOUND));
+
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(
                     request.getProfessorClinicalAreaId())
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND
@@ -77,8 +83,8 @@ public class ProgressNoteService {
 
             progressNote.setPatient(patient);
             progressNote.setProfessor(professorClinicalArea.getProfessor());
-            ProgressNoteModel saved = progressNoteRepository.save(progressNote);
-            return progressNoteMapper.toDto(saved);
+
+            return progressNoteMapper.toDto(progressNoteRepository.save(progressNote));
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
@@ -191,8 +197,7 @@ public class ProgressNoteService {
 
         if (ERole.ROLE_PROFESSOR.toString().equals(role)) {
             ProfessorModel professor = professorRepository.findById(username)
-                    .orElseThrow(() -> new AppException(String.format(ResponseMessages.PROFESSOR_NOT_FOUND, username),
-                            HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
             return this.getFullName(professor.getPerson());
         } else if (ERole.ROLE_STUDENT.toString().equals(role)) {
             StudentModel student = studentRepository.findById(username)
