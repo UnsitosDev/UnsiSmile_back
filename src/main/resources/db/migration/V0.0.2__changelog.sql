@@ -103,7 +103,7 @@ CREATE TABLE
 
 CREATE TABLE
     occupations (
-        id_occupation BIGINT (20) NOT NULL,
+        id_occupation BIGINT (20) NOT NULL AUTO_INCREMENT,
         occupation VARCHAR(100) DEFAULT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,

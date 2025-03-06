@@ -10,6 +10,7 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +24,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/patients")
+@RequiredArgsConstructor
 public class PatientController {
 
     private final PatientService patientService;
     private final StudentPatientService studentPatientService;
-
-    public PatientController(PatientService patientService, StudentPatientService studentPatientService) {
-        this.patientService = patientService;
-        this.studentPatientService = studentPatientService;
-    }
 
     @PostMapping
     public ResponseEntity<Void> createPatient(@Valid @RequestBody PatientRequest patientRequest) {

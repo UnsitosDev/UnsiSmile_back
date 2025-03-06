@@ -1,10 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -17,6 +14,7 @@ import lombok.*;
 public class OccupationModel extends AuditModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_occupation")
     private Long idOccupation;
 

@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
@@ -17,9 +18,9 @@ import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.*;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -48,6 +49,11 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final IPatientRepository patientRepository;
+    private final INationalityRepository nationalityRepository;
+    private final IMaritalStatusRepository maritalStatusRepository;
+    private final IEthnicGroupRepository ethnicGroupRepository;
+    private final IReligionRepository religionRepository;
+    private final OccupationService occupationService;
     private final PatientMapper patientMapper;
     private final IGuardianRepository guardianRepository;
     private final GuardianMapper guardianMapper;
@@ -70,15 +76,40 @@ public class PatientService {
                 throw new AppException("A patient with the given person already exists", HttpStatus.CONFLICT);
             }
 
+            validatePatientRequest(patientRequest);
+
             PatientModel patientModel = preparePatientModel(patientRequest, personModel);
             validateAndSetGuardian(patientRequest, patientModel);
             AddressModel addressModel = addressService.findOrCreateAddress(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
             relateStudentPatient(savedPatient);
+        } catch (AppException e) {
+            throw e;
         } catch (DataAccessException ex) {
-            throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.ERROR_CREATING_PATIENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private void validatePatientRequest(PatientRequest patientRequest) {
+        if (!nationalityRepository.existsById(patientRequest.getNationalityId())) {
+            throw new AppException(ResponseMessages.NATIONALITY_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!maritalStatusRepository.existsById(patientRequest.getMaritalStatus().getIdMaritalStatus())) {
+            throw new AppException(ResponseMessages.MARITAL_STATUS_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!ethnicGroupRepository.existsById(patientRequest.getEthnicGroup().getIdEthnicGroup())) {
+            throw new AppException(ResponseMessages.ETHNIC_GROUP_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!religionRepository.existsById(patientRequest.getReligion().getIdReligion())) {
+            throw new AppException(ResponseMessages.RELIGION_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        OccupationModel createdOccupation = occupationService.findOrCreateOccupation(patientRequest.getOccupation());
+        patientRequest.getOccupation().setIdOccupation(createdOccupation.getIdOccupation());
     }
 
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {

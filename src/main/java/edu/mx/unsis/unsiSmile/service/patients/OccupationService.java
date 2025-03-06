@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.OccupationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -135,6 +136,16 @@ public class OccupationService {
             occupationRepository.deleteById(idOccupation);
         } catch (Exception ex) {
             throw new AppException("Failed to delete occupation", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public OccupationModel findOrCreateOccupation(OccupationRequest occupation) {
+        try {
+            return occupationRepository.findByOccupation(occupation.getOccupation())
+                    .orElseGet(() -> occupationRepository.save(occupationMapper.toEntity(occupation)));
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.OCCUPATION_NOT_FOUND, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
