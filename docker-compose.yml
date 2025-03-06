@@ -1,31 +1,31 @@
 services:
-  app:
-    container_name: unsismile_back-app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8082:8082" # El puerto del host apunta al puerto del contenedor
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 
-      SPRING_JPA_HIBERNATE_DDL_AUTO: none
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
-      JWT_SECRET: 
-      FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
-    networks:
-      - unsismile_network
-    volumes:
-      - gradle_cache:/home/gradle/.gradle
+  # app:
+  #   container_name: unsismile_back-app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8082:8082" # El puerto del host apunta al puerto del contenedor
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
+  #     SPRING_DATASOURCE_USERNAME: root
+  #     SPRING_DATASOURCE_PASSWORD: password
+  #     SPRING_JPA_HIBERNATE_DDL_AUTO: none
+  #     SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
+  #     JWT_SECRET: QruMos1OK9tySyrkqy0LKzTXuOE76vC4JhHMjLc5EJOUxSMiu/K5lWakWzc0fUzfCcuX7d4GgpN4KrE2ylZyJJ7P3j6kiZxqsy/+shM+aHq1E73eIDbE+7vGNj7Pb4B+pf1gBlCUWSTpxE5U3OkhZDJ8jblNnSkhiGira84eV5Hlb5zbJDDR8irGgruTvRQwydyjOPMlL3Ae3IKnzB1Hsybsv7di7fO+brWFg3iJpea7h7xB0A1dBWfuVybIeGQvJAjQdgUXWqzI0/ipNKCCX2sEc2LFNVt46XCD4b3hKjz42m7E7Qy+ATcG1FkvhhLFOi9F+Zp8348bI7t8DlJpog==
+  #     FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
+  #   networks:
+  #     - unsismile_network
+  #   volumes:
+  #     - gradle_cache:/home/gradle/.gradle
 
   db:
     image: mariadb:10.5
     container_name: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: unsis_smile
     ports:
       - "3306:3306" # Base de datos
