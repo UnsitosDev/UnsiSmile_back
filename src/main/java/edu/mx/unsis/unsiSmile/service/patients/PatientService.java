@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
@@ -17,9 +19,9 @@ import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.*;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -48,6 +50,11 @@ import java.util.stream.Collectors;
 public class PatientService {
 
     private final IPatientRepository patientRepository;
+    private final INationalityRepository nationalityRepository;
+    private final IMaritalStatusRepository maritalStatusRepository;
+    private final IEthnicGroupRepository ethnicGroupRepository;
+    private final IReligionRepository religionRepository;
+    private final OccupationService occupationService;
     private final PatientMapper patientMapper;
     private final IGuardianRepository guardianRepository;
     private final GuardianMapper guardianMapper;
@@ -56,6 +63,7 @@ public class PatientService {
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
+    private final ValidationUtils validationUtils;
     @Value("${max.medical.record.number}")
     private int maxFileNumberProperties;
 
@@ -70,29 +78,49 @@ public class PatientService {
                 throw new AppException("A patient with the given person already exists", HttpStatus.CONFLICT);
             }
 
+            validatePatientRequest(patientRequest);
+
             PatientModel patientModel = preparePatientModel(patientRequest, personModel);
             validateAndSetGuardian(patientRequest, patientModel);
             AddressModel addressModel = addressService.findOrCreateAddress(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
             relateStudentPatient(savedPatient);
+        } catch (AppException e) {
+            throw e;
         } catch (DataAccessException ex) {
-            throw new AppException("Failed to create patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.ERROR_CREATING_PATIENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
+    private void validatePatientRequest(PatientRequest patientRequest) {
+        if (!nationalityRepository.existsById(patientRequest.getNationalityId())) {
+            throw new AppException(ResponseMessages.NATIONALITY_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!maritalStatusRepository.existsById(patientRequest.getMaritalStatus().getIdMaritalStatus())) {
+            throw new AppException(ResponseMessages.MARITAL_STATUS_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!ethnicGroupRepository.existsById(patientRequest.getEthnicGroup().getIdEthnicGroup())) {
+            throw new AppException(ResponseMessages.ETHNIC_GROUP_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (!religionRepository.existsById(patientRequest.getReligion().getIdReligion())) {
+            throw new AppException(ResponseMessages.RELIGION_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        OccupationModel createdOccupation = occupationService.findOrCreateOccupation(patientRequest.getOccupation());
+        patientRequest.getOccupation().setIdOccupation(createdOccupation.getIdOccupation());
+    }
+
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
-        if (isMinor(patientRequest.getPerson().getBirthDate())) {
+        if (validationUtils.isMinor(patientRequest.getPerson().getBirthDate())) {
             GuardianModel guardianModel = Optional.ofNullable(patientRequest.getGuardian())
                     .map(this::createGuardianEntity)
                     .orElseThrow(() -> new AppException("The patient needs to have a guardian", HttpStatus.BAD_REQUEST));
             patientModel.setGuardian(guardianModel);
         }
-    }
-
-    private boolean isMinor(LocalDate birthDate) {
-        LocalDate today = LocalDate.now();
-        return Period.between(birthDate, today).getYears() < 18;
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
@@ -271,19 +299,15 @@ public class PatientService {
         try {
             Assert.notNull(updatedPatientRequest, "Updated PatientRequest cannot be null");
 
-            // Find the patient in the database
-            PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
-                    .orElseThrow(
-                            () -> new AppException("Patient not found with ID: " + idPatient, HttpStatus.NOT_FOUND));
+            PatientModel patientModel = getExistingPatient(idPatient);
 
-            // Update the patient entity with the new data
-            patientMapper.updateEntity(updatedPatientRequest, patientModel);
+            updatePatientData(patientModel, updatedPatientRequest);
 
-            // Save the updated entity
             PatientModel updatedPatient = patientRepository.save(patientModel);
 
-            // Map the updated entity back to a response DTO
             return patientMapper.toDto(updatedPatient);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to update patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -347,6 +371,26 @@ public class PatientService {
             return patientMapper.toDto(optionalPatient.get());
         } else {
             throw new AppException("Student does not have access to this patient", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private PatientModel getExistingPatient(@NonNull String idPatient) {
+        return patientRepository.findByIdPatient(idPatient)
+                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+    }
+
+    private void updatePatientData(PatientModel patientModel, PatientRequest updatedPatientRequest) {
+        patientMapper.updateEntity(updatedPatientRequest, patientModel);
+
+        if (updatedPatientRequest.getOccupation() != null) {
+            OccupationModel occupationModel = occupationService.findOrCreateOccupation(updatedPatientRequest.getOccupation());
+            patientModel.setOccupation(occupationModel);
+        }
+
+        if (updatedPatientRequest.getPerson() != null) {
+            PersonModel updatedPerson = personService.updatedPerson(
+                    patientModel.getPerson().getCurp(), updatedPatientRequest.getPerson());
+            patientModel.setPerson(updatedPerson);
         }
     }
 }

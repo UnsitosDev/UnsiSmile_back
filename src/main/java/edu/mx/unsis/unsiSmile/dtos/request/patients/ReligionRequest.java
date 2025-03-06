@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +14,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReligionRequest {
-    @NotBlank(message = "Religion ID cannot be blank")
+
     private Long idReligion;
 
-    @NotBlank(message = "Religion description cannot be blank")
-    @Size(max = 100, message = "Religion description must be at most 100 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_RELIGION_DESCRIPTION)
+    @Size(max = 100, message = ResponseMessages.MAX_SIZE_RELIGION_DESCRIPTION)
     private String religion;
 }

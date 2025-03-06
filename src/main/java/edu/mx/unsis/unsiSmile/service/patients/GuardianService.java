@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -92,25 +93,11 @@ public class GuardianService {
 
     @Transactional
     public GuardianResponse updateGuardian(@NonNull Long idGuardian, @NonNull GuardianRequest updatedGuardianRequest) {
-        try {
-            Assert.notNull(updatedGuardianRequest, "Updated GuardianRequest cannot be null");
+        GuardianModel updatedGuardian = updateGuardianModel(idGuardian, updatedGuardianRequest);
 
-            // Find the guardian in the database
-            GuardianModel guardianModel = guardianRepository.findByIdGuardian(idGuardian)
-                    .orElseThrow(() -> new AppException("Guardian not found with ID: " + idGuardian, HttpStatus.NOT_FOUND));
-
-            // Update the guardian entity with the new data
-            guardianMapper.updateEntity(updatedGuardianRequest, guardianModel);
-
-            // Save the updated entity
-            GuardianModel updatedGuardian = guardianRepository.save(guardianModel);
-
-            // Map the updated entity back to a response DTO
-            return guardianMapper.toDto(updatedGuardian);
-        } catch (Exception ex) {
-            throw new AppException("Failed to update guardian", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
+        return guardianMapper.toDto(updatedGuardian);
     }
+
 
     @Transactional
     public void deleteGuardianById(@NonNull Long idGuardian) {
@@ -122,6 +109,24 @@ public class GuardianService {
             guardianRepository.deleteById(idGuardian);
         } catch (Exception ex) {
             throw new AppException("Failed to delete guardian", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public GuardianModel updateGuardianModel(@NonNull Long idGuardian, @NonNull GuardianRequest updatedGuardianRequest) {
+        try {
+            Assert.notNull(updatedGuardianRequest, ResponseMessages.GUARDIAN_REQUEST_CANNOT_BE_NULL);
+
+            GuardianModel guardianModel = guardianRepository.findByIdGuardian(idGuardian)
+                    .orElseThrow(() -> new AppException(ResponseMessages.GUARDIAN_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            guardianMapper.updateEntity(updatedGuardianRequest, guardianModel);
+
+            return guardianRepository.save(guardianModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.GUARDIAN_UPDATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

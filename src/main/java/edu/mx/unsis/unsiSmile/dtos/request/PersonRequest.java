@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,35 +19,35 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PersonRequest {
 
-    @NotBlank(message = "CURP cannot be blank")
-    @Size(min = 18, max = 18, message = "CURP must be 18 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_CURP)
+    @Size(min = 18, max = 18, message = ResponseMessages.SIZE_CURP)
     private String curp;
 
-    @NotBlank(message = "First name cannot be blank")
-    @Size(max = 50, message = "First name must be at most 50 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_FIRST_NAME)
+    @Size(max = 50, message = ResponseMessages.SIZE_FIRST_NAME)
     private String firstName;
 
-    @Size(max = 50, message = "Second name must be at most 50 characters long")
+    @Size(max = 50, message = ResponseMessages.SIZE_SECOND_NAME)
     private String secondName;
 
-    @NotBlank(message = "First last name cannot be blank")
-    @Size(max = 50, message = "First last name must be at most 50 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_FIRST_LAST_NAME)
+    @Size(max = 50, message = ResponseMessages.SIZE_FIRST_LAST_NAME)
     private String firstLastName;
 
-    @Size(max = 50, message = "Second last name must be at most 50 characters long")
+    @Size(max = 50, message = ResponseMessages.SIZE_SECOND_LAST_NAME)
     private String secondLastName;
 
-    @Pattern(regexp = "^\\d{10}$", message = "Phone number must be 10 digits long")
+    @Pattern(regexp = "^\\d{10}$", message = ResponseMessages.PATTERN_PHONE)
     private String phone;
 
-    @NotNull(message = "Birth date cannot be null")
+    @NotNull(message = ResponseMessages.NOT_NULL_BIRTH_DATE)
     private LocalDate birthDate;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email must be a valid email address")
-    @Size(max = 200, message = "Email must be at most 200 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_EMAIL)
+    @Email(message = ResponseMessages.VALID_EMAIL)
+    @Size(max = 200, message = ResponseMessages.SIZE_EMAIL)
     private String email;
 
-    @NotNull(message = "Gender cannot be null")
+    @NotNull(message = ResponseMessages.NOT_NULL_GENDER)
     private GenderRequest gender;
 }
