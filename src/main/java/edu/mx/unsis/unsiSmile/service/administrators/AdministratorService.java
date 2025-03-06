@@ -1,13 +1,24 @@
 package edu.mx.unsis.unsiSmile.service.administrators;
 
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorUpdateRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
@@ -16,14 +27,9 @@ import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +41,7 @@ public class AdministratorService {
     private final UserService userService;
     private final UserMapper userMapper;
     private final IUserRepository userRepository;
+    private final PersonMapper personMapper;
 
     @Transactional
     public AdministratorResponse createAdministrator(@NonNull AdministratorRequest request) {
@@ -94,26 +101,47 @@ public class AdministratorService {
 
             return administrators.map(administratorMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Error al obtener la lista de administradores", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Error al obtener la lista de administradores", HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
     @Transactional
-    public AdministratorResponse updateAdministrator(@NonNull String employeeNumber,
-            @NonNull AdministratorRequest updatedAdministratorRequest) {
+    public AdministratorResponse updateAdministrator(@NotBlank String administradorId,
+            @NonNull AdministratorUpdateRequest updatedAdministratorRequest) {
         try {
-            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
-                    .orElseThrow(() -> new AppException(
-                            "Administrator not found with employee number: " + employeeNumber, HttpStatus.NOT_FOUND));
+            AdministratorModel updatedAdministrator;
+            // mapear los datos de la solicitud con la entidad actual
+            updatedAdministrator = mapAdministratorData(administradorId, updatedAdministratorRequest);
 
-            administratorMapper.updateEntity(updatedAdministratorRequest, administratorModel);
-
-            AdministratorModel updatedAdministrator = administratorRepository.save(administratorModel);
+            administratorRepository.save(updatedAdministrator);
 
             return administratorMapper.toDto(updatedAdministrator);
         } catch (Exception ex) {
-            throw new AppException("Failed to update administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.ERROR_UPDATING_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private AdministratorModel mapAdministratorData(String administradorId,
+            AdministratorUpdateRequest updatedAdministratorRequest) {
+
+        AdministratorModel currentAdministrator = administratorRepository.findById(administradorId)
+                .orElseThrow(() -> new AppException(
+                        ResponseMessages.ADMINISTRATOR_NOT_FOUND + updatedAdministratorRequest.getEmployeeNumber(),
+                        HttpStatus.NOT_FOUND));
+
+        PersonResponse personResponse = personService.updatePerson(currentAdministrator.getPerson().getCurp(),
+                updatedAdministratorRequest.getPerson());
+
+        // Preserve existing values if request fields are null
+        currentAdministrator.setPerson(personMapper.toEntity(personResponse));
+
+        currentAdministrator.setEmployeeNumber(updatedAdministratorRequest.getEmployeeNumber() != null
+                ? updatedAdministratorRequest.getEmployeeNumber()
+                : currentAdministrator.getEmployeeNumber());
+
+        return currentAdministrator;
+
     }
 
     @Transactional
@@ -143,10 +171,12 @@ public class AdministratorService {
     @Transactional
     public void updateAdministratorStatus(@NonNull String employeeNumber) {
         try {
-            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber).orElseThrow(()
-                    -> new AppException("Administrator not found with employeeNumber: " + employeeNumber, HttpStatus.NOT_FOUND));
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber).orElseThrow(
+                    () -> new AppException("Administrator not found with employeeNumber: " + employeeNumber,
+                            HttpStatus.NOT_FOUND));
 
-            administratorModel.setStatusKey(Constants.ACTIVE.equals(administratorModel.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
+            administratorModel.setStatusKey(
+                    Constants.ACTIVE.equals(administratorModel.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
 
             UserModel userModel = administratorModel.getUser();
             userModel.setStatus(!userModel.isStatus());

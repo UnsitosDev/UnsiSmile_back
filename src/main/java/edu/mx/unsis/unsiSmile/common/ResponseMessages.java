@@ -188,4 +188,8 @@ public class ResponseMessages {
     // RELIGION VALIDATION REQUEST
     public static final String NOT_BLANK_RELIGION_DESCRIPTION = "La descripción de la religión no puede estar en blanco";
     public static final String MAX_SIZE_RELIGION_DESCRIPTION = "La descripción de la religión debe tener un máximo de 100 caracteres";
+
+    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
+    public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
+    public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
 }

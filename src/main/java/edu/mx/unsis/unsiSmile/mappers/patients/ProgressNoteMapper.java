@@ -71,8 +71,8 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
                 .origin(getFullOrigin(patientResponse))
                 .medicalRecordNumber(patientResponse.getMedicalRecordNumber())
                 .creationDate(LocalDate.now())
-                .isMinor(patientResponse.getIsMinor())
-                .guardian(mapGuardianName(patientResponse.getGuardian()))
+                .isMinor(patientResponse.getIsMinor() != null ? patientResponse.getIsMinor() : false)
+                .guardian(patientResponse.getGuardian() != null ? mapGuardianName(patientResponse.getGuardian()) : null)
                 .build();
     }
 
