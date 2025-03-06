@@ -59,7 +59,7 @@ public class GuardianController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GuardianResponse> updateGuardian(@Valid @PathVariable Long id, @Valid @RequestBody GuardianRequest updatedGuardianRequest) {
+        public ResponseEntity<GuardianResponse> updateGuardian(@Valid @PathVariable Long id, @RequestBody GuardianRequest updatedGuardianRequest) {
         GuardianResponse updatedGuardian = guardianService.updateGuardian(id, updatedGuardianRequest);
         return ResponseEntity.ok(updatedGuardian);
     }

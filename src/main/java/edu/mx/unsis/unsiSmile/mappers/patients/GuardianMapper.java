@@ -51,11 +51,12 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
 
     @Override
     public void updateEntity(GuardianRequest request, GuardianModel entity) {
-        entity.setFirstName(request.getFirstName());
-        entity.setLastName(request.getLastName());
-        entity.setPhone(request.getPhone());
-        entity.setEmail(request.getEmail());
-        entity.setParentalStatus(catalogOptionMapper.toEntity(request.getParentalStatus()));
-        entity.setDoctorName(request.getDoctorName());          
+        entity.setFirstName(request.getFirstName() != null ? request.getFirstName() : entity.getFirstName());
+        entity.setLastName(request.getLastName() != null ? request.getLastName() : entity.getLastName());
+        entity.setPhone(request.getPhone() != null ? request.getPhone() : entity.getPhone());
+        entity.setEmail(request.getEmail() != null ? request.getEmail() : entity.getEmail());
+        entity.setParentalStatus(request.getParentalStatus() != null ?
+                catalogOptionMapper.toEntity(request.getParentalStatus()) : entity.getParentalStatus());
+        entity.setDoctorName(request.getDoctorName() != null ? request.getDoctorName() : entity.getDoctorName());
     }
 }

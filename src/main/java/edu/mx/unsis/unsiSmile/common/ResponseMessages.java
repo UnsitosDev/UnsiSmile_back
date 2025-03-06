@@ -150,6 +150,8 @@ public class ResponseMessages {
     public static final String ERROR_CREATING_OCCUPATION = "Error al crear la ocupación";
 
     public static final String GUARDIAN_NOT_FOUND = "Tutor no encontrado";
+    public static final String GUARDIAN_UPDATE_FAILED = "Error al actualizar el tutor.";
+    public static final String GUARDIAN_REQUEST_CANNOT_BE_NULL = "El objeto GuardianRequest no puede ser nulo.";
 
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
