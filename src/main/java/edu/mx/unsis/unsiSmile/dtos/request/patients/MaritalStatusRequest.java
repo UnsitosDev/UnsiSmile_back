@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MaritalStatusRequest {
     private Long idMaritalStatus;
 
-    @NotBlank(message = "Marital Status description cannot be blank")
-    @Size(max = 100, message = "Marital Status description must be at most 100 characters long")
+    @NotBlank(message = ResponseMessages.NOT_BLANK_MARITAL_STATUS_DESCRIPTION)
+    @Size(max = 100, message = ResponseMessages.MAX_SIZE_MARITAL_STATUS_DESCRIPTION)
     private String maritalStatus;
 }

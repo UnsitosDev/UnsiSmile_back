@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GenderRequest {
     private Long idGender;
-    @NotNull(message = "The field gender can't be null")
-    @NotBlank(message = "The field gender can't be blank")
+    @NotNull(message = ResponseMessages.NOT_NULL_GENDER_FIELD)
+    @NotBlank(message = ResponseMessages.NOT_BLANK_GENDER_FIELD)
     private String gender;
 }

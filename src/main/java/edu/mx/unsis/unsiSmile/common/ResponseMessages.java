@@ -128,4 +128,59 @@ public class ResponseMessages {
     public static final String INVALID_INPUT = "La entrada no es válida. Debe ser un número o una cadena.";
     public static final String FAILED_FETCH_STUDENTS_IN_GROUPS = "Error al obtener los estudiantes en los grupos.";
     public static final String FAILED_TO_FETCH_STUDENTS = "Error al obtener los estudiantes.";
+
+    public static final String NATIONALITY_NOT_FOUND = "Nacionalidad no encontrada";
+    public static final String MARITAL_STATUS_NOT_FOUND = "Estado civil no encontrado";
+    public static final String ETHNIC_GROUP_NOT_FOUND = "Grupo étnico no encontrado";
+    public static final String RELIGION_NOT_FOUND = "Religión no encontrada";
+
+    // PATIENT VALIDATION REQUEST
+    public static final String NOT_NULL_HAS_DISABILITY = "El campo 'tiene discapacidad' no puede ser nulo";
+    public static final String NOT_NULL_NATIONALITY = "El campo 'nacionalidad' no puede ser nulo";
+    public static final String NOT_NULL_PERSON = "El campo 'persona' no puede ser nulo";
+    public static final String NOT_NULL_ADDRESS = "El campo 'dirección' no puede ser nulo";
+    public static final String NOT_NULL_MARITAL_STATUS = "El campo 'estado civil' no puede ser nulo";
+    public static final String NOT_NULL_OCCUPATION = "El campo 'ocupación' no puede ser nulo";
+    public static final String NOT_NULL_ETHNIC_GROUP = "El campo 'grupo étnico' no puede ser nulo";
+    public static final String NOT_NULL_RELIGION = "El campo 'religión' no puede ser nulo";
+
+    public static final String ERROR_CREATING_PATIENT = "Error al crear el paciente";
+
+    public static final String OCCUPATION_NOT_FOUND = "No se pudo encontrar o crear la ocupación";
+
+    // PERSON VALIDATION REQUEST
+    public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
+    public static final String SIZE_CURP = "El CURP debe tener exactamente 18 caracteres";
+    public static final String NOT_BLANK_FIRST_NAME = "El primer nombre no puede estar en blanco";
+    public static final String SIZE_FIRST_NAME = "El primer nombre debe tener como máximo 50 caracteres";
+    public static final String SIZE_SECOND_NAME = "El segundo nombre debe tener como máximo 50 caracteres";
+    public static final String NOT_BLANK_FIRST_LAST_NAME = "El primer apellido no puede estar en blanco";
+    public static final String SIZE_FIRST_LAST_NAME = "El primer apellido debe tener como máximo 50 caracteres";
+    public static final String SIZE_SECOND_LAST_NAME = "El segundo apellido debe tener como máximo 50 caracteres";
+    public static final String PATTERN_PHONE = "El número de teléfono debe tener 10 dígitos";
+    public static final String NOT_NULL_BIRTH_DATE = "La fecha de nacimiento no puede ser nula";
+    public static final String NOT_BLANK_EMAIL = "El correo electrónico no puede estar en blanco";
+    public static final String VALID_EMAIL = "El correo electrónico debe ser válido";
+    public static final String SIZE_EMAIL = "El correo electrónico debe tener como máximo 200 caracteres";
+
+    // GENDER VALIDATION REQUEST
+    public static final String NOT_NULL_GENDER = "El género no puede ser nulo";
+    public static final String NOT_NULL_GENDER_FIELD = "El campo género no puede ser nulo";
+    public static final String NOT_BLANK_GENDER_FIELD = "El campo género no puede estar en blanco";
+
+    // MARITAL STATUS VALIDATION REQUEST
+    public static final String NOT_BLANK_MARITAL_STATUS_DESCRIPTION = "La descripción del estado civil no puede estar en blanco";
+    public static final String MAX_SIZE_MARITAL_STATUS_DESCRIPTION = "La descripción del estado civil debe tener un máximo de 100 caracteres";
+
+    // OCCUPATION VALIDATION REQUEST
+    public static final String NOT_BLANK_OCCUPATION_DESCRIPTION = "La descripción de la ocupación no puede estar en blanco";
+    public static final String MAX_SIZE_OCCUPATION_DESCRIPTION = "La descripción de la ocupación debe tener un máximo de 100 caracteres";
+
+    // ETHNIC GROUP VALIDATION REQUEST
+    public static final String NOT_BLANK_ETHNIC_GROUP_DESCRIPTION = "La descripción del grupo étnico no puede estar en blanco";
+    public static final String MAX_SIZE_ETHNIC_GROUP_DESCRIPTION = "La descripción del grupo étnico debe tener un máximo de 100 caracteres";
+
+    // RELIGION VALIDATION REQUEST
+    public static final String NOT_BLANK_RELIGION_DESCRIPTION = "La descripción de la religión no puede estar en blanco";
+    public static final String MAX_SIZE_RELIGION_DESCRIPTION = "La descripción de la religión debe tener un máximo de 100 caracteres";
 }
