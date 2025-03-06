@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
@@ -62,6 +63,7 @@ public class PatientService {
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
+    private final ValidationUtils validationUtils;
     @Value("${max.medical.record.number}")
     private int maxFileNumberProperties;
 
@@ -113,17 +115,12 @@ public class PatientService {
     }
 
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
-        if (isMinor(patientRequest.getPerson().getBirthDate())) {
+        if (validationUtils.isMinor(patientRequest.getPerson().getBirthDate())) {
             GuardianModel guardianModel = Optional.ofNullable(patientRequest.getGuardian())
                     .map(this::createGuardianEntity)
                     .orElseThrow(() -> new AppException("The patient needs to have a guardian", HttpStatus.BAD_REQUEST));
             patientModel.setGuardian(guardianModel);
         }
-    }
-
-    private boolean isMinor(LocalDate birthDate) {
-        LocalDate today = LocalDate.now();
-        return Period.between(birthDate, today).getYears() < 18;
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
@@ -302,18 +299,20 @@ public class PatientService {
         try {
             Assert.notNull(updatedPatientRequest, "Updated PatientRequest cannot be null");
 
-            // Find the patient in the database
             PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
                     .orElseThrow(
                             () -> new AppException("Patient not found with ID: " + idPatient, HttpStatus.NOT_FOUND));
 
-            // Update the patient entity with the new data
             patientMapper.updateEntity(updatedPatientRequest, patientModel);
 
-            // Save the updated entity
+            if (updatedPatientRequest.getPerson() != null) {
+                PersonModel updatedPerson = personService.updatedPerson(patientModel.getPerson().getCurp(),
+                        updatedPatientRequest.getPerson());
+                patientModel.setPerson(updatedPerson);
+            }
+
             PatientModel updatedPatient = patientRepository.save(patientModel);
 
-            // Map the updated entity back to a response DTO
             return patientMapper.toDto(updatedPatient);
         } catch (Exception ex) {
             throw new AppException("Failed to update patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);

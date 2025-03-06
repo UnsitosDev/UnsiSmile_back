@@ -79,9 +79,9 @@ public class PatientController {
     // Implement similar methods for other search criteria like nationality, person,
     // address, marital status, occupation, ethnic group, religion, guardian, etc.
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<PatientResponse> updatePatient(@PathVariable String id,
-            @Valid @RequestBody PatientRequest updatedPatientRequest) {
+            @RequestBody PatientRequest updatedPatientRequest) {
         PatientResponse updatedPatient = patientService.updatePatient(id, updatedPatientRequest);
         return ResponseEntity.ok(updatedPatient);
     }

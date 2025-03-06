@@ -34,7 +34,6 @@ public class GuardianRequest {
     @Size(max = 50, message = "Email must be at most 50 characters long")
     private String email;
 
-    @NotBlank(message = "Parental status cannot be blank")
     @NotNull(message = "Parental status is required")
     private CatalogOptionRequest parentalStatus;
 

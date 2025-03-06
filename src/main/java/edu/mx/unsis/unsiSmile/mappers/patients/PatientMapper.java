@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.patients;
 
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
@@ -26,6 +27,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
     private ReligionMapper religionMapper;
     private GuardianMapper guardianMapper;
     private PersonMapper personMapper;
+    private ValidationUtils validationUtils;
 
     @Override
     public PatientModel toEntity(PatientRequest dto) {
@@ -58,6 +60,7 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 .occupation(occupationMapper.toDto(entity.getOccupation()))
                 .ethnicGroup(ethnicGroupMapper.toDto(entity.getEthnicGroup()))
                 .religion(religionMapper.toDto(entity.getReligion()))
+                .isMinor(validationUtils.isMinor(entity.getPerson().getBirthDate()))
                 .guardian(entity.getGuardian() != null ? guardianMapper.toDto(entity.getGuardian()) : null)
                 .build();
     }
@@ -71,15 +74,21 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
 
     @Override
     public void updateEntity(PatientRequest request, PatientModel entity) {
-        entity.setAdmissionDate(LocalDate.now());
-        entity.setHasDisability(request.getHasDisability());
-        entity.setNationality(NationalityModel.builder().idNationality(request.getNationalityId()).build());
-        entity.setPerson(personMapper.toEntity(request.getPerson()));
-        entity.setAddress(addressMapper.toEntity(request.getAddress()));
-        entity.setMaritalStatus(MaritalStatusModel.builder().idMaritalStatus(request.getMaritalStatus().getIdMaritalStatus()).build());
-        entity.setOccupation(OccupationModel.builder().idOccupation(request.getOccupation().getIdOccupation()).build());
-        entity.setEthnicGroup(EthnicGroupModel.builder().idEthnicGroup(request.getEthnicGroup().getIdEthnicGroup()).build());
-        entity.setReligion(ReligionModel.builder().idReligion(request.getReligion().getIdReligion()).build());
-        entity.setGuardian(guardianMapper.toEntity(request.getGuardian()));
+        entity.setHasDisability(request.getHasDisability() != null ? request.getHasDisability() :
+                entity.getHasDisability());
+        entity.setNationality(request.getNationalityId() != null ?
+                NationalityModel.builder().idNationality(request.getNationalityId()).build() : entity.getNationality());
+        entity.setAddress(request.getAddress() != null ? addressMapper.toEntity(request.getAddress()) :
+                entity.getAddress());
+        entity.setMaritalStatus(request.getMaritalStatus() != null ?
+                MaritalStatusModel.builder().idMaritalStatus(request.getMaritalStatus().getIdMaritalStatus()).build() : entity.getMaritalStatus());
+        entity.setOccupation(request.getOccupation() != null ?
+                OccupationModel.builder().idOccupation(request.getOccupation().getIdOccupation()).build() : entity.getOccupation());
+        entity.setEthnicGroup(request.getEthnicGroup() != null ?
+                EthnicGroupModel.builder().idEthnicGroup(request.getEthnicGroup().getIdEthnicGroup()).build() : entity.getEthnicGroup());
+        entity.setReligion(request.getReligion() != null ?
+                ReligionModel.builder().idReligion(request.getReligion().getIdReligion()).build() : entity.getReligion());
+        entity.setGuardian(request.getGuardian() != null ? guardianMapper.toEntity(request.getGuardian()) :
+                entity.getGuardian());
     }
 }
