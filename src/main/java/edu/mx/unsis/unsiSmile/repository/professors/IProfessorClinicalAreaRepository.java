@@ -22,4 +22,7 @@ public interface IProfessorClinicalAreaRepository extends JpaRepository<Professo
     Page<ProfessorClinicalAreaModel> findAllBySearchInput(@Param("keyword") String keyword, Pageable pageable);
 
     Optional<ProfessorClinicalAreaModel> findByProfessorAndStatusKey(@Param("professor") ProfessorModel professor, @Param("statusKey") String statusKey);
+
+    @Query("SELECT p FROM ProfessorClinicalAreaModel p WHERE p.professor.idProfessor = :professorId AND p.statusKey = 'A'")
+    Optional<ProfessorClinicalAreaModel> findByProfessorId(@Param("professorId") String professorId);
 }
