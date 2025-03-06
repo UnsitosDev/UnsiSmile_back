@@ -192,4 +192,7 @@ public class ResponseMessages {
     public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
     public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
+
+    public static final String CURP_LENGTH_MISMATCH = "La CURP generada no coincide en longitud con la CURP proporcionada.";
+    public static final String CURP_DATA_MISMATCH = "La CURP generada no coincide con los datos proporcionados.";
 }

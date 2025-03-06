@@ -252,7 +252,6 @@ public class StudentService {
 
     private void processAndSaveStudents(List<List<String>> studentsData, Map<String, GroupModel> groups) {
         for (List<String> studentRow : studentsData) {
-            StudentGroupModel studentGroup = new StudentGroupModel();
 
             String enrollment = studentRow.get(3);
 
