@@ -145,7 +145,7 @@ public class OccupationService {
             return occupationRepository.findByOccupation(occupation.getOccupation())
                     .orElseGet(() -> occupationRepository.save(occupationMapper.toEntity(occupation)));
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.OCCUPATION_NOT_FOUND, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.ERROR_CREATING_OCCUPATION, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

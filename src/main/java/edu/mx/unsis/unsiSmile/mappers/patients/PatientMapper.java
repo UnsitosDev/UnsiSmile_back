@@ -82,13 +82,9 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 entity.getAddress());
         entity.setMaritalStatus(request.getMaritalStatus() != null ?
                 MaritalStatusModel.builder().idMaritalStatus(request.getMaritalStatus().getIdMaritalStatus()).build() : entity.getMaritalStatus());
-        entity.setOccupation(request.getOccupation() != null ?
-                OccupationModel.builder().idOccupation(request.getOccupation().getIdOccupation()).build() : entity.getOccupation());
         entity.setEthnicGroup(request.getEthnicGroup() != null ?
                 EthnicGroupModel.builder().idEthnicGroup(request.getEthnicGroup().getIdEthnicGroup()).build() : entity.getEthnicGroup());
         entity.setReligion(request.getReligion() != null ?
                 ReligionModel.builder().idReligion(request.getReligion().getIdReligion()).build() : entity.getReligion());
-        entity.setGuardian(request.getGuardian() != null ? guardianMapper.toEntity(request.getGuardian()) :
-                entity.getGuardian());
     }
 }

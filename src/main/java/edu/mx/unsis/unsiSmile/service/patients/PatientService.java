@@ -299,21 +299,15 @@ public class PatientService {
         try {
             Assert.notNull(updatedPatientRequest, "Updated PatientRequest cannot be null");
 
-            PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
-                    .orElseThrow(
-                            () -> new AppException("Patient not found with ID: " + idPatient, HttpStatus.NOT_FOUND));
+            PatientModel patientModel = getExistingPatient(idPatient);
 
-            patientMapper.updateEntity(updatedPatientRequest, patientModel);
-
-            if (updatedPatientRequest.getPerson() != null) {
-                PersonModel updatedPerson = personService.updatedPerson(patientModel.getPerson().getCurp(),
-                        updatedPatientRequest.getPerson());
-                patientModel.setPerson(updatedPerson);
-            }
+            updatePatientData(patientModel, updatedPatientRequest);
 
             PatientModel updatedPatient = patientRepository.save(patientModel);
 
             return patientMapper.toDto(updatedPatient);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to update patient", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -377,6 +371,26 @@ public class PatientService {
             return patientMapper.toDto(optionalPatient.get());
         } else {
             throw new AppException("Student does not have access to this patient", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    private PatientModel getExistingPatient(@NonNull String idPatient) {
+        return patientRepository.findByIdPatient(idPatient)
+                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+    }
+
+    private void updatePatientData(PatientModel patientModel, PatientRequest updatedPatientRequest) {
+        patientMapper.updateEntity(updatedPatientRequest, patientModel);
+
+        if (updatedPatientRequest.getOccupation() != null) {
+            OccupationModel occupationModel = occupationService.findOrCreateOccupation(updatedPatientRequest.getOccupation());
+            patientModel.setOccupation(occupationModel);
+        }
+
+        if (updatedPatientRequest.getPerson() != null) {
+            PersonModel updatedPerson = personService.updatedPerson(
+                    patientModel.getPerson().getCurp(), updatedPatientRequest.getPerson());
+            patientModel.setPerson(updatedPerson);
         }
     }
 }

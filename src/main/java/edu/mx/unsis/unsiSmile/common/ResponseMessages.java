@@ -147,6 +147,9 @@ public class ResponseMessages {
     public static final String ERROR_CREATING_PATIENT = "Error al crear el paciente";
 
     public static final String OCCUPATION_NOT_FOUND = "No se pudo encontrar o crear la ocupación";
+    public static final String ERROR_CREATING_OCCUPATION = "Error al crear la ocupación";
+
+    public static final String GUARDIAN_NOT_FOUND = "Tutor no encontrado";
 
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
