@@ -1,5 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
@@ -8,14 +17,6 @@ import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +30,9 @@ public class PersonService {
         try {
             Assert.notNull(personRequest, "PersonRequest cannot be null");
 
-            if(personRepository.existsById(personRequest.getCurp())){
-              throw new AppException("Person with " + personRequest.getCurp() + " already exists", HttpStatus.CONFLICT);
+            if (personRepository.existsById(personRequest.getCurp())) {
+                throw new AppException("Person with " + personRequest.getCurp() + " already exists",
+                        HttpStatus.CONFLICT);
             }
 
             // Map the DTO request to the entity

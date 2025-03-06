@@ -128,4 +128,7 @@ public class ResponseMessages {
     public static final String INVALID_INPUT = "La entrada no es válida. Debe ser un número o una cadena.";
     public static final String FAILED_FETCH_STUDENTS_IN_GROUPS = "Error al obtener los estudiantes en los grupos.";
     public static final String FAILED_TO_FETCH_STUDENTS = "Error al obtener los estudiantes.";
+    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
+    public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
+    public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
 }

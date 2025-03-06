@@ -1,14 +1,15 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.model.GenderModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, PersonModel> {
@@ -41,6 +42,8 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
                 .phone(dto.getPhone())
                 .birthDate(dto.getBirthDate())
                 .email(dto.getEmail())
+                .gender(GenderModel.builder().gender(dto.getGender().getGender())
+                        .idGender(dto.getGender().getIdGender()).build())
                 .build();
     }
 
@@ -68,15 +71,24 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
 
     @Override
     public void updateEntity(PersonRequest request, PersonModel entity) {
-        entity.setFirstName((request.getFirstName() != null && !request.getFirstName().isBlank()) ? request.getFirstName() : entity.getFirstName());
-        entity.setSecondName((request.getSecondName() != null && !request.getSecondName().isBlank()) ? request.getSecondName() : entity.getSecondName());
-        entity.setFirstLastName((request.getFirstLastName() != null && !request.getFirstLastName().isBlank()) ? request.getFirstLastName() : entity.getFirstLastName());
-        entity.setSecondLastName((request.getSecondLastName() != null && !request.getSecondLastName().isBlank()) ? request.getSecondLastName() : entity.getSecondLastName());
-        entity.setPhone((request.getPhone() != null && !request.getPhone().isBlank()) ? request.getPhone() : entity.getPhone());
+        entity.setFirstName(
+                (request.getFirstName() != null && !request.getFirstName().isBlank()) ? request.getFirstName()
+                        : entity.getFirstName());
+        entity.setSecondName(
+                (request.getSecondName() != null && !request.getSecondName().isBlank()) ? request.getSecondName()
+                        : entity.getSecondName());
+        entity.setFirstLastName((request.getFirstLastName() != null && !request.getFirstLastName().isBlank())
+                ? request.getFirstLastName()
+                : entity.getFirstLastName());
+        entity.setSecondLastName((request.getSecondLastName() != null && !request.getSecondLastName().isBlank())
+                ? request.getSecondLastName()
+                : entity.getSecondLastName());
+        entity.setPhone(
+                (request.getPhone() != null && !request.getPhone().isBlank()) ? request.getPhone() : entity.getPhone());
         entity.setBirthDate(request.getBirthDate() != null ? request.getBirthDate() : entity.getBirthDate());
-        entity.setEmail((request.getEmail() != null && !request.getEmail().isBlank()) ? request.getEmail() : entity.getEmail());
-        entity.setGender((request.getGender() != null && request.getGender().getIdGender() != null)
-                ? GenderModel.builder().idGender(request.getGender().getIdGender()).build()
-                : entity.getGender());
+        entity.setEmail(
+                (request.getEmail() != null && !request.getEmail().isBlank()) ? request.getEmail() : entity.getEmail());
+        entity.setGender(request.getGender() != null ? genderMapper.toEntity(request.getGender()) : entity.getGender());
     }
+
 }
