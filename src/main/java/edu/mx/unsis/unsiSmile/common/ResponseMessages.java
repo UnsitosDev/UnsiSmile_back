@@ -200,4 +200,9 @@ public class ResponseMessages {
     public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";
     public static final String PERSON_NULL = "El campo persona no puede estar vacío";
     public static final String CAREER_NULL = "El campo carrera no puede estar vacío";
+
+    // STUDENT VALIDATION REQUEST
+    public static final String NOT_NULL_ENROLLMENT = "El campo matrícula no puede estar vacío";
+    public static final String ENROLLMENT_INVALID = "La matrícula debe contener exactamente 10 dígitos numéricos";
+    public static final String NOT_NULL_GROUP = "El campo grupo no puede estar vacío";
 }

@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class StudentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> createStudent(@RequestBody StudentRequest request) {
+    public ResponseEntity<Void> createStudent(@Valid @RequestBody StudentRequest request) {
         studentService.createStudent(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
