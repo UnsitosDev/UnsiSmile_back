@@ -46,7 +46,6 @@ public class StudentMapper implements BaseMapper<StudentResponse, StudentRequest
     @Override
     public void updateEntity(StudentRequest request, StudentModel entity) {
         entity.setEnrollment(request.getEnrollment());
-        entity.setUser(userMapper.toEntity(request.getUser()));
         entity.setPerson(personMapper.toEntity(request.getPerson()));
     }
 }
