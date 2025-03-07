@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,7 @@ public class UserService {
     private final AdministratorMapper administratorMapper;
     private final FileStorageService fileStorageService;
     private final IProfilePictureRepository profilePictureRepository;
+    private final IRoleRepository roleRepository;
 
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
 
@@ -115,8 +117,12 @@ public class UserService {
 
     public UserModel setValuesModel(RegisterRequest request) {
 
-        RoleModel role = new RoleModel();
-        role.setRole(ERole.valueOf(request.getRole()));
+        RoleModel role = roleRepository.findByRole(ERole.valueOf(request.getRole()))
+                .orElseGet(() -> {
+                    RoleModel newRole = new RoleModel();
+                    newRole.setRole(ERole.valueOf(request.getRole()));
+                    return roleRepository.save(newRole);
+                });
 
         return UserModel.builder()
                 .username(request.getUsername())
