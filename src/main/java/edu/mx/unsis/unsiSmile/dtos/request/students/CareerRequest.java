@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CareerRequest {
+    @NotNull(message = "The field idCareer can't be null")
+    @NotBlank(message = "The field idCareer can't be blank")
     private String idCareer;
     @NotNull(message = "The field career can't be null")
     @NotBlank(message = "The field career can't be blank")

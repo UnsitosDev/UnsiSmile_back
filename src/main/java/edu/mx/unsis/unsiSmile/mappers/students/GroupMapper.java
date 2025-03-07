@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
+import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
                 .groupName(dto.getGroupName())
                 .semesterNumber(dto.getSemesterNumber())
                 .career(careerMapper.toEntity(dto.getCareer()))
+                .semester(SemesterModel.builder().idSemester(dto.getSemester().getIdSemester()).build())
                 .build();
     }
 
