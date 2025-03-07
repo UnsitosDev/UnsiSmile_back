@@ -10,13 +10,15 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper
+import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
+import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteFileRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteRepository;
@@ -54,6 +56,7 @@ public class ProgressNoteService {
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
+    private final ICatalogOptionRepository catalogOptionRepository;
     private final ProgressNoteMapper progressNoteMapper;
     private final FileStorageService fileStorageService;
     private final UserService userService;
@@ -65,23 +68,11 @@ public class ProgressNoteService {
         try {
             Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
-            PatientModel patient = patientRepository.findById(request.getPatientId())
-                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: "
-                            + request.getPatientId(), HttpStatus.NOT_FOUND));
-
-            UserResponse user = userService.getCurrentUser();
-
-            StudentModel student = studentRepository.findById(user.getUsername())
-                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: "
-                            + user.getUsername(), HttpStatus.NOT_FOUND));
-
-            ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(
-                    request.getProfessorClinicalAreaId())
-                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND
-                            + " con ID: " + request.getProfessorClinicalAreaId(), HttpStatus.NOT_FOUND));
+            PatientModel patient = getPatientById(request.getPatientId());
+            StudentModel student = getCurrentStudent();
+            ProfessorClinicalAreaModel professorClinicalArea = getProfessorClinicalAreaById(request.getProfessorClinicalAreaId());
 
             ProgressNoteModel progressNote = progressNoteMapper.toEntity(request);
-
             progressNote.setPatient(patient);
             progressNote.setProfessor(professorClinicalArea.getProfessor());
 
@@ -200,5 +191,24 @@ public class ProgressNoteService {
         } else {
             throw new AppException(ResponseMessages.INVALID_ROLE, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private PatientModel getPatientById(String patientId) {
+        return patientRepository.findById(patientId)
+                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId, HttpStatus.NOT_FOUND));
+    }
+
+    private StudentModel getCurrentStudent() {
+        String studentId = userService.getCurrentUser().getUsername();
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: " + studentId, HttpStatus.NOT_FOUND));
+    }
+
+    private ProfessorClinicalAreaModel getProfessorClinicalAreaById(Long catalogOptionId) {
+        CatalogOptionModel catalog = catalogOptionRepository.findById(catalogOptionId)
+                .orElseThrow(() -> new AppException(ResponseMessages.CATALOG_OPTION_NOT_FOUND + " con ID: " + catalogOptionId, HttpStatus.NOT_FOUND));
+
+        return professorClinicalAreaRepository.findByProfessorId(catalog.getOptionName())
+                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + " con ID: " + catalogOptionId, HttpStatus.NOT_FOUND));
     }
 }

@@ -122,6 +122,8 @@ public class ResponseMessages {
     public static final String FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA = "Error al habilitar el área clínica del profesor.";
     public static final String CATALOG_NOT_FOUND = "Catálogo no encontrado.";
 
+    public static final String CATALOG_OPTION_NOT_FOUND= "Opción de catálogo no encontrada";
+
     public static final String GROUP_NOT_FOUND = "Grupo no encontrado";
     public static final String ERROR_CREATING_STUDENT_GROUP = "Ocurrió un error al agregar un estudiante a un grupo.";
 
