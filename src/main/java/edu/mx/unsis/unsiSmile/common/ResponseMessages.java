@@ -205,4 +205,18 @@ public class ResponseMessages {
     public static final String NOT_NULL_ENROLLMENT = "El campo matrícula no puede estar vacío";
     public static final String ENROLLMENT_INVALID = "La matrícula debe contener exactamente 10 dígitos numéricos";
     public static final String NOT_NULL_GROUP = "El campo grupo no puede estar vacío";
+
+    public static final String CAREER_REQUEST_CANNOT_BE_NULL = "CareerRequest no puede ser nulo";
+    public static final String FAILED_TO_CREATE_CAREER = "Error al crear la carrera";
+    public static final String CAREER_NOT_FOUND_ID = "Carrera no encontrada con ID: ";
+    public static final String CAREER_NOT_FOUND_NAME = "Carrera no encontrada con NOMBRE: ";
+    public static final String FAILED_TO_FETCH_CAREER = "Error al obtener la carrera";
+    public static final String FAILED_TO_FETCH_CAREERS = "Error al obtener las carreras";
+    public static final String FAILED_TO_UPDATE_CAREER = "Error al actualizar la carrera";
+    public static final String FAILED_TO_DELETE_CAREER = "Error al eliminar la carrera";
+    public static final String NOT_NULL_ID_CAREER = "El campo idCareer no puede ser nulo";
+    public static final String NOT_BLANK_ID_CAREER = "El campo idCareer no puede estar vacío";
+    public static final String NOT_NULL_CAREER = "El campo career no puede ser nulo";
+    public static final String NOT_BLANK_CAREER = "El campo career no puede estar vacío";
+
 }
