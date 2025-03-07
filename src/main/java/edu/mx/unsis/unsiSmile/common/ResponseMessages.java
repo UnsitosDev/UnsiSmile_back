@@ -195,4 +195,9 @@ public class ResponseMessages {
 
     public static final String CURP_LENGTH_MISMATCH = "La CURP generada no coincide en longitud con la CURP proporcionada.";
     public static final String CURP_DATA_MISMATCH = "La CURP generada no coincide con los datos proporcionados.";
+
+    public static final String EMPLOYEE_NUMBER_NULL = "El campo número de empleado no puede estar vacío";
+    public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";
+    public static final String PERSON_NULL = "El campo persona no puede estar vacío";
+    public static final String CAREER_NULL = "El campo carrera no puede estar vacío";
 }
