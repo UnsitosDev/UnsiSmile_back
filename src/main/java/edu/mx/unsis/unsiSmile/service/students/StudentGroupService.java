@@ -79,4 +79,9 @@ public class StudentGroupService {
             throw new AppException(ResponseMessages.FAILED_FETCH_STUDENTS_IN_GROUPS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional(readOnly = true)
+    public StudentGroupModel getStudentGroup(String enrollment) {
+        return studentGroupRepository.findLatestActiveByStudent(enrollment).orElse(null);
+    }
 }

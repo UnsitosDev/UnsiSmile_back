@@ -58,6 +58,7 @@ public class ResponseMessages {
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser nulL.";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
+    public static final String STUDENT_GROUP_NOT_FOUND = "El estudiante no está registrado en el grupo.";
     public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado";
 
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";

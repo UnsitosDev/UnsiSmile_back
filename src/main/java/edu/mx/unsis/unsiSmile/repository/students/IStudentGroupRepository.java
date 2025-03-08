@@ -48,4 +48,10 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             @Param("keyword") String keyword,
             @Param("keywordInt") Integer keywordInt,
             Pageable pageable);
+
+    @Query("SELECT sg FROM StudentGroupModel sg " +
+            "WHERE sg.student.enrollment = :enrollment " +
+            "AND sg.statusKey = 'A' " +
+            "ORDER BY sg.idStudentGroups DESC LIMIT 1")
+    Optional<StudentGroupModel> findLatestActiveByStudent(@Param("enrollment") String enrollment);
 }

@@ -85,7 +85,14 @@ public class StudentService {
             StudentModel studentModel = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
                             HttpStatus.NOT_FOUND));
-            return studentMapper.toDto(studentModel);
+
+            StudentResponse studentResponse = studentMapper.toDto(studentModel);
+
+            StudentGroupModel studentGroup = studentGroupService.getStudentGroup(enrollment);
+            if (studentGroup != null) {
+                studentResponse.setGroup(groupMapper.toDto(studentGroup.getGroup()));
+            }
+            return studentResponse;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
