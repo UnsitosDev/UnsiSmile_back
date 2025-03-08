@@ -194,4 +194,31 @@ public class ResponseMessages {
     public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
     public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
+
+    public static final String CURP_LENGTH_MISMATCH = "La CURP generada no coincide en longitud con la CURP proporcionada.";
+    public static final String CURP_DATA_MISMATCH = "La CURP generada no coincide con los datos proporcionados.";
+
+    public static final String EMPLOYEE_NUMBER_NULL = "El campo número de empleado no puede estar vacío";
+    public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";
+    public static final String PERSON_NULL = "El campo persona no puede estar vacío";
+    public static final String CAREER_NULL = "El campo carrera no puede estar vacío";
+
+    // STUDENT VALIDATION REQUEST
+    public static final String NOT_NULL_ENROLLMENT = "El campo matrícula no puede estar vacío";
+    public static final String ENROLLMENT_INVALID = "La matrícula debe contener exactamente 10 dígitos numéricos";
+    public static final String NOT_NULL_GROUP = "El campo grupo no puede estar vacío";
+
+    public static final String CAREER_REQUEST_CANNOT_BE_NULL = "CareerRequest no puede ser nulo";
+    public static final String FAILED_TO_CREATE_CAREER = "Error al crear la carrera";
+    public static final String CAREER_NOT_FOUND_ID = "Carrera no encontrada con ID: ";
+    public static final String CAREER_NOT_FOUND_NAME = "Carrera no encontrada con NOMBRE: ";
+    public static final String FAILED_TO_FETCH_CAREER = "Error al obtener la carrera";
+    public static final String FAILED_TO_FETCH_CAREERS = "Error al obtener las carreras";
+    public static final String FAILED_TO_UPDATE_CAREER = "Error al actualizar la carrera";
+    public static final String FAILED_TO_DELETE_CAREER = "Error al eliminar la carrera";
+    public static final String NOT_NULL_ID_CAREER = "El campo idCareer no puede ser nulo";
+    public static final String NOT_BLANK_ID_CAREER = "El campo idCareer no puede estar vacío";
+    public static final String NOT_NULL_CAREER = "El campo career no puede ser nulo";
+    public static final String NOT_BLANK_CAREER = "El campo career no puede estar vacío";
+
 }

@@ -74,6 +74,8 @@ public class StudentService {
 
             studentRepository.save(studentModel);
             studentGroupService.createStudentGroup(this.toSGRequest(request.getEnrollment(), request.getGroup().getId()));
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to create student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -252,7 +254,6 @@ public class StudentService {
 
     private void processAndSaveStudents(List<List<String>> studentsData, Map<String, GroupModel> groups) {
         for (List<String> studentRow : studentsData) {
-            StudentGroupModel studentGroup = new StudentGroupModel();
 
             String enrollment = studentRow.get(3);
 

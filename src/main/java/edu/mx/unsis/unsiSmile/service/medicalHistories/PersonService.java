@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class PersonService {
 
     private final IPersonRepository personRepository;
     private final PersonMapper personMapper;
+    private final ValidationUtils validationUtils;
 
     @Transactional
     public PersonResponse createPerson(@NonNull PersonRequest personRequest) {
@@ -35,14 +37,14 @@ public class PersonService {
                         HttpStatus.CONFLICT);
             }
 
-            // Map the DTO request to the entity
             PersonModel personModel = personMapper.toEntity(personRequest);
+            validationUtils.validateCURP(personModel);
 
-            // Save the entity to the database
             PersonModel savedPerson = personRepository.save(personModel);
 
-            // Map the saved entity back to a response DTO
             return personMapper.toDto(savedPerson);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to create person", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -130,6 +132,7 @@ public class PersonService {
                         " con curp: " + personId,
                         HttpStatus.NOT_FOUND));
         personMapper.updateEntity(request, personModel);
+        validationUtils.validateCURP(personModel);
 
         return personRepository.save(personModel);
     }

@@ -10,7 +10,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;

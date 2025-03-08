@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,14 +34,22 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final ICareerRepository careerRepository;
     private final SemesterService semesterService;
+    private final ISemesterRepository semesterRepository;
 
     @Transactional
     public void createGroup(@NonNull GroupRequest request) {
         try {
-            Assert.notNull(request, "GroupRequest cannot be null");
+            validateRequest(request);
+
+            SemesterModel semesterModel = findSemesterById(request.getSemester().getIdSemester());
+            CareerModel careerModel = findCareerById(request.getCareer().getIdCareer());
+
+            validateGroupExistence(request, careerModel, semesterModel);
 
             GroupModel groupModel = groupMapper.toEntity(request);
             groupRepository.save(groupModel);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to create group", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -152,5 +161,35 @@ public class GroupService {
         } catch (Exception ex) {
             throw new AppException("Error processing groups", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private void validateRequest(GroupRequest request) {
+        if (request == null) {
+            throw new AppException("GroupRequest no puede ser nulo", HttpStatus.BAD_REQUEST);
+        }
+        if (request.getSemester().getIdSemester() == null) {
+            throw new AppException("El ID del semestre no puede ser nulo", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private SemesterModel findSemesterById(Long idSemester) {
+        return semesterRepository.findById(idSemester)
+                .orElseThrow(() -> new AppException("Semester not found with ID: " + idSemester, HttpStatus.NOT_FOUND));
+    }
+
+    private CareerModel findCareerById(String idCareer) {
+        return careerRepository.findById(idCareer)
+                .orElseThrow(() -> new AppException("Carrera no encontrada con ID: " + idCareer, HttpStatus.NOT_FOUND));
+    }
+
+    private void validateGroupExistence(GroupRequest request, CareerModel careerModel, SemesterModel semesterModel) {
+        groupRepository.findByGroupNameAndSemesterNumberAndCareerAndSemester(
+                request.getGroupName(),
+                request.getSemesterNumber(),
+                careerModel,
+                semesterModel
+        ).ifPresent(group -> {
+            throw new AppException("El grupo ya existe", HttpStatus.BAD_REQUEST);
+        });
     }
 }

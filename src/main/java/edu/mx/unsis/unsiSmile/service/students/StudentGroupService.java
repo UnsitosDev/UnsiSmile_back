@@ -41,6 +41,8 @@ public class StudentGroupService {
 
             StudentGroupModel newStudentGroup = this.toEntity(request);
             studentGroupRepository.save(newStudentGroup);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_CREATING_STUDENT_GROUP, HttpStatus.INTERNAL_SERVER_ERROR);
         }
