@@ -37,7 +37,7 @@ public class StudentGroupService {
             groupRepository.findById(request.getGroupId())
                     .orElseThrow(() -> new AppException(ResponseMessages.GROUP_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            studentGroupRepository.deactivateLatestStudentGroup(request.getEnrollment());
+            studentGroupRepository.disableLatestStudentGroup(request.getEnrollment());
 
             StudentGroupModel newStudentGroup = this.toEntity(request);
             studentGroupRepository.save(newStudentGroup);
