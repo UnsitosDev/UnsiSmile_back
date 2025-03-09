@@ -136,14 +136,23 @@ public class StudentService {
     public void updateStudent(@NonNull String enrollment, @NonNull StudentRequest updatedStudentRequest) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
-                    .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + enrollment,
                             HttpStatus.NOT_FOUND));
 
-            studentMapper.updateEntity(updatedStudentRequest, studentModel);
+            if (updatedStudentRequest.getPerson() != null) {
+                PersonModel updatedPerson = personService.updatedPerson(
+                        studentModel.getPerson().getCurp(), updatedStudentRequest.getPerson());
+                studentModel.setPerson(updatedPerson);
+            }
+
+            if (updatedStudentRequest.getGroup() != null && updatedStudentRequest.getGroup().getId() != null) {
+                studentGroupService.createStudentGroup(this.toSGRequest(enrollment,
+                        updatedStudentRequest.getGroup().getId()));
+            }
 
             studentRepository.save(studentModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to update student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_UPDATE_STUDENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

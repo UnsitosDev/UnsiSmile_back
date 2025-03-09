@@ -25,7 +25,7 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
     @Query("UPDATE StudentGroupModel s SET s.statusKey = 'I' WHERE s.student.enrollment = :enrollment " +
             "AND s.idStudentGroups = (SELECT MAX(s2.idStudentGroups) FROM StudentGroupModel s2 " +
             "WHERE s2.student.enrollment = :enrollment)")
-    void deactivateLatestStudentGroup(@Param("enrollment") String enrollment);
+    void disableLatestStudentGroup(@Param("enrollment") String enrollment);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.statusKey = 'A'")
     Page<StudentGroupModel> findAllActive(Pageable pageable);

@@ -53,7 +53,7 @@ public class StudentController {
         return ResponseEntity.ok(studentResponses);
     }
 
-    @PutMapping("/{enrollment}")
+    @PatchMapping("/{enrollment}")
     public ResponseEntity<Void> updateStudent(@PathVariable String enrollment,
             @RequestBody StudentRequest updatedStudentRequest) {
          studentService.updateStudent(enrollment, updatedStudentRequest);
