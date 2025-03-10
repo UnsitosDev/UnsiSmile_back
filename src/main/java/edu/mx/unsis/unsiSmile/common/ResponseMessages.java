@@ -160,6 +160,9 @@ public class ResponseMessages {
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
     public static final String SIZE_CURP = "El CURP debe tener exactamente 18 caracteres";
+    public static final String INVALID_CURP_FORMAT = "CURP inválida: %s - Formato incorrecto";
+    public static final String INVALID_CURP_BIRTHDATE = "CURP inválida: %s - Fecha de nacimiento no coincide";
+    public static final String INVALID_CURP_GENDER = "CURP inválida: %s - Sexo no coincide";
     public static final String NOT_BLANK_FIRST_NAME = "El primer nombre no puede estar en blanco";
     public static final String SIZE_FIRST_NAME = "El primer nombre debe tener como máximo 50 caracteres";
     public static final String SIZE_SECOND_NAME = "El segundo nombre debe tener como máximo 50 caracteres";
