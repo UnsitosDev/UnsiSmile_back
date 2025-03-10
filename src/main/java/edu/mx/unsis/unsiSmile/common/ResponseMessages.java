@@ -69,6 +69,16 @@ public class ResponseMessages {
     public static final String INVALID_ROLE = "Rol no válido";
   
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
+    public static final String PERSON_REQUEST_NULL = "PersonRequest no puede ser nulo";
+    public static final String PERSON_ALREADY_EXISTS = "La persona con CURP %s ya existe";
+    public static final String FAILED_CREATE_PERSON = "Error al crear la persona";
+    public static final String FAILED_FETCH_PERSON = "Error al obtener la persona";
+    public static final String PERSON_NOT_FOUND_EMAIL = "Persona no encontrada con email: %s";
+    public static final String FAILED_FETCH_PERSONS = "Error al obtener las personas";
+    public static final String UPDATED_PERSON_REQUEST_NULL = "Updated PersonRequest no puede ser nulo";
+    public static final String FAILED_UPDATE_PERSON = "Error al actualizar la persona";
+    public static final String PERSON_NOT_FOUND_ID = "Persona no encontrada con ID: %s";
+    public static final String FAILED_DELETE_PERSON = "Error al eliminar la persona";
 
     // ADDRESS VALIDATION REQUEST
     public static final String HOUSING_NULL = "La vivienda no puede ser nula.";
