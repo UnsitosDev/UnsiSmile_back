@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/unsismile/api/v1/students")
 @RequiredArgsConstructor
@@ -69,8 +71,13 @@ public class StudentController {
 
     @Operation(summary = "Carga de alumnos mediante archivo.")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadExcel(@RequestParam("file") MultipartFile file) {
-        studentService.loadStudentsFromFile(file);
+    public ResponseEntity<List<String>> uploadExcel(@RequestParam("file") MultipartFile file) {
+        List<String> errors = studentService.loadStudentsFromFile(file);
+
+        if (!errors.isEmpty()) {
+            return new ResponseEntity<>(errors, HttpStatus.PARTIAL_CONTENT);
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -1,82 +1,68 @@
 package edu.mx.unsis.unsiSmile.common;
 
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 public class ValidateCurp {
 
-    public void validateCURP(PersonModel person) {
-        String expectedCURP = generateCURP(person);
-        String actualCURP = person.getCurp();
+    private static final Pattern CURP_REGEX = Pattern.compile(
+            "^[A-Z][AEIOUX][A-Z]{2}\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])[HM]" +
+                    "(?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)" +
+                    "[B-DF-HJ-NP-TV-Z]{3}[A-Z\\d]\\d$"
+    );
 
-        if (expectedCURP.length() != actualCURP.length()) {
-            throw new AppException(ResponseMessages.CURP_LENGTH_MISMATCH, HttpStatus.BAD_REQUEST);
-        }
-
-        for (int i = 0; i < expectedCURP.length(); i++) {
-            if (expectedCURP.charAt(i) != '-' && expectedCURP.charAt(i) != actualCURP.charAt(i)) {
-                throw new AppException(ResponseMessages.CURP_DATA_MISMATCH, HttpStatus.BAD_REQUEST);
+    public boolean validateCurpStructure(String curp, List<String> invalidCurps) {
+        if (curp == null || curp.trim().isEmpty()) {
+            if (invalidCurps != null) {
+                invalidCurps.add(ResponseMessages.NOT_BLANK_CURP);
             }
+            return false;
         }
+
+        if (!CURP_REGEX.matcher(curp).matches()) {
+            if (invalidCurps != null) {
+                invalidCurps.add(String.format(ResponseMessages.INVALID_CURP_FORMAT, curp));
+            }
+            return false;
+        }
+
+        return true;
     }
 
-    private static String generateCURP(PersonModel person) {
-        StringBuilder curpBuilder = new StringBuilder();
+    public boolean validateCURP(PersonModel person, List<String> invalidCurps) {
+        String curp = person.getCurp();
 
-        curpBuilder.append(person.getFirstLastName().toUpperCase().charAt(0));
+        if (!validateCurpStructure(curp, invalidCurps)) {
+            return false;
+        }
 
-        curpBuilder.append(getFirstInternalVowel(person.getFirstLastName()));
+        return validateDateAndGender(person, curp, invalidCurps);
+    }
 
-        curpBuilder.append(person.getSecondLastName().toUpperCase().charAt(0));
-
-        curpBuilder.append(person.getFirstName().toUpperCase().charAt(0));
+    private boolean validateDateAndGender(PersonModel person, String curp, List<String> invalidCurps) {
+        String curpDate = curp.substring(4, 10);
+        String curpGender = curp.substring(10, 11);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        curpBuilder.append(person.getBirthDate().format(formatter));
+        String expectedDate = person.getBirthDate().format(formatter);
 
-        curpBuilder.append(getGenderCode(person.getGender().getGender()));
-
-        curpBuilder.append("--");
-
-        curpBuilder.append(getFirstInternalConsonant(person.getFirstLastName()));
-        curpBuilder.append(getFirstInternalConsonant(person.getSecondLastName()));
-        curpBuilder.append(getFirstInternalConsonant(person.getFirstName()));
-
-        curpBuilder.append("-");
-
-        curpBuilder.append("-");
-
-        return curpBuilder.toString();
-    }
-
-    private static char getFirstInternalVowel(String str) {
-        String vowels = "AEIOU";
-        for (int i = 1; i < str.length(); i++) {
-            char c = Character.toUpperCase(str.charAt(i));
-            if (vowels.indexOf(c) != -1) {
-                return c;
-            }
+        if (!curpDate.equals(expectedDate)) {
+            invalidCurps.add(String.format(ResponseMessages.INVALID_CURP_BIRTHDATE, curp));
+            return false;
         }
-        return 'X';
-    }
 
-    private static char getFirstInternalConsonant(String str) {
-        String consonants = "BCDFGHJKLMNÑPQRSTVWXYZ";
-        for (int i = 1; i < str.length(); i++) {
-            char c = Character.toUpperCase(str.charAt(i));
-            if (consonants.indexOf(c) != -1) {
-                return c;
-            }
+        String expectedGender = person.getGender().getGender().equalsIgnoreCase("Masculino") ? "H" : "M";
+
+        if (!curpGender.equals(expectedGender)) {
+            invalidCurps.add(String.format(ResponseMessages.INVALID_CURP_GENDER, curp));
+            return false;
         }
-        return 'X';
-    }
 
-    private static String getGenderCode(String gender) {
-        return gender.equalsIgnoreCase("Masculino") ? "H" : "M";
+        return true;
     }
 }

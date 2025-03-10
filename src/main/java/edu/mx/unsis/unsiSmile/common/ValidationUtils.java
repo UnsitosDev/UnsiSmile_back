@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +25,11 @@ public class ValidationUtils {
         return Period.between(birthDate, today).getYears() < 18;
     }
 
-    public void validateCURP(PersonModel person) {
-        curpValidator.validateCURP(person);
+    public boolean validateCURP(PersonModel person, List<String> invalidCurps) {
+        return curpValidator.validateCURP(person, invalidCurps);
+    }
+
+    public boolean validateCurpStructure(String curp, List<String> invalidCurps) {
+        return curpValidator.validateCurpStructure(curp, invalidCurps);
     }
 }

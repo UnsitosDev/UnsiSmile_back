@@ -70,7 +70,11 @@ public class PatientService {
     @Transactional
     public void createPatient(@Valid @NonNull PatientRequest patientRequest) {
         try {
-            PersonModel personModel = personService.createPersonEntity(patientRequest.getPerson());
+            List<String> invalidCurp = new ArrayList<>();
+            PersonModel personModel = personService.createPersonEntity(patientRequest.getPerson(), invalidCurp);
+            if(!invalidCurp.isEmpty()) {
+                throw new AppException(invalidCurp.getFirst(), HttpStatus.BAD_REQUEST);
+            }
 
             Optional<PatientModel> existingPatient = patientRepository.findByPerson(personModel);
 

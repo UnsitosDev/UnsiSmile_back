@@ -69,6 +69,16 @@ public class ResponseMessages {
     public static final String INVALID_ROLE = "Rol no válido";
   
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
+    public static final String PERSON_REQUEST_NULL = "PersonRequest no puede ser nulo";
+    public static final String PERSON_ALREADY_EXISTS = "La persona con CURP %s ya existe";
+    public static final String FAILED_CREATE_PERSON = "Error al crear la persona";
+    public static final String FAILED_FETCH_PERSON = "Error al obtener la persona";
+    public static final String PERSON_NOT_FOUND_EMAIL = "Persona no encontrada con email: %s";
+    public static final String FAILED_FETCH_PERSONS = "Error al obtener las personas";
+    public static final String UPDATED_PERSON_REQUEST_NULL = "Updated PersonRequest no puede ser nulo";
+    public static final String FAILED_UPDATE_PERSON = "Error al actualizar la persona";
+    public static final String PERSON_NOT_FOUND_ID = "Persona no encontrada con ID: %s";
+    public static final String FAILED_DELETE_PERSON = "Error al eliminar la persona";
 
     // ADDRESS VALIDATION REQUEST
     public static final String HOUSING_NULL = "La vivienda no puede ser nula.";
@@ -160,6 +170,9 @@ public class ResponseMessages {
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
     public static final String SIZE_CURP = "El CURP debe tener exactamente 18 caracteres";
+    public static final String INVALID_CURP_FORMAT = "CURP inválida: %s - Formato incorrecto";
+    public static final String INVALID_CURP_BIRTHDATE = "CURP inválida: %s - Fecha de nacimiento no coincide";
+    public static final String INVALID_CURP_GENDER = "CURP inválida: %s - Sexo no coincide";
     public static final String NOT_BLANK_FIRST_NAME = "El primer nombre no puede estar en blanco";
     public static final String SIZE_FIRST_NAME = "El primer nombre debe tener como máximo 50 caracteres";
     public static final String SIZE_SECOND_NAME = "El segundo nombre debe tener como máximo 50 caracteres";
@@ -193,12 +206,16 @@ public class ResponseMessages {
     public static final String NOT_BLANK_RELIGION_DESCRIPTION = "La descripción de la religión no puede estar en blanco";
     public static final String MAX_SIZE_RELIGION_DESCRIPTION = "La descripción de la religión debe tener un máximo de 100 caracteres";
 
-    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
+    //public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
     public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
-
-    public static final String CURP_LENGTH_MISMATCH = "La CURP generada no coincide en longitud con la CURP proporcionada.";
-    public static final String CURP_DATA_MISMATCH = "La CURP generada no coincide con los datos proporcionados.";
+    public static final String FAILED_CREATE_ADMINISTRATOR = "Error al crear el administrador";
+    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con número de empleado: %s";
+    public static final String FAILED_FETCH_ADMINISTRATOR = "Error al obtener el administrador";
+    public static final String ADMINISTRATOR_NOT_FOUND_FOR_USER = "Administrador no encontrado para el usuario: %s";
+    public static final String FAILED_FETCH_ADMINISTRATORS = "Error al obtener la lista de administradores";
+    public static final String FAILED_DELETE_ADMINISTRATOR = "Error al eliminar el administrador";
+    public static final String FAILED_UPDATE_ADMINISTRATOR_STATUS = "Error al actualizar el estado del administrador";
 
     public static final String EMPLOYEE_NUMBER_NULL = "El campo número de empleado no puede estar vacío";
     public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";
