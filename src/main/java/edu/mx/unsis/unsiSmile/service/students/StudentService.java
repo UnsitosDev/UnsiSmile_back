@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
@@ -57,6 +58,7 @@ public class StudentService {
     private final GroupService groupService;
     private final StudentGroupService studentGroupService;
     private final GroupMapper groupMapper;
+    private final ValidationUtils validationUtils;
 
     @Transactional
     public void createStudent(@NonNull StudentRequest request) {
@@ -65,7 +67,11 @@ public class StudentService {
                     setCredentials(request.getEnrollment(), request.getPerson().getCurp())
             );
 
-            PersonModel personModel = personService.createPersonEntity(request.getPerson());
+            List<String> invalidCurp = new ArrayList<>();
+            PersonModel personModel = personService.createPersonEntity(request.getPerson(), invalidCurp);
+            if(!invalidCurp.isEmpty()) {
+                throw new AppException(invalidCurp.getFirst(), HttpStatus.BAD_REQUEST);
+            }
 
             StudentModel studentModel = studentMapper.toEntity(request);
 
@@ -179,7 +185,8 @@ public class StudentService {
     }
 
     @Transactional
-    public void loadStudentsFromFile(@NonNull MultipartFile file) {
+    public List<String> loadStudentsFromFile(@NonNull MultipartFile file) {
+        List<String> errors = new ArrayList<>();
         try (InputStream inputStream = file.getInputStream()) {
             String fileExtension = getFileExtension(Objects.requireNonNull(file.getOriginalFilename()));
 
@@ -228,12 +235,13 @@ public class StudentService {
 
             Map<String, GroupModel> groups = groupService.saveGroups(gruposData);
 
-            processAndSaveStudents(studentsData, groups);
+            processAndSaveStudents(studentsData, groups, errors);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new AppException("Error processing file", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+        return errors;
     }
 
     private String getFileExtension(String fileName) {
@@ -268,7 +276,7 @@ public class StudentService {
         }
     }
 
-    private void processAndSaveStudents(List<List<String>> studentsData, Map<String, GroupModel> groups) {
+    private void processAndSaveStudents(List<List<String>> studentsData, Map<String, GroupModel> groups, List<String> errors) {
         for (List<String> studentRow : studentsData) {
 
             String enrollment = studentRow.get(3);
@@ -276,6 +284,12 @@ public class StudentService {
             String groupKey = studentRow.get(7);
 
             GroupModel groupModel = groups.get(groupKey);
+
+            List<String> invalidCurps = new ArrayList<>();
+            if (!validationUtils.validateCurpStructure(studentRow.get(4), invalidCurps)) {
+                errors.add("CURP inválida para el alumno con matrícula: " + enrollment + ". Errores: " + String.join(", ", invalidCurps));
+                continue;
+            }
 
             StudentGroupRequest studentGroupRequest = toSGRequest(enrollment, groupModel.getIdGroup());
 
@@ -290,11 +304,12 @@ public class StudentService {
                 continue;
             }
 
+            PersonModel personModel = personService.createPersonEntity(setPersonRequest(studentRow), invalidCurps);
+            if (personModel == null) continue;
+
             UserModel userModel = userService.createUser(
                     this.setCredentials(enrollment, studentRow.get(4))
             );
-
-            PersonModel personModel = personService.createPersonEntity(setPersonRequest(studentRow));
 
             StudentModel studentModel = StudentModel.builder()
                     .enrollment(enrollment)
