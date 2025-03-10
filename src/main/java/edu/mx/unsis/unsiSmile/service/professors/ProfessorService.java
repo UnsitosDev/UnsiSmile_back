@@ -24,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,7 +41,11 @@ public class ProfessorService {
     @Transactional
     public void createProfessor(@NotNull ProfessorRequest request) {
         try {
-            PersonModel personModel = personService.createPersonEntity(request.getPerson());
+            List<String> invalidCurp = new ArrayList<>();
+            PersonModel personModel = personService.createPersonEntity(request.getPerson(), invalidCurp);
+            if(!invalidCurp.isEmpty()) {
+                throw new AppException(invalidCurp.getFirst(), HttpStatus.BAD_REQUEST);
+            }
 
             UserModel userModel = userService.createUser(
                 setCredentials(request.getEmployeeNumber(), request.getPerson().getCurp()));
