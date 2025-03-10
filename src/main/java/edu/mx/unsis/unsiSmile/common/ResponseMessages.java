@@ -206,12 +206,16 @@ public class ResponseMessages {
     public static final String NOT_BLANK_RELIGION_DESCRIPTION = "La descripción de la religión no puede estar en blanco";
     public static final String MAX_SIZE_RELIGION_DESCRIPTION = "La descripción de la religión debe tener un máximo de 100 caracteres";
 
-    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
+    //public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
     public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
-
-    public static final String CURP_LENGTH_MISMATCH = "La CURP generada no coincide en longitud con la CURP proporcionada.";
-    public static final String CURP_DATA_MISMATCH = "La CURP generada no coincide con los datos proporcionados.";
+    public static final String FAILED_CREATE_ADMINISTRATOR = "Error al crear el administrador";
+    public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con número de empleado: %s";
+    public static final String FAILED_FETCH_ADMINISTRATOR = "Error al obtener el administrador";
+    public static final String ADMINISTRATOR_NOT_FOUND_FOR_USER = "Administrador no encontrado para el usuario: %s";
+    public static final String FAILED_FETCH_ADMINISTRATORS = "Error al obtener la lista de administradores";
+    public static final String FAILED_DELETE_ADMINISTRATOR = "Error al eliminar el administrador";
+    public static final String FAILED_UPDATE_ADMINISTRATOR_STATUS = "Error al actualizar el estado del administrador";
 
     public static final String EMPLOYEE_NUMBER_NULL = "El campo número de empleado no puede estar vacío";
     public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";

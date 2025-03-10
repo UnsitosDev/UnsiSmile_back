@@ -31,6 +31,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AdministratorService {
@@ -46,7 +49,11 @@ public class AdministratorService {
     @Transactional
     public AdministratorResponse createAdministrator(@NonNull AdministratorRequest request) {
         try {
-            PersonModel personModel = personService.createPersonEntity(request.getPerson());
+            List<String> invalidCurp = new ArrayList<>();
+            PersonModel personModel = personService.createPersonEntity(request.getPerson(), invalidCurp);
+            if(!invalidCurp.isEmpty()) {
+                throw new AppException(invalidCurp.getFirst(), HttpStatus.BAD_REQUEST);
+            }
 
             UserModel userModel = userService.createUser(setCredentials(request));
             AdministratorModel administratorModel = administratorMapper.toEntity(request);
@@ -58,8 +65,7 @@ public class AdministratorService {
 
             return administratorMapper.toDto(savedAdministrator);
         } catch (Exception ex) {
-            throw new AppException("Failed to create administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
+            throw new AppException(ResponseMessages.FAILED_CREATE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);        }
     }
 
     @Transactional(readOnly = true)
@@ -67,10 +73,11 @@ public class AdministratorService {
         try {
             AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
                     .orElseThrow(() -> new AppException(
-                            "Administrator not found with employee number: " + employeeNumber, HttpStatus.NOT_FOUND));
+                            String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
+                            HttpStatus.NOT_FOUND));
             return administratorMapper.toDto(administratorModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -80,11 +87,12 @@ public class AdministratorService {
             UserModel userModel = userMapper.toEntity(userRequest);
 
             AdministratorModel administratorModel = administratorRepository.findByUser(userModel)
-                    .orElseThrow(() -> new AppException("Administrator not found for user: " + userRequest,
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND_FOR_USER, userRequest),
                             HttpStatus.NOT_FOUND));
             return administratorMapper.toDto(administratorModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -101,7 +109,7 @@ public class AdministratorService {
 
             return administrators.map(administratorMapper::toDto);
         } catch (Exception ex) {
-            throw new AppException("Error al obtener la lista de administradores", HttpStatus.INTERNAL_SERVER_ERROR,
+            throw new AppException(ResponseMessages.FAILED_FETCH_ADMINISTRATORS, HttpStatus.INTERNAL_SERVER_ERROR,
                     ex);
         }
     }
@@ -127,7 +135,8 @@ public class AdministratorService {
 
         AdministratorModel currentAdministrator = administratorRepository.findById(administradorId)
                 .orElseThrow(() -> new AppException(
-                        ResponseMessages.ADMINISTRATOR_NOT_FOUND + updatedAdministratorRequest.getEmployeeNumber(),
+                                String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND,
+                                        updatedAdministratorRequest.getEmployeeNumber()),
                         HttpStatus.NOT_FOUND));
 
         PersonResponse personResponse = personService.updatePerson(currentAdministrator.getPerson().getCurp(),
@@ -141,22 +150,20 @@ public class AdministratorService {
                 : currentAdministrator.getEmployeeNumber());
 
         return currentAdministrator;
-
     }
 
     @Transactional
     public void deleteAdministratorByEmployeeNumber(@NonNull String employeeNumber) {
         try {
             if (!administratorRepository.existsById(employeeNumber)) {
-                throw new AppException("Administrator not found with employee number: " + employeeNumber,
+                throw new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
                         HttpStatus.NOT_FOUND);
             }
             administratorRepository.deleteById(employeeNumber);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new AppException("Administrator not found with employee number: " + employeeNumber,
-                    HttpStatus.NOT_FOUND, ex);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to delete administrator", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_DELETE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -172,7 +179,7 @@ public class AdministratorService {
     public void updateAdministratorStatus(@NonNull String employeeNumber) {
         try {
             AdministratorModel administratorModel = administratorRepository.findById(employeeNumber).orElseThrow(
-                    () -> new AppException("Administrator not found with employeeNumber: " + employeeNumber,
+                    () -> new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
                             HttpStatus.NOT_FOUND));
 
             administratorModel.setStatusKey(
@@ -186,7 +193,7 @@ public class AdministratorService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Fail to update administrator status", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.FAILED_UPDATE_ADMINISTRATOR_STATUS, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
