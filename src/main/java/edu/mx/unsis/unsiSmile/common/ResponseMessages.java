@@ -189,6 +189,7 @@ public class ResponseMessages {
     public static final String NOT_NULL_GENDER = "El género no puede ser nulo";
     public static final String NOT_NULL_GENDER_FIELD = "El campo género no puede ser nulo";
     public static final String NOT_BLANK_GENDER_FIELD = "El campo género no puede estar en blanco";
+    public static final String NOT_NULL_ID_GENDER_FIELD = "El campo ID género no puede ser nulo";
 
     // MARITAL STATUS VALIDATION REQUEST
     public static final String NOT_BLANK_MARITAL_STATUS_DESCRIPTION = "La descripción del estado civil no puede estar en blanco";
