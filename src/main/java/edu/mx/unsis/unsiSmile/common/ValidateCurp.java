@@ -46,20 +46,12 @@ public class ValidateCurp {
 
     private boolean validateDateAndGender(PersonModel person, String curp, List<String> invalidCurps) {
         String curpDate = curp.substring(4, 10);
-        String curpGender = curp.substring(10, 11);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
         String expectedDate = person.getBirthDate().format(formatter);
 
         if (!curpDate.equals(expectedDate)) {
             invalidCurps.add(String.format(ResponseMessages.INVALID_CURP_BIRTHDATE, curp));
-            return false;
-        }
-
-        String expectedGender = person.getGender().getGender().equalsIgnoreCase("Masculino") ? "H" : "M";
-
-        if (!curpGender.equals(expectedGender)) {
-            invalidCurps.add(String.format(ResponseMessages.INVALID_CURP_GENDER, curp));
             return false;
         }
 

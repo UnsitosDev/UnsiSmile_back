@@ -1,17 +1,14 @@
 package edu.mx.unsis.unsiSmile.dtos.request;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
-
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -49,5 +46,6 @@ public class PersonRequest {
     private String email;
 
     @NotNull(message = ResponseMessages.NOT_NULL_GENDER)
+    @Valid
     private GenderRequest gender;
 }
