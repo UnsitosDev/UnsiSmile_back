@@ -396,5 +396,10 @@ public class PatientService {
                     patientModel.getPerson().getCurp(), updatedPatientRequest.getPerson());
             patientModel.setPerson(updatedPerson);
         }
+
+        if (updatedPatientRequest.getAddress() != null) {
+            AddressModel addressModel = addressService.findOrCreateAddress(updatedPatientRequest.getAddress());
+            patientModel.setAddress(addressModel);
+        }
     }
 }
