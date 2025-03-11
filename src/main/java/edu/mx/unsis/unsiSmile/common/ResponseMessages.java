@@ -86,6 +86,8 @@ public class ResponseMessages {
     public static final String ID_HOUSING_SIZE = "El ID de la vivienda debe tener 2 caracteres.";
     public static final String CATEGORY_BLANK = "La categoría de la vivienda no puede estar vacía.";
     public static final String HOUSING_CREATE_FAILED = "Error al buscar o crear la vivienda";
+    public static final String HOUSING_NOT_FOUND = "No se encontró la vivienda con el ID proporcionado.";
+    public static final String HOUSING_FETCH_FAILED = "Error al intentar obtener la vivienda.";
 
     public static final String STREET_NULL = "La calle no puede ser nula.";
     public static final String STREET_NUMBER_BLANK = "El número de la calle no puede estar vacío.";

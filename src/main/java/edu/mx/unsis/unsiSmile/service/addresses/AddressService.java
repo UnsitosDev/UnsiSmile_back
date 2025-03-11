@@ -180,7 +180,7 @@ public class AddressService {
                 return existingAddress;
             }
 
-            HousingModel housing = housingService.findOrCreateHousing(addressRequest.getHousing());
+            HousingModel housing = housingService.findHousingById(addressRequest.getHousing().getIdHousing());
             StreetModel street = streetService.findOrCreateStreet(addressRequest.getStreet());
 
             AddressModel addressModel = addressMapper.toModel(addressRequest);
