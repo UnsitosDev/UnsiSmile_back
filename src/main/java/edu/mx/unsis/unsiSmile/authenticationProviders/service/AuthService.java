@@ -38,7 +38,7 @@ public class AuthService {
     public ResponseEntity<ApiResponse<Object>> login(LoginRequest request) {
 
         UserModel user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
         log.info("User found - ID: " + user.getId());
 

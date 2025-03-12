@@ -33,7 +33,8 @@ public class ResponseMessages {
     public static final String NETWORK_AUTHENTICATION_REQUIRED = "Se requiere autenticación de red";
     public static final String PRECONDITION_FAILED = "Falló la condición previa";
     public static final String LOGIN_ERROR = "Usuario o contraseña incorrectos";
-    public static final String USER_NOT_FOUND = "Usuario no encontrado";
+    public static final String USER_NOT_FOUND = "Usuario no registrado";
+    public static final String USER_DISABLED = "Usuario deshabilitado";
     public static final String USER_ALREADY_EXISTS = "El usuario ya existe";
     public static final String EMAIL_ALREADY_EXISTS = "El correo electrónico ya está registrado";
     public static final String BAD_PASSWORD = "Contraseña incorrecta";
