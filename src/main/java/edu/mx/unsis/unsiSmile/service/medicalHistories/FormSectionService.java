@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
@@ -8,7 +9,9 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.service.QuestionService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
@@ -26,35 +29,38 @@ import java.util.stream.Collectors;
 public class FormSectionService {
 
     private final IFormSectionRepository formSectionRepository;
+    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
 
     @Transactional
     public void save(FormSectionRequest request) {
         try {
-            Assert.notNull(request, "FormSectionRequest cannot be null");
+            Assert.notNull(request, ResponseMessages.FORM_SECTION_REQUEST_NULL);
 
             FormSectionModel formSectionModel = formSectionMapper.toEntity(request);
 
             formSectionRepository.save(formSectionModel);
         } catch (Exception ex) {
-            throw new AppException("Failed to save form section due to an internal server error", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_SAVE_FORM_SECTION, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse findById(Long id, String patientId) {
+    public FormSectionResponse findById(Long id, Long idPatientClinicalHistory) {
         try {
-            Assert.notNull(id, "Id cannot be null");
+            Assert.notNull(id, ResponseMessages.FORM_SECTION_ID_NULL);
 
             FormSectionModel formSectionModel = formSectionRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Form section not found with id: " + id, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + id, HttpStatus.NOT_FOUND));
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory, HttpStatus.NOT_FOUND));
 
-            return this.toResponse(formSectionModel, patientId, null);
+            return this.toResponse(formSectionModel, patientClinicalHistoryModel.getPatient().getIdPatient() , idPatientClinicalHistory);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to find form section with id: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FIND_FORM_SECTION + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -64,14 +70,14 @@ public class FormSectionService {
             List<FormSectionModel> formSectionModelList = formSectionRepository.findAll();
 
             if (formSectionModelList.isEmpty()) {
-                throw new AppException("No form sections found", HttpStatus.NOT_FOUND);
+                throw new AppException(ResponseMessages.NO_FORM_SECTIONS, HttpStatus.NOT_FOUND);
             } else {
                 return formSectionModelList.stream()
                         .map(formSectionMapper::toDto)
                         .collect(Collectors.toList());
             }
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch form sections", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_FORM_SECTIONS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -86,11 +92,11 @@ public class FormSectionService {
                         formSectionRepository.save(formSection);
                     },
                     () -> {
-                        throw new AppException("Form section not found with ID: " + id, HttpStatus.NOT_FOUND);
+                        throw new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + id, HttpStatus.NOT_FOUND);
                     }
             );
         } catch (Exception ex) {
-            throw new AppException("Failed to delete form section with ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_DELETE_FORM_SECTION + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -108,7 +114,7 @@ public class FormSectionService {
                     .map(sectionModel -> toResponse(sectionModel, patientId, patientClinicalHistoryId))
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch form sections", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_FORM_SECTIONS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -138,7 +144,7 @@ public class FormSectionService {
         try {
             return formSectionRepository.findByParenSectionId(parentSectionModelId);
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch subform section model", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_SUBFORM, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
