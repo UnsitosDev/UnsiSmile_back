@@ -11,4 +11,6 @@ public class StatusClinicalHistoryRequest {
     private String message;
     
     private Long idPatientClinicalHistory;
+
+    private Long idSection;
 }
