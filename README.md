@@ -59,6 +59,24 @@ Sigue estos pasos para levantar el proyecto correctamente:
 
 5. Accede a la aplicación en tu navegador en `http://localhost:8080`.
 
+### Logs y Auditoría
+
+El sistema de logging utiliza Log4j2 para separar los mensajes según su nivel en archivos distintos, ubicados en el directorio definido por la propiedad `APP_LOG_ROOT` (por defecto, `/var/log/unsismile`):
+
+- **debug.log**: Registra mensajes de nivel DEBUG.
+- **info.log**: Registra mensajes de nivel INFO.
+- **error.log**: Registra mensajes de nivel ERROR.
+
+### Visualización de Logs
+
+Si ejecutas la aplicación en un entorno local o mediante Docker, asegúrate de que el directorio `/var/log/unsismile` exista y sea accesible. Por ejemplo, en Linux puedes utilizar el comando `tail` para visualizar los logs en tiempo real:
+
+```bash
+tail -f /var/log/unsismile/debug.log
+tail -f /var/log/unsismile/info.log
+tail -f /var/log/unsismile/error.log
+```
+
 ### Notas Adicionales
 
 - Asegúrate de tener los puertos `8082` y `3306` disponibles en tu máquina.
@@ -68,3 +86,4 @@ Sigue estos pasos para levantar el proyecto correctamente:
         ```
 
 Con estos pasos, deberías poder levantar y ejecutar el backend de UnsiSmile correctamente.
+
