@@ -22,9 +22,12 @@ WORKDIR /app
 # Copiar el JAR generado desde la etapa de construcción
 COPY --from=build /app/build/libs/unsiSmile-0.0.1-SNAPSHOT.jar app.jar
 
+# Crear directorio de logs
+RUN mkdir -p /var/log/unsismile && \
+    chmod 777 /var/log/unsismile
+
 # Exponer el puerto 8080
 EXPOSE 8082              
 
 # Ejecutar la aplicación
 CMD ["java", "-jar", "app.jar"]
-    
