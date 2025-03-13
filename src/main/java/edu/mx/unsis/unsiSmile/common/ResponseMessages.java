@@ -241,4 +241,8 @@ public class ResponseMessages {
     public static final String NOT_NULL_CAREER = "El campo career no puede ser nulo";
     public static final String NOT_BLANK_CAREER = "El campo career no puede estar vacío";
 
+    //DASHBOARD
+    public static final String ERROR_STUDENT_DASHBOARD = "Error al acceder a los datos del dashboard del estudiante";
+    public static final String ERROR_PROFESSOR_DASHBOARD = "Error al acceder a los datos del dashboard del profesor";
+    public static final String ERROR_ADMIN_DASHBOARD = "Error al acceder a los datos del dashboard del administrador";
 }
