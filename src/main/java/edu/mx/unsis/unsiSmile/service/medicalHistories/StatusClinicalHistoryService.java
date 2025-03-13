@@ -105,4 +105,10 @@ public class StatusClinicalHistoryService {
             throw new AppException(ResponseMessages.ERROR_FETCHING_STATUS_LIST, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
+
+    @Transactional(readOnly = true)
+    public StatusClinicalHistoryModel getStatusByPatientClinicalHistoryIdAndSection(Long idPatientClinicalHistory, Long idSection) {
+        return statusClinicalHistoryRepository.findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(idPatientClinicalHistory, idSection)
+                            .orElse(null);
+    }
 }

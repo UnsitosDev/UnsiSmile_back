@@ -5,11 +5,13 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.service.QuestionService;
@@ -32,6 +34,7 @@ public class FormSectionService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
+    private final StatusClinicalHistoryService statusClinicalHistoryService;
 
     @Transactional
     public void save(FormSectionRequest request) {
@@ -49,18 +52,53 @@ public class FormSectionService {
     @Transactional(readOnly = true)
     public FormSectionResponse findById(Long id, Long idPatientClinicalHistory) {
         try {
-            Assert.notNull(id, ResponseMessages.FORM_SECTION_ID_NULL);
+            validateIds(id, idPatientClinicalHistory);
 
-            FormSectionModel formSectionModel = formSectionRepository.findById(id)
-                    .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + id, HttpStatus.NOT_FOUND));
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory, HttpStatus.NOT_FOUND));
+            FormSectionModel formSectionModel = findFormSectionById(id);
+            PatientClinicalHistoryModel patientClinicalHistoryModel = findPatientClinicalHistoryById(idPatientClinicalHistory);
 
-            return this.toResponse(formSectionModel, patientClinicalHistoryModel.getPatient().getIdPatient() , idPatientClinicalHistory);
+            FormSectionResponse response = buildFormSectionResponse(formSectionModel, patientClinicalHistoryModel);
+            setStatusInResponse(response, formSectionModel, idPatientClinicalHistory, id);
+
+            return response;
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FIND_FORM_SECTION + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private void validateIds(Long id, Long idPatientClinicalHistory) {
+        Assert.notNull(id, ResponseMessages.FORM_SECTION_ID_NULL);
+        Assert.notNull(idPatientClinicalHistory, ResponseMessages.PATIENT_CLINICAL_HISTORY_ID_NULL);
+    }
+
+    private FormSectionModel findFormSectionById(Long id) {
+        return formSectionRepository.findById(id)
+                .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + id, HttpStatus.NOT_FOUND));
+    }
+
+    private PatientClinicalHistoryModel findPatientClinicalHistoryById(Long idPatientClinicalHistory) {
+        return patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory, HttpStatus.NOT_FOUND));
+    }
+
+    private FormSectionResponse buildFormSectionResponse(FormSectionModel formSectionModel, PatientClinicalHistoryModel patientClinicalHistoryModel) {
+        return this.toResponse(formSectionModel,
+                patientClinicalHistoryModel.getPatient().getIdPatient(),
+                patientClinicalHistoryModel.getIdPatientClinicalHistory());
+    }
+
+    private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel, Long idPatientClinicalHistory, Long idFormSection) {
+        if (formSectionModel.getRequiresReview()) {
+            try {
+                StatusClinicalHistoryResponse statusResponse = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(idPatientClinicalHistory, idFormSection);
+                response.setStatus(statusResponse.getStatus());
+            } catch (AppException ex) {
+                response.setStatus("NO_STATUS");
+            }
+        } else {
+            response.setStatus("NO_REQUIRED");
         }
     }
 
@@ -111,17 +149,36 @@ public class FormSectionService {
             List<FormSectionModel> formSectionModels = formSectionRepository.findAllById(sectionIds);
 
             return formSectionModels.stream()
-                    .map(sectionModel -> toResponse(sectionModel, patientId, patientClinicalHistoryId))
+                    .map(sectionModel -> buildFormSectionResponseWithStatus(sectionModel, patientId, patientClinicalHistoryId))
                     .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_FORM_SECTIONS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
+    private FormSectionResponse buildFormSectionResponseWithStatus(FormSectionModel sectionModel, String patientId, Long patientClinicalHistoryId) {
+        FormSectionResponse response = toResponse(sectionModel, patientId, patientClinicalHistoryId);
+
+        if (sectionModel.getRequiresReview()) {
+            StatusClinicalHistoryModel status = statusClinicalHistoryService.getStatusByPatientClinicalHistoryIdAndSection(patientClinicalHistoryId, sectionModel.getIdFormSection());
+            if(status != null) {
+                response.setStatus(status.getStatus().toString());
+            } else {
+                response.setStatus("NO_STATUS");
+            }
+        } else {
+            response.setStatus("NO_REQUIRED");
+        }
+
+        return response;
+    }
+
     @Transactional(readOnly = true)
     public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId, Long patientClinicalHistoryId) {
         FormSectionResponse formSectionResponse = formSectionMapper.toDto(sectionModel);
-        List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(), 
+        List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(),
         patientId, (sectionModel.getIdFormSection() == 1) ? patientClinicalHistoryId : 0L);
 
         formSectionResponse.setQuestions(questions);

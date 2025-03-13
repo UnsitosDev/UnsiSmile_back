@@ -19,6 +19,10 @@ public class FormSectionResponse {
 
     private Boolean isAnswered;
 
+    private Boolean requiresReview;
+
+    private String status;
+
     private List<FormSectionResponse> subSections;
 
     private List<QuestionResponse> questions;
