@@ -2,30 +2,30 @@
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3, ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- Secciones padre:
 INSERT INTO
-    form_sections (form_name)
+    form_sections (form_name, requires_review)
 VALUES
-    ("Signos vitales"),
-    ("Interrogatorio"),
-    ("Examen parodontal"),
-    ("Exploración de la cavidad bucal"),
-    ("Exámen de dientes pilares"),
-    ("Exámen radiográfico de dientes pilares"), -- tiene hijos
-    ("Exámen de organo dentario"), -- tiene hijos
-    ("Odontograma prótesis bucal"),
-    ("Plan de tratamiento"),
-    ("Recibo"),
-    ("Autorización de tratamiento"),
-    ("Evaluación de prótesis parcial fija"),
-    ("Carta de consentimiento informado para prótesis bucal");
+    ("Signos vitales", false),
+    ("Interrogatorio", false),
+    ("Examen parodontal", false),
+    ("Exploración de la cavidad bucal", false),
+    ("Exámen de dientes pilares", false),
+    ("Exámen radiográfico de dientes pilares", false), -- tiene hijos
+    ("Exámen de organo dentario", false), -- tiene hijos
+    ("Odontograma prótesis bucal", false),
+    ("Plan de tratamiento", false),
+    ("Recibo", false),
+    ("Autorización de tratamiento", false),
+    ("Evaluación de prótesis parcial fija", false),
+    ("Carta de consentimiento informado para prótesis bucal", false);
 
 INSERT INTO
-    form_sections (form_name, fk_parent_section) -- 6 y 7
+    form_sections (form_name, fk_parent_section, requires_review) -- 6 y 7
 VALUES
-    ("Cámara pulpar", 25),
-    ("Zona apical", 25),
-    ("Conducto radicular", 25),
-    ("Número de conductos", 26),
-    ("Proporción corona-raíz", 26);
+    ("Cámara pulpar", 25, false),
+    ("Zona apical", 25, false),
+    ("Conducto radicular", 25, false),
+    ("Número de conductos", 26, false),
+    ("Proporción corona-raíz", 26, false);
 
 INSERT INTO
     clinical_history_sections (

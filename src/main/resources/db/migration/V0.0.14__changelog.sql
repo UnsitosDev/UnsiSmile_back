@@ -1,20 +1,20 @@
 
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE ODONTOLOGÍA PREVENTIVA Y SALUD PÚBLICA *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (form_name)
+    form_sections (form_name, requires_review)
 VALUES
-    ("Profilaxis Dental"), -- tiene hijos
-    ("Profilaxis Dental - Sesiones"),
-    ("Fluorosis"),
-    ("Barniz o selladores de fosetas y fisuras"),
-    ("Observaciones"); -- tiene hijos
+    ("Profilaxis Dental", false), -- tiene hijos
+    ("Profilaxis Dental - Sesiones", false),
+    ("Fluorosis", false),
+    ("Barniz o selladores de fosetas y fisuras", false),
+    ("Observaciones", false); -- tiene hijos
 
 
 INSERT INTO
-    form_sections (form_name, fk_parent_section) 
+    form_sections (form_name, fk_parent_section, requires_review)
 VALUES  
-    ("Indice de Higiene Oral Simplificado (IHOS)", 48),
-    ("Profilaxis / Detartraje", 52);
+    ("Indice de Higiene Oral Simplificado (IHOS)", 48, false),
+    ("Profilaxis / Detartraje", 52, false);
 
 INSERT INTO clinical_history_sections
 (fk_clinical_history_catalog,
