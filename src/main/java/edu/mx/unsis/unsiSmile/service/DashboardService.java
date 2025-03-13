@@ -1,9 +1,11 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.dtos.response.DashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.ProfessorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
@@ -12,6 +14,8 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,65 +37,65 @@ public class DashboardService {
     private final IProfessorGroupRepository professorGroupRepository;
     private final IStudentGroupRepository studentGroupRepository;
     private final IProfessorRepository professorRepository;
-    private final UserService userService;
 
     @Transactional(readOnly = true)
-    public DashboardResponse getDashboardMetrics() {
-        Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
-        UserResponse user = userService.getCurrentUser();
-        Map<String, Object> data = new HashMap<>();
+    public StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
+        try {
+            Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-        if (isStudent(user)) {
-            loadStudentMetrics(data, user.getUsername(), lastMonthTimestamp);
-        } else if (isProfessor(user)) {
-            loadProfessorMetrics(data, user.getUsername());
-        } else if (isAdmin(user)) {
-            loadAdminMetrics(data, lastMonthTimestamp);
+            return StudentDashboardResponse.builder()
+                    .totalPatients(studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE))
+                    .patientsWithDisability(studentPatientRepository.countPatientsWithDisabilityByStudent(enrollment, Constants.ACTIVE))
+                    .patientsRegisteredLastMonth(studentPatientRepository.countPatientsRegisteredSinceByStudent(enrollment, lastMonthTimestamp, Constants.ACTIVE))
+                    .patientsByNationality(convertToMap(studentPatientRepository.countPatientsByNationalityByStudent(enrollment, Constants.ACTIVE)))
+                    .patientsUnder18(studentPatientRepository.countPatientsUnder18ByStudent(enrollment, Constants.ACTIVE))
+                    .patientsBetween18And60(studentPatientRepository.countPatientsBetween18And60ByStudent(enrollment, Constants.ACTIVE))
+                    .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE))
+                    .build();
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return DashboardResponse.builder().data(data).build();
     }
 
-    private boolean isStudent(UserResponse user) {
-        return ERole.ROLE_STUDENT.equals(user.getRole().getRole());
+
+    @Transactional(readOnly = true)
+    public ProfessorDashboardResponse getProfessorDashboardMetrics(String employeeNumber) {
+        try {
+            List<ProfessorGroupModel> professorGroups = professorGroupRepository
+                    .findByProfessorAndGroupStatus(employeeNumber, Constants.ACTIVE);
+
+            Set<Long> idsGroups = professorGroups.stream()
+                    .map(professorGroup -> professorGroup.getGroup().getIdGroup())
+                    .collect(Collectors.toSet());
+
+            Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
+
+            return ProfessorDashboardResponse.builder()
+                    .totalGroups(professorGroups.size())
+                    .totalStudents(studentCount)
+                    .build();
+        } catch (DataAccessException e) {
+            throw new AppException(ResponseMessages.ERROR_PROFESSOR_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    private boolean isProfessor(UserResponse user) {
-        return ERole.ROLE_PROFESSOR.equals(user.getRole().getRole());
-    }
+    @Transactional(readOnly = true)
+    public AdminDashboardResponse getAdminDashboardMetrics() {
+        try {
+            Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-    private boolean isAdmin(UserResponse user) {
-        return ERole.ROLE_ADMIN.equals(user.getRole().getRole());
-    }
-
-    private void loadStudentMetrics(Map<String, Object> data, String enrollment, Timestamp lastMonthTimestamp) {
-        data.put("patients", studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE));
-        data.put("patientsWithDisability", studentPatientRepository.countPatientsWithDisabilityByStudent(enrollment, Constants.ACTIVE));
-        data.put("patientsRegisteredLastMonth", studentPatientRepository.countPatientsRegisteredSinceByStudent(enrollment, lastMonthTimestamp, Constants.ACTIVE));
-        data.put("patientsByNationality", convertToMap(studentPatientRepository.countPatientsByNationalityByStudent(enrollment, Constants.ACTIVE)));
-    }
-
-    private void loadProfessorMetrics(Map<String, Object> data, String employeeNumber) {
-        List<ProfessorGroupModel> professorGroups = professorGroupRepository
-                .findByProfessorAndGroupStatus(employeeNumber, Constants.ACTIVE);
-
-        Set<Long> idsGroups = professorGroups.stream()
-                .map(professorGroup -> professorGroup.getGroup().getIdGroup())
-                .collect(Collectors.toSet());
-
-        Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
-        data.put("groups", professorGroups.size());
-        data.put("students", studentCount);
-    }
-
-    private void loadAdminMetrics(Map<String, Object> data, Timestamp lastMonthTimestamp) {
-        data.put("patients", patientRepository.countTotalPatients(Constants.ACTIVE));
-        data.put("patientsWithDisability", patientRepository.countPatientsWithDisability(Constants.ACTIVE));
-        data.put("patientsRegisteredLastMonth", patientRepository.countPatientsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE));
-        data.put("patientsByNationality", convertToMap(patientRepository.countPatientsByNationality(Constants.ACTIVE)));
-        data.put("students", studentRepository.countTotalStudents(Constants.ACTIVE));
-        data.put("studentsRegisteredLastMonth", studentRepository.countStudentsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE));
-        data.put("professors", professorRepository.countTotalProfessors(Constants.ACTIVE));
+            return AdminDashboardResponse.builder()
+                    .totalPatients(patientRepository.countTotalPatients(Constants.ACTIVE))
+                    .patientsWithDisability(patientRepository.countPatientsWithDisability(Constants.ACTIVE))
+                    .patientsRegisteredLastMonth(patientRepository.countPatientsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
+                    .patientsByNationality(convertToMap(patientRepository.countPatientsByNationality(Constants.ACTIVE)))
+                    .totalStudents(studentRepository.countTotalStudents(Constants.ACTIVE))
+                    .studentsRegisteredLastMonth(studentRepository.countStudentsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
+                    .totalProfessors(professorRepository.countTotalProfessors(Constants.ACTIVE))
+                    .build();
+        } catch (DataAccessException e) {
+            throw new AppException(ResponseMessages.ERROR_ADMIN_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private Map<String, Long> convertToMap(List<Object[]> dataList) {

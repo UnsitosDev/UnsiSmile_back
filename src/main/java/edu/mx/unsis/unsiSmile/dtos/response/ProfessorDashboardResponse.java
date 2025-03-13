@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DashboardResponse {
-    private Map<String, Object> data;
+public class ProfessorDashboardResponse {
+    private Integer totalGroups;
+    private Long totalStudents;
 }
