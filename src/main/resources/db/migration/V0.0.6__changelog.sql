@@ -11,33 +11,33 @@ VALUES
 
 -- secciones padre
 INSERT INTO form_sections
-(form_name)
+(form_name, requires_review)
 VALUES
-    ("Signos vitales"),
-    ("Exámen facial"),
-    ("Antecedentes heredofamiliares"),
-    ("Antecedentes personales no patológicos"),
-    ("Antecedentes personales patológicos"),
-    ("Odontograma inicial"),
-    ("Odontograma final"),
-    ("Medición de bolsas inicial"),
-    ("Exámen clínico"),
-    ("Análisis funcional"),
-    ("Postura del paciente"),
-    ("Exámen bucal"),
-    ("Análisis radiográfico"),
-    ("Modelos de estudio de fotografías"),
-    ("Estudio de laboratorio/biopsia"),
-    ("Interconsulta médica"),
-    ("Consentimiento informado"),
-    ("Nota de evolución")
+    ("Signos vitales", true),
+    ("Exámen facial", false),
+    ("Antecedentes heredofamiliares", false),
+    ("Antecedentes personales no patológicos", false),
+    ("Antecedentes personales patológicos", false),
+    ("Odontograma inicial", false),
+    ("Odontograma final", false),
+    ("Medición de bolsas inicial", false),
+    ("Exámen clínico", false),
+    ("Análisis funcional", false),
+    ("Postura del paciente", false),
+    ("Exámen bucal", false),
+    ("Análisis radiográfico", false),
+    ("Modelos de estudio de fotografías", false),
+    ("Estudio de laboratorio/biopsia", false),
+    ("Interconsulta médica", false),
+    ("Consentimiento informado", false),
+    ("Nota de evolución", false)
 ;
 
 -- secciones hijas
 INSERT INTO form_sections
-(form_name, fk_parent_section)
+(form_name, fk_parent_section, requires_review)
 VALUES
-    ("Clasificación de angle", 12)
+    ("Clasificación de angle", 12, false)
 ;
 
 -- insert para las secciones de historia clínica general

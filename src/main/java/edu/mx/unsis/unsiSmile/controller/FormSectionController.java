@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.FormSectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class FormSectionController {
 
     @Operation(summary = "Crea una sección para un formulario, puede o no ser una subsección.")
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody FormSectionRequest request) {
+    public ResponseEntity<Void> save(@Valid @RequestBody FormSectionRequest request) {
         formSectionService.save(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

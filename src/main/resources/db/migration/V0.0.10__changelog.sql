@@ -1,12 +1,12 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (form_name)
+    form_sections (form_name, requires_review)
 VALUES
-    ("Interrogatorio por aparatos y sistemas"),
-    ("Padecimiento actual"),
-    ("Recomendaciones previas a la intervensión quirúrgica"),
-    ("Recomendaciones para despues de intervenciones quirúrgicas"),
-    ("Carta de consentimiento informado para cirugía oral")
+    ("Interrogatorio por aparatos y sistemas", false),
+    ("Padecimiento actual", false),
+    ("Recomendaciones previas a la intervensión quirúrgica", false),
+    ("Recomendaciones para despues de intervenciones quirúrgicas", false),
+    ("Carta de consentimiento informado para cirugía oral", false)
 ;
 
 INSERT INTO
