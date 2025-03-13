@@ -1,22 +1,10 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -39,7 +27,11 @@ public class StatusClinicalHistoryModel extends AuditModel {
     @Column(name = "message", columnDefinition = "LONGTEXT")
     private String message;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "fk_patient_clinical_history", nullable = false)
     private PatientClinicalHistoryModel patientClinicalHistory;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_form_section")
+    private FormSectionModel formSection;
 }

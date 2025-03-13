@@ -254,4 +254,11 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_FORM_SECTIONS = "Error al obtener las secciones de formulario";
     public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
     public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
+
+    public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
+    public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
+    public static final String ERROR_FETCHING_STATUS = "Error al obtener el estado de la historia clínica";
+    public static final String STATUS_NOT_FOUND = "Estado no encontrado para la historia clínica del paciente proporcionado";
+    public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
+    public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
 }
