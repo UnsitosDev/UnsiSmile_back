@@ -78,8 +78,6 @@ public class PatientMapper implements BaseMapper<PatientResponse, PatientRequest
                 entity.getHasDisability());
         entity.setNationality(request.getNationalityId() != null ?
                 NationalityModel.builder().idNationality(request.getNationalityId()).build() : entity.getNationality());
-        entity.setAddress(request.getAddress() != null ? addressMapper.toEntity(request.getAddress()) :
-                entity.getAddress());
         entity.setMaritalStatus(request.getMaritalStatus() != null ?
                 MaritalStatusModel.builder().idMaritalStatus(request.getMaritalStatus().getIdMaritalStatus()).build() : entity.getMaritalStatus());
         entity.setEthnicGroup(request.getEthnicGroup() != null ?

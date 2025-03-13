@@ -2,9 +2,9 @@
 ALTER TABLE answers MODIFY COLUMN fk_patient CHAR(36) NULL;
 
 INSERT INTO
-    form_sections (form_name)
+    form_sections (form_name, requires_review)
 VALUES
-    ("Formatos Legales y Consentimientos");
+    ("Formatos Legales y Consentimientos", false);
 INSERT INTO 
     questions (
     question_text,

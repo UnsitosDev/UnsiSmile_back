@@ -118,23 +118,17 @@ public class HousingService {
     }
 
     @Transactional
-    public HousingModel findOrCreateHousing(@NonNull HousingRequest housingRequest) {
+    public HousingModel findHousingById(@NonNull String id) {
         try {
-            Assert.notNull(housingRequest, ResponseMessages.HOUSING_NULL);
+            Assert.notNull(id, ResponseMessages.ID_HOUSING_BLANK);
 
-            HousingModel existingHousing = housingRepository.findByCategory(housingRequest.getCategory()).orElse(null);
+            return housingRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ResponseMessages.HOUSING_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            if (existingHousing != null) {
-                return existingHousing;
-            }
-
-            HousingModel housingModel = housingMapper.toEntity(housingRequest);
-
-            return housingRepository.save(housingModel);
-
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.HOUSING_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.HOUSING_FETCH_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }

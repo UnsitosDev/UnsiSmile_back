@@ -1,48 +1,82 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.3'
-	id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'edu.mx.unsis'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+    sourceCompatibility = '21'
 }
 
+// Excluir globalmente las dependencias de logging conflictivas
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    all {
+        // Excluimos el starter de logging por defecto de Spring Boot y Logback
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+        // Excluimos la implementación que adapta Log4j a SLF4J, si fuera necesario
+        exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    // Starter base con exclusiones (se mantienen las exclusiones por redundancia)
+    implementation('org.springframework.boot:spring-boot-starter') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+    }
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    // Starter web con exclusiones
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+    }
 
-	implementation("org.flywaydb:flyway-core:8.5.13")
-	implementation("org.flywaydb:flyway-mysql:8.5.13")
+    // Se utiliza Log4j2 para el logging
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
-	implementation 'org.apache.poi:poi:5.2.5'
-	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+    }
+    implementation('org.springframework.boot:spring-boot-starter-security') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+    // Excluir también en las dependencias de test
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude group: 'ch.qos.logback'
+    }
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation("org.flywaydb:flyway-core:8.5.13")
+    implementation("org.flywaydb:flyway-mysql:8.5.13")
+
+    implementation 'org.apache.poi:poi:5.2.5'
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
 }
 
 bootBuildImage {
@@ -50,5 +84,5 @@ bootBuildImage {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

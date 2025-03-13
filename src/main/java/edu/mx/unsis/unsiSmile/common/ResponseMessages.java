@@ -33,7 +33,8 @@ public class ResponseMessages {
     public static final String NETWORK_AUTHENTICATION_REQUIRED = "Se requiere autenticación de red";
     public static final String PRECONDITION_FAILED = "Falló la condición previa";
     public static final String LOGIN_ERROR = "Usuario o contraseña incorrectos";
-    public static final String USER_NOT_FOUND = "Usuario no encontrado";
+    public static final String USER_NOT_FOUND = "Usuario no registrado";
+    public static final String USER_DISABLED = "Usuario deshabilitado";
     public static final String USER_ALREADY_EXISTS = "El usuario ya existe";
     public static final String EMAIL_ALREADY_EXISTS = "El correo electrónico ya está registrado";
     public static final String BAD_PASSWORD = "Contraseña incorrecta";
@@ -86,6 +87,8 @@ public class ResponseMessages {
     public static final String ID_HOUSING_SIZE = "El ID de la vivienda debe tener 2 caracteres.";
     public static final String CATEGORY_BLANK = "La categoría de la vivienda no puede estar vacía.";
     public static final String HOUSING_CREATE_FAILED = "Error al buscar o crear la vivienda";
+    public static final String HOUSING_NOT_FOUND = "No se encontró la vivienda con el ID proporcionado.";
+    public static final String HOUSING_FETCH_FAILED = "Error al intentar obtener la vivienda.";
 
     public static final String STREET_NULL = "La calle no puede ser nula.";
     public static final String STREET_NUMBER_BLANK = "El número de la calle no puede estar vacío.";
@@ -245,4 +248,23 @@ public class ResponseMessages {
     public static final String ERROR_STUDENT_DASHBOARD = "Error al acceder a los datos del dashboard del estudiante";
     public static final String ERROR_PROFESSOR_DASHBOARD = "Error al acceder a los datos del dashboard del profesor";
     public static final String ERROR_ADMIN_DASHBOARD = "Error al acceder a los datos del dashboard del administrador";
+  
+    public static final String FORM_SECTION_REQUEST_NULL = "FormSectionRequest no puede ser nulo";
+    public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";
+    public static final String FORM_SECTION_NOT_FOUND = "Sección de formulario no encontrada con el ID: ";
+    public static final String PATIENT_CLINICAL_HISTORY_NOT_FOUND = "Historial clínico del paciente no encontrado con el ID: ";
+    public static final String PATIENT_CLINICAL_HISTORY_ID_NULL = "El ID de la historial clínico del paciente no puede ser nulo";
+    public static final String NO_FORM_SECTIONS = "No se encontraron secciones de formulario";
+    public static final String FAILED_SAVE_FORM_SECTION = "Error al guardar la sección de formulario debido a un error interno del servidor";
+    public static final String FAILED_FIND_FORM_SECTION = "Error al buscar la sección de formulario con el ID: ";
+    public static final String FAILED_FETCH_FORM_SECTIONS = "Error al obtener las secciones de formulario";
+    public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
+    public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
+
+    public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
+    public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
+    public static final String ERROR_FETCHING_STATUS = "Error al obtener el estado de la historia clínica";
+    public static final String STATUS_NOT_FOUND = "Estado no encontrado para la historia clínica del paciente proporcionado";
+    public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
+    public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
 }

@@ -15,5 +15,8 @@ public class FormSectionRequest {
     @NotNull(message = "The Form Name cannot be null.")
     private String formName;
 
+    @NotNull(message = "The requiresReview cannot be null.")
+    private Boolean requiresReview;
+
     private Long idParentSection;
 }

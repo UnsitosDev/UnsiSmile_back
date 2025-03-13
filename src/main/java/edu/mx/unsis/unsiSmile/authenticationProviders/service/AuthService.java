@@ -23,11 +23,11 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -37,39 +37,47 @@ public class AuthService {
 
     public ResponseEntity<ApiResponse<Object>> login(LoginRequest request) {
 
-        UserModel user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.NOT_FOUND));
+        log.info("AUDIT: Login attempt for user: {}", request.getUsername());
+        try {
+            UserModel user = userRepository.findByUsername(request.getUsername())
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-        log.info("User found - ID: " + user.getId());
+            log.info("User found - ID: " + user.getId());
 
-        if (!user.isEnabled()) {
-            throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.UNAUTHORIZED);
+            if (!user.isEnabled()) {
+                throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.UNAUTHORIZED);
+            }
+
+            if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+
+                String token = jwtService.getToken(user);
+                String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
+
+                AuthResponse authResponse = AuthResponse.builder()
+                        .token(token)
+                        .refreshToken(refreshToken)
+                        .build();
+
+                Map<String, Object> objects = new HashMap<>();
+                objects.put("token", authResponse.getToken());
+                objects.put("refreshToken", authResponse.getRefreshToken());
+
+                log.info("AUDIT: Login successful for user: {}", request.getUsername());
+
+                return ResponseEntity.ok(ApiResponse.<Object>builder()
+                        .response(objects)
+                        .build());
+            }
+
+            throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("AUDIT: Login failed for user: {}. Error: {}", request.getUsername(), e.getMessage());
+            throw e;
         }
-
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-
-            String token = jwtService.getToken(user);
-            String refreshToken = refreshTokenService.createRefreshToken(user).getToken();
-
-            AuthResponse authResponse = AuthResponse.builder()
-                    .token(token)
-                    .refreshToken(refreshToken)
-                    .build();
-
-            Map<String, Object> objects = new HashMap<>();
-            objects.put("token", authResponse.getToken());
-            objects.put("refreshToken", authResponse.getRefreshToken());
-
-            return ResponseEntity.ok(ApiResponse.<Object>builder()
-                    .response(objects)
-                    .build());
-        }
-
-        throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.BAD_REQUEST);
-
     }
 
     public void updatePassword(PasswordUpdateRequest request) {
+        log.info("AUDIT: Password update attempt: {}");
         try {
             UserModel currentUser = getCurrentUser();
 
@@ -81,9 +89,12 @@ public class AuthService {
             currentUser.setFirstLogin(false);
 
             userRepository.save(currentUser);
+
+            log.info("AUDIT: Password updated successfully for userId: {}", currentUser.getId());
         } catch (AppException ex) {
             throw ex;
         } catch (Exception e) {
+            log.error("AUDIT: Password update failed: {}. Error: {}", e.getMessage());
             throw new AppException(ResponseMessages.ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

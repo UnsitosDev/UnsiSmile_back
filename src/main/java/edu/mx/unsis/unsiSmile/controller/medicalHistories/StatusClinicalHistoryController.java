@@ -4,9 +4,13 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistor
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.StatusClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,26 +31,42 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente_historia_clínica")
-    @GetMapping("/{idPatientClinicalHistory}")
+    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente e ID de la sección")
+    @GetMapping("/{idPatientClinicalHistory}/{idSection}")
     public ResponseEntity<StatusClinicalHistoryResponse> getStatusByPatientClinicalHistoryId(
-            @PathVariable Long idPatientClinicalHistory) {
-        StatusClinicalHistoryResponse response = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(idPatientClinicalHistory);
+            @PathVariable Long idPatientClinicalHistory,
+            @PathVariable Long idSection) {
+        StatusClinicalHistoryResponse response = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(
+                idPatientClinicalHistory,
+                idSection);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Eliminar el estado de la historia clínica por ID del paciente_historia_clínica")
-    @DeleteMapping("/{idPatientClinicalHistory}")
-    public ResponseEntity<Void> deleteStatusByPatientClinicalHistoryId(
-            @PathVariable Long idPatientClinicalHistory) {
-        statusClinicalHistoryService.deleteStatusByPatientClinicalHistoryId(idPatientClinicalHistory);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @Operation(summary = "Enviar una historia clínica a revisión")
+    @PutMapping("/sendToReview/{idPatientClinicalHistory}/{idSection}")
+    public ResponseEntity<Void> sendToReview(
+            @PathVariable Long idPatientClinicalHistory,
+            @PathVariable Long idSection) {
+        statusClinicalHistoryService.sendToReview(idPatientClinicalHistory, idSection);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Enviar una historia clínica a revisión")
-    @PutMapping("/sendToReview/{idPatientClinicalHistory}")
-    public ResponseEntity<Void> sendToReview(@PathVariable Long idPatientClinicalHistory) {
-        statusClinicalHistoryService.sendToReview(idPatientClinicalHistory);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @Operation(summary = "Obtener un listado paginado de historias clínicas por estado")
+    @GetMapping("/list")
+    public ResponseEntity<Page<StatusClinicalHistoryResponse>> getStatusClinicalHistoriesByStatus(
+            @RequestParam String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Field key for sorting", example = "patientClinicalHistory.idPatientClinicalHistory")
+            @RequestParam(defaultValue = "patientClinicalHistory.idPatientClinicalHistory") String order,
+            @RequestParam(defaultValue = "true") boolean asc){
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest .of(page, size, sort);
+
+        Page<StatusClinicalHistoryResponse> response = statusClinicalHistoryService.getStatusClinicalHistoriesByStatus(
+                status, pageable);
+
+        return ResponseEntity.ok(response);
     }
 }

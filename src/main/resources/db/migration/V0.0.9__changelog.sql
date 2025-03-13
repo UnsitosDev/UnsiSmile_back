@@ -1,11 +1,9 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (form_name)
+    form_sections (form_name, requires_review)
 VALUES
-    ("Exploración de la cavidad bucal y anexos"),
-    (
-        "Carta de concentimiento informado para periodoncia"
-    );
+    ("Exploración de la cavidad bucal y anexos", false),
+    ("Carta de concentimiento informado para periodoncia", false);
 
 INSERT INTO
     clinical_history_sections (
