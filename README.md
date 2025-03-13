@@ -69,12 +69,12 @@ El sistema de logging utiliza Log4j2 para separar los mensajes según su nivel e
 
 ### Visualización de Logs
 
-Si ejecutas la aplicación en un entorno local o mediante Docker, asegúrate de que el directorio `/var/log/unsismile` exista y sea accesible. Por ejemplo, en Linux puedes utilizar el comando `tail` para visualizar los logs en tiempo real:
+Si ejecutas la aplicación en un entorno local o mediante Docker, asegúrate de que el directorio `/var/log/unsismile` exista y sea accesible. Por ejemplo, en Linux puedes utilizar el comando `tail` para visualizar los logs en tiempo real (estando dentro del directorio):
 
 ```bash
-tail -f /var/log/unsismile/debug.log
-tail -f /var/log/unsismile/info.log
-tail -f /var/log/unsismile/error.log
+tail -f debug.log
+tail -f info.log
+tail -f error.log
 ```
 
 ### Notas Adicionales
