@@ -23,11 +23,11 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -59,6 +59,8 @@ public class AuthService {
             Map<String, Object> objects = new HashMap<>();
             objects.put("token", authResponse.getToken());
             objects.put("refreshToken", authResponse.getRefreshToken());
+
+
 
             return ResponseEntity.ok(ApiResponse.<Object>builder()
                     .response(objects)
