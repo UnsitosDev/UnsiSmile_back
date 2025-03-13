@@ -16,4 +16,7 @@ public class StudentDashboardResponse {
     private Long patientsWithDisability;
     private Long patientsRegisteredLastMonth;
     private Map<String, Long> patientsByNationality;
+    private Long patientsUnder18;
+    private Long patientsBetween18And60;
+    private Long patientsOver60;
 }

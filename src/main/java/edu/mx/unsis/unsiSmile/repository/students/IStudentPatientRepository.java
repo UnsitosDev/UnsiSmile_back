@@ -67,4 +67,22 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
 
     @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId")
     Page<StudentPatientModel> findByPatientId(@Param("patientId")  String patientId, Pageable pageable);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
+            "WHERE sp.student.enrollment = :studentId " +
+            "AND sp.student.statusKey = :status " +
+            "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) < 18")
+    Long countPatientsUnder18ByStudent(@Param("studentId") String studentId, @Param("status") String status);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
+            "WHERE sp.student.enrollment = :studentId " +
+            "AND sp.student.statusKey = :status " +
+            "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) BETWEEN 18 AND 60")
+    Long countPatientsBetween18And60ByStudent(@Param("studentId") String studentId, @Param("status") String status);
+
+    @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
+            "WHERE sp.student.enrollment = :studentId " +
+            "AND sp.student.statusKey = :status " +
+            "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) > 60")
+    Long countPatientsOver60ByStudent(@Param("studentId") String studentId, @Param("status") String status);
 }
