@@ -244,6 +244,17 @@ public class ResponseMessages {
     public static final String NOT_NULL_CAREER = "El campo career no puede ser nulo";
     public static final String NOT_BLANK_CAREER = "El campo career no puede estar vacío";
 
+    public static final String FORM_SECTION_REQUEST_NULL = "FormSectionRequest no puede ser nulo";
+    public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";
+    public static final String FORM_SECTION_NOT_FOUND = "Sección de formulario no encontrada con el ID: ";
+    public static final String PATIENT_CLINICAL_HISTORY_NOT_FOUND = "Historial clínico del paciente no encontrado con el ID: ";
+    public static final String NO_FORM_SECTIONS = "No se encontraron secciones de formulario";
+    public static final String FAILED_SAVE_FORM_SECTION = "Error al guardar la sección de formulario debido a un error interno del servidor";
+    public static final String FAILED_FIND_FORM_SECTION = "Error al buscar la sección de formulario con el ID: ";
+    public static final String FAILED_FETCH_FORM_SECTIONS = "Error al obtener las secciones de formulario";
+    public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
+    public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
+
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
     public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
     public static final String ERROR_FETCHING_STATUS = "Error al obtener el estado de la historia clínica";
