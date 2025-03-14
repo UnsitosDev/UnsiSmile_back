@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Dashboard")
@@ -20,14 +19,14 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping("/students")
-    public ResponseEntity<StudentDashboardResponse> getStudentDashboard(@RequestParam String enrollment) {
-        StudentDashboardResponse dashboard = dashboardService.getStudentDashboardMetrics(enrollment);
+    public ResponseEntity<StudentDashboardResponse> getStudentDashboard() {
+        StudentDashboardResponse dashboard = dashboardService.getStudentDashboardMetrics();
         return ResponseEntity.ok(dashboard);
     }
 
     @GetMapping("/professors")
-    public ResponseEntity<ProfessorDashboardResponse> getProfessorDashboard(@RequestParam String employeeNumber) {
-        ProfessorDashboardResponse dashboard = dashboardService.getProfessorDashboardMetrics(employeeNumber);
+    public ResponseEntity<ProfessorDashboardResponse> getProfessorDashboard() {
+        ProfessorDashboardResponse dashboard = dashboardService.getProfessorDashboardMetrics();
         return ResponseEntity.ok(dashboard);
     }
 

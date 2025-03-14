@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.ProfessorDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
@@ -37,10 +38,12 @@ public class DashboardService {
     private final IProfessorGroupRepository professorGroupRepository;
     private final IStudentGroupRepository studentGroupRepository;
     private final IProfessorRepository professorRepository;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
+    public StudentDashboardResponse getStudentDashboardMetrics() {
         try {
+            String enrollment = getUserName();
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
             return StudentDashboardResponse.builder()
@@ -59,8 +62,9 @@ public class DashboardService {
 
 
     @Transactional(readOnly = true)
-    public ProfessorDashboardResponse getProfessorDashboardMetrics(String employeeNumber) {
+    public ProfessorDashboardResponse getProfessorDashboardMetrics() {
         try {
+            String employeeNumber = getUserName();
             List<ProfessorGroupModel> professorGroups = professorGroupRepository
                     .findByProfessorAndGroupStatus(employeeNumber, Constants.ACTIVE);
 
@@ -108,5 +112,10 @@ public class DashboardService {
             }
         }
         return map;
+    }
+
+    private String getUserName() {
+        UserResponse user = userService.getCurrentUser();
+        return user.getUsername();
     }
 }
