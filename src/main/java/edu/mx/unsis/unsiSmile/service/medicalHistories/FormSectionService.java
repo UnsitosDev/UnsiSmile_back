@@ -162,7 +162,7 @@ public class FormSectionService {
         FormSectionResponse response = toResponse(sectionModel, patientId, patientClinicalHistoryId);
 
         if (sectionModel.getRequiresReview()) {
-            StatusClinicalHistoryModel status = statusClinicalHistoryService.getStatusByPatientClinicalHistoryIdAndSection(patientClinicalHistoryId, sectionModel.getIdFormSection());
+            StatusClinicalHistoryModel status = statusClinicalHistoryService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection());
             if(status != null) {
                 response.setStatus(status.getStatus().toString());
             } else {
