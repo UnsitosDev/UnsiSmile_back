@@ -1,14 +1,26 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.UserMapper;
+import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
+import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
 import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
+import edu.mx.unsis.unsiSmile.repository.IUserRepository;
+import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
+import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
+import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,24 +33,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.UserMapper;
-import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
-import edu.mx.unsis.unsiSmile.repository.IUserRepository;
-import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
-import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +55,10 @@ public class UserService {
     private final FileStorageService fileStorageService;
     private final IProfilePictureRepository profilePictureRepository;
     private final IRoleRepository roleRepository;
+    private final IProfessorRepository professorRepository;
 
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
+    private final ProfessorMapper professorMapper;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -64,9 +67,7 @@ public class UserService {
                 throw new AppException(ResponseMessages.USER_ALREADY_EXISTS + ": " + request.getUsername(),
                         HttpStatus.BAD_REQUEST);
             }
-            // seteamos valores a un tipo request
-            UserModel savedUser = userRepository.save(setValuesModel(request));
-            return savedUser;
+            return userRepository.save(setValuesModel(request));
         } catch (ConstraintViolationException e) {
             throw new AppException(ResponseMessages.BAD_REQUEST + ": " + e.getMessage(), HttpStatus.BAD_REQUEST, e);
         } catch (Exception ex) {
@@ -99,8 +100,7 @@ public class UserService {
     public UserResponse getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
 
             UserModel currentUser = userRepository.findByUsername(username);
@@ -134,37 +134,52 @@ public class UserService {
     public ResponseEntity<?> getInformationUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
 
-            UserModel currentUser = userRepository.findByUsername(username);
-            ResponseEntity<?> owner = null;
-            if (currentUser == null) {
-                throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-            }
-
-            switch (currentUser.getRole().getRole()) {
-                case ERole.ROLE_ADMIN:
-                    owner = ResponseEntity
-                            .ok(administratorMapper.toDto(administratorRepository.findById(currentUser.getUsername())
-                                    .orElseThrow(() -> new AppException(
-                                            ResponseMessages.USER_NOT_FOUND + " with enrollment: "
-                                                    + currentUser.getUsername(),
-                                            HttpStatus.NOT_FOUND))));
-                    break;
-                case ERole.ROLE_STUDENT:
-                    owner = ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(currentUser.getUsername())
-                            .orElseThrow(() -> new AppException(
-                                    ResponseMessages.USER_NOT_FOUND + " with enrollment: " + currentUser.getUsername(),
-                                    HttpStatus.NOT_FOUND))));
-                    break;
-                default:
-                    break;
-            }
-            return owner;
+            return getInformationByUsername(username);
         } else {
             throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public ResponseEntity<?> getInformationUser(String username) {
+        try {
+            return getInformationByUsername(username);
+        } catch (AppException ex) {
+            throw ex;
+        }
+    }
+
+    private ResponseEntity<?> getInformationByUsername(String username) {
+        try {
+            UserModel user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username, HttpStatus.NOT_FOUND);
+            }
+
+            return switch (user.getRole().getRole()) {
+                case ERole.ROLE_ADMIN -> ResponseEntity
+                        .ok(administratorMapper.toDto(administratorRepository.findById(user.getUsername())
+                                .orElseThrow(() -> new AppException(
+                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                        HttpStatus.NOT_FOUND))));
+                case ERole.ROLE_STUDENT ->
+                        ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(user.getUsername())
+                                .orElseThrow(() -> new AppException(
+                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                        HttpStatus.NOT_FOUND))));
+                case ERole.ROLE_PROFESSOR ->
+                        ResponseEntity.ok(professorMapper.toDto(professorRepository.findById(user.getUsername())
+                                .orElseThrow(() -> new AppException(
+                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                        HttpStatus.NOT_FOUND))));
+                default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            };
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
