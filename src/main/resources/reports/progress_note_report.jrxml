@@ -1,0 +1,252 @@
+<!-- Created with Jaspersoft Studio version 7.0.2.final using JasperReports Library version 7.0.2-31532122640f516c6d17238ae0e41a08113d5ac0  -->
+<jasperReport name="Blank_A4" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a5a6bb1b-296b-41c0-98cc-2321bfb58840">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="birthDate" class="java.util.Date"/>
+	<parameter name="age" class="java.lang.Integer"/>
+	<parameter name="gender" class="java.lang.String"/>
+	<parameter name="origin" class="java.lang.String"/>
+	<parameter name="idProgressNote" class="java.lang.String"/>
+	<parameter name="bloodPressure" class="java.lang.String"/>
+	<parameter name="temperature" class="java.lang.Integer"/>
+	<parameter name="heartRate" class="java.lang.Integer"/>
+	<parameter name="respirationRate" class="java.lang.Integer"/>
+	<parameter name="oxygenSaturation" class="java.lang.Integer"/>
+	<parameter name="diagnosis" class="java.lang.String"/>
+	<parameter name="prognosis" class="java.lang.String"/>
+	<parameter name="treatment" class="java.lang.String"/>
+	<parameter name="indications" class="java.lang.String"/>
+	<parameter name="creationDate" class="java.util.Date"/>
+	<query language="sql"><![CDATA[]]></query>
+	<background splitType="Stretch"/>
+	<title height="129" splitType="Stretch">
+		<element kind="staticText" uuid="259f9e6c-9759-4582-8f3b-44a8903eb2ef" x="160" y="0" width="239" height="129" fontName="Serif" fontSize="14.0" bold="false" hTextAlign="Center" vTextAlign="Middle">
+			<paragraph lineSpacing="1_1_2" lineSpacingSize="4.0"/>
+			<text><![CDATA[UNIVERSIDAD DE LA SIERRA SUR
+ Licenciatura en Odontología
+Clínica de Odontología
+NOTA DE EVOLUCIÓN]]></text>
+			<box leftPadding="0" bottomPadding="0" rightPadding="0"/>
+		</element>
+		<element kind="image" uuid="af3ea1d2-d4a4-4f39-a2d6-d9ae400e5eab" x="-7" y="0" width="87" height="80">
+			<expression><![CDATA["logo.png"]]></expression>
+		</element>
+	</title>
+	<pageHeader height="89" splitType="Stretch">
+		<element kind="staticText" uuid="b906aaeb-34d8-41c9-a682-013c1c63b353" x="20" y="10" width="130" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Nombre completo del paciente:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="1eb55e54-6b4c-4155-93a8-ca0a18635451" x="310" y="10" width="90" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Fecha de nacimiento:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="469694b2-1b2e-4b0d-ac12-b81a54ac60ff" x="470" y="10" width="30" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Edad:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="d62dc103-14fa-4ea2-a877-eaa68f751602" x="20" y="30" width="30" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Sexo:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="56a7a61b-6bcc-4489-a365-d39f4e498b81" x="120" y="30" width="90" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Lugar de procedencia:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="ff6d8547-9c23-43ff-acd3-a3cb6d22ff5d" x="350" y="30" width="70" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[N de expediente:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="staticText" uuid="a9741993-82d2-4d34-8c9d-7f728cb54664" x="20" y="50" width="120" height="20" fontSize="9.0" hTextAlign="Left">
+			<text><![CDATA[Fecha y hora de elaboración:]]></text>
+			<box topPadding="4" leftPadding="0"/>
+		</element>
+		<element kind="textField" uuid="63999401-1097-4317-835d-97dfb2356150" x="150" y="10" width="160" height="20" fontSize="9.0" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$P{name}]]></expression>
+		</element>
+		<element kind="textField" uuid="0f7fb71a-f65d-4e3e-a457-01e020d2f1de" x="400" y="10" width="71" height="20" fontSize="9.0" vTextAlign="Middle">
+			<expression><![CDATA[$P{birthDate}]]></expression>
+		</element>
+		<element kind="textField" uuid="95b65c4e-a543-43fb-8905-d3ae0721f480" x="500" y="10" width="45" height="20" fontSize="9.0" vTextAlign="Middle">
+			<expression><![CDATA[$P{age}]]></expression>
+		</element>
+		<element kind="textField" uuid="4b5d120f-c013-4e2f-ba82-e3a97058e868" x="50" y="30" width="71" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{gender}]]></expression>
+		</element>
+		<element kind="textField" uuid="1ae27f28-0650-4f2f-8999-6b675141be1a" x="220" y="30" width="130" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{origin}]]></expression>
+		</element>
+		<element kind="textField" uuid="acd24284-562c-45cc-87c8-9ffe83d53455" x="430" y="30" width="100" height="20" vTextAlign="Middle">
+			<expression><![CDATA[$P{idProgressNote}]]></expression>
+		</element>
+		<element kind="textField" uuid="c2b674dd-eeae-44dd-931f-dbcbd7593b60" x="140" y="50" width="80" height="20" fontSize="9.0" vTextAlign="Middle">
+			<expression><![CDATA[$P{creationDate}]]></expression>
+		</element>
+		<element kind="staticText" uuid="f1722a6d-1457-454e-a8e6-66588db54cbc" x="210" y="34" width="140" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="099afb01-c08e-473d-8252-7870f2a660a5" x="150" y="13" width="160" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="e68b7f20-7a56-4a6b-bad7-7588d659bb09" x="400" y="13" width="71" height="21">
+			<text><![CDATA[__________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="a2f5c87a-580a-48e6-a3d4-7065c2ddf1eb" x="490" y="13" width="55" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="94490f4d-423f-42b1-a9db-c4b150760f00" x="40" y="34" width="81" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="4bd0f3cc-3d37-40e8-a2a9-91bb63576912" x="140" y="55" width="90" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="24972215-c7ef-4c71-9cf2-8cb0ab9df40a" x="420" y="34" width="110" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+	</pageHeader>
+	<columnHeader height="140" splitType="Stretch">
+		<element kind="staticText" uuid="61b6f483-5f11-4507-9b32-71066d5808da" x="204" y="10" width="150" height="17" hTextAlign="Center">
+			<text><![CDATA[Actualización del cuadro clínico:]]></text>
+		</element>
+		<element kind="staticText" uuid="90d3f649-40c5-49e6-8038-a7e0e49131c4" x="20" y="10" width="70" height="17" hTextAlign="Left">
+			<text><![CDATA[Signos vitales ]]></text>
+		</element>
+		<element kind="staticText" uuid="210a1f76-644f-4078-a21d-21eb1a74d487" x="20" y="40" width="20" height="17" hTextAlign="Left">
+			<text><![CDATA[TA:]]></text>
+		</element>
+		<element kind="staticText" uuid="68bbe2c1-9d04-4ee6-a268-09b2b297cab0" x="20" y="57" width="30" height="17" hTextAlign="Left">
+			<text><![CDATA[Temp:]]></text>
+		</element>
+		<element kind="staticText" uuid="53397ad3-170d-4746-9ef5-8d95ef1f08ec" x="20" y="74" width="20" height="17" hTextAlign="Left">
+			<text><![CDATA[FC:]]></text>
+		</element>
+		<element kind="staticText" uuid="4b911765-b00b-4f39-8a3d-b03381094731" x="20" y="90" width="20" height="17" hTextAlign="Left">
+			<text><![CDATA[FR:]]></text>
+		</element>
+		<element kind="staticText" uuid="c8eb2f77-d353-4ff7-bbc6-9f0caf0fe3b9" x="20" y="107" width="30" height="17" hTextAlign="Left">
+			<text><![CDATA[SpO2:]]></text>
+		</element>
+		<element kind="textField" uuid="cd12cb1f-0549-4b45-9930-a02778f90c9c" x="40" y="40" width="80" height="17" fontSize="9.0" vTextAlign="Top">
+			<expression><![CDATA[$P{bloodPressure}]]></expression>
+			<patternExpression><![CDATA[$P{bloodPressure}]]></patternExpression>
+		</element>
+		<element kind="textField" uuid="020f1335-4830-4bc2-ae40-cba6c4cb3ae6" x="50" y="57" width="70" height="18" fontSize="9.0" vTextAlign="Top">
+			<expression><![CDATA[$P{temperature}]]></expression>
+		</element>
+		<element kind="textField" uuid="a9fe088a-2ea1-44da-b199-0adaba04f1f6" x="40" y="75" width="100" height="16" fontSize="9.0" vTextAlign="Top">
+			<expression><![CDATA[$P{heartRate}]]></expression>
+		</element>
+		<element kind="textField" uuid="6abac376-6cd5-4f98-8649-823d54dd46e3" x="40" y="91" width="100" height="16" fontSize="9.0" vTextAlign="Top">
+			<expression><![CDATA[$P{respirationRate}]]></expression>
+		</element>
+		<element kind="textField" uuid="aabbd805-54cf-4a27-b329-9f147a99c2b2" x="50" y="107" width="100" height="16" fontSize="9.0" vTextAlign="Middle">
+			<expression><![CDATA[$P{oxygenSaturation}]]></expression>
+		</element>
+		<element kind="staticText" uuid="0252b390-4366-4030-baa0-ca3e711cb692" x="40" y="40" width="60" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="7a5225ca-9315-4d34-94cf-5842c9f79767" x="50" y="56" width="50" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="f390b8fb-93b0-4174-908b-9d8d9b55d427" x="40" y="73" width="60" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="2fd48dc8-10bc-4c0d-a830-f906070daf22" x="40" y="89" width="60" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="ae31d143-cd28-4f1e-8545-51e060be8eb0" x="50" y="110" width="50" height="21">
+			<text><![CDATA[________________________________________________________________]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="269" splitType="Stretch">
+			<element kind="staticText" uuid="a9e7db65-2823-4e64-9b6e-1c1ad5cacb81" x="20" y="10" width="60" height="20">
+				<text><![CDATA[Diagnóstico:]]></text>
+			</element>
+			<element kind="staticText" uuid="9868f548-ad1d-41ce-a6a3-31e54fb337d3" x="400" y="10" width="60" height="20">
+				<text><![CDATA[Pronóstico:]]></text>
+			</element>
+			<element kind="staticText" uuid="6fb6fd3a-7a50-4dbc-9ebf-6feff5eeca66" x="20" y="30" width="160" height="20">
+				<text><![CDATA[Tratamiento/terapéutica empleada:]]></text>
+			</element>
+			<element kind="staticText" uuid="8015f81f-44ab-484a-a046-8f08a6529506" x="20" y="150" width="490" height="34">
+				<text><![CDATA[Indicaciones odontológicas (En caso de medicamentos señalar como mínimo dosis, vía de administración y
+periodicidad):]]></text>
+			</element>
+			<element kind="textField" uuid="8e3fa365-c37d-4b3b-bda7-b24867070442" x="80" y="10" width="320" height="20" fontSize="9.0" vTextAlign="Top">
+				<expression><![CDATA[$P{diagnosis}]]></expression>
+			</element>
+			<element kind="textField" uuid="12c19142-0e9e-4d48-a2b6-36721107d616" x="460" y="10" width="100" height="20" fontSize="9.0" vTextAlign="Top">
+				<expression><![CDATA[$P{prognosis}]]></expression>
+			</element>
+			<element kind="textField" uuid="09414dbc-ea31-46d7-bf66-8f7d90896f1a" x="20" y="50" width="530" height="99" fontSize="9.0" vTextAlign="Top">
+				<paragraph lineSpacing="Double"/>
+				<expression><![CDATA[$P{treatment}]]></expression>
+				<patternExpression><![CDATA[$P{treatment}]]></patternExpression>
+			</element>
+			<element kind="textField" uuid="1b0ccfce-c409-4e97-87bb-c1a19a97bb1f" x="20" y="184" width="530" height="70" fontSize="9.0">
+				<paragraph lineSpacing="Double"/>
+				<expression><![CDATA[$P{indications}]]></expression>
+				<patternExpression><![CDATA[$P{indications}]]></patternExpression>
+			</element>
+			<element kind="staticText" uuid="1626f038-f29a-4d60-8378-e5b1db54b2ca" x="80" y="10" width="319" height="21">
+				<text><![CDATA[________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="faa226ba-9e82-403f-ac73-13deed624c95" x="450" y="10" width="110" height="21">
+				<text><![CDATA[________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="3f3685ae-e6d9-4e70-a060-1c6b87dd5eac" x="20" y="51" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="49f08bde-dbbe-4bcd-8912-ae150d2fbdc7" x="180" y="30" width="370" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="2274225a-5b5d-4326-ac89-11d13ae345bd" x="20" y="70" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="2e5e5cbe-25c8-447b-a9e2-829f3bb09bb4" x="20" y="90" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="a00cfb83-bc93-4c7d-8b9f-87babeb02eb0" x="20" y="110" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="45ba58a6-c446-449c-94e6-723f45e578ac" x="20" y="184" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="77da5691-900d-4f46-8d21-cd119365ed3d" x="20" y="205" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="1517e78e-f495-4099-ba8e-13e15d589b3a" x="20" y="226" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="293ce753-2380-4a84-90fc-6fe944672d2b" x="20" y="247" width="530" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+			<element kind="staticText" uuid="517edd9b-8aa3-406e-93c5-3b4a3820d934" x="80" y="163" width="470" height="21">
+				<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+			</element>
+		</band>
+	</detail>
+	<columnFooter height="80" splitType="Stretch">
+		<element kind="staticText" uuid="c8681e49-d6cb-447e-a91a-f5f21464163d" x="20" y="20" width="230" height="20">
+			<text><![CDATA[Nombre y firma del operador que elaboró la nota:]]></text>
+		</element>
+		<element kind="staticText" uuid="876620cd-db4e-4b00-a4a3-7d9c7e219ea2" x="20" y="40" width="230" height="20">
+			<text><![CDATA[Firma del paciente:]]></text>
+		</element>
+		<element kind="staticText" uuid="e8175687-a408-4905-8a17-f45db918dd04" x="20" y="60" width="230" height="20">
+			<text><![CDATA[Nombre y firma del profesor responsable:]]></text>
+		</element>
+		<element kind="staticText" uuid="afab2da3-ca6a-421a-a95b-885d27ae3ba6" x="240" y="20" width="170" height="21">
+			<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="de7f4561-04e5-47bf-af3b-87235608fe0a" x="110" y="40" width="170" height="21">
+			<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="dec0c0e5-0723-44d2-a307-9ae7ce66ca8e" x="204" y="59" width="170" height="21">
+			<text><![CDATA[___________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+		</element>
+	</columnFooter>
+	<pageFooter height="54" splitType="Stretch"/>
+	<summary height="42" splitType="Stretch"/>
+</jasperReport>
