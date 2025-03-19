@@ -1,17 +1,5 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
@@ -21,9 +9,25 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final UserService userService;
 
     public ResponseEntity<ApiResponse<Object>> login(LoginRequest request) {
 
@@ -168,5 +173,45 @@ public class AuthService {
             }
         }
         return null;
+    }
+
+    public void resetPasswordToDefault(String username) {
+        try {
+            ResponseEntity<?> userInformation = userService.getInformationUser(username);
+
+            String defaultPassword = getString(userInformation);
+
+            UserModel user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException(ResponseMessages.USER_NOT_FOUND));
+
+            String encodedPassword = passwordEncoder.encode(defaultPassword);
+
+            user.setPassword(encodedPassword);
+            user.setFirstLogin(true);
+            userRepository.save(user);
+        } catch (AppException e) {
+            throw e;
+        }
+    }
+
+    private static String getString(ResponseEntity<?> userInformation) {
+        Object associatedPerson = userInformation.getBody();
+
+        if (associatedPerson == null) {
+            throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        PersonResponse person = switch (associatedPerson) {
+            case ProfessorResponse professorResponse -> professorResponse.getPerson();
+
+            case StudentResponse studentResponse -> studentResponse.getPerson();
+
+            case AdministratorResponse administratorResponse ->
+                    administratorResponse.getPerson();
+
+            default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        };
+
+        return person.getCurp();
     }
 }
