@@ -27,6 +27,7 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
+import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +45,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,6 +68,7 @@ public class ProgressNoteService {
     private final UserService userService;
     private final ProgressNoteFileMapper progressNoteFileMapper;
     private final ValidationUtils validationUtils;
+    private final JasperReportService jasperReportService;
 
     @Transactional
     public ProgressNoteResponse createProgressNote(@NonNull ProgressNoteRequest request) {
@@ -159,20 +166,50 @@ public class ProgressNoteService {
     }
 
     public ResponseEntity<byte[]> downloadProgressNoteById(String id) {
-        ProgressNoteFileModel fileModel = progressNoteFileRepository.findById(id)
+        ProgressNoteModel progressNote = progressNoteRepository.findById(id)
                 .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
 
+        PatientModel patient = progressNote.getPatient();
+        
         try {
-            Path filePath = Paths.get(fileModel.getUrl());
-            byte[] fileBytes = Files.readAllBytes(filePath);
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("name", validationUtils.getFullNameFromPerson(patient.getPerson()));
+            parameters.put("birthDate", patient.getPerson().getBirthDate());
+            parameters.put("age", calculateAge(patient.getPerson().getBirthDate()));
+            parameters.put("gender", patient.getPerson().getGender());
+            parameters.put("origin", getFullOrigin(patient));
+            parameters.put("idProgressNote", progressNote.getIdProgressNote());
+            parameters.put("bloodPressure", progressNote.getBloodPressure());
+            parameters.put("temperature", progressNote.getTemperature().intValue());
+            parameters.put("heartRate", progressNote.getHeartRate());
+            parameters.put("respirationRate", progressNote.getRespiratoryRate());
+            parameters.put("oxygenSaturation", progressNote.getOxygenSaturation().intValue());
+            parameters.put("diagnosis", progressNote.getDiagnosis());
+            parameters.put("prognosis", progressNote.getPrognosis());
+            parameters.put("treatment", progressNote.getTreatment());
+            parameters.put("indications", progressNote.getIndications());
+            parameters.put("creationDate", progressNote.getCreatedAt());
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getUrl() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
-                    .body(fileBytes);
+            byte[] pdfBytes = jasperReportService.generatePdfReport("/reports/progress_note_report.jrxml", parameters);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"progress_note_" + id + ".pdf\"")
+                    .body(pdfBytes);
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_WHILE_DOWNLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    private String getFullOrigin(PatientModel patient) {
+        return String.format("%s, %s, %s",
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getName(),
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getMunicipality().getName(),
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getMunicipality().getState().getName());
+    }
+
+    private Integer calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     private String getStudent(String userId) {

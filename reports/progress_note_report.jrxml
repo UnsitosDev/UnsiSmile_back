@@ -34,7 +34,7 @@ NOTA DE EVOLUCIÓN]]></text>
 	</title>
 	<pageHeader height="89" splitType="Stretch">
 		<element kind="staticText" uuid="b906aaeb-34d8-41c9-a682-013c1c63b353" x="20" y="10" width="130" height="20" fontSize="9.0" hTextAlign="Left">
-			<text><![CDATA[Nombre completo del paciente:]]></text>
+			<text><![CDATA[Nombre1 completo del paciente:]]></text>
 			<box topPadding="4" leftPadding="0"/>
 		</element>
 		<element kind="staticText" uuid="1eb55e54-6b4c-4155-93a8-ca0a18635451" x="310" y="10" width="90" height="20" fontSize="9.0" hTextAlign="Left">
