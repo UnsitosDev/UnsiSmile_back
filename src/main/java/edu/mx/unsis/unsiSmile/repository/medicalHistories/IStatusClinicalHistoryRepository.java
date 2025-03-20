@@ -15,5 +15,8 @@ public interface IStatusClinicalHistoryRepository extends JpaRepository<StatusCl
     Optional<StatusClinicalHistoryModel> findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(
             Long idPatientClinicalHistory, Long idSection);
 
+    Optional<StatusClinicalHistoryModel> findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
+            String idPatient, Long idSection);
+
     Page<StatusClinicalHistoryModel> findByStatus(ClinicalHistoryStatus status, Pageable pageable);
 }

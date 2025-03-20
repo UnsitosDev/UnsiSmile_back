@@ -9,6 +9,7 @@ import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IStatusClinicalHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class StatusClinicalHistoryService {
 
     private final IStatusClinicalHistoryRepository statusClinicalHistoryRepository;
     private final StatusClinicalHistoryMapper statusClinicalHistoryMapper;
+    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     @Transactional
     public void createOrUpdateStatusClinicalHistory(StatusClinicalHistoryRequest request) {
@@ -52,8 +54,13 @@ public class StatusClinicalHistoryService {
     @Transactional(readOnly = true)
     public StatusClinicalHistoryResponse getStatusByPatientClinicalHistoryId(Long idPatientClinicalHistory, Long idSection) {
         try {
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, HttpStatus.NOT_FOUND));
+
             StatusClinicalHistoryModel statusModel = 
-                statusClinicalHistoryRepository.findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(idPatientClinicalHistory, idSection)
+                statusClinicalHistoryRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
+                        patientClinicalHistoryModel.getPatient().getIdPatient(),
+                                idSection)
                         .orElseThrow(() -> new AppException(ResponseMessages.STATUS_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             return statusClinicalHistoryMapper.toDto(statusModel);
@@ -107,8 +114,8 @@ public class StatusClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public StatusClinicalHistoryModel getStatusByPatientClinicalHistoryIdAndSection(Long idPatientClinicalHistory, Long idSection) {
-        return statusClinicalHistoryRepository.findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(idPatientClinicalHistory, idSection)
+    public StatusClinicalHistoryModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, Long idSection) {
+        return statusClinicalHistoryRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(idPatient, idSection)
                             .orElse(null);
     }
 }
