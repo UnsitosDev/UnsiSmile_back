@@ -21,4 +21,5 @@ public class PatientRes {
     private LocalDate creationDate;
     private Boolean isMinor;
     private String guardian;
+    private String gender;
 }
