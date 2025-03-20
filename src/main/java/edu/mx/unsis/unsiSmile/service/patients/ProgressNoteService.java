@@ -190,7 +190,7 @@ public class ProgressNoteService {
             parameters.put("indications", progressNote.getIndications());
             parameters.put("creationDate", progressNote.getCreatedAt());
 
-            byte[] pdfBytes = jasperReportService.generatePdfReport("classpath:reports/progress_note_report.jrxml", parameters);
+            byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
