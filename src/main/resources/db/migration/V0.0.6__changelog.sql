@@ -268,7 +268,7 @@ INSERT INTO questions
  placeholder)
 VALUES
     ("Deglución",10, 3, 1, true, "Descripción de deglución"),
-    ("Fonación masticación",10, 3, 2, true, "Descripción de fonación"),
+    ("Fonación/masticación",10, 3, 2, true, "Descripción de fonación"),
     ("Respiración",10, 3, 3, true, "Descripción de respiración"),
     ("Observaciones",10, 3, 4, false, "Observaciones generales");
 
