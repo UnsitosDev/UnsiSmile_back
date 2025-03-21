@@ -1,7 +1,9 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistoryRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.StatusClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "STATUS_CLINICAL_HISTORIES")
 @RestController
@@ -31,17 +35,6 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente e ID de la sección")
-    @GetMapping("/{idPatientClinicalHistory}/{idSection}")
-    public ResponseEntity<StatusClinicalHistoryResponse> getStatusByPatientClinicalHistoryId(
-            @PathVariable Long idPatientClinicalHistory,
-            @PathVariable Long idSection) {
-        StatusClinicalHistoryResponse response = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(
-                idPatientClinicalHistory,
-                idSection);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @Operation(summary = "Enviar una historia clínica a revisión")
     @PutMapping("/sendToReview/{idPatientClinicalHistory}/{idSection}")
     public ResponseEntity<Void> sendToReview(
@@ -51,9 +44,9 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener un listado paginado de historias clínicas por estado")
+    @Operation(summary = "Obtener un listado de pacintes con una HC en un determinado estado.")
     @GetMapping("/list")
-    public ResponseEntity<Page<StatusClinicalHistoryResponse>> getStatusClinicalHistoriesByStatus(
+    public ResponseEntity<Page<PatientResponse>> getStatusClinicalHistoriesByStatus(
             @RequestParam String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -64,9 +57,17 @@ public class StatusClinicalHistoryController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest .of(page, size, sort);
 
-        Page<StatusClinicalHistoryResponse> response = statusClinicalHistoryService.getStatusClinicalHistoriesByStatus(
+        Page<PatientResponse> response = statusClinicalHistoryService.getStatusClinicalHistoriesByStatus(
                 status, pageable);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado.")
+    @GetMapping("/patient-clinical-histories")
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient,
+                                                                                      @RequestParam String status) {
+        List<PatientClinicalHistoryResponse> response = statusClinicalHistoryService.searchClinicalHistory(idPatient, status);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
