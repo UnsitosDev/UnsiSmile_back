@@ -17,7 +17,7 @@
 	<parameter name="prognosis" class="java.lang.String"/>
 	<parameter name="treatment" class="java.lang.String"/>
 	<parameter name="indications" class="java.lang.String"/>
-	<parameter name="creationDate" class="java.sql.Date"/>
+	<parameter name="creationDate" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>

@@ -175,8 +175,8 @@ public class ProgressNoteService {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("name", validationUtils.getFullNameFromPerson(patient.getPerson()));
             parameters.put("birthDate", java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
-            parameters.put("age", calculateAge(patient.getPerson().getBirthDate()));
-            parameters.put("gender", patient.getPerson().getGender());
+            parameters.put("age", String.valueOf(calculateAge(patient.getPerson().getBirthDate())));
+            parameters.put("gender", progressNote.getPatient().getPerson().getGender().getGender());
             parameters.put("origin", getFullOrigin(patient));
             parameters.put("idProgressNote", progressNote.getIdProgressNote());
             parameters.put("bloodPressure", progressNote.getBloodPressure());
@@ -188,7 +188,7 @@ public class ProgressNoteService {
             parameters.put("prognosis", progressNote.getPrognosis());
             parameters.put("treatment", progressNote.getTreatment());
             parameters.put("indications", progressNote.getIndications());
-            parameters.put("creationDate", progressNote.getCreatedAt());
+            parameters.put("creationDate", progressNote.getCreatedBy());
 
             byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters);
 
