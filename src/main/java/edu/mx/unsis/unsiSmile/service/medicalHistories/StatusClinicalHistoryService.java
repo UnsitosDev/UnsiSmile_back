@@ -2,12 +2,12 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistoryRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.StatusClinicalHistoryMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
@@ -15,6 +15,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IStatusClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +34,8 @@ public class StatusClinicalHistoryService {
     private final IStatusClinicalHistoryRepository statusClinicalHistoryRepository;
     private final StatusClinicalHistoryMapper statusClinicalHistoryMapper;
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
-    private final ProgressNoteMapper progressNoteMapper;
     private final PatientMapper patientMapper;
+    private final IPatientRepository patientRepository;
 
     @Transactional
     public void createOrUpdateStatusClinicalHistory(StatusClinicalHistoryRequest request) {
@@ -125,5 +128,35 @@ public class StatusClinicalHistoryService {
     public StatusClinicalHistoryModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, Long idSection) {
         return statusClinicalHistoryRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(idPatient, idSection)
                             .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient, String status) {
+        if (!patientRepository.existsById(idPatient)) {
+            throw new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        ClinicalHistoryStatus clinicalHistoryStatus;
+        try {
+            clinicalHistoryStatus = ClinicalHistoryStatus.valueOf(status.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ResponseMessages.INVALID_STATUS, HttpStatus.BAD_REQUEST);
+        }
+
+        List<StatusClinicalHistoryModel> statusModels = statusClinicalHistoryRepository
+                .findByIdPatientAndStatus(idPatient, clinicalHistoryStatus);
+
+        return statusModels.stream()
+                .map(statusModel -> mapToClinicalHistoryResponse(statusModel.getPatientClinicalHistory()))
+                .collect(Collectors.toList());
+    }
+
+    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(PatientClinicalHistoryModel patientClinicalHistoryModel) {
+        return PatientClinicalHistoryResponse.builder()
+                .id(patientClinicalHistoryModel.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog())
+                .clinicalHistoryName(patientClinicalHistoryModel.getClinicalHistoryCatalog().getClinicalHistoryName())
+                .patientClinicalHistoryId(patientClinicalHistoryModel.getIdPatientClinicalHistory())
+                .patientId(patientClinicalHistoryModel.getPatient().getIdPatient())
+                .build();
     }
 }

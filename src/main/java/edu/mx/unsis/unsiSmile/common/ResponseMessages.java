@@ -268,4 +268,6 @@ public class ResponseMessages {
     public static final String STATUS_NOT_FOUND = "Estado no encontrado para la historia clínica del paciente proporcionado";
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
+
+    public static final String INVALID_STATUS = "Estatus no válido: ";
 }

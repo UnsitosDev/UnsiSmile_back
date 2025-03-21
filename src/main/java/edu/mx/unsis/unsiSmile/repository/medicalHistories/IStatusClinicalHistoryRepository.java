@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,12 @@ public interface IStatusClinicalHistoryRepository extends JpaRepository<StatusCl
     @Query("SELECT DISTINCT s FROM StatusClinicalHistoryModel s " +
             "WHERE s.status = :status " +
             "GROUP BY s.patientClinicalHistory.patient.idPatient")
-    Page<StatusClinicalHistoryModel> findByStatus(@Param("status") ClinicalHistoryStatus status, Pageable pageable);}
+    Page<StatusClinicalHistoryModel> findByStatus(@Param("status") ClinicalHistoryStatus status, Pageable pageable);
+
+    @Query("SELECT DISTINCT s FROM StatusClinicalHistoryModel s " +
+            "WHERE s.patientClinicalHistory.patient.idPatient = :idPatient " +
+            "AND s.status = :status" +
+            " GROUP BY s.patientClinicalHistory.idPatientClinicalHistory")
+    List<StatusClinicalHistoryModel> findByIdPatientAndStatus(@Param("idPatient") String idPatient,
+                                                              @Param("status") ClinicalHistoryStatus status);
+}

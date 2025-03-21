@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistoryRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.StatusClinicalHistoryService;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "STATUS_CLINICAL_HISTORIES")
 @RestController
@@ -69,5 +72,13 @@ public class StatusClinicalHistoryController {
                 status, pageable);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
+    @GetMapping("/patient-clinical-histories")
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient,
+                                                                                      @RequestParam String status) {
+        List<PatientClinicalHistoryResponse> response = statusClinicalHistoryService.searchClinicalHistory(idPatient, status);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
