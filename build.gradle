@@ -80,8 +80,16 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.2.5'
     
     // JasperReports dependencies
-    implementation 'net.sf.jasperreports:jasperreports:6.20.5'
-    implementation 'net.sf.jasperreports:jasperreports-fonts:6.20.5'
+    implementation 'net.sf.jasperreports:jasperreports:6.20.6'
+    implementation 'net.sf.jasperreports:jasperreports-fonts:6.20.6'
+    implementation 'com.lowagie:itext:2.1.7.js10'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'commons-digester:commons-digester:2.1'
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.20'
+    implementation 'org.apache.xmlgraphics:batik-bridge:1.17'
+    implementation 'org.apache.xmlgraphics:batik-svggen:1.17'
 }
 
 bootBuildImage {

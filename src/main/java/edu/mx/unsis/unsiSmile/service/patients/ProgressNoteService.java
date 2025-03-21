@@ -174,7 +174,7 @@ public class ProgressNoteService {
         try {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("name", validationUtils.getFullNameFromPerson(patient.getPerson()));
-            parameters.put("birthDate", patient.getPerson().getBirthDate());
+            parameters.put("birthDate", java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
             parameters.put("age", calculateAge(patient.getPerson().getBirthDate()));
             parameters.put("gender", patient.getPerson().getGender());
             parameters.put("origin", getFullOrigin(patient));
