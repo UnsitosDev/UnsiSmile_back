@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistoryRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.StatusClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -53,7 +54,7 @@ public class StatusClinicalHistoryController {
 
     @Operation(summary = "Obtener un listado paginado de historias clínicas por estado")
     @GetMapping("/list")
-    public ResponseEntity<Page<StatusClinicalHistoryResponse>> getStatusClinicalHistoriesByStatus(
+    public ResponseEntity<Page<PatientResponse>> getStatusClinicalHistoriesByStatus(
             @RequestParam String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -64,7 +65,7 @@ public class StatusClinicalHistoryController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest .of(page, size, sort);
 
-        Page<StatusClinicalHistoryResponse> response = statusClinicalHistoryService.getStatusClinicalHistoriesByStatus(
+        Page<PatientResponse> response = statusClinicalHistoryService.getStatusClinicalHistoriesByStatus(
                 status, pageable);
 
         return ResponseEntity.ok(response);

@@ -3,12 +3,16 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.StatusClinicalHistoryRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.StatusClinicalHistoryMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IStatusClinicalHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,8 @@ public class StatusClinicalHistoryService {
     private final IStatusClinicalHistoryRepository statusClinicalHistoryRepository;
     private final StatusClinicalHistoryMapper statusClinicalHistoryMapper;
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final ProgressNoteMapper progressNoteMapper;
+    private final PatientMapper patientMapper;
 
     @Transactional
     public void createOrUpdateStatusClinicalHistory(StatusClinicalHistoryRequest request) {
@@ -98,14 +104,16 @@ public class StatusClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StatusClinicalHistoryResponse> getStatusClinicalHistoriesByStatus(String status, Pageable pageable) {
+    public Page<PatientResponse> getStatusClinicalHistoriesByStatus(String status, Pageable pageable) {
         try {
             ClinicalHistoryStatus clinicalHistoryStatus = ClinicalHistoryStatus.valueOf(status.toUpperCase());
 
             Page<StatusClinicalHistoryModel> statusModels = statusClinicalHistoryRepository.findByStatus(clinicalHistoryStatus, pageable);
 
-            return statusModels.map(statusClinicalHistoryMapper::toDto);
-
+            return statusModels.map(statusModel -> {
+                PatientModel patient = statusModel.getPatientClinicalHistory().getPatient();
+                return patientMapper.toDto(patient);
+            });
         } catch (IllegalArgumentException e) {
             throw new AppException("Estatus no válido: " + status, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

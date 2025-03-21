@@ -5,6 +5,8 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,5 +20,7 @@ public interface IStatusClinicalHistoryRepository extends JpaRepository<StatusCl
     Optional<StatusClinicalHistoryModel> findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
             String idPatient, Long idSection);
 
-    Page<StatusClinicalHistoryModel> findByStatus(ClinicalHistoryStatus status, Pageable pageable);
-}
+    @Query("SELECT DISTINCT s FROM StatusClinicalHistoryModel s " +
+            "WHERE s.status = :status " +
+            "GROUP BY s.patientClinicalHistory.patient.idPatient")
+    Page<StatusClinicalHistoryModel> findByStatus(@Param("status") ClinicalHistoryStatus status, Pageable pageable);}
