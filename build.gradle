@@ -79,17 +79,28 @@ dependencies {
     implementation 'org.apache.poi:poi:5.2.5'
     implementation 'org.apache.poi:poi-ooxml:5.2.5'
     
-    // JasperReports dependencies
-    implementation 'net.sf.jasperreports:jasperreports:6.20.6'
-    implementation 'net.sf.jasperreports:jasperreports-fonts:6.20.6'
-    implementation 'com.lowagie:itext:2.1.7.js10'
+    // JasperReports dependencies - Versiones específicas y compatibles
+    implementation 'net.sf.jasperreports:jasperreports:6.20.0'
+    implementation 'com.lowagie:itext:2.1.7'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'commons-digester:commons-digester:2.1'
     implementation 'commons-beanutils:commons-beanutils:1.9.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'org.codehaus.groovy:groovy-all:3.0.20'
-    implementation 'org.apache.xmlgraphics:batik-bridge:1.17'
-    implementation 'org.apache.xmlgraphics:batik-svggen:1.17'
+    implementation 'org.apache.xmlgraphics:batik-bridge:1.16'
+    implementation 'org.apache.xmlgraphics:batik-svggen:1.16'
+    
+    // Excluir dependencias conflictivas
+    configurations {
+        all*.exclude group: 'com.itextpdf', module: 'itext-asian'
+        all*.exclude group: 'bouncycastle', module: 'bcmail-jdk14'
+        all*.exclude group: 'bouncycastle', module: 'bcprov-jdk14'
+        all*.exclude group: 'org.bouncycastle', module: 'bctsp-jdk14'
+    }
+    
+    // Dependencias adicionales para resolver conflictos
+    implementation('com.itextpdf:itext-asian:5.2.0')
+    implementation('org.olap4j:olap4j:1.2.0')
 }
 
 bootBuildImage {

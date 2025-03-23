@@ -14,23 +14,26 @@ public class JasperReportService {
     
     public byte[] generatePdfReport(String reportPath, Map<String, Object> parameters) {
         try {
-            // Obtener el archivo JRXML como InputStream
-            InputStream reportStream = getClass().getResourceAsStream("/reports/progress_note_report.jrxml");
+            ClassPathResource resource = new ClassPathResource(reportPath);
+            InputStream reportStream = resource.getInputStream();
+
             if (reportStream == null) {
-                throw new AppException("No se pudo encontrar el archivo de reporte", HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new AppException("No se pudo encontrar el archivo de reporte: " + reportPath, 
+                    HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            // Compilar el archivo JRXML
+            // Compilar el reporte
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
             
             // Llenar el reporte con los parámetros
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
             
-            // Exportar a PDF
+            // Exportar directamente a PDF
             return JasperExportManager.exportReportToPdf(jasperPrint);
+            
         } catch (Exception e) {
             throw new AppException("Error al generar el reporte PDF: " + e.getMessage(), 
-                                 HttpStatus.INTERNAL_SERVER_ERROR);
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

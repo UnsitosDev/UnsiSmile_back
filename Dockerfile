@@ -16,6 +16,11 @@ RUN gradle build --no-daemon --no-build-cache
 # Crear imagen final para la aplicación
 FROM openjdk:21-jdk-slim    
 
+# Instalar dependencias gráficas necesarias
+RUN apt-get update && \
+    apt-get install -y libfreetype6 libfontconfig1 && \
+    rm -rf /var/lib/apt/lists/*
+
 # Establecer el directorio de trabajo
 WORKDIR /app
 
