@@ -183,4 +183,21 @@ public class GroupService {
             throw new AppException("El grupo ya existe", HttpStatus.BAD_REQUEST);
         });
     }
+
+    @Transactional(readOnly = true)
+    public List<GroupResponse> getGroupsByCareer(@NonNull String careerId) {
+        try {
+            List<GroupModel> groups = groupRepository.findByCareerId(careerId);
+
+            if (groups.isEmpty()) {
+                throw new AppException(ResponseMessages.GROUPS_NOT_FOUND + careerId, HttpStatus.NOT_FOUND);
+            }
+
+            return groupMapper.toDtos(groups);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

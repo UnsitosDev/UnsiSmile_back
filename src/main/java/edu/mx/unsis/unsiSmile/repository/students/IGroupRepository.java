@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IGroupRepository extends JpaRepository<GroupModel, Long> {
@@ -21,4 +22,7 @@ public interface IGroupRepository extends JpaRepository<GroupModel, Long> {
             @Param("semesterNumber") String semesterNumber,
             @Param("career") CareerModel career,
             @Param("semester") SemesterModel semester);
+
+    @Query("SELECT g FROM GroupModel g WHERE g.career.idCareer = :careerId AND g.statusKey = 'A'")
+    List<GroupModel> findByCareerId(@Param("careerId") String careerId);
 }
