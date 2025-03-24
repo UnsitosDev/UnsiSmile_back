@@ -45,10 +45,10 @@ NOTA DE EVOLUCIÓN]]></text>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="39" splitType="Stretch"/>
+		<band height="5" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="89" splitType="Stretch">
+		<band height="71" splitType="Stretch">
 			<staticText>
 				<reportElement x="10" y="0" width="410" height="22" uuid="bb2e50fb-4965-4a85-b0af-0df9e73cffb7"/>
 				<textElement verticalAlignment="Top">
@@ -151,25 +151,25 @@ ___]]></text>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="394" splitType="Stretch">
+		<band height="521" splitType="Stretch">
 			<textField>
-				<reportElement x="58" y="50" width="100" height="19" uuid="3e889281-1d0b-452f-ae49-5ab201b0a502"/>
+				<reportElement x="66" y="54" width="100" height="19" uuid="3e889281-1d0b-452f-ae49-5ab201b0a502"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{temperature}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="47" y="62" width="100" height="20" uuid="9d8c3475-643d-4827-8340-b79773b4cd6d"/>
+				<reportElement x="54" y="70" width="100" height="20" uuid="9d8c3475-643d-4827-8340-b79773b4cd6d"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{heartRate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="59" y="88" width="100" height="19" uuid="082a9880-a4f5-425b-b0d6-f5fcaeb8c945"/>
+				<reportElement x="230" y="38" width="126" height="19" uuid="082a9880-a4f5-425b-b0d6-f5fcaeb8c945"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{oxygenSaturation}]]></textFieldExpression>
 			</textField>
@@ -195,37 +195,42 @@ ___]]></text>
 				<textFieldExpression><![CDATA[$P{treatment}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="48" y="74" width="100" height="20" uuid="09a5bac0-ec3d-450b-82a7-f21ea9fe6829"/>
+				<reportElement x="55" y="86" width="100" height="20" uuid="09a5bac0-ec3d-450b-82a7-f21ea9fe6829"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{respirationRate}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="188" y="0" width="185" height="30" uuid="a7f4da31-84b4-4f74-96e0-e592a3616de0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="13"/>
 				</textElement>
 				<text><![CDATA[ Actualización del cuadro clínico:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="24" y="0" width="100" height="30" uuid="8c37ec8c-b582-4519-8510-91cbbe33444f"/>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
 				<text><![CDATA[Signos vitales]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="24" y="40" width="116" height="79" uuid="edfe82d4-ee04-4eb1-8299-980226735418"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
 				<text><![CDATA[TA:__________
 Temp:________
 FC:__________
 FR:__________
-SpO2: ______
+
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="50" y="37" width="100" height="18" uuid="e6a10510-51f4-4fbf-8afa-00f1dec10077"/>
+				<reportElement x="50" y="38" width="100" height="18" uuid="e6a10510-51f4-4fbf-8afa-00f1dec10077"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{bloodPressure}]]></textFieldExpression>
 			</textField>
@@ -234,7 +239,7 @@ SpO2: ______
 				<textElement>
 					<font size="13"/>
 				</textElement>
-				<text><![CDATA[Tratamiento/terapéutica empleada:_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+				<text><![CDATA[Tratamiento/terapéutica.empleada:__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="120" width="390" height="30" uuid="66e15a7f-3567-4781-9a5f-47b67853962f"/>
@@ -261,19 +266,22 @@ ________________________________________________________________________________
 ________________________________________________________________________________________]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="11" y="320" width="540" height="64" uuid="a8481f3b-59b7-4dee-9836-13d8c5515321"/>
+				<reportElement x="13" y="318" width="540" height="64" uuid="a8481f3b-59b7-4dee-9836-13d8c5515321"/>
 				<textElement verticalAlignment="Top">
 					<font size="10"/>
 					<paragraph lineSpacing="1_1_2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{indications}]]></textFieldExpression>
 			</textField>
-		</band>
-	</detail>
-	<columnFooter>
-		<band height="92" splitType="Stretch">
 			<staticText>
-				<reportElement x="8" y="21" width="545" height="50" uuid="f920a7ff-e70e-497e-85ea-8012208fdb86"/>
+				<reportElement x="181" y="40" width="100" height="20" uuid="ff63effa-b443-44d9-9b3d-8e158ac634f6"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[SpO2: ______]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="440" width="545" height="50" uuid="f920a7ff-e70e-497e-85ea-8012208fdb86"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
@@ -282,11 +290,14 @@ Firma del paciente:_________________
 Nombre y firma del profesor responsable:______________________________]]></text>
 			</staticText>
 		</band>
+	</detail>
+	<columnFooter>
+		<band height="29" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="31" splitType="Stretch"/>
+		<band height="7" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="8" splitType="Stretch"/>
 	</summary>
 </jasperReport>

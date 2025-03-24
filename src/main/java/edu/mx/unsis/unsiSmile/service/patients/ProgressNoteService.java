@@ -178,7 +178,7 @@ public class ProgressNoteService {
             parameters.put("age", String.valueOf(calculateAge(patient.getPerson().getBirthDate())));
             parameters.put("gender", progressNote.getPatient().getPerson().getGender().getGender());
             parameters.put("origin", getFullOrigin(patient));
-            parameters.put("idProgressNote", patient.getMedicalRecordNumber());
+            parameters.put("idProgressNote", Integer.parseInt(String.valueOf(patient.getMedicalRecordNumber())));
             parameters.put("bloodPressure", progressNote.getBloodPressure());
             parameters.put("temperature", progressNote.getTemperature().intValue());
             parameters.put("heartRate", progressNote.getHeartRate());
