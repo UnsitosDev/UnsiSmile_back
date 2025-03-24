@@ -44,7 +44,7 @@ public class StatusClinicalHistoryController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener un listado de pacintes con una HC en un determinado estado.")
+    @Operation(summary = "Obtener un listado de pacientes con una HC en un determinado estado.")
     @GetMapping("/list")
     public ResponseEntity<Page<PatientResponse>> getStatusClinicalHistoriesByStatus(
             @RequestParam String status,
@@ -68,6 +68,17 @@ public class StatusClinicalHistoryController {
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient,
                                                                                       @RequestParam String status) {
         List<PatientClinicalHistoryResponse> response = statusClinicalHistoryService.searchClinicalHistory(idPatient, status);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente e ID de la sección")
+    @GetMapping("/{idPatientClinicalHistory}/{idSection}")
+    public ResponseEntity<StatusClinicalHistoryResponse> getStatusByPatientClinicalHistoryId(
+            @PathVariable Long idPatientClinicalHistory,
+            @PathVariable Long idSection) {
+        StatusClinicalHistoryResponse response = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(
+                idPatientClinicalHistory,
+                idSection);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
