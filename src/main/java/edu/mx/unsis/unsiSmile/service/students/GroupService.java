@@ -1,19 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -21,10 +8,18 @@ import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
 import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
-import edu.mx.unsis.unsiSmile.repository.students.IGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ICareerRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +36,16 @@ public class GroupService {
         try {
             validateRequest(request);
 
-            SemesterModel semesterModel = findSemesterById(request.getSemester().getIdSemester());
+            SemesterModel semesterModel = semesterService.getActiveSemester()
+                    .orElseThrow(() -> new AppException(ResponseMessages.CURRENT_SEMESTER_INACTIVE,
+                            HttpStatus.BAD_REQUEST));
             CareerModel careerModel = findCareerById(request.getCareer().getIdCareer());
 
             validateGroupExistence(request, careerModel, semesterModel);
 
             GroupModel groupModel = groupMapper.toEntity(request);
+            groupModel.setSemester(semesterModel);
+
             groupRepository.save(groupModel);
         } catch (AppException e) {
             throw e;
@@ -167,14 +166,6 @@ public class GroupService {
         if (request == null) {
             throw new AppException("GroupRequest no puede ser nulo", HttpStatus.BAD_REQUEST);
         }
-        if (request.getSemester().getIdSemester() == null) {
-            throw new AppException("El ID del semestre no puede ser nulo", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    private SemesterModel findSemesterById(Long idSemester) {
-        return semesterRepository.findById(idSemester)
-                .orElseThrow(() -> new AppException("Semester not found with ID: " + idSemester, HttpStatus.NOT_FOUND));
     }
 
     private CareerModel findCareerById(String idCareer) {
