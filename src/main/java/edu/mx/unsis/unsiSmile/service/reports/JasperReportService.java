@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.service.reports;
 
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,11 @@ public class JasperReportService {
     
     public byte[] generatePdfReport(String reportPath, Map<String, Object> parameters) {
         try {
-            ClassPathResource resource = new ClassPathResource(reportPath);
-            InputStream reportStream = resource.getInputStream();
+            ClassPathResource reportResource = new ClassPathResource(reportPath);
+            ClassPathResource logoResource = new ClassPathResource("reports/logo.png");
+            
+            InputStream reportStream = reportResource.getInputStream();
+            InputStream logoStream = logoResource.getInputStream();
 
             if (reportStream == null) {
                 throw new AppException("No se pudo encontrar el archivo de reporte: " + reportPath, 
@@ -25,10 +29,14 @@ public class JasperReportService {
             // Compilar el reporte
             JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
             
+            // Asegurarnos que el logo existe
+            if (!parameters.containsKey("logo")) {
+                parameters.put("logo", logoStream);
+            }
+            
             // Llenar el reporte con los parámetros
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, new JREmptyDataSource());
             
-            // Exportar directamente a PDF
             return JasperExportManager.exportReportToPdf(jasperPrint);
             
         } catch (Exception e) {

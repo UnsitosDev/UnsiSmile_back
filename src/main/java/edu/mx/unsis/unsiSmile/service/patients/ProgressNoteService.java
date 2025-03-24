@@ -188,7 +188,7 @@ public class ProgressNoteService {
             parameters.put("prognosis", progressNote.getPrognosis());
             parameters.put("treatment", progressNote.getTreatment());
             parameters.put("indications", progressNote.getIndications());
-            parameters.put("creationDate", progressNote.getCreatedBy());
+            parameters.put("creationDate", progressNote.getCreatedAt().toString());
 
             byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters);
 
