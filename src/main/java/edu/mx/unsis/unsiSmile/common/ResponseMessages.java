@@ -270,4 +270,9 @@ public class ResponseMessages {
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
 
     public static final String INVALID_STATUS = "Estatus no válido: ";
+
+    public static final String SEMESTER_NOT_FOUND = "Semestre no encontrado";
+    public static final String CURRENT_SEMESTER_INACTIVE = "No hay semestre activo";
+
+    public static final String GROUPS_NOT_FOUND = "No se encontraron grupos para la carrera con ID: ";
 }
