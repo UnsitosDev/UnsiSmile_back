@@ -39,7 +39,7 @@ Clínica de Odontología
 NOTA DE EVOLUCIÓN]]></text>
 			</staticText>
 			<image>
-				<reportElement x="10" y="11" width="60" height="56" uuid="e60e119c-99ad-4954-bd9e-45e30f22ce94"/>
+				<reportElement x="29" y="0" width="106" height="110" uuid="e60e119c-99ad-4954-bd9e-45e30f22ce94"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 		</band>
