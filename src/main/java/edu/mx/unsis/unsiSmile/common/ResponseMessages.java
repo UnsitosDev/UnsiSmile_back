@@ -68,6 +68,7 @@ public class ResponseMessages {
 
     public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado";
     public static final String INVALID_ROLE = "Rol no válido";
+    public static final String ROLE_NOT_FOUND = "Rol no encontrado";
   
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
     public static final String PERSON_REQUEST_NULL = "PersonRequest no puede ser nulo";
@@ -280,4 +281,11 @@ public class ResponseMessages {
     public static final String DUPLICATE_ENTRY = "Duplicate entry";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND_BY_SECTION = "Dental prophylaxis not found with form section ID: ";
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT = "Failed to fetch dental prophylaxis by patient ID";
+
+    public static final String INVALID_STATUS = "Estatus no válido: ";
+
+    public static final String SEMESTER_NOT_FOUND = "Semestre no encontrado";
+    public static final String CURRENT_SEMESTER_INACTIVE = "No hay semestre activo";
+
+    public static final String GROUPS_NOT_FOUND = "No se encontraron grupos para la carrera con ID: ";
 }

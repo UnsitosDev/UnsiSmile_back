@@ -23,7 +23,4 @@ public class GroupRequest {
     @NotNull(message = "The field Career can't be null")
     @Valid
     private CareerRequest career;
-    @NotNull(message = "El campo semesterRequest no puuede ser null")
-    @Valid
-    private SemesterRequest semester;
 }

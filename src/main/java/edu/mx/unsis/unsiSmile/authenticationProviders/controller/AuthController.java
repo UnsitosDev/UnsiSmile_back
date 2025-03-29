@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshRequest;
@@ -20,6 +11,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controlador de autenticación para la aplicación UnsiSmile.
@@ -67,5 +62,12 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
         return ResponseEntity.ok(refreshTokenService.refreshToken(request.getRefreshToken()));
+    }
+
+    @PatchMapping("/resetPasswordToDefault")
+    @PreAuthorize("hasRole('ROLE_ADMIN')") // Solo los administradores pueden restablecer contraseñas
+    public ResponseEntity<Void> resetPasswordToDefault(@RequestParam String username) {
+        authService.resetPasswordToDefault(username);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
-import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,6 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
                 .groupName(dto.getGroupName())
                 .semesterNumber(dto.getSemesterNumber())
                 .career(careerMapper.toEntity(dto.getCareer()))
-                .semester(SemesterModel.builder().idSemester(dto.getSemester().getIdSemester()).build())
                 .build();
     }
 
@@ -33,7 +31,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
     public GroupResponse toDto(GroupModel entity) {
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
-                .groupName(entity.getGroupName())
+                .groupName(formatGroupName(entity))
                 .career(careerMapper.toDto(entity.getCareer()))
                 .semester(semesterMapper.toDto(entity.getSemester()))
                 .build();
@@ -49,5 +47,12 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
     @Override
     public void updateEntity(GroupRequest request, GroupModel entity) {
         entity.setGroupName(request.getGroupName());
+    }
+
+    private String formatGroupName(GroupModel entity) {
+        String baseName = entity.getSemesterNumber() + entity.getCareer().getIdCareer();
+        return (entity.getGroupName() != null && !entity.getGroupName().isEmpty())
+                ? baseName + "-" + entity.getGroupName()
+                : baseName;
     }
 }

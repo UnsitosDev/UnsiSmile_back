@@ -59,4 +59,10 @@ public class GroupController {
         groupService.deleteGroupById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/career/{careerId}")
+    public ResponseEntity<List<GroupResponse>> getGroupsByCareer(@PathVariable String careerId) {
+        List<GroupResponse> groups = groupService.getGroupsByCareer(careerId);
+        return ResponseEntity.ok(groups);
+    }
 }
