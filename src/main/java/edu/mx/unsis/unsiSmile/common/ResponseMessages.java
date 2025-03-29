@@ -269,6 +269,19 @@ public class ResponseMessages {
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
 
+    // Dental Prophylaxis Request
+    public static final String PATIENT_ID_CANNOT_BE_NULL = "El ID del paciente no puede ser nulo";
+    public static final String QUESTION_ID_CANNOT_BE_NULL = "El ID de la pregunta no puede ser nulo";
+    public static final String CLINICAL_HISTORY_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
+    public static final String FORM_SECTION_ID_CANNOT_BE_NULL = "El ID de la sección del formulario no puede ser nulo";
+
+    public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS = "Failed to fetch dental prophylaxis";
+    public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "Dental prophylaxis not found with ID: ";
+    public static final String FAILED_DELETE_DENTAL_PROPHYLAXIS = "Failed to delete dental prophylaxis";
+    public static final String DUPLICATE_ENTRY = "Duplicate entry";
+    public static final String DENTAL_PROPHYLAXIS_NOT_FOUND_BY_SECTION = "Dental prophylaxis not found with form section ID: ";
+    public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT = "Failed to fetch dental prophylaxis by patient ID";
+
     public static final String INVALID_STATUS = "Estatus no válido: ";
 
     public static final String SEMESTER_NOT_FOUND = "Semestre no encontrado";
