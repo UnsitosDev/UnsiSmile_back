@@ -1,0 +1,8 @@
+package edu.mx.unsis.unsiSmile.repository.medicalHistories;
+
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.utils.ProphylaxisToothFaceConditionAssignmentId;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface IProphylaxisToothfaceConditionsAssignmentRepository extends JpaRepository<ProphylaxisToothfaceConditionsAssignmentModel, ProphylaxisToothFaceConditionAssignmentId> {
+}
