@@ -16,10 +16,10 @@ import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 

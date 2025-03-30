@@ -14,7 +14,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothConditionReques
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothConditionMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionRepository;
 import lombok.RequiredArgsConstructor;
 
