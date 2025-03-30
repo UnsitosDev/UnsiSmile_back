@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.teeth;
 
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,12 +11,12 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "form_component_tooth_conditions")
-public class FormComponentToothConditionModel extends AuditModel {
+@Table(name = "form_component_tooth_faces")
+public class FormComponentToothFaceModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_form_component_tooth_condition")
+    @Column(name = "id_form_component_tooth_face")
     private Long id;
 
     @ManyToOne
@@ -23,6 +24,6 @@ public class FormComponentToothConditionModel extends AuditModel {
     private FormComponentModel formComponent;
 
     @ManyToOne
-    @JoinColumn(name = "fk_tooth_condition", nullable = false)
-    private ToothConditionModel toothCondition;
+    @JoinColumn(name = "fk_tooth_face", nullable = false)
+    private ToothFaceConditionModel toothFace;
 }
