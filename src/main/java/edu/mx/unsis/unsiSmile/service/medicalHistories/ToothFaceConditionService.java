@@ -15,7 +15,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothFaceConditionR
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothFaceConditionRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

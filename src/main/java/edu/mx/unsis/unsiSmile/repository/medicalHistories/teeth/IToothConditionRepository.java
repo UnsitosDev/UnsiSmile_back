@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.repository.medicalHistories;
+package edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth;
 
 import java.util.Optional;
 
