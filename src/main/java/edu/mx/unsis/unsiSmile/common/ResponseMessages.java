@@ -288,4 +288,14 @@ public class ResponseMessages {
     public static final String CURRENT_SEMESTER_INACTIVE = "No hay semestre activo";
 
     public static final String GROUPS_NOT_FOUND = "No se encontraron grupos para la carrera con ID: ";
+
+    // FormComponent Request
+    public static final String NOT_NULL_DESCRIPTION_FIELD = "El campo descripción no puede ser nulo";
+    public static final String NOT_BLANK_DESCRIPTION_FIELD = "El campo descripción no puede estar en blanco";
+    public static final String FAILED_CREATE_FORM_COMPONENT = "Error al crear el componente";
+    public static final String FORM_COMPONENT_NOT_FOUND = "Componente no encontrado con id: %s";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENT = "Error al obtener el componente";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENTS = "Error al obtener los componentes";
+    public static final String FAILED_UPDATE_FORM_COMPONENT = "Error al actualizar el componente";
+    public static final String FAILED_DELETE_FORM_COMPONENT = "Error al eliminar el componente";
 }
