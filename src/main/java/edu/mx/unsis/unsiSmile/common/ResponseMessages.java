@@ -314,4 +314,14 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al actualizar la condición de cara de diente del componente";
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al eliminar la condición de cara de diente del componente";
 
+    // FormComponentToothCondition request
+    public static final String NOT_NULL_ID_TOOTH_CONDITION = "El campo idToothCondition no puede ser nulo";
+    public static final String POSITIVE_ID_TOOTH_CONDITION = "El campo idToothCondition debe ser mayor a 0";
+
+    public static final String FAILED_CREATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al crear la relación de condición de diente y el componente";
+    public static final String FORM_COMPONENT_TOOTH_CONDITION_NOT_FOUND = "Condición de diente del componente no encontrada con id: %s";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENT_TOOTH_CONDITION = "Error al obtener la condición de diente del componente";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENTS_TOOTH_CONDITION = "Error al obtener las condiciones de diente de los componentes";
+    public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al actualizar la condición de diente del componente";
+    public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
 }
