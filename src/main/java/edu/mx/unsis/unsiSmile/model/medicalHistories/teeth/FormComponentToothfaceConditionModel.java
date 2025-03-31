@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.teeth;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;

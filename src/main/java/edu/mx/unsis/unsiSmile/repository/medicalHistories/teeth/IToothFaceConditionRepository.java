@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
