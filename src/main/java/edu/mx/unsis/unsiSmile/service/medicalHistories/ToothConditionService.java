@@ -1,22 +1,21 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothConditionRepository;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.teeth.FormComponentToothConditionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class ToothConditionService {
 
     private final IToothConditionRepository toothConditionRepository;
     private final ToothConditionMapper toothConditionMapper;
+    private final FormComponentToothConditionService formComponentToothConditionService;
 
     @Transactional
     public ToothConditionResponse createToothCondition(@NonNull ToothConditionRequest toothConditionRequest) {
@@ -52,12 +52,11 @@ public class ToothConditionService {
     }
 
     @Transactional(readOnly = true)
-    public List<ToothConditionResponse> getAllToothConditions() {
+    public List<ToothConditionResponse> getAllToothConditions(String formName) {
         try {
-            List<ToothConditionModel> allToothConditions = toothConditionRepository.findAll();
-            return allToothConditions.stream()
-                    .map(toothConditionMapper::toDto)
-                    .collect(Collectors.toList());
+            return formComponentToothConditionService.getToothConditionsByComponent(formName);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch tooth conditions", HttpStatus.INTERNAL_SERVER_ERROR);
         }

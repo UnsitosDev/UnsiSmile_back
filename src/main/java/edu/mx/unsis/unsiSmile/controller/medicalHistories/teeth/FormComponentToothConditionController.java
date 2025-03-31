@@ -50,10 +50,4 @@ public class FormComponentToothConditionController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/by-form-component/{idFormComponent}")
-    public ResponseEntity<List<ToothConditionResponse>> getToothConditionsByComponent(@PathVariable Long idFormComponent) {
-        List<ToothConditionResponse> responses = service.getToothConditionsByComponent(idFormComponent);
-        return ResponseEntity.ok(responses);
-    }
 }

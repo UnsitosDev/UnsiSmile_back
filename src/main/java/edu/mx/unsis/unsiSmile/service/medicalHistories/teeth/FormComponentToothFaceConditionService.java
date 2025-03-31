@@ -105,11 +105,11 @@ public class FormComponentToothFaceConditionService {
     }
 
     @Transactional(readOnly = true)
-    public List<ToothFaceConditionResponse> getToothFacesByComponent(@NonNull Long idFormComponent) {
+    public List<ToothFaceConditionResponse> getToothFacesByComponent(@NonNull String formName) {
         try {
-            FormComponentModel formComponent = formComponentRepository.findById(idFormComponent)
+            FormComponentModel formComponent = formComponentRepository.findByDescription(formName)
                     .orElseThrow(()-> new AppException(
-                            String.format(ResponseMessages.FORM_COMPONENT_NOT_FOUND, idFormComponent),
+                            ResponseMessages.FORM_COMPONENT_NOT_FOUND,
                             HttpStatus.NOT_FOUND));
 
             List<FormComponentToothfaceConditionModel> models = formComponentToothFaceConditionRepository.findByFormComponent(formComponent);

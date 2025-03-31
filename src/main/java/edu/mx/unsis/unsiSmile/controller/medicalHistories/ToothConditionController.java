@@ -38,10 +38,10 @@ public class ToothConditionController {
         return ResponseEntity.ok(toothConditionResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ToothConditionResponse>> getAllToothConditions() {
-        List<ToothConditionResponse> allToothConditions = toothConditionService.getAllToothConditions();
-        return ResponseEntity.ok(allToothConditions);
+    @GetMapping()
+    public ResponseEntity<List<ToothConditionResponse>> getOdontogramConditions() {
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Odontograma");
+        return ResponseEntity.ok(conditions);
     }
 
     @PutMapping("/{id}")
@@ -66,4 +66,16 @@ public class ToothConditionController {
     //         return ResponseEntity.notFound().build();
     //     }
     // }
+
+    @GetMapping("/profilaxis")
+    public ResponseEntity<List<ToothConditionResponse>> getProfilaxisConditions() {
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Profilaxis Dental");
+        return ResponseEntity.ok(conditions);
+    }
+
+    @GetMapping("/fluorosis")
+    public ResponseEntity<List<ToothConditionResponse>> getFluorosisConditions() {
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Fluorosis");
+        return ResponseEntity.ok(conditions);
+    }
 }
