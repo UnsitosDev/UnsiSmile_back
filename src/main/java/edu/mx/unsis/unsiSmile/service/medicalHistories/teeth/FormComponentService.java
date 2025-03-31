@@ -46,6 +46,8 @@ public class FormComponentService {
                             HttpStatus.NOT_FOUND));
 
             return formComponentMapper.toDto(formComponentModel);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_FORM_COMPONENT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -77,6 +79,8 @@ public class FormComponentService {
             FormComponentModel updatedFormComponent = formComponentRepository.save(existingFormComponent);
 
             return formComponentMapper.toDto(updatedFormComponent);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_UPDATE_FORM_COMPONENT, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,6 +95,8 @@ public class FormComponentService {
                         HttpStatus.NOT_FOUND);
             }
             formComponentRepository.deleteById(id);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_DELETE_FORM_COMPONENT, HttpStatus.INTERNAL_SERVER_ERROR);
         }

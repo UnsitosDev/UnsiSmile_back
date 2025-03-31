@@ -50,6 +50,8 @@ public class FormComponentToothFaceConditionService {
                             HttpStatus.NOT_FOUND));
 
             return formComponentToothFaceConditionMapper.toDto(model);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_FORM_COMPONENT_TOOTH_FACE_CONDITION, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -79,6 +81,8 @@ public class FormComponentToothFaceConditionService {
             FormComponentToothfaceConditionModel updatedModel = formComponentToothFaceConditionRepository.save(existingModel);
 
             return formComponentToothFaceConditionMapper.toDto(updatedModel);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_UPDATE_FORM_COMPONENT_TOOTH_FACE_CONDITION, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -93,6 +97,8 @@ public class FormComponentToothFaceConditionService {
                         HttpStatus.NOT_FOUND);
             }
             formComponentToothFaceConditionRepository.deleteById(id);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_DELETE_FORM_COMPONENT_TOOTH_FACE_CONDITION, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -111,6 +117,8 @@ public class FormComponentToothFaceConditionService {
             return models.stream()
                     .map(model -> formComponentToothFaceConditionMapper.toDto(model).getToothFaceCondition())
                     .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_FORM_COMPONENTS_TOOTH_FACE_CONDITION, HttpStatus.INTERNAL_SERVER_ERROR);
         }
