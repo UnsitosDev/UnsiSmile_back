@@ -89,15 +89,6 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:3.0.20'
     implementation 'org.apache.xmlgraphics:batik-bridge:1.16'
     implementation 'org.apache.xmlgraphics:batik-svggen:1.16'
-    
-    // Excluir dependencias conflictivas
-    configurations {
-        all*.exclude group: 'com.itextpdf', module: 'itext-asian'
-        all*.exclude group: 'bouncycastle', module: 'bcmail-jdk14'
-        all*.exclude group: 'bouncycastle', module: 'bcprov-jdk14'
-        all*.exclude group: 'org.bouncycastle', module: 'bctsp-jdk14'
-    }
-    
     // Dependencias adicionales para resolver conflictos
     implementation('com.itextpdf:itext-asian:5.2.0')
     implementation('org.olap4j:olap4j:1.2.0')
