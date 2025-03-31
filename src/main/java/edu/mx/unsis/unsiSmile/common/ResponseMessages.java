@@ -292,10 +292,26 @@ public class ResponseMessages {
     // FormComponent Request
     public static final String NOT_NULL_DESCRIPTION_FIELD = "El campo descripción no puede ser nulo";
     public static final String NOT_BLANK_DESCRIPTION_FIELD = "El campo descripción no puede estar en blanco";
+
     public static final String FAILED_CREATE_FORM_COMPONENT = "Error al crear el componente";
     public static final String FORM_COMPONENT_NOT_FOUND = "Componente no encontrado con id: %s";
     public static final String FAILED_TO_FETCH_FORM_COMPONENT = "Error al obtener el componente";
     public static final String FAILED_TO_FETCH_FORM_COMPONENTS = "Error al obtener los componentes";
     public static final String FAILED_UPDATE_FORM_COMPONENT = "Error al actualizar el componente";
     public static final String FAILED_DELETE_FORM_COMPONENT = "Error al eliminar el componente";
+
+    // FormComponentToothFace request
+    public static final String NOT_NULL_ID_FORM_COMPONENT = "El campo idFormComponent no puede ser nulo";
+    public static final String POSITIVE_ID_FORM_COMPONENT = "El campo idFormComponent debe ser mayor a 0";
+
+    public static final String NOT_NULL_ID_TOOTH_FACE_CONDITION = "El campo idToothFaceCondition no puede ser nulo";
+    public static final String POSITIVE_ID_TOOTH_FACE_CONDITION = "El campo idToothFaceCondition debe ser mayor a 0";
+
+    public static final String FAILED_CREATE_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al crear la relación de condición de cara de diente y el componente";
+    public static final String FORM_COMPONENT_TOOTH_FACE_CONDITION_NOT_FOUND = "Condición de cara de diente del componente no encontrada con id: %s";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al obtener la condición de cara de diente del componente";
+    public static final String FAILED_TO_FETCH_FORM_COMPONENTS_TOOTH_FACE_CONDITION = "Error al obtener las condiciones de cara de diente de los componentes";
+    public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al actualizar la condición de cara de diente del componente";
+    public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_FACE_CONDITION = "Error al eliminar la condición de cara de diente del componente";
+
 }
