@@ -28,6 +28,7 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
+import edu.mx.unsis.unsiSmile.service.reports.ProgressNoteReportParameters;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,16 +42,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -172,25 +167,25 @@ public class ProgressNoteService {
         PatientModel patient = progressNote.getPatient();
         
         try {
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("name", validationUtils.getFullNameFromPerson(patient.getPerson()));
-            parameters.put("birthDate", java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
-            parameters.put("age", String.valueOf(calculateAge(patient.getPerson().getBirthDate())));
-            parameters.put("gender", progressNote.getPatient().getPerson().getGender().getGender());
-            parameters.put("origin", getFullOrigin(patient));
-            parameters.put("idProgressNote", Integer.parseInt(String.valueOf(patient.getMedicalRecordNumber())));
-            parameters.put("bloodPressure", progressNote.getBloodPressure());
-            parameters.put("temperature", progressNote.getTemperature().intValue());
-            parameters.put("heartRate", progressNote.getHeartRate());
-            parameters.put("respirationRate", progressNote.getRespiratoryRate());
-            parameters.put("oxygenSaturation", progressNote.getOxygenSaturation().intValue());
-            parameters.put("diagnosis", progressNote.getDiagnosis());
-            parameters.put("prognosis", progressNote.getPrognosis());
-            parameters.put("treatment", progressNote.getTreatment());
-            parameters.put("indications", progressNote.getIndications());
-            parameters.put("creationDate", progressNote.getCreatedAt().toString());
+            ProgressNoteReportParameters parameters = new ProgressNoteReportParameters();
+            parameters.setName(validationUtils.getFullNameFromPerson(patient.getPerson()));
+            parameters.setBirthDate(java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
+            parameters.setAge(calculateAge(patient.getPerson().getBirthDate()));
+            parameters.setGender(progressNote.getPatient().getPerson().getGender().getGender());
+            parameters.setOrigin(getFullOrigin(patient));
+            parameters.setIdProgressNote(patient.getMedicalRecordNumber().intValue());
+            parameters.setBloodPressure(progressNote.getBloodPressure());
+            parameters.setTemperature(progressNote.getTemperature().intValue());
+            parameters.setHeartRate(progressNote.getHeartRate());
+            parameters.setRespirationRate(progressNote.getRespiratoryRate());
+            parameters.setOxygenSaturation(progressNote.getOxygenSaturation().intValue());
+            parameters.setDiagnosis(progressNote.getDiagnosis());
+            parameters.setPrognosis(progressNote.getPrognosis());
+            parameters.setTreatment(progressNote.getTreatment());
+            parameters.setIndications(progressNote.getIndications());
+            parameters.setCreationDate(progressNote.getCreatedAt().toString());
 
-            byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters);
+            byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters.toMap());
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
