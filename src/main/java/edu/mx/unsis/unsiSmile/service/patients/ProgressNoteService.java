@@ -71,7 +71,6 @@ public class ProgressNoteService {
             Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
             PatientModel patient = getPatientById(request.getPatientId());
-            StudentModel student = getCurrentStudent();
             ProfessorClinicalAreaModel professorClinicalArea = getProfessorClinicalAreaById(request.getProfessorClinicalAreaId());
 
             ProgressNoteModel progressNote = progressNoteMapper.toEntity(request);
@@ -183,7 +182,7 @@ public class ProgressNoteService {
             parameters.setPrognosis(progressNote.getPrognosis());
             parameters.setTreatment(progressNote.getTreatment());
             parameters.setIndications(progressNote.getIndications());
-            parameters.setCreationDate(progressNote.getCreatedAt().toString());
+            parameters.setCreationDate(progressNote.getCreatedAt().toString().substring(0, 10)); // Cortar hasta "yyyy-MM-dd"
 
             byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters.toMap());
 
@@ -228,12 +227,6 @@ public class ProgressNoteService {
     private PatientModel getPatientById(String patientId) {
         return patientRepository.findById(patientId)
                 .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId, HttpStatus.NOT_FOUND));
-    }
-
-    private StudentModel getCurrentStudent() {
-        String studentId = userService.getCurrentUser().getUsername();
-        return studentRepository.findById(studentId)
-                .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: " + studentId, HttpStatus.NOT_FOUND));
     }
 
     private ProfessorClinicalAreaModel getProfessorClinicalAreaById(Long catalogOptionId) {
