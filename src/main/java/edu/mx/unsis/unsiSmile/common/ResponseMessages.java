@@ -55,6 +55,8 @@ public class ResponseMessages {
     public static final String ERROR_CREATING_PROGRESS_NOTE = "Error al crear la nota de evolución. ";
     public static final String ERROR_FETCHING_PROGRESS_NOTES = "Error al obtener las notas de evolución del paciente.";
     public static final String PATIENT_NOT_FOUND_PROGRESS_NOTES = "No se encontraron notas de evolución para el paciente con ID: ";
+    public static final String ERROR_REPORT_NOT_FOUND = "No se pudo encontrar el archivo de notas de evolución: ";
+    public static final String ERROR_GENERATING_REPORT = "Error al generar el PDF de notas de evolución: ";
     public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser nulL.";
 
