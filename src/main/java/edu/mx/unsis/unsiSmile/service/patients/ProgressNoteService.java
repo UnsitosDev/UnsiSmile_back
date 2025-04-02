@@ -27,6 +27,8 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
+import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
+import edu.mx.unsis.unsiSmile.service.reports.ProgressNoteReportParameters;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,15 +36,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,6 +63,7 @@ public class ProgressNoteService {
     private final UserService userService;
     private final ProgressNoteFileMapper progressNoteFileMapper;
     private final ValidationUtils validationUtils;
+    private final JasperReportService jasperReportService;
 
     @Transactional
     public ProgressNoteResponse createProgressNote(@NonNull ProgressNoteRequest request) {
@@ -69,7 +71,6 @@ public class ProgressNoteService {
             Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
             PatientModel patient = getPatientById(request.getPatientId());
-            StudentModel student = getCurrentStudent();
             ProfessorClinicalAreaModel professorClinicalArea = getProfessorClinicalAreaById(request.getProfessorClinicalAreaId());
 
             ProgressNoteModel progressNote = progressNoteMapper.toEntity(request);
@@ -159,20 +160,50 @@ public class ProgressNoteService {
     }
 
     public ResponseEntity<byte[]> downloadProgressNoteById(String id) {
-        ProgressNoteFileModel fileModel = progressNoteFileRepository.findById(id)
+        ProgressNoteModel progressNote = progressNoteRepository.findById(id)
                 .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
 
+        PatientModel patient = progressNote.getPatient();
+        
         try {
-            Path filePath = Paths.get(fileModel.getUrl());
-            byte[] fileBytes = Files.readAllBytes(filePath);
+            ProgressNoteReportParameters parameters = new ProgressNoteReportParameters();
+            parameters.setName(validationUtils.getFullNameFromPerson(patient.getPerson()));
+            parameters.setBirthDate(java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
+            parameters.setAge(calculateAge(patient.getPerson().getBirthDate()));
+            parameters.setGender(progressNote.getPatient().getPerson().getGender().getGender());
+            parameters.setOrigin(getFullOrigin(patient));
+            parameters.setIdProgressNote(patient.getMedicalRecordNumber().intValue());
+            parameters.setBloodPressure(progressNote.getBloodPressure());
+            parameters.setTemperature(progressNote.getTemperature().intValue());
+            parameters.setHeartRate(progressNote.getHeartRate());
+            parameters.setRespirationRate(progressNote.getRespiratoryRate());
+            parameters.setOxygenSaturation(progressNote.getOxygenSaturation().intValue());
+            parameters.setDiagnosis(progressNote.getDiagnosis());
+            parameters.setPrognosis(progressNote.getPrognosis());
+            parameters.setTreatment(progressNote.getTreatment());
+            parameters.setIndications(progressNote.getIndications());
+            parameters.setCreationDate(progressNote.getCreatedAt().toString().substring(0, 10)); // Cortar hasta "yyyy-MM-dd"
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getUrl() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
-                    .body(fileBytes);
+            byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters.toMap());
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"progress_note_" + id + ".pdf\"")
+                    .body(pdfBytes);
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_WHILE_DOWNLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
+    }
+
+    private String getFullOrigin(PatientModel patient) {
+        return String.format("%s, %s, %s",
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getName(),
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getMunicipality().getName(),
+                patient.getAddress().getStreet().getNeighborhood().getLocality().getMunicipality().getState().getName());
+    }
+
+    private Integer calculateAge(LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
     private String getStudent(String userId) {
@@ -196,12 +227,6 @@ public class ProgressNoteService {
     private PatientModel getPatientById(String patientId) {
         return patientRepository.findById(patientId)
                 .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId, HttpStatus.NOT_FOUND));
-    }
-
-    private StudentModel getCurrentStudent() {
-        String studentId = userService.getCurrentUser().getUsername();
-        return studentRepository.findById(studentId)
-                .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + " con ID: " + studentId, HttpStatus.NOT_FOUND));
     }
 
     private ProfessorClinicalAreaModel getProfessorClinicalAreaById(Long catalogOptionId) {
