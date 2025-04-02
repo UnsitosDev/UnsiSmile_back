@@ -69,7 +69,7 @@ public class ToothConditionController {
     // }
 
     @GetMapping("/prophylaxis")
-    public ResponseEntity<List<ToothConditionResponse>> getProfilaxisConditions() {
+    public ResponseEntity<List<ToothConditionResponse>> getProphylaxisConditions() {
         List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions(Constants.PROPHYLAXIS);
         return ResponseEntity.ok(conditions);
     }
