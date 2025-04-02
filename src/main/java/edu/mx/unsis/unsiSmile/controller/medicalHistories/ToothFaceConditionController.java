@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothFaceConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ToothFaceConditionService;
@@ -32,7 +33,7 @@ public class ToothFaceConditionController {
 
     @GetMapping
     public ResponseEntity<List<ToothFaceConditionResponse>> getOdontogramConditions() {
-        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions("Odontograma");
+        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions(Constants.ODONTOGRAM);
         return ResponseEntity.ok(conditions);
     }
 
@@ -59,15 +60,15 @@ public class ToothFaceConditionController {
     //     }
     // }
 
-    @GetMapping("/profilaxis")
+    @GetMapping("/prophylaxis")
     public ResponseEntity<List<ToothFaceConditionResponse>> getProfilaxisConditions() {
-        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions("Profilaxis Dental");
+        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions(Constants.PROPHYLAXIS);
         return ResponseEntity.ok(conditions);
     }
 
     @GetMapping("/fluorosis")
     public ResponseEntity<List<ToothFaceConditionResponse>> getFluorosisConditions() {
-        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions("Fluorosis");
+        List<ToothFaceConditionResponse> conditions = toothFaceConditionService.getAllToothConditions(Constants.FLUOROSIS);
         return ResponseEntity.ok(conditions);
     }
 }

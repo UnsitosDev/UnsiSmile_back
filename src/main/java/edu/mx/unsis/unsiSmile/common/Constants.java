@@ -15,4 +15,7 @@ public class Constants {
     //upload files path
     public static final String UPLOAD_PATH = "uploads/";
 
+    public static final String ODONTOGRAM = "Odontograma";
+    public static final String PROPHYLAXIS = "Profilaxis Dental";
+    public static final String FLUOROSIS =  "Fluorosis";
 }

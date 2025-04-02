@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class ToothConditionController {
 
     @GetMapping()
     public ResponseEntity<List<ToothConditionResponse>> getOdontogramConditions() {
-        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Odontograma");
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions(Constants.ODONTOGRAM);
         return ResponseEntity.ok(conditions);
     }
 
@@ -67,15 +68,15 @@ public class ToothConditionController {
     //     }
     // }
 
-    @GetMapping("/profilaxis")
+    @GetMapping("/prophylaxis")
     public ResponseEntity<List<ToothConditionResponse>> getProfilaxisConditions() {
-        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Profilaxis Dental");
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions(Constants.PROPHYLAXIS);
         return ResponseEntity.ok(conditions);
     }
 
     @GetMapping("/fluorosis")
     public ResponseEntity<List<ToothConditionResponse>> getFluorosisConditions() {
-        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions("Fluorosis");
+        List<ToothConditionResponse> conditions = toothConditionService.getAllToothConditions(Constants.FLUOROSIS);
         return ResponseEntity.ok(conditions);
     }
 }
