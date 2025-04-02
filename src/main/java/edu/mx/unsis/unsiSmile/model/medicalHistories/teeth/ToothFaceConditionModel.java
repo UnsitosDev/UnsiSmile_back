@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
+package edu.mx.unsis.unsiSmile.model.medicalHistories.teeth;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.Column;
@@ -19,14 +19,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "tooth_conditions")
-public class ToothConditionModel extends AuditModel{
+@Table(name = "toothface_conditions")
+public class ToothFaceConditionModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tooth_condition")
-    private Long idToothCondition;
+    @Column(name = "id_toothface_conditions")
+    private Long idToothFaceCondition;
 
     @Column(name = "description", length = 50, nullable = false)
     private String description;
+
 }

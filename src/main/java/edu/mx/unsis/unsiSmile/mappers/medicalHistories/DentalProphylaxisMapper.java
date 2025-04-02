@@ -6,6 +6,10 @@ import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.DentalProphylaxisModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.*;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 

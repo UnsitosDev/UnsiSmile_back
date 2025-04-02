@@ -1,6 +1,9 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
 
 import edu.mx.unsis.unsiSmile.model.medicalHistories.DentalProphylaxisModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import edu.mx.unsis.unsiSmile.model.utils.ProphylaxisToothFaceConditionAssignmentId;
 import jakarta.persistence.*;
