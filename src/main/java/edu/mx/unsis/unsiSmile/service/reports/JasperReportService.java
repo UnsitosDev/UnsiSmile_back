@@ -6,15 +6,13 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import java.io.InputStream;
 import java.util.Map;
 
 @Service
 public class JasperReportService {
     
-    private static final String ERROR_REPORT_NOT_FOUND = "No se pudo encontrar el archivo de reporte: ";
-    private static final String ERROR_GENERATING_REPORT = "Error al generar el reporte PDF: ";
     
     public byte[] generatePdfReport(String reportPath, Map<String, Object> parameters) {
         try {
@@ -25,7 +23,7 @@ public class JasperReportService {
             InputStream logoStream = logoResource.getInputStream();
 
             if (reportStream == null) {
-                throw new AppException(ERROR_REPORT_NOT_FOUND + reportPath, HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new AppException(ResponseMessages.ERROR_REPORT_NOT_FOUND + reportPath, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
             // Compilar el reporte
@@ -42,7 +40,7 @@ public class JasperReportService {
             return JasperExportManager.exportReportToPdf(jasperPrint);
             
         } catch (Exception e) {
-            throw new AppException(ERROR_GENERATING_REPORT + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.ERROR_GENERATING_REPORT + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
