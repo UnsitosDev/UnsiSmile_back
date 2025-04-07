@@ -83,12 +83,17 @@ INSERT INTO scope_types (name) VALUES
     ('Prótesis'), 
     ('General');
 
--- Poblado de treatment_scopes
-INSERT INTO treatment_scopes (fk_scope_type, scope_name) VALUES
-    (1, 'Órgano dentario'),  -- Diente
-    (2, 'Cuadrante'),        -- Cuadrante
-    (3, 'Por prótesis'),     -- Prótesis
-    (4, 'General');          -- General
+INSERT INTO treatment_scopes (fk_scope_type, scope_name)
+VALUES
+    (1, 'Diente'),
+    (2, 'Cuadrante 1'),
+    (2, 'Cuadrante 2'),
+    (2, 'Cuadrante 3'),
+    (2, 'Cuadrante 4'),
+    (3, 'Prótesis removible'),
+    (3, 'Prótesis fija'),
+    (3, 'Prostodoncia'),
+    (4, 'General');
 
 -- Poblado de treatments
 INSERT INTO treatments (name, fk_treatment_scope, fk_clinical_history_catalog) VALUES
