@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentScopeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentScopeResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentScopeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class TreatmentScopeController {
     private final TreatmentScopeService treatmentScopeService;
 
     @PostMapping
-    public ResponseEntity<TreatmentScopeResponse> createTreatmentScope(@RequestBody TreatmentScopeRequest request) {
+    public ResponseEntity<TreatmentScopeResponse> createTreatmentScope(@Valid @RequestBody TreatmentScopeRequest request) {
         TreatmentScopeResponse response = treatmentScopeService.createTreatmentScope(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

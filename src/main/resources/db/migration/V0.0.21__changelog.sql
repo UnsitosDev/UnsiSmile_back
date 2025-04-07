@@ -24,15 +24,15 @@ CREATE TABLE treatment_scopes (
 CREATE TABLE treatments (
     id_treatment BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    fk_treatment_scope BIGINT(20) NOT NULL,
-    cost DECIMAL(10,2),
+    fk_scope_type BIGINT(20) NOT NULL,
+    cost DECIMAL(10,2) DEFAULT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    fk_clinical_history_catalog BIGINT(20) DEFAULT NULL,
-    FOREIGN KEY (fk_treatment_scope) REFERENCES treatment_scopes(id_scope),
+    fk_clinical_history_catalog BIGINT(20) NOT NULL,
+    FOREIGN KEY (fk_scope_type) REFERENCES scope_types(id_scope_type),
     FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog)
 );
 
@@ -96,7 +96,7 @@ VALUES
     (4, 'General');
 
 -- Poblado de treatments
-INSERT INTO treatments (name, fk_treatment_scope, fk_clinical_history_catalog) VALUES
+INSERT INTO treatments (name, fk_scope_type, fk_clinical_history_catalog) VALUES
 -- Operatoria dental
 ('Resinas', 1, 4),  -- Órgano dentario, HC Operatoria dental
 

@@ -354,4 +354,25 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_SCOPES_BY_TYPE = "Error al obtener los alcances del tratamiento por tipo";
     public static final String FAILED_UPDATE_TREATMENT_SCOPE = "Error al actualizar el alcance del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_SCOPE = "Error al eliminar el alcance del tratamiento";
+
+    // Treatment Request
+    public static final String NOT_BLANK_TREATMENT_NAME = "El nombre del tratamiento no puede estar vacío";
+    public static final String MAX_LENGTH_TREATMENT_NAME = "El nombre del tratamiento debe tener como máximo 100 caracteres";
+
+    public static final String DIGITS_TREATMENT_COST = "El costo debe tener hasta 8 dígitos enteros y 2 decimales";
+
+    public static final String NOT_NULL_CATALOG_ID = "El ID del catálogo de historia clínica no puede ser nulo";
+    public static final String POSITIVE_CATALOG_ID = "El ID del catálogo de historia clínica debe ser un número positivo";
+
+    // Treatment Messages
+    public static final String TREATMENT_NAME_EXISTS = "El nombre del tratamiento ya existe";
+    public static final String TREATMENT_NOT_FOUND = "No se encontró el tratamiento con ID: ";
+    public static final String FAILED_CREATE_TREATMENT = "Error al crear el tratamiento";
+    public static final String FAILED_FETCH_TREATMENT = "Error al obtener el tratamiento";
+    public static final String FAILED_FETCH_TREATMENTS = "Error al obtener los tratamientos";
+    public static final String FAILED_FETCH_TREATMENTS_BY_SCOPE = "Error al obtener tratamientos por alcance";
+    public static final String FAILED_FETCH_TREATMENTS_BY_HISTORY = "Error al obtener tratamientos por historial clínico";
+    public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
+    public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
+    public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
 }
