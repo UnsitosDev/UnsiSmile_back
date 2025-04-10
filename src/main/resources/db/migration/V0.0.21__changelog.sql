@@ -86,10 +86,7 @@ INSERT INTO scope_types (name) VALUES
 INSERT INTO treatment_scopes (fk_scope_type, scope_name)
 VALUES
     (1, 'Diente'),
-    (2, 'Cuadrante 1'),
-    (2, 'Cuadrante 2'),
-    (2, 'Cuadrante 3'),
-    (2, 'Cuadrante 4'),
+    (2, 'Cuadrante'),
     (3, 'Prótesis removible'),
     (3, 'Prótesis fija'),
     (3, 'Prostodoncia'),

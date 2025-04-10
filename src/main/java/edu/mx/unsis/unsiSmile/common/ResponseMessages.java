@@ -345,6 +345,8 @@ public class ResponseMessages {
     // TreatmentScope Request
     public static final String NOT_BLANK_SCOPE_NAME = "El nombre del alcance no puede estar vacío";
     public static final String NOT_NULL_SCOPE_NAME = "El nombre del alcance no puede ser nulo";
+    public static final String TREATMENT_SCOPE_ID_CANNOT_BE_NULL = "El ID del alcance del tratamiento no puede ser nulo";
+    public static final String POSITIVE_TREATMENT_SCOPE_ID = "El ID del alcance del tratamiento debe ser un número positivo";
 
     public static final String FAILED_CREATE_TREATMENT_SCOPE = "Error al crear el alcance del tratamiento";
     public static final String TREATMENT_SCOPE_NAME_EXISTS = "El nombre del alcance del tratamiento ya existe";
@@ -375,4 +377,7 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
     public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
+    public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
+    public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
+    public static final String TREATMENT_DATE_CANNOT_BE_NULL  = "La fecha del tratamiento no puede ser nula";
 }
