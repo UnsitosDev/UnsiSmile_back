@@ -380,4 +380,19 @@ public class ResponseMessages {
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
     public static final String TREATMENT_DATE_CANNOT_BE_NULL  = "La fecha del tratamiento no puede ser nula";
+    public static final String SIZE_TREATMENT_STATUS = "El estado del tratamiento debe tener como máximo 50 caracteres";
+
+    // TreatmentDetail
+    public static final String TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL = "El request de organos dentarios del tratamiento no puede ser nulo";
+    public static final String FAILED_CREATE_TREATMENT_DETAIL = "Error al crear el detalle del tratamiento";
+    public static final String TREATMENT_DETAIL_NOT_FOUND = "No se encontró el registro de detalle del tratamiento con ID: %s";
+
+    //TreatmentDetailTooth
+    public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
+    public static final String DUPLICATE_TEETH_IDS = "IDs de dientes duplicados en el request.";
+    public static final String FAILED_CREATE_TREATMENT_DETAIL_TEETH = "Error al guardar los dientes del tratamiento.";
+    public static final String FAILED_FETCH_TREATMENT_DETAIL_TEETH = "Error al obtener los dientes del tratamiento.";
+    public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
+    public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
+    public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
 }

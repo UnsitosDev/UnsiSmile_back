@@ -18,4 +18,6 @@ public class Constants {
     public static final String ODONTOGRAM = "Odontograma";
     public static final String PROPHYLAXIS = "Profilaxis Dental";
     public static final String FLUOROSIS =  "Fluorosis";
+
+    public static final String TOOTH = "Diente";
 }

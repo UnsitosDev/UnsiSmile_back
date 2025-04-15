@@ -37,6 +37,8 @@ public class TreatmentDetailRequest {
 
     private String professorId;
 
-    @Size(max = 50, message = "Status must be maximum 50 characters")
+    @Size(max = 50, message = ResponseMessages.SIZE_TREATMENT_STATUS)
     private String status;
+
+    TreatmentDetailToothRequest treatmentDetailToothRequest;
 }
