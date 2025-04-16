@@ -25,26 +25,22 @@ public class TreatmentDetailModel extends AuditModel {
     @Column(name = "id_treatment_detail")
     private Long idTreatmentDetail;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_patient_clinical_history", referencedColumnName = "id_patient_clinical_history", nullable = false)
     private PatientClinicalHistoryModel patientClinicalHistory;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_treatment", referencedColumnName = "id_treatment", nullable = false)
     private TreatmentModel treatment;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_treatment_scope", referencedColumnName = "id_scope")
-    private TreatmentScopeModel treatmentScope;
 
     @Column(name = "treatment_date", nullable = false)
     private LocalDateTime treatmentDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_student_group", referencedColumnName = "id_student_groups", nullable = false)
     private StudentGroupModel studentGroup;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_professor", referencedColumnName = "id_professor")
     private ProfessorModel professor;
 

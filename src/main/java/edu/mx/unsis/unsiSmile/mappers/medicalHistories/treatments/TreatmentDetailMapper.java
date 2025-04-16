@@ -27,9 +27,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .treatment(TreatmentModel.builder()
                         .idTreatment(dto.getTreatmentId())
                         .build())
-                .treatmentScope(TreatmentScopeModel.builder()
-                                .idScope(dto.getTreatmentScopeId())
-                                .build())
                 .treatmentDate(dto.getTreatmentDate() != null ?
                         dto.getTreatmentDate() : null)
                 .professor(dto.getProfessorId() != null ? ProfessorModel.builder()
@@ -45,7 +42,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .idTreatmentDetail(entity.getIdTreatmentDetail())
                 .patientClinicalHistoryId(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                 .treatment(treatmentMapper.toDto(entity.getTreatment()))
-                .treatmentScope(treatmentScopeMapper.toDto(entity.getTreatmentScope()))
                 .treatmentDate(entity.getTreatmentDate())
                 .studentGroupId(entity.getStudentGroup().getIdStudentGroups())
                 .professorId(entity.getProfessor() != null ?
@@ -66,10 +62,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
         entity.setTreatment(TreatmentModel.builder()
                 .idTreatment(request.getTreatmentId())
                 .build());
-        entity.setTreatmentScope(request.getTreatmentScopeId() != null ?
-                TreatmentScopeModel.builder()
-                        .idScope(request.getTreatmentScopeId())
-                        .build() : null);
         entity.setTreatmentDate(request.getTreatmentDate());
         entity.setProfessor(ProfessorModel.builder()
                 .idProfessor(request.getProfessorId())
