@@ -40,7 +40,6 @@ CREATE TABLE treatment_details (
     id_treatment_detail BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_patient_clinical_history BIGINT(20) NOT NULL,
     fk_treatment BIGINT(20) NOT NULL,
-    fk_treatment_scope BIGINT(20) DEFAULT NULL,
     treatment_date DATETIME(6) NOT NULL,
 
     fk_student_group BIGINT(20) NOT NULL, -- 'Para saber el nombre del alumno y el grupo donde se encontraba durante el tratamiento'
@@ -54,7 +53,6 @@ CREATE TABLE treatment_details (
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
     FOREIGN KEY (fk_treatment) REFERENCES treatments(id_treatment),
-    FOREIGN KEY (fk_treatment_scope) REFERENCES treatment_scopes(id_scope),
     FOREIGN KEY (fk_professor) REFERENCES professors(id_professor)
 );
 
