@@ -1,37 +1,39 @@
 package edu.mx.unsis.unsiSmile.controller.professors;
 
-import org.springframework.data.domain.Sort;
+import edu.mx.unsis.unsiSmile.dtos.request.professors.ClinicalAreaRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.professors.ClinicalAreaResponse;
+import edu.mx.unsis.unsiSmile.service.professors.ClinicalAreaService;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import edu.mx.unsis.unsiSmile.dtos.request.professors.ClinicalAreaRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.professors.ClinicalAreaResponse;
-import edu.mx.unsis.unsiSmile.service.professors.ClinicalAreaService;
-import org.springframework.web.bind.annotation.RequestBody;
-import lombok.RequiredArgsConstructor;
-
 @RestController
-@RequestMapping("/unsismile/api/v1/professors/clinical-areas")
+@RequestMapping("/unsismile/api/v1/clinical-areas")
 @RequiredArgsConstructor
 public class ClinicalAreaController {
     private final ClinicalAreaService clinicalAreaService;
-    
+
+    @Operation(summary = "Crea una nueva área clínica")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createClinicalArea(@RequestBody ClinicalAreaRequest request) {
         clinicalAreaService.createClinicalArea(request);
     }
 
+    @Operation(summary = "Obtiene un área clínica por su ID")
     @GetMapping("/{idClinicalArea}")
     public ResponseEntity<ClinicalAreaResponse> getClinicalArea(@PathVariable Long idClinicalArea) {
         ClinicalAreaResponse clinicalArea = clinicalAreaService.getClinicalArea(idClinicalArea);
         return ResponseEntity.ok(clinicalArea);
     }
 
+    @Operation(summary = "Obtiene todas las áreas clínicas, con paginación, ordenamiento y búsqueda opcional")
     @GetMapping
     public ResponseEntity<Page<ClinicalAreaResponse>> getAllClinicalAreas(
             @RequestParam(defaultValue = "0") int page,
@@ -46,12 +48,14 @@ public class ClinicalAreaController {
         return ResponseEntity.ok(clinicalAreaResponses);
     }
 
+    @Operation(summary = "Actualiza una área clínica existente")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public void updateClinicalArea(@RequestBody ClinicalAreaRequest request) {
         clinicalAreaService.updateClinicalArea(request);
     }
 
+    @Operation(summary = "Elimina un área clínica por su ID")
     @DeleteMapping("/{idClinicalArea}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClinicalArea(@PathVariable Long idClinicalArea) {
