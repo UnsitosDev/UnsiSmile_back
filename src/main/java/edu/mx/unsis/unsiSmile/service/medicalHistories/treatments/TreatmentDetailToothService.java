@@ -57,19 +57,14 @@ public class TreatmentDetailToothService {
     }
 
     @Transactional(readOnly = true)
-    public TreatmentDetailToothResponse getTreatmentDetailTeeth(Long treatmentDetailId) {
+    public List<TreatmentDetailToothResponse> getTreatmentDetailTeethByTreatmentDetail(Long treatmentDetailId) {
         try {
             verifyTreatmentDetailExists(treatmentDetailId);
 
             List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
                     .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
 
-            return TreatmentDetailToothResponse.builder()
-                    .idTreatmentDetail(treatmentDetailId)
-                    .idTeeth(models.stream()
-                            .map(model -> model.getTooth().getIdTooth())
-                            .collect(Collectors.toList()))
-                    .build();
+            return treatmentDetailToothMapper.toDtos(models);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

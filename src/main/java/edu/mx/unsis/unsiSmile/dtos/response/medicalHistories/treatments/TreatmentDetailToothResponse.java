@@ -14,6 +14,5 @@ import java.util.List;
 public class TreatmentDetailToothResponse {
 
     private Long idDetailTooth;
-    private Long idTreatmentDetail;
-    private List<String> idTeeth;
+    private String idTooth;
 }

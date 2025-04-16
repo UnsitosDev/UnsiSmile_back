@@ -26,7 +26,7 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
     public TreatmentDetailToothResponse toDto(TreatmentDetailToothModel entity) {
         return TreatmentDetailToothResponse.builder()
                 .idDetailTooth(entity.getIdDetailTooth())
-                .idTreatmentDetail(entity.getTreatmentDetail().getIdTreatmentDetail())
+                .idTooth(entity.getTooth().getIdTooth())
                 .build();
     }
 
