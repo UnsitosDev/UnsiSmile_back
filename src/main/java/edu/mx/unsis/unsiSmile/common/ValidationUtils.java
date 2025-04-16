@@ -15,7 +15,7 @@ public class ValidationUtils {
 
     public String getFullNameFromPerson(PersonModel person) {
         return person.getFirstName() + " " +
-                (person.getSecondName() != null ? person.getSecondName() + " " : "") +
+                ((person.getSecondName() != null && !person.getSecondName().trim().isEmpty()) ? person.getSecondName() + " " : "") +
                 person.getFirstLastName() + " " +
                 person.getSecondLastName();
     }

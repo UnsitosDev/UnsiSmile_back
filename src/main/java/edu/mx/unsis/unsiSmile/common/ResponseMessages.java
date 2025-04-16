@@ -386,6 +386,10 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL = "El request de organos dentarios del tratamiento no puede ser nulo";
     public static final String FAILED_CREATE_TREATMENT_DETAIL = "Error al crear el detalle del tratamiento";
     public static final String TREATMENT_DETAIL_NOT_FOUND = "No se encontró el registro de detalle del tratamiento con ID: %s";
+    public static final String FAILED_FETCH_TREATMENT_DETAIL = "Error al obtener el detalle del tratamiento";
+    public static final String FAILED_FETCH_TREATMENT_DETAILS = "Error al obtener los detalles del tratamiento";
+    public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
+    public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
 
     //TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
