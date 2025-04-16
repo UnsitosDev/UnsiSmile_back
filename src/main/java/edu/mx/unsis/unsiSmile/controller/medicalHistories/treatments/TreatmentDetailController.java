@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "TreatmentDetail")
+@Tag(name = "Treatment Details")
 @RestController
 @RequestMapping("/unsismile/api/v1/treatment-details")
 @RequiredArgsConstructor
