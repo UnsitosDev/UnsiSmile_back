@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.professors;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.CatalogOptionRequest;
@@ -14,6 +15,8 @@ import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
 import edu.mx.unsis.unsiSmile.repository.ICatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +35,22 @@ public class ProfessorClinicalAreaService {
     private final CatalogOptionMapper catalogOptionMapper;
     private final ICatalogOptionRepository catalogOptionRepository;
     private final ICatalogRepository catalogRepository;
+    private final UserService userService;
+    private final IProfessorRepository professorRepository;
 
     @Transactional
     public void createProfessorClinicalArea(@NotNull ProfessorClinicalAreaRequest request) {
         try {
+            ProfessorModel professorModel = getProfessorById(request.getIdProfessor());
+
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaMapper.toEntity(request);
             ProfessorClinicalAreaModel professorClinicalAreaSaved = professorClinicalAreaRepository.save(professorClinicalAreaModel);
 
             createCatalogOptionForProfessor(professorClinicalAreaSaved);
+
+            assignRoleToProfessor(professorModel, ERole.ROLE_AREA_RESPONSIBLE);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,9 +102,11 @@ public class ProfessorClinicalAreaService {
     public void deleteProfessorClinicalArea(@NotNull Long id) {
         try {
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Professor clinical area not found", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND, HttpStatus.NOT_FOUND));
             professorClinicalAreaModel.setStatusKey(Constants.INACTIVE);
             professorClinicalAreaRepository.save(professorClinicalAreaModel);
+
+            assignRoleToProfessor(professorClinicalAreaModel.getProfessor(), ERole.ROLE_PROFESSOR);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
@@ -158,6 +171,19 @@ public class ProfessorClinicalAreaService {
             throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ProfessorModel getProfessorById(String idProfessor) {
+        return professorRepository.findById(idProfessor)
+                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+    }
+
+    private void assignRoleToProfessor(ProfessorModel professorModel, ERole role) {
+        try {
+            userService.changeRole(professorModel.getIdProfessor(), role.toString());
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.FAILED_CHANGE_ROLE, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 }
