@@ -9,18 +9,6 @@ CREATE TABLE scope_types (
     updated_by VARCHAR(255) DEFAULT NULL
 );
 
-CREATE TABLE treatment_scopes (
-    id_scope BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    fk_scope_type BIGINT(20) NOT NULL,
-    scope_name VARCHAR(100) NOT NULL,
-    created_at DATETIME(6) DEFAULT NULL,
-    created_by VARCHAR(255) DEFAULT NULL,
-    status_key VARCHAR(255) DEFAULT NULL,
-    updated_at DATETIME(6) DEFAULT NULL,
-    updated_by VARCHAR(255) DEFAULT NULL,
-    FOREIGN KEY (fk_scope_type) REFERENCES scope_types(id_scope_type)
-);
-
 CREATE TABLE treatments (
     id_treatment BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
