@@ -30,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -264,5 +265,27 @@ public class UserService {
                 .header(HttpHeaders.CONTENT_TYPE, contentType)
                 .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(picture.length))
                 .body(picture);
+    }
+
+    @Transactional
+    public void changeRole(String username, String newRole) {
+        try {
+            UserModel user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+
+            ERole roleEnum = ERole.valueOf(newRole);
+
+            RoleModel role = roleRepository.findByRole(roleEnum)
+                    .orElseThrow(() -> new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            user.setRole(role);
+            userRepository.save(user);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 }

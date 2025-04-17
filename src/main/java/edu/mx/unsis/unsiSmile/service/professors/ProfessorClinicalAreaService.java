@@ -1,19 +1,25 @@
 package edu.mx.unsis.unsiSmile.service.professors;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.professors.ProfessorClinicalAreaRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorClinicalAreaResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorClinicalAreaMapper;
+import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
+import edu.mx.unsis.unsiSmile.model.professors.ClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
 import edu.mx.unsis.unsiSmile.repository.ICatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +28,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +40,23 @@ public class ProfessorClinicalAreaService {
     private final CatalogOptionMapper catalogOptionMapper;
     private final ICatalogOptionRepository catalogOptionRepository;
     private final ICatalogRepository catalogRepository;
+    private final UserService userService;
+    private final IProfessorRepository professorRepository;
+    private final ProfessorMapper professorMapper;
 
     @Transactional
     public void createProfessorClinicalArea(@NotNull ProfessorClinicalAreaRequest request) {
         try {
+            ProfessorModel professorModel = getProfessorById(request.getIdProfessor());
+
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaMapper.toEntity(request);
             ProfessorClinicalAreaModel professorClinicalAreaSaved = professorClinicalAreaRepository.save(professorClinicalAreaModel);
 
             createCatalogOptionForProfessor(professorClinicalAreaSaved);
+
+            assignRoleToProfessor(professorModel, ERole.ROLE_CLINICAL_AREA_SUPERVISOR);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_CREATING_PROGRESS_NOTE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,9 +108,15 @@ public class ProfessorClinicalAreaService {
     public void deleteProfessorClinicalArea(@NotNull Long id) {
         try {
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaRepository.findById(id)
-                    .orElseThrow(() -> new AppException("Professor clinical area not found", HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND, HttpStatus.NOT_FOUND));
             professorClinicalAreaModel.setStatusKey(Constants.INACTIVE);
             professorClinicalAreaRepository.save(professorClinicalAreaModel);
+
+            boolean hasOtherActiveAreas = professorClinicalAreaRepository
+                    .existsByProfessorAndStatusKey(professorClinicalAreaModel.getProfessor(), Constants.ACTIVE);
+            if (!hasOtherActiveAreas) {
+                assignRoleToProfessor(professorClinicalAreaModel.getProfessor(), ERole.ROLE_PROFESSOR);
+            }
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
@@ -158,6 +181,39 @@ public class ProfessorClinicalAreaService {
             throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ProfessorModel getProfessorById(String idProfessor) {
+        return professorRepository.findById(idProfessor)
+                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+    }
+
+    private void assignRoleToProfessor(ProfessorModel professorModel, ERole role) {
+        try {
+            userService.changeRole(professorModel.getIdProfessor(), role.toString());
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.FAILED_CHANGE_ROLE, HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    @Transactional
+    public List<ProfessorResponse> getProfessorsByClinicalAreaId(@NotNull ClinicalAreaModel clinicalArea) {
+        try {
+            List<ProfessorClinicalAreaModel> professorClinicalAreaModels =
+                    professorClinicalAreaRepository.findAllByClinicalAreaAndStatusKey(clinicalArea, Constants.ACTIVE);
+
+            if (professorClinicalAreaModels.isEmpty()) {
+                return null;
+            }
+
+            List<ProfessorModel> professors = professorClinicalAreaModels.stream()
+                    .map(ProfessorClinicalAreaModel::getProfessor)
+                    .collect(Collectors.toList());
+
+            return professorMapper.toDtos(professors);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener profesores por área clínica", e);
         }
     }
 }
