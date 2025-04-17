@@ -21,7 +21,7 @@ public class TreatmentService {
 
     private final ITreatmentRepository treatmentRepository;
     private final TreatmentMapper treatmentMapper;
-    private final ScopeTypeService scopeTypeService;
+    private final TreatmentScopeService treatmentScopeService;
     private final IClinicalHistoryCatalogRepository clinicalHistoryCatalogRepository;
 
     @Transactional
@@ -31,7 +31,7 @@ public class TreatmentService {
                 throw new AppException(ResponseMessages.TREATMENT_NAME_EXISTS, HttpStatus.BAD_REQUEST);
             }
 
-            scopeTypeService.getScopeTypeById(request.getScopeTypeId());
+            treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
             clinicalHistoryCatalogRepository.findById(request.getClinicalHistoryCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,
@@ -71,9 +71,9 @@ public class TreatmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<TreatmentResponse> getTreatmentsByScopeType(Long scopeTypeId) {
+    public List<TreatmentResponse> getTreatmentsByTreatmentScope(Long treatmentScopeId) {
         try {
-            List<TreatmentModel> models = treatmentRepository.findByScopeType_IdScopeType(scopeTypeId);
+            List<TreatmentModel> models = treatmentRepository.findByTreatmentScope_IdTreatmentScope(treatmentScopeId);
             return treatmentMapper.toDtos(models);
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENTS_BY_SCOPE, HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -101,7 +101,7 @@ public class TreatmentService {
                 throw new AppException(ResponseMessages.TREATMENT_NAME_EXISTS, HttpStatus.BAD_REQUEST);
             }
 
-            scopeTypeService.getScopeTypeById(request.getScopeTypeId());
+            treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
             clinicalHistoryCatalogRepository.findById(request.getClinicalHistoryCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,

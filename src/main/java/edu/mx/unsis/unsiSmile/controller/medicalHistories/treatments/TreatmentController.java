@@ -43,9 +43,9 @@ public class TreatmentController {
     }
 
     @Operation(summary = "Obtiene los tratamientos asociados a un tipo de alcance")
-    @GetMapping("/by-scope-type/{scopeTypeId}")
-    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByScope(@PathVariable Long scopeTypeId) {
-        List<TreatmentResponse> responses = treatmentService.getTreatmentsByScopeType(scopeTypeId);
+    @GetMapping("/by-treatment-scope/{treatmentScopeId}")
+    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByScope(@PathVariable Long treatmentScopeId) {
+        List<TreatmentResponse> responses = treatmentService.getTreatmentsByTreatmentScope(treatmentScopeId);
         return ResponseEntity.ok(responses);
     }
 

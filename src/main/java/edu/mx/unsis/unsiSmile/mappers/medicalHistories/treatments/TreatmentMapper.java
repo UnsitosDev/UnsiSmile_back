@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.*;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ScopeTypeModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentScopeModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentRequest, TreatmentModel> {
-    private final ScopeTypeMapper scopeTypeMapper;
+    private final TreatmentScopeMapper treatmentScopeMapper;
 
     @Override
     public TreatmentModel toEntity(TreatmentRequest dto) {
         return TreatmentModel.builder()
                 .idTreatment(dto.getIdTreatment())
                 .name(dto.getName())
-                .scopeType(ScopeTypeModel.builder()
-                        .idScopeType(dto.getScopeTypeId())
+                .treatmentScope(TreatmentScopeModel.builder()
+                        .idTreatmentScope(dto.getTreatmentScopeId())
                         .build())
                 .cost(dto.getCost() != null ? dto.getCost() : BigDecimal.ZERO)
                 .clinicalHistoryCatalog(ClinicalHistoryCatalogModel.builder()
@@ -38,7 +38,7 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
         return TreatmentResponse.builder()
                 .idTreatment(entity.getIdTreatment())
                 .name(entity.getName())
-                .scopeType(scopeTypeMapper.toDto(entity.getScopeType()))
+                .treatmentScope(treatmentScopeMapper.toDto(entity.getTreatmentScope()))
                 .cost(entity.getCost())
                 .clinicalHistoryCatalogId(entity.getClinicalHistoryCatalog() != null ?
                         entity.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog() : null)
@@ -57,8 +57,8 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
     @Override
     public void updateEntity(TreatmentRequest request, TreatmentModel entity) {
         entity.setName(request.getName());
-        entity.setScopeType(ScopeTypeModel.builder()
-                .idScopeType(request.getScopeTypeId())
+        entity.setTreatmentScope(TreatmentScopeModel.builder()
+                .idTreatmentScope(request.getTreatmentScopeId())
                 .build());
         entity.setCost(request.getCost() != null ? request.getCost() : entity.getCost());
         entity.setClinicalHistoryCatalog(

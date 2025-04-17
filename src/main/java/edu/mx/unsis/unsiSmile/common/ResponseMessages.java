@@ -327,7 +327,7 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al actualizar la condición de diente del componente";
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
 
-    // ScopeType request
+    // TreatmentScope request
     public static final String NOT_NULL_TREATMENT_SCOPE_ID = "El campo idScopeTreatment no puede ser nulo";
     public static final String NOT_NULL_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede ser nulo";
     public static final String NOT_BLANK_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede estar vacío";

@@ -6,7 +6,6 @@ import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentScopeModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 @Component
 public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse, TreatmentDetailRequest, TreatmentDetailModel> {
     private final TreatmentMapper treatmentMapper;
-    private final TreatmentScopeMapper treatmentScopeMapper;
 
     @Override
     public TreatmentDetailModel toEntity(TreatmentDetailRequest dto) {

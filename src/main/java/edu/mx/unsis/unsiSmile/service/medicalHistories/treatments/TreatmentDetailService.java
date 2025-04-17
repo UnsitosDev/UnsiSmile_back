@@ -48,7 +48,7 @@ public class TreatmentDetailService {
             validateRequestDependencies(request);
 
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
-            String scope = treatmentResponse.getScopeType().getName();
+            String scope = treatmentResponse.getTreatmentScope().getName();
 
             if (scope.equals(Constants.TOOTH) && request.getTreatmentDetailToothRequest() == null) {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
@@ -110,7 +110,7 @@ public class TreatmentDetailService {
         );
         treatmentDetail.setPatientName(patientName);
 
-        if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getScopeType().getName())) {
+        if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
             treatmentDetail.setTeeth(
                     treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
                             treatmentDetailModel.getIdTreatmentDetail()

@@ -27,8 +27,8 @@ public class TreatmentModel extends AuditModel {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "fk_scope_type", referencedColumnName = "id_scope_type", nullable = false)
-    private ScopeTypeModel scopeType;
+    @JoinColumn(name = "fk_treatment_scope", referencedColumnName = "id_treatment_scope", nullable = false)
+    private TreatmentScopeModel treatmentScope;
 
     @Column(name = "cost", precision = 10, scale = 2)
     private BigDecimal cost;

@@ -2,7 +2,10 @@ package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -18,9 +21,9 @@ public class TreatmentRequest {
     @Size(max = 100, message = ResponseMessages.MAX_LENGTH_TREATMENT_NAME)
     private String name;
 
-    @NotNull(message = ResponseMessages.NOT_NULL_SCOPE_TYPE_ID)
-    @Positive(message = ResponseMessages.POSITIVE_SCOPE_TYPE_ID)
-    private Long scopeTypeId;
+    @NotNull(message = ResponseMessages.NOT_NULL_TREATMENT_SCOPE_ID)
+    @Positive(message = ResponseMessages.POSITIVE_TREATMENT_SCOPE_ID)
+    private Long treatmentScopeId;
 
     @Digits(integer = 8, fraction = 2, message = ResponseMessages.DIGITS_TREATMENT_COST)
     private BigDecimal cost;
