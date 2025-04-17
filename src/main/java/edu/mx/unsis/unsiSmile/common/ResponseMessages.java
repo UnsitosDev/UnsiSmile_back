@@ -327,4 +327,13 @@ public class ResponseMessages {
     public static final String FAILED_TO_FETCH_FORM_COMPONENTS_TOOTH_CONDITION = "Error al obtener las condiciones de diente de los componentes";
     public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al actualizar la condición de diente del componente";
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
+
+    // ClinicalArea
+    public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";
+    public static final String CLINICAL_AREA_NOT_FOUND = "Área clínica no encontrada con id: %s";
+    public static final String FAILED_FETCH_CLINICAL_AREA = "Error al obtener el área clínica";
+    public static final String FAILED_FETCH_CLINICAL_AREAS = "Error al obtener las áreas clínicas";
+    public static final String FAILED_UPDATE_CLINICAL_AREA = "Error al actualizar el área clínica";
+    public static final String FAILED_DELETE_CLINICAL_AREA = "Error al eliminar el área clínica";
+
 }

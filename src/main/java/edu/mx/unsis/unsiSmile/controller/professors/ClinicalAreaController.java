@@ -49,10 +49,11 @@ public class ClinicalAreaController {
     }
 
     @Operation(summary = "Actualiza una área clínica existente")
-    @PutMapping
+    @PatchMapping("/{idClinicalArea}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateClinicalArea(@RequestBody ClinicalAreaRequest request) {
-        clinicalAreaService.updateClinicalArea(request);
+    public void updateClinicalArea(@PathVariable Long idClinicalArea,
+                                   @RequestBody ClinicalAreaRequest request) {
+        clinicalAreaService.updateClinicalArea(idClinicalArea, request);
     }
 
     @Operation(summary = "Elimina un área clínica por su ID")
