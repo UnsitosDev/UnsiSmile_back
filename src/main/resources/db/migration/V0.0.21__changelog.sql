@@ -1,6 +1,6 @@
 -- Tratamientos
-CREATE TABLE scope_types (
-    id_scope_type BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE treatment_scopes (
+    id_treatment_scope BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE scope_types (
 CREATE TABLE treatments (
     id_treatment BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    fk_scope_type BIGINT(20) NOT NULL,
+    fk_treatment_scope BIGINT(20) NOT NULL,
     cost DECIMAL(10,2) DEFAULT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE treatments (
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
     fk_clinical_history_catalog BIGINT(20) NOT NULL,
-    FOREIGN KEY (fk_scope_type) REFERENCES scope_types(id_scope_type),
+    FOREIGN KEY (fk_treatment_scope) REFERENCES treatment_scopes(id_treatment_scope),
     FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog)
 );
 
@@ -28,7 +28,8 @@ CREATE TABLE treatment_details (
     id_treatment_detail BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_patient_clinical_history BIGINT(20) NOT NULL,
     fk_treatment BIGINT(20) NOT NULL,
-    treatment_date DATETIME(6) NOT NULL,
+    treatment_start DATETIME(6) NOT NULL,
+    treatment_end DATETIME(6) DEFAULT NULL,
 
     fk_student_group BIGINT(20) NOT NULL, -- 'Para saber el nombre del alumno y el grupo donde se encontraba durante el tratamiento'
     fk_professor VARCHAR(15) DEFAULT NULL, -- 'Firma y nombre del profesor a cargo',
@@ -62,24 +63,15 @@ INSERT INTO clinical_history_catalogs (clinical_history_name) VALUES
     ('Endodoncia'),
     ('Pulpotomía'),
     ('Pulpectomía');
--- Poblado de scope_types (ya está hecho en tu modelo inicial)
-INSERT INTO scope_types (name) VALUES                               
+-- Poblado de treatment_scopes
+INSERT INTO treatment_scopes (name) VALUES
     ('Diente'), 
     ('Cuadrante'), 
     ('Prótesis'), 
     ('General');
 
-INSERT INTO treatment_scopes (fk_scope_type, scope_name)
-VALUES
-    (1, 'Diente'),
-    (2, 'Cuadrante'),
-    (3, 'Prótesis removible'),
-    (3, 'Prótesis fija'),
-    (3, 'Prostodoncia'),
-    (4, 'General');
-
 -- Poblado de treatments
-INSERT INTO treatments (name, fk_scope_type, fk_clinical_history_catalog) VALUES
+INSERT INTO treatments (name, fk_treatment_scope, fk_clinical_history_catalog) VALUES
 -- Operatoria dental
 ('Resinas', 1, 4),  -- Órgano dentario, HC Operatoria dental
 
