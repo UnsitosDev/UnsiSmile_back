@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -13,5 +14,6 @@ import java.util.List;
 @Builder
 public class DentalProphylaxisResponse {
     private Long idDentalProphylaxis;
+    private LocalDate date;
     private List<ToothResponse> teethProphylaxis;
 }
