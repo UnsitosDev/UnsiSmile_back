@@ -22,7 +22,7 @@ import java.util.List;
 @Tag(name = "STATUS_CLINICAL_HISTORIES")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unsismile/api/v1/medicalHistories/status")
+@RequestMapping("/unsismile/api/v1/medical-histories/status")
 public class StatusClinicalHistoryController {
 
     private final StatusClinicalHistoryService statusClinicalHistoryService;
@@ -36,7 +36,7 @@ public class StatusClinicalHistoryController {
     }
 
     @Operation(summary = "Enviar una historia clínica a revisión")
-    @PutMapping("/sendToReview/{idPatientClinicalHistory}/{idSection}")
+    @PutMapping("/send-to-review/{idPatientClinicalHistory}/{idSection}")
     public ResponseEntity<Void> sendToReview(
             @PathVariable Long idPatientClinicalHistory,
             @PathVariable Long idSection) {
