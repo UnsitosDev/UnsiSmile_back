@@ -328,19 +328,11 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
 
     // ScopeType request
-    public static final String NOT_NULL_SCOPE_TYPE_ID = "El campo idScopeType no puede ser nulo";
-    public static final String POSITIVE_SCOPE_TYPE_ID = "El campo idScopeType debe ser mayor a 0";
-    public static final String NOT_NULL_SCOPE_TYPE = "El campo tipo de alcance no puede ser nulo";
-    public static final String NOT_BLANK_SCOPE_TYPE = "El campo tipo de alcance no puede estar vacío";
+    public static final String NOT_NULL_TREATMENT_SCOPE_ID = "El campo idScopeTreatment no puede ser nulo";
+    public static final String NOT_NULL_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede ser nulo";
+    public static final String NOT_BLANK_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede estar vacío";
 
-    public static final String FAILED_CREATE_SCOPE_TYPE = "Error al crear el tipo de alcance";
-    public static final String SCOPE_TYPE_NAME_EXISTS = "El nombre del tipo de alcance ya existe";
-    public static final String SCOPE_TYPE_NOT_FOUND = "No se encontró el tipo de alcance con ID: ";
-    public static final String FAILED_FETCH_SCOPE_TYPE = "Error al obtener el tipo de alcance";
-    public static final String FAILED_FETCH_SCOPE_TYPES = "Error al obtener los tipos de alcance";
-    public static final String FAILED_UPDATE_SCOPE_TYPE = "Error al actualizar el tipo de alcance";
-    public static final String SCOPE_TYPE_NAME_DUPLICATED = "El nuevo nombre del tipo de alcance ya existe";
-    public static final String FAILED_DELETE_SCOPE_TYPE = "Error al eliminar el tipo de alcance";
+    public static final String TREATMENT_SCOPE_NAME_DUPLICATED = "El nuevo nombre del alcance del tratamiento ya existe";
 
     // TreatmentScope Request
     public static final String NOT_BLANK_SCOPE_NAME = "El nombre del alcance no puede estar vacío";
