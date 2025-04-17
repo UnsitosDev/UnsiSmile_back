@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.service.medicalHistories.StatusClinicalHistoryServ
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +29,8 @@ public class StatusClinicalHistoryController {
     private final StatusClinicalHistoryService statusClinicalHistoryService;
 
     @Operation(summary = "Crear o actualizar el estado de la historia clínica")
-    @PostMapping
-    public ResponseEntity<StatusClinicalHistoryResponse> createOrUpdateStatusClinicalHistory(
+    @PatchMapping
+    public ResponseEntity<StatusClinicalHistoryResponse> createOrUpdateStatusClinicalHistory(@Valid
             @RequestBody StatusClinicalHistoryRequest request) {
         statusClinicalHistoryService.createOrUpdateStatusClinicalHistory(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
