@@ -129,10 +129,11 @@ CREATE TABLE
 
 CREATE TABLE
     roles (
-        id BIGINT (20) NOT NULL AUTO_INCREMENT,
-        role ENUM ('ROLE_ADMIN', 'ROLE_STUDENT', 'ROLE_PROFESSOR', 'ROLE_AREA_RESPONSIBLE') DEFAULT NULL,
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+        id BIGINT(20) NOT NULL AUTO_INCREMENT,
+        role VARCHAR(50) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (role)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
     states (

@@ -278,7 +278,7 @@ public class UserService {
             ERole roleEnum = ERole.valueOf(newRole);
 
             RoleModel role = roleRepository.findByRole(roleEnum)
-                    .orElseGet(() -> createNewRole(roleEnum));
+                    .orElseThrow(() -> new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             user.setRole(role);
             userRepository.save(user);
@@ -287,12 +287,5 @@ public class UserService {
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public RoleModel createNewRole(ERole roleEnum) {
-        RoleModel newRoleModel = new RoleModel();
-        newRoleModel.setRole(roleEnum);
-        return roleRepository.save(newRoleModel);
     }
 }

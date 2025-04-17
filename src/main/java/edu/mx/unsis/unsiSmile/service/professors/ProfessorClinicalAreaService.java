@@ -48,7 +48,7 @@ public class ProfessorClinicalAreaService {
 
             createCatalogOptionForProfessor(professorClinicalAreaSaved);
 
-            assignRoleToProfessor(professorModel, ERole.ROLE_AREA_RESPONSIBLE);
+            assignRoleToProfessor(professorModel, ERole.ROLE_CLINICAL_AREA_SUPERVISOR);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {

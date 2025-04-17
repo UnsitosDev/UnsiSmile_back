@@ -132,4 +132,6 @@ INSERT INTO `religions` VALUES (133100,'Adventistas del Séptimo Día', null, nu
 -- Inserción de roles
 INSERT INTO roles (id, role) VALUES
                                  (1, 'ROLE_ADMIN'),
-                                 (2, 'ROLE_STUDENT');
+                                 (2, 'ROLE_STUDENT'),
+                                 (3, 'ROLE_PROFESSOR'),
+                                 (4, 'ROLE_CLINICAL_AREA_SUPERVISOR');
