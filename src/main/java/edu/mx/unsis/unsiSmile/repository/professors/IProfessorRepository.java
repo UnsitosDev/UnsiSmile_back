@@ -19,10 +19,13 @@ public interface IProfessorRepository extends JpaRepository<ProfessorModel, Stri
                 "OR p.person.secondLastName LIKE %:keyword% " +
                 "OR p.person.phone LIKE %:keyword% " +
                 "OR p.person.email LIKE %:keyword% " +
-                "AND p.statusKey='A'")
+                "AND p.statusKey='A' AND p.user.role.role='ROLE_PROFESSOR'")
         Page<ProfessorModel> findAllBySearchInput(
                 @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT COUNT(p) FROM ProfessorModel p WHERE p.statusKey = :status")
     Long countTotalProfessors(@Param("status") String status);
+
+    @Query("SELECT p FROM ProfessorModel p WHERE p.statusKey = 'A' AND p.user.role.role = 'ROLE_PROFESSOR'")
+    Page<ProfessorModel> findAll(Pageable pageable);
 }
