@@ -198,22 +198,24 @@ public class ProfessorClinicalAreaService {
     }
 
     @Transactional
-    public List<ProfessorResponse> getProfessorsByClinicalAreaId(@NotNull ClinicalAreaModel clinicalArea) {
+    public Page<ProfessorResponse> getProfessorsByClinicalAreaId(@NotNull ClinicalAreaModel clinicalArea, Pageable professorPageable) {
         try {
-            List<ProfessorClinicalAreaModel> professorClinicalAreaModels =
-                    professorClinicalAreaRepository.findAllByClinicalAreaAndStatusKey(clinicalArea, Constants.ACTIVE);
+            Page<ProfessorClinicalAreaModel> professorClinicalAreaPage =
+                    professorClinicalAreaRepository.findByClinicalAreaAndStatusKey(
+                            clinicalArea,
+                            Constants.ACTIVE,
+                            professorPageable
+                    );
 
-            if (professorClinicalAreaModels.isEmpty()) {
-                return null;
+            if (professorClinicalAreaPage.isEmpty()) {
+                return Page.empty(professorPageable);
             }
 
-            List<ProfessorModel> professors = professorClinicalAreaModels.stream()
-                    .map(ProfessorClinicalAreaModel::getProfessor)
-                    .collect(Collectors.toList());
-
-            return professorMapper.toDtos(professors);
+            return professorClinicalAreaPage.map(professorClinicalArea ->
+                    professorMapper.toDto(professorClinicalArea.getProfessor())
+            );
         } catch (Exception e) {
-            throw new RuntimeException("Error al obtener profesores por área clínica", e);
+            throw new RuntimeException(ResponseMessages.FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA, e);
         }
     }
 }
