@@ -329,6 +329,73 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al actualizar la condición de diente del componente";
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
 
+
+    // TreatmentScope request
+    public static final String NOT_NULL_TREATMENT_SCOPE_ID = "El campo idScopeTreatment no puede ser nulo";
+    public static final String NOT_NULL_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede ser nulo";
+    public static final String NOT_BLANK_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede estar vacío";
+
+    public static final String TREATMENT_SCOPE_NAME_DUPLICATED = "El nuevo nombre del alcance del tratamiento ya existe";
+
+    // TreatmentScope Request
+    public static final String NOT_BLANK_SCOPE_NAME = "El nombre del alcance no puede estar vacío";
+    public static final String NOT_NULL_SCOPE_NAME = "El nombre del alcance no puede ser nulo";
+    public static final String TREATMENT_SCOPE_ID_CANNOT_BE_NULL = "El ID del alcance del tratamiento no puede ser nulo";
+    public static final String POSITIVE_TREATMENT_SCOPE_ID = "El ID del alcance del tratamiento debe ser un número positivo";
+
+    public static final String FAILED_CREATE_TREATMENT_SCOPE = "Error al crear el alcance del tratamiento";
+    public static final String TREATMENT_SCOPE_NAME_EXISTS = "El nombre del alcance del tratamiento ya existe";
+    public static final String TREATMENT_SCOPE_NOT_FOUND = "No se encontró el alcance del tratamiento con ID: ";
+    public static final String FAILED_FETCH_TREATMENT_SCOPE = "Error al obtener el alcance del tratamiento";
+    public static final String FAILED_FETCH_TREATMENT_SCOPES = "Error al obtener los alcances del tratamiento";
+    public static final String FAILED_FETCH_TREATMENT_SCOPES_BY_TYPE = "Error al obtener los alcances del tratamiento por tipo";
+    public static final String FAILED_UPDATE_TREATMENT_SCOPE = "Error al actualizar el alcance del tratamiento";
+    public static final String FAILED_DELETE_TREATMENT_SCOPE = "Error al eliminar el alcance del tratamiento";
+
+    // Treatment Request
+    public static final String NOT_BLANK_TREATMENT_NAME = "El nombre del tratamiento no puede estar vacío";
+    public static final String MAX_LENGTH_TREATMENT_NAME = "El nombre del tratamiento debe tener como máximo 100 caracteres";
+
+    public static final String DIGITS_TREATMENT_COST = "El costo debe tener hasta 8 dígitos enteros y 2 decimales";
+
+    public static final String NOT_NULL_CATALOG_ID = "El ID del catálogo de historia clínica no puede ser nulo";
+    public static final String POSITIVE_CATALOG_ID = "El ID del catálogo de historia clínica debe ser un número positivo";
+
+    // Treatment Messages
+    public static final String TREATMENT_NAME_EXISTS = "El nombre del tratamiento ya existe";
+    public static final String TREATMENT_NOT_FOUND = "No se encontró el tratamiento con ID: ";
+    public static final String FAILED_CREATE_TREATMENT = "Error al crear el tratamiento";
+    public static final String FAILED_FETCH_TREATMENT = "Error al obtener el tratamiento";
+    public static final String FAILED_FETCH_TREATMENTS = "Error al obtener los tratamientos";
+    public static final String FAILED_FETCH_TREATMENTS_BY_SCOPE = "Error al obtener tratamientos por alcance";
+    public static final String FAILED_FETCH_TREATMENTS_BY_HISTORY = "Error al obtener tratamientos por historial clínico";
+    public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
+    public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
+    public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
+    public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
+    public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
+    public static final String TREATMENT_START_DATE_CANNOT_BE_NULL  = "La fecha de inicio del tratamiento no puede ser nula";
+    public static final String TREATMENT_END_DATE_CANNOT_BE_NULL  = "La fecha de finalización del tratamiento no puede ser nula";
+    public static final String SIZE_TREATMENT_STATUS = "El estado del tratamiento debe tener como máximo 50 caracteres";
+
+    // TreatmentDetail
+    public static final String TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL = "El request de organos dentarios del tratamiento no puede ser nulo";
+    public static final String FAILED_CREATE_TREATMENT_DETAIL = "Error al crear el detalle del tratamiento";
+    public static final String TREATMENT_DETAIL_NOT_FOUND = "No se encontró el registro de detalle del tratamiento con ID: %s";
+    public static final String FAILED_FETCH_TREATMENT_DETAIL = "Error al obtener el detalle del tratamiento";
+    public static final String FAILED_FETCH_TREATMENT_DETAILS = "Error al obtener los detalles del tratamiento";
+    public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
+    public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
+
+    //TreatmentDetailTooth
+    public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
+    public static final String DUPLICATE_TEETH_IDS = "IDs de dientes duplicados en el request.";
+    public static final String FAILED_CREATE_TREATMENT_DETAIL_TEETH = "Error al guardar los dientes del tratamiento.";
+    public static final String FAILED_FETCH_TREATMENT_DETAIL_TEETH = "Error al obtener los dientes del tratamiento.";
+    public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
+    public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
+    public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
+
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";
     public static final String CLINICAL_AREA_NOT_FOUND = "Área clínica no encontrada con id: %s";

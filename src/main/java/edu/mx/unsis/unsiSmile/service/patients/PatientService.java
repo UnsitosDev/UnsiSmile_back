@@ -240,16 +240,18 @@ public class PatientService {
     @Transactional(readOnly = true)
     public PatientResponse getPatientById(@NonNull String idPatient) {
         try {
+            PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
                 List<PatientModel> patients = getPatientsByStudents(studentResponse,  null, null);
                 return getPatientByIdByStudent(patients, idPatient);
             } else {
-                PatientModel patientModel = getPatientModel(idPatient);
                 return patientMapper.toDto(patientModel);
             }
-
+        }catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

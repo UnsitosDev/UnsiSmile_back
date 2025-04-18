@@ -1,11 +1,13 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,19 +22,16 @@ import java.util.Optional;
 public class PatientClinicalHistoryService {
 
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientRepository patientRepository;
 
     @Transactional
     public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
         try {
-            Optional<PatientClinicalHistoryModel> existingRecord =
-                    patientClinicalHistoryRepository.findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
-                                    idPatient, idClinicalHistory);
+            PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            if (existingRecord.isPresent()) {
-                throw new AppException("The clinical history already exists for this patient", HttpStatus.CONFLICT);
-            }
 
-            return patientClinicalHistoryRepository.save(toEntity(idPatient, idClinicalHistory));
+            return patientClinicalHistoryRepository.save(toEntity(patientModel, idClinicalHistory));
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -85,11 +84,9 @@ public class PatientClinicalHistoryService {
         }
     }
 
-    private PatientClinicalHistoryModel toEntity(String idPatient, Long idClinicalHistory) {
+    private PatientClinicalHistoryModel toEntity(PatientModel patient, Long idClinicalHistory) {
         return PatientClinicalHistoryModel.builder()
-                .patient(PatientModel.builder()
-                        .idPatient(idPatient)
-                        .build())
+                .patient(patient)
                 .clinicalHistoryCatalog(ClinicalHistoryCatalogModel.builder()
                         .idClinicalHistoryCatalog(idClinicalHistory)
                         .build())
