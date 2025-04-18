@@ -43,14 +43,14 @@ public class ClinicalAreaService {
     }
 
     @Transactional
-    public ClinicalAreaResponse getClinicalArea(Long idClinicalArea) {
+    public ClinicalAreaResponse getClinicalArea(@NotNull Long idClinicalArea, Pageable professorPageable) {
         try {
             ClinicalAreaModel clinicalAreaModel = clinicalAreaRepository.findById(idClinicalArea)
                 .orElseThrow(() -> new AppException(
                         String.format(ResponseMessages.CLINICAL_AREA_NOT_FOUND, idClinicalArea),
                         HttpStatus.NOT_FOUND));
 
-            List<ProfessorResponse> professorResponses = professorClinicalAreaService.getProfessorsByClinicalAreaId(clinicalAreaModel);
+            Page<ProfessorResponse> professorResponses = professorClinicalAreaService.getProfessorsByClinicalAreaId(clinicalAreaModel, professorPageable);
 
             ClinicalAreaResponse response = clinicalAreaMapper.toDto(clinicalAreaModel);
 
@@ -67,23 +67,11 @@ public class ClinicalAreaService {
     @Transactional
     public Page<ClinicalAreaResponse> getAllClinicalAreas(Pageable pageable, String keyword) {
         try {
-            Page<ClinicalAreaModel> clinicalAreas;
-            if (keyword == null || keyword.isEmpty()) {
-                clinicalAreas  = clinicalAreaRepository.findAll(pageable);
-            } else {
-                clinicalAreas = clinicalAreaRepository.findAllBySearchInput(keyword, pageable);
-            }
-            List<ClinicalAreaResponse> responses = clinicalAreas.getContent().stream()
-                    .map(model -> {
-                        ClinicalAreaResponse response = clinicalAreaMapper.toDto(model);
-                        List<ProfessorResponse> professors =
-                                professorClinicalAreaService.getProfessorsByClinicalAreaId(model);
-                        response.setProfessors(professors);
-                        return response;
-                    })
-                    .collect(Collectors.toList());
+            Page<ClinicalAreaModel> clinicalAreas = (keyword == null || keyword.isBlank())
+                    ? clinicalAreaRepository.findAll(pageable)
+                    : clinicalAreaRepository.findAllBySearchInput(keyword, pageable);
 
-            return new PageImpl<>(responses, pageable, clinicalAreas.getTotalElements());
+            return clinicalAreas.map(clinicalAreaMapper::toDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
