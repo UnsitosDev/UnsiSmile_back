@@ -16,7 +16,8 @@ public class TreatmentDetailResponse {
     private String patientName;
     private TreatmentResponse treatment;
     List<TreatmentDetailToothResponse> teeth;
-    private LocalDateTime treatmentDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long studentGroupId;
     private String professorId;
     private String professorName;

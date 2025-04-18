@@ -25,8 +25,10 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .treatment(TreatmentModel.builder()
                         .idTreatment(dto.getTreatmentId())
                         .build())
-                .treatmentDate(dto.getTreatmentDate() != null ?
-                        dto.getTreatmentDate() : null)
+                .startDate(dto.getStartDate() != null ?
+                        dto.getStartDate() : null)
+                .endDate(dto.getEndDate() != null ?
+                        dto.getEndDate() : null)
                 .professor(dto.getProfessorId() != null ? ProfessorModel.builder()
                         .idProfessor(dto.getProfessorId())
                         .build() : null)
@@ -40,7 +42,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .idTreatmentDetail(entity.getIdTreatmentDetail())
                 .patientClinicalHistoryId(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                 .treatment(treatmentMapper.toDto(entity.getTreatment()))
-                .treatmentDate(entity.getTreatmentDate())
+                .startDate(entity.getStartDate())
+                .endDate(entity.getEndDate())
                 .studentGroupId(entity.getStudentGroup().getIdStudentGroups())
                 .professorId(entity.getProfessor() != null ?
                         entity.getProfessor().getIdProfessor() : null)
@@ -60,7 +63,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
         entity.setTreatment(TreatmentModel.builder()
                 .idTreatment(request.getTreatmentId())
                 .build());
-        entity.setTreatmentDate(request.getTreatmentDate());
+        entity.setStartDate(request.getStartDate());
+        entity.setEndDate(request.getEndDate());
         entity.setProfessor(ProfessorModel.builder()
                 .idProfessor(request.getProfessorId())
                 .build());

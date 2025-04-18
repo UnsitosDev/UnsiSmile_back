@@ -28,8 +28,11 @@ public class TreatmentDetailRequest {
     @Positive(message = ResponseMessages.POSITIVE_TREATMENT_ID)
     private Long treatmentId;
 
-    @NotNull(message = ResponseMessages.TREATMENT_DATE_CANNOT_BE_NULL)
-    private LocalDateTime treatmentDate;
+    @NotNull(message = ResponseMessages.TREATMENT_START_DATE_CANNOT_BE_NULL)
+    private LocalDateTime startDate;
+
+    @NotNull(message = ResponseMessages.TREATMENT_END_DATE_CANNOT_BE_NULL)
+    private LocalDateTime endDate;
 
     private String professorId;
 

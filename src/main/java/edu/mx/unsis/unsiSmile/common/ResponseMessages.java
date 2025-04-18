@@ -371,7 +371,8 @@ public class ResponseMessages {
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
-    public static final String TREATMENT_DATE_CANNOT_BE_NULL  = "La fecha del tratamiento no puede ser nula";
+    public static final String TREATMENT_START_DATE_CANNOT_BE_NULL  = "La fecha de inicio del tratamiento no puede ser nula";
+    public static final String TREATMENT_END_DATE_CANNOT_BE_NULL  = "La fecha de finalización del tratamiento no puede ser nula";
     public static final String SIZE_TREATMENT_STATUS = "El estado del tratamiento debe tener como máximo 50 caracteres";
 
     // TreatmentDetail

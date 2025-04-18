@@ -123,7 +123,9 @@ public class TreatmentDetailService {
     public TreatmentDetailResponse getTreatmentDetailById(@NonNull Long id) {
         try {
             TreatmentDetailModel model = treatmentDetailRepository.findById(id)
-                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
             return toDto(model);
         } catch (AppException e) {
             throw e;
@@ -149,7 +151,9 @@ public class TreatmentDetailService {
     public TreatmentDetailResponse updateTreatmentDetail(@NonNull Long id, @NonNull TreatmentDetailRequest request) {
         try {
             TreatmentDetailModel existing = treatmentDetailRepository.findById(id)
-                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
 
             validateRequestDependencies(request);
 
@@ -172,7 +176,9 @@ public class TreatmentDetailService {
     public void deleteTreatmentDetail(Long id) {
         try {
             TreatmentDetailModel model = treatmentDetailRepository.findById(id)
-                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
 
             treatmentDetailRepository.delete(model);
         } catch (AppException e) {

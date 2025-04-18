@@ -28,8 +28,8 @@ CREATE TABLE treatment_details (
     id_treatment_detail BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_patient_clinical_history BIGINT(20) NOT NULL,
     fk_treatment BIGINT(20) NOT NULL,
-    treatment_start DATETIME(6) NOT NULL,
-    treatment_end DATETIME(6) DEFAULT NULL,
+    start_date DATETIME(6) NOT NULL,
+    end_date DATETIME(6) DEFAULT NULL,
 
     fk_student_group BIGINT(20) NOT NULL, -- 'Para saber el nombre del alumno y el grupo donde se encontraba durante el tratamiento'
     fk_professor VARCHAR(15) DEFAULT NULL, -- 'Firma y nombre del profesor a cargo',

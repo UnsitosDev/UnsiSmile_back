@@ -33,8 +33,11 @@ public class TreatmentDetailModel extends AuditModel {
     @JoinColumn(name = "fk_treatment", referencedColumnName = "id_treatment", nullable = false)
     private TreatmentModel treatment;
 
-    @Column(name = "treatment_date", nullable = false)
-    private LocalDateTime treatmentDate;
+    @Column(name = "start_date", nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(name = "end_date", nullable = false)
+    private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_student_group", referencedColumnName = "id_student_groups", nullable = false)
