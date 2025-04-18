@@ -26,11 +26,20 @@ public class ClinicalAreaController {
         clinicalAreaService.createClinicalArea(request);
     }
 
-    @Operation(summary = "Obtiene un área clínica por su ID")
+    @Operation(summary = "Obtiene un área clínica por su ID, con paginación de profesores asociados")
     @GetMapping("/{idClinicalArea}")
-    public ResponseEntity<ClinicalAreaResponse> getClinicalArea(@PathVariable Long idClinicalArea) {
-        ClinicalAreaResponse clinicalArea = clinicalAreaService.getClinicalArea(idClinicalArea);
-        return ResponseEntity.ok(clinicalArea);
+    public ResponseEntity<ClinicalAreaResponse> getClinicalArea(
+            @PathVariable Long idClinicalArea,
+            @RequestParam(defaultValue = "0") int professorPage,
+            @RequestParam(defaultValue = "10") int professorSize,
+            @RequestParam(defaultValue = "professor.person.firstName") String professorOrder,
+            @RequestParam(defaultValue = "true") boolean professorAsc) {
+
+        Sort sort = professorAsc ? Sort.by(professorOrder).ascending() : Sort.by(professorOrder).descending();
+        Pageable professorPageable = PageRequest.of(professorPage, professorSize, sort);
+
+        ClinicalAreaResponse response = clinicalAreaService.getClinicalArea(idClinicalArea, professorPageable);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Obtiene todas las áreas clínicas, con paginación, ordenamiento y búsqueda opcional")
