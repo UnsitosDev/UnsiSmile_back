@@ -46,7 +46,7 @@ public class AuthController {
      * @param passwordUpdateRequest Objeto que contiene la nueva contraseña.
      * @return ResponseEntity con el estado de la operación.
      */
-    @PatchMapping("/updatePassword")
+    @PatchMapping("/update-password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest) {
         authService.updatePassword(passwordUpdateRequest);
@@ -64,7 +64,8 @@ public class AuthController {
         return ResponseEntity.ok(refreshTokenService.refreshToken(request.getRefreshToken()));
     }
 
-    @PatchMapping("/resetPasswordToDefault")
+    @Operation(summary = "Restablece la contraseña de un usuario a la predeterminada (solo ADMIN)")
+    @PatchMapping("/reset-password-to-default")
     @PreAuthorize("hasRole('ROLE_ADMIN')") // Solo los administradores pueden restablecer contraseñas
     public ResponseEntity<Void> resetPasswordToDefault(@RequestParam String username) {
         authService.resetPasswordToDefault(username);

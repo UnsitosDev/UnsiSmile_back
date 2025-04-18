@@ -258,7 +258,7 @@ public class ResponseMessages {
     public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";
     public static final String FORM_SECTION_NOT_FOUND = "Sección de formulario no encontrada con el ID: ";
     public static final String PATIENT_CLINICAL_HISTORY_NOT_FOUND = "Historial clínico del paciente no encontrado con el ID: ";
-    public static final String PATIENT_CLINICAL_HISTORY_ID_NULL = "El ID de la historial clínico del paciente no puede ser nulo";
+    public static final String PATIENT_CLINICAL_HISTORY_ID_NULL = "El ID de la historia clínica del paciente no puede ser nulo";
     public static final String NO_FORM_SECTIONS = "No se encontraron secciones de formulario";
     public static final String FAILED_SAVE_FORM_SECTION = "Error al guardar la sección de formulario debido a un error interno del servidor";
     public static final String FAILED_FIND_FORM_SECTION = "Error al buscar la sección de formulario con el ID: ";
@@ -337,4 +337,6 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_CLINICAL_AREA = "Error al actualizar el área clínica";
     public static final String FAILED_DELETE_CLINICAL_AREA = "Error al eliminar el área clínica";
 
+    //StatusClinicalHistory Request
+    public static final String STATUS_NULL = "El estatus no puede ser nulo";
 }
