@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ClinicalHistoryStatus;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -32,7 +32,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .professor(dto.getProfessorId() != null ? ProfessorModel.builder()
                         .idProfessor(dto.getProfessorId())
                         .build() : null)
-                .status(ClinicalHistoryStatus.IN_PROGRESS.toString())
+                .status(ReviewStatus.IN_PROGRESS.toString())
                 .build();
     }
 

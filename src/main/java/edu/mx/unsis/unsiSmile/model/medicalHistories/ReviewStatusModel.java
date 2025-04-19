@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,17 +13,17 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "status_clinical_history")
-public class StatusClinicalHistoryModel extends AuditModel {
+@Table(name = "review_status")
+public class ReviewStatusModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_status_clinical_history")
-    private Long idStatusClinicalHistory;
+    @Column(name = "id_review_status")
+    private Long idReviewStatus;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 100)
-    private ClinicalHistoryStatus status;
+    private ReviewStatus status;
 
     @Column(name = "message", columnDefinition = "LONGTEXT")
     private String message;
@@ -34,4 +35,8 @@ public class StatusClinicalHistoryModel extends AuditModel {
     @ManyToOne
     @JoinColumn(name = "fk_form_section")
     private FormSectionModel formSection;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_professor_clinical_area", nullable = false)
+    private ProfessorClinicalAreaModel professorClinicalArea;
 }

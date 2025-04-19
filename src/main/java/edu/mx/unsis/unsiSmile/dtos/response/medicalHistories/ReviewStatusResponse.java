@@ -7,9 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class StatusClinicalHistoryResponse {
-    private Long idStatusClinicalHistory;
+public class ReviewStatusResponse {
+    private Long idReviewStatus;
     private String status;
     private String message;
     private Long idPatientClinicalHistory;
+    private Long idSection;
+    private Long idProfessorClinicalArea;
 }
