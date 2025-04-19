@@ -211,9 +211,12 @@ public class ProfessorClinicalAreaService {
                 return Page.empty(professorPageable);
             }
 
-            return professorClinicalAreaPage.map(professorClinicalArea ->
-                    professorMapper.toDto(professorClinicalArea.getProfessor())
-            );
+            return professorClinicalAreaPage.map(professorClinicalArea -> {
+                ProfessorResponse response = professorMapper.toDto(professorClinicalArea.getProfessor());
+                response.setIdProfessorClinicalArea(professorClinicalArea.getIdProfessorClinicalArea());
+                return response;
+            });
+
         } catch (Exception e) {
             throw new RuntimeException(ResponseMessages.FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA, e);
         }

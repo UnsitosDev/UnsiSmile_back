@@ -14,13 +14,9 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +41,7 @@ public class ClinicalAreaService {
     @Transactional
     public ClinicalAreaResponse getClinicalArea(@NotNull Long idClinicalArea, Pageable professorPageable) {
         try {
-            ClinicalAreaModel clinicalAreaModel = clinicalAreaRepository.findById(idClinicalArea)
+            ClinicalAreaModel clinicalAreaModel = clinicalAreaRepository.findByIdClinicalAreaAndStatusKey(idClinicalArea, Constants.ACTIVE)
                 .orElseThrow(() -> new AppException(
                         String.format(ResponseMessages.CLINICAL_AREA_NOT_FOUND, idClinicalArea),
                         HttpStatus.NOT_FOUND));
@@ -68,8 +64,8 @@ public class ClinicalAreaService {
     public Page<ClinicalAreaResponse> getAllClinicalAreas(Pageable pageable, String keyword) {
         try {
             Page<ClinicalAreaModel> clinicalAreas = (keyword == null || keyword.isBlank())
-                    ? clinicalAreaRepository.findAll(pageable)
-                    : clinicalAreaRepository.findAllBySearchInput(keyword, pageable);
+                    ? clinicalAreaRepository.findAllByStatusKey(Constants.ACTIVE, pageable)
+                    : clinicalAreaRepository.findAllBySearchInput(keyword, Constants.ACTIVE, pageable);
 
             return clinicalAreas.map(clinicalAreaMapper::toDto);
         } catch (AppException e) {
