@@ -55,6 +55,8 @@ public class ReviewStatusService {
             reviewStatusMapper.updateEntity(request, statusModel);
 
             reviewStatusRepository.save(statusModel);
+        } catch (IllegalArgumentException e) {
+            throw new AppException(ResponseMessages.INVALID_STATUS + request.getStatus(), HttpStatus.BAD_REQUEST);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
