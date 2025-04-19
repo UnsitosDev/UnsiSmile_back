@@ -5,13 +5,13 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.StatusClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.StatusClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.service.QuestionService;
@@ -34,7 +34,7 @@ public class FormSectionService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
-    private final StatusClinicalHistoryService statusClinicalHistoryService;
+    private final ReviewStatusService reviewStatusService;
 
     @Transactional
     public void save(FormSectionRequest request) {
@@ -92,7 +92,7 @@ public class FormSectionService {
     private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel, Long idPatientClinicalHistory, Long idFormSection) {
         if (formSectionModel.getRequiresReview()) {
             try {
-                StatusClinicalHistoryResponse statusResponse = statusClinicalHistoryService.getStatusByPatientClinicalHistoryId(idPatientClinicalHistory, idFormSection);
+                ReviewStatusResponse statusResponse = reviewStatusService.getStatusByPatientClinicalHistoryId(idPatientClinicalHistory, idFormSection);
                 response.setStatus(statusResponse.getStatus());
             } catch (AppException ex) {
                 response.setStatus("NO_STATUS");
@@ -162,7 +162,7 @@ public class FormSectionService {
         FormSectionResponse response = toResponse(sectionModel, patientId, patientClinicalHistoryId);
 
         if (sectionModel.getRequiresReview()) {
-            StatusClinicalHistoryModel status = statusClinicalHistoryService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection());
+            ReviewStatusModel status = reviewStatusService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection());
             if(status != null) {
                 response.setStatus(status.getStatus().toString());
             } else {

@@ -269,7 +269,7 @@ public class ResponseMessages {
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
     public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
     public static final String ERROR_FETCHING_STATUS = "Error al obtener el estado de la historia clínica";
-    public static final String STATUS_NOT_FOUND = "Estado no encontrado para la historia clínica del paciente proporcionado";
+    public static final String STATUS_NOT_FOUND = "No se encontró el registro de estado de revisión con ID: %s";
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
 
@@ -404,6 +404,7 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_CLINICAL_AREA = "Error al actualizar el área clínica";
     public static final String FAILED_DELETE_CLINICAL_AREA = "Error al eliminar el área clínica";
 
-    //StatusClinicalHistory Request
+    //ReviewStatus Request
     public static final String STATUS_NULL = "El estatus no puede ser nulo";
+    public static final String ID_REVIEW_STATUS_NULL = "El ID del estatus de revisión no puede ser nulo";
 }
