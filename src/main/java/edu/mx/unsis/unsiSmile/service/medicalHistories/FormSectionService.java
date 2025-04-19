@@ -92,7 +92,7 @@ public class FormSectionService {
     private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel, Long idPatientClinicalHistory, Long idFormSection) {
         if (formSectionModel.getRequiresReview()) {
             try {
-                ReviewStatusResponse statusResponse = reviewStatusService.getStatusByPatientClinicalHistoryId(idPatientClinicalHistory, idFormSection);
+                ReviewStatusResponse statusResponse = reviewStatusService.getStatusByPatientMedicalRecordId(idPatientClinicalHistory, idFormSection);
                 response.setStatus(statusResponse.getStatus());
             } catch (AppException ex) {
                 response.setStatus("NO_STATUS");
