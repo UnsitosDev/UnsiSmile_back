@@ -36,4 +36,10 @@ public interface IProfessorClinicalAreaRepository extends JpaRepository<Professo
             Pageable pageable);
 
     boolean existsByProfessorAndStatusKey(ProfessorModel professor, String statusKey);
+
+    @Query("SELECT p FROM ProfessorClinicalAreaModel p " +
+            "WHERE p.clinicalArea = :clinicalArea AND p.statusKey = :statusKey")
+    List<ProfessorClinicalAreaModel> findByClinicalAreaAndStatusKey(
+            @Param("clinicalArea") ClinicalAreaModel clinicalArea,
+            @Param("statusKey") String statusKey);
 }

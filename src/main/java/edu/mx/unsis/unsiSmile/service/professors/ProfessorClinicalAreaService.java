@@ -30,7 +30,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -219,6 +218,20 @@ public class ProfessorClinicalAreaService {
 
         } catch (Exception e) {
             throw new RuntimeException(ResponseMessages.FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA, e);
+        }
+    }
+
+    @Transactional
+    public void deleteByClinicalArea(ClinicalAreaModel clinicalArea) {
+        try {
+            List<ProfessorClinicalAreaModel> professorClinicalAreas = professorClinicalAreaRepository.findByClinicalAreaAndStatusKey(clinicalArea, Constants.ACTIVE);
+            for (ProfessorClinicalAreaModel professorClinicalArea : professorClinicalAreas) {
+                deleteProfessorClinicalArea(professorClinicalArea.getIdProfessorClinicalArea());
+            }
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREAS, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
