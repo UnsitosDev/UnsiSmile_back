@@ -66,9 +66,9 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusResponse getStatusByPatientClinicalHistoryId(Long idPatientClinicalHistory, Long idSection) {
+    public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
         try {
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             ReviewStatusModel statusModel =
@@ -87,11 +87,11 @@ public class ReviewStatusService {
     }
 
     @Transactional
-    public void sendToReview(Long idPatientClinicalHistory,  Long idSection, Long idProfessorClinicalArea) {
+    public void sendToReview(Long idPatientMedicalRecord,  Long idSection, Long idProfessorClinicalArea) {
         try {
-            validateEntitiesExist(idPatientClinicalHistory, idSection, idProfessorClinicalArea);
+            validateEntitiesExist(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
 
-            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(idPatientClinicalHistory, idSection, idProfessorClinicalArea);
+            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
 
             reviewStatusRepository.save(statusModel);
         } catch (AppException e) {
@@ -138,20 +138,20 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient, String status) {
+    public List<PatientClinicalHistoryResponse> searchMedicalRecords(String idPatient, String status) {
         if (!patientRepository.existsById(idPatient)) {
             throw new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        ReviewStatus clinicalHistoryStatus;
+        ReviewStatus reviewStatus;
         try {
-            clinicalHistoryStatus = ReviewStatus.valueOf(status.toUpperCase());
+            reviewStatus = ReviewStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS, HttpStatus.BAD_REQUEST);
         }
 
         List<ReviewStatusModel> statusModels = reviewStatusRepository
-                .findByIdPatientAndStatus(idPatient, clinicalHistoryStatus);
+                .findByIdPatientAndStatus(idPatient, reviewStatus);
 
         return statusModels.stream()
                 .map(statusModel -> mapToClinicalHistoryResponse(statusModel.getPatientClinicalHistory()))

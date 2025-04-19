@@ -23,7 +23,7 @@ import java.util.List;
 @Tag(name = "Review Status of Clinical Histories", description = "Gestiona el proceso de revisión y las actualizaciones del estado de las secciones de la historia clínica")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unsismile/api/v1/medical-histories/status")
+@RequestMapping("/unsismile/api/v1/medical-records/status")
 public class ReviewStatusController {
 
     private final ReviewStatusService reviewStatusService;
@@ -37,12 +37,12 @@ public class ReviewStatusController {
     }
 
     @Operation(summary = "Enviar una historia clínica a revisión")
-    @PostMapping("/send-to-review/{idPatientClinicalHistory}/{idSection}/{idProfessorClinicalArea}")
+    @PostMapping("/send-to-review/patient-medical-records/{idPatientMedicalRecord}/sections/{idSection}/professor-clinical-areas/{idProfessorClinicalArea}")
     public ResponseEntity<Void> sendToReview(
-            @PathVariable Long idPatientClinicalHistory,
+            @PathVariable Long idPatientMedicalRecord,
             @PathVariable Long idSection,
             @PathVariable Long idProfessorClinicalArea) {
-        reviewStatusService.sendToReview(idPatientClinicalHistory, idSection, idProfessorClinicalArea);
+        reviewStatusService.sendToReview(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -66,20 +66,20 @@ public class ReviewStatusController {
     }
 
     @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado de revisión.")
-    @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient,
+    @GetMapping("/patient-medical-records")
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchMedicalRecords(@RequestParam String idPatient,
                                                                                       @RequestParam String status) {
-        List<PatientClinicalHistoryResponse> response = reviewStatusService.searchClinicalHistory(idPatient, status);
+        List<PatientClinicalHistoryResponse> response = reviewStatusService.searchMedicalRecords(idPatient, status);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtener el estado de revisión de la historia clínica por ID del paciente e ID de la sección")
-    @GetMapping("/{idPatientClinicalHistory}/{idSection}")
-    public ResponseEntity<ReviewStatusResponse> getStatusByPatientClinicalHistoryId(
-            @PathVariable Long idPatientClinicalHistory,
+    @GetMapping("/{idPatientMedicalRecord}/{idSection}")
+    public ResponseEntity<ReviewStatusResponse> getStatusByPatientMedicalRecordId(
+            @PathVariable Long idPatientMedicalRecord,
             @PathVariable Long idSection) {
-        ReviewStatusResponse response = reviewStatusService.getStatusByPatientClinicalHistoryId(
-                idPatientClinicalHistory,
+        ReviewStatusResponse response = reviewStatusService.getStatusByPatientMedicalRecordId(
+                idPatientMedicalRecord,
                 idSection);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
