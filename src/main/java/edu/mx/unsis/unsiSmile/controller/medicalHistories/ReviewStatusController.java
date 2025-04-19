@@ -28,7 +28,7 @@ public class ReviewStatusController {
 
     private final ReviewStatusService reviewStatusService;
 
-    @Operation(summary = "Crear o actualizar el estado de la historia clínica")
+    @Operation(summary = "Actualizar el estado de la historia clínica")
     @PatchMapping
     public ResponseEntity<ReviewStatusResponse> updateReviewStatus(@Valid
             @RequestBody ReviewStatusRequest request) {
