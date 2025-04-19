@@ -46,10 +46,10 @@ public class ReviewStatusController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener un listado de pacientes con una HC en un determinado estado.")
+    @Operation(summary = "Obtener un listado de pacientes con una HC en un determinado estado de revisión.")
     @GetMapping("/list")
     public ResponseEntity<Page<PatientResponse>> getPatientsByReviewStatus(
-            @RequestParam String status,
+            @RequestParam(defaultValue = "IN_REVIEW") String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "Field key for sorting", example = "patientClinicalHistory.idPatientClinicalHistory")
@@ -65,7 +65,7 @@ public class ReviewStatusController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado.")
+    @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado de revisión.")
     @GetMapping("/patient-clinical-histories")
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient,
                                                                                       @RequestParam String status) {
@@ -73,7 +73,7 @@ public class ReviewStatusController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtener el estado de la historia clínica por ID del paciente e ID de la sección")
+    @Operation(summary = "Obtener el estado de revisión de la historia clínica por ID del paciente e ID de la sección")
     @GetMapping("/{idPatientClinicalHistory}/{idSection}")
     public ResponseEntity<ReviewStatusResponse> getStatusByPatientClinicalHistoryId(
             @PathVariable Long idPatientClinicalHistory,

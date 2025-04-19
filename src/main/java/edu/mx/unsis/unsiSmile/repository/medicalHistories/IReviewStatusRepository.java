@@ -32,4 +32,12 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
             " GROUP BY s.patientClinicalHistory.idPatientClinicalHistory")
     List<ReviewStatusModel> findByIdPatientAndStatus(@Param("idPatient") String idPatient,
                                                               @Param("status") ReviewStatus status);
+
+    @Query("SELECT DISTINCT s FROM ReviewStatusModel s " +
+            "WHERE s.status = :status " +
+            "AND s.professorClinicalArea.professor.idProfessor = :professorId " +
+            "GROUP BY s.patientClinicalHistory.patient.idPatient")
+    Page<ReviewStatusModel> findByStatusAndProfessor(@Param("professorId") String professorId,
+                                                     @Param("status") ReviewStatus status,
+                                                     Pageable pageable);
 }

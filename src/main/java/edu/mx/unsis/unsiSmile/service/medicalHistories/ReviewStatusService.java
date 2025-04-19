@@ -1,7 +1,9 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
@@ -17,6 +19,7 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistor
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
+import edu.mx.unsis.unsiSmile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +41,7 @@ public class ReviewStatusService {
     private final IPatientRepository patientRepository;
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
+    private final UserService userService;
 
     @Transactional
     public void updateReviewStatus(ReviewStatusRequest request) {
@@ -98,9 +102,19 @@ public class ReviewStatusService {
     @Transactional(readOnly = true)
     public Page<PatientResponse> getPatientsByReviewStatus(String status, Pageable pageable) {
         try {
+            UserResponse user = userService.getCurrentUser();
             ReviewStatus clinicalHistoryStatus = ReviewStatus.valueOf(status.toUpperCase());
 
-            Page<ReviewStatusModel> statusModels = reviewStatusRepository.findByStatus(clinicalHistoryStatus, pageable);
+            Page<ReviewStatusModel> statusModels;
+
+            if (user.getRole().getRole() == ERole.ROLE_ADMIN) {
+                statusModels = reviewStatusRepository.findByStatus(clinicalHistoryStatus, pageable);
+            } else if (user.getRole().getRole() == ERole.ROLE_CLINICAL_AREA_SUPERVISOR) {
+                statusModels = reviewStatusRepository.findByStatusAndProfessor(
+                        user.getUsername(),clinicalHistoryStatus, pageable);
+            } else {
+                throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
+            }
 
             return statusModels.map(statusModel -> {
                 PatientModel patient = statusModel.getPatientClinicalHistory().getPatient();
@@ -108,6 +122,8 @@ public class ReviewStatusService {
             });
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + status, HttpStatus.BAD_REQUEST);
+        }catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_FETCHING_STATUS_LIST, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
