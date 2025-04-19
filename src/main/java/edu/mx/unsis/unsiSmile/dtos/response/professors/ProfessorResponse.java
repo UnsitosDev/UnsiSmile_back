@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfessorResponse {
+    private Long idProfessorClinicalArea;
+
     private String employeeNumber;
 
     private PersonResponse person;
