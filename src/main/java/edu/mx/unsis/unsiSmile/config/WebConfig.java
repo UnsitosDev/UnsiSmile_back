@@ -26,9 +26,8 @@ public class WebConfig implements WebMvcConfigurer {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8081",
-                "https://unsismile.unsis.edu.mx",
-                "http://132.18.41.181:8081","https://132.18.41.181:8081"));
+                "http://localhost:8081", "https://unsismile.unsis.edu.mx", "http://132.18.41.181:8081",
+                "https://132.18.41.181:8081"));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
