@@ -94,10 +94,13 @@ public class ClinicalAreaService {
     @Transactional
     public void deleteClinicalArea(@NotNull Long idClinicalArea) {
         try {
-            ClinicalAreaModel clinicalAreaModel = clinicalAreaRepository.findById(idClinicalArea)
+            ClinicalAreaModel clinicalAreaModel = clinicalAreaRepository.findByIdClinicalAreaAndStatusKey(idClinicalArea, Constants.ACTIVE)
                 .orElseThrow(() -> new AppException(
                         String.format(ResponseMessages.CLINICAL_AREA_NOT_FOUND, idClinicalArea),
                         HttpStatus.NOT_FOUND));
+
+            professorClinicalAreaService.deleteByClinicalArea(clinicalAreaModel);
+
             clinicalAreaModel.setStatusKey(Constants.INACTIVE);
             clinicalAreaRepository.save(clinicalAreaModel);
         } catch (AppException e) {
