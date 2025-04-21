@@ -170,7 +170,7 @@ public class UserService {
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
                                         HttpStatus.NOT_FOUND))));
-                case ERole.ROLE_PROFESSOR ->
+                case ERole.ROLE_PROFESSOR, ERole.ROLE_CLINICAL_AREA_SUPERVISOR ->
                         ResponseEntity.ok(professorMapper.toDto(professorRepository.findById(user.getUsername())
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
