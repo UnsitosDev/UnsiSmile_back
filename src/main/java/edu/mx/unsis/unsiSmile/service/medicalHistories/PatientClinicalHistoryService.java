@@ -2,7 +2,9 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
@@ -23,13 +25,13 @@ public class PatientClinicalHistoryService {
 
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
     private final IPatientRepository patientRepository;
+    private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
 
     @Transactional
     public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
         try {
             PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-
 
             return patientClinicalHistoryRepository.save(toEntity(patientModel, idClinicalHistory));
         } catch (AppException ex) {
@@ -39,6 +41,17 @@ public class PatientClinicalHistoryService {
         }
     }
 
+    @Transactional
+    public PatientMedicalRecordRes createPatientMedicalRecord(String idPatient, Long idClinicalHistory) {
+        try {
+            PatientClinicalHistoryModel model = this.save(idPatient, idClinicalHistory);
+            return toResponse(model);
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Failed to save patient clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 
     @Transactional(readOnly = true)
     public PatientClinicalHistoryModel findById(Long id) {
@@ -128,6 +141,14 @@ public class PatientClinicalHistoryService {
                 .patient(entity.getPatient())
                 .clinicalHistoryCatalog(entity.getClinicalHistoryCatalog())
                 .date(entity.getDate())
+                .build();
+    }
+
+    private PatientMedicalRecordRes toResponse(PatientClinicalHistoryModel entity) {
+        return PatientMedicalRecordRes.builder()
+                .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
+                .clinicalHistoryCatalog(clinicalHistoryCatalogMapper.toDto(entity.getClinicalHistoryCatalog()))
+                .date(entity.getDate().toLocalDate())
                 .build();
     }
 }

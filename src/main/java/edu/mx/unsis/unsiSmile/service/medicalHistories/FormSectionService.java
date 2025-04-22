@@ -5,9 +5,9 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
@@ -35,6 +35,7 @@ public class FormSectionService {
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
     private final ReviewStatusService reviewStatusService;
+    private final ReviewStatusMapper reviewStatusMapper;
 
     @Transactional
     public void save(FormSectionRequest request) {
@@ -89,17 +90,13 @@ public class FormSectionService {
                 patientClinicalHistoryModel.getIdPatientClinicalHistory());
     }
 
-    private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel, Long idPatientClinicalHistory, Long idFormSection) {
-        if (formSectionModel.getRequiresReview()) {
-            try {
-                ReviewStatusResponse statusResponse = reviewStatusService.getStatusByPatientMedicalRecordId(idPatientClinicalHistory, idFormSection);
-                response.setStatus(statusResponse.getStatus());
-            } catch (AppException ex) {
-                response.setStatus("NO_STATUS");
-            }
-        } else {
-            response.setStatus("NO_REQUIRED");
-        }
+    private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel,
+                                     Long idPatientClinicalHistory, Long idFormSection) {
+        ReviewStatusModel status = formSectionModel.getRequiresReview()
+                ? reviewStatusService.getStatusModelByPatientMedicalRecordId(idPatientClinicalHistory, idFormSection)
+                : null;
+
+        response.setReviewStatus(reviewStatusService.buildStatusResponse(status, formSectionModel.getRequiresReview()));
     }
 
     @Transactional(readOnly = true)
@@ -158,20 +155,16 @@ public class FormSectionService {
         }
     }
 
-    private FormSectionResponse buildFormSectionResponseWithStatus(FormSectionModel sectionModel, String patientId, Long patientClinicalHistoryId) {
+    private FormSectionResponse buildFormSectionResponseWithStatus(FormSectionModel sectionModel,
+                                                                   String patientId,
+                                                                   Long patientClinicalHistoryId) {
         FormSectionResponse response = toResponse(sectionModel, patientId, patientClinicalHistoryId);
 
-        if (sectionModel.getRequiresReview()) {
-            ReviewStatusModel status = reviewStatusService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection());
-            if(status != null) {
-                response.setStatus(status.getStatus().toString());
-            } else {
-                response.setStatus("NO_STATUS");
-            }
-        } else {
-            response.setStatus("NO_REQUIRED");
-        }
+        ReviewStatusModel status = sectionModel.getRequiresReview()
+                ? reviewStatusService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection())
+                : null;
 
+        response.setReviewStatus(reviewStatusService.buildStatusResponse(status, sectionModel.getRequiresReview()));
         return response;
     }
 

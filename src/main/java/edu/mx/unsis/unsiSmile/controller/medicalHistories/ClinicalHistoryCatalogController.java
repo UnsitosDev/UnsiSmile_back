@@ -3,8 +3,8 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
@@ -66,10 +66,10 @@ public class ClinicalHistoryCatalogController {
 
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
-    public ResponseEntity<PatientClinicalHistoryModel> createPatientClinicalHistory(
+    public ResponseEntity<PatientMedicalRecordRes> createPatientClinicalHistory(
             @RequestParam String idPatient,
             @RequestParam Long idClinicalHistory) {
-        PatientClinicalHistoryModel response = patientClinicalHistoryService.save(idPatient, idClinicalHistory);
+        PatientMedicalRecordRes response = patientClinicalHistoryService.createPatientMedicalRecord(idPatient, idClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

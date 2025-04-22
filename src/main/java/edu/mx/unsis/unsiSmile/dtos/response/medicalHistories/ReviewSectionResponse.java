@@ -7,8 +7,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class ReviewStatusResponse extends ReviewSectionResponse{
-    private Long idPatientClinicalHistory;
-    private Long idSection;
-    private Long idProfessorClinicalArea;
+public class ReviewSectionResponse {
+    private Long idReviewStatus;
+    private String status;
+    private String message;
 }

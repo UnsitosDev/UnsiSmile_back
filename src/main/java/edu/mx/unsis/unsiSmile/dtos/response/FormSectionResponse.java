@@ -1,5 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.response;
-
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class FormSectionResponse {
 
     private Boolean requiresReview;
 
-    private String status;
+    private ReviewSectionResponse reviewStatus;
 
     private List<FormSectionResponse> subSections;
 

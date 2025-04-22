@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -66,17 +67,27 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
+    public ReviewStatusModel getStatusModelByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
         try {
             PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            ReviewStatusModel statusModel =
-                reviewStatusRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
-                        patientClinicalHistoryModel.getPatient().getIdPatient(),
-                                idSection)
-                        .orElseThrow(() -> new AppException(ResponseMessages.STATUS_NOT_FOUND, HttpStatus.NOT_FOUND));
+            return reviewStatusRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
+                            patientClinicalHistoryModel.getPatient().getIdPatient(),
+                            idSection)
+                    .orElseThrow(() -> new AppException(ResponseMessages.STATUS_NOT_FOUND, HttpStatus.NOT_FOUND));
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_FETCHING_STATUS, HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
 
+    @Transactional(readOnly = true)
+    public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
+        try {
+            ReviewStatusModel statusModel =
+                    this.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord, idSection);
             return reviewStatusMapper.toDto(statusModel);
 
         } catch (AppException ex) {
@@ -178,5 +189,19 @@ public class ReviewStatusService {
         professorClinicalAreaRepository.findById(idProfessorClinicalArea)
                 .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + idProfessorClinicalArea,
                         HttpStatus.NOT_FOUND));
+    }
+
+    public ReviewSectionResponse buildStatusResponse(ReviewStatusModel statusModel, boolean requiresReview) {
+        if (!requiresReview) {
+            return ReviewSectionResponse.builder()
+                    .status("NOT_REQUIRED")
+                    .build();
+        }
+
+        return statusModel != null
+                ? reviewStatusMapper.toReviewSectionResponse(statusModel)
+                : ReviewSectionResponse.builder()
+                .status("NO_STATUS")
+                .build();
     }
 }
