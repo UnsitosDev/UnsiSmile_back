@@ -87,17 +87,21 @@ public class NeighborhoodService {
             Optional<NeighborhoodModel> specialNeighborhoodOpt = getSpecialNeighborhood();
 
             Page<NeighborhoodModel> neighborhoodModels = neighborhoodRepository.findByLocality(locality, pageable);
+            List<NeighborhoodModel> neighborhoodList = neighborhoodModels.getContent();
 
-            List<NeighborhoodModel> combinedNeighborhoods = new ArrayList<>();
+            List<NeighborhoodModel> combinedNeighborhoods = new ArrayList<>(neighborhoodList);
 
-            specialNeighborhoodOpt.ifPresent(combinedNeighborhoods::add);
-
-
-            combinedNeighborhoods.addAll(neighborhoodModels.getContent());
+            specialNeighborhoodOpt.ifPresent(specialNeighborhood -> {
+                boolean exists = neighborhoodList.stream()
+                        .anyMatch(neighborhood -> neighborhood.getName().equals(specialNeighborhood.getName()));
+                if (!exists) {
+                    combinedNeighborhoods.add(specialNeighborhood);
+                }
+            });
 
             return new PageImpl<>(combinedNeighborhoods.stream()
                     .map(neighborhoodMapper::toDto)
-                    .collect(Collectors.toList()), pageable, combinedNeighborhoods.size());
+                    .collect(Collectors.toList()), pageable, neighborhoodModels.getTotalElements());
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
