@@ -103,7 +103,7 @@ public class PatientClinicalHistoryService {
                 .clinicalHistoryCatalog(ClinicalHistoryCatalogModel.builder()
                         .idClinicalHistoryCatalog(idClinicalHistory)
                         .build())
-                .date(LocalDateTime.now())
+                .appointmentDate(LocalDateTime.now())
                 .build();
     }
 
@@ -140,7 +140,7 @@ public class PatientClinicalHistoryService {
                 .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
                 .patient(entity.getPatient())
                 .clinicalHistoryCatalog(entity.getClinicalHistoryCatalog())
-                .date(entity.getDate())
+                .appointmentDate(entity.getAppointmentDate())
                 .build();
     }
 
@@ -148,7 +148,7 @@ public class PatientClinicalHistoryService {
         return PatientMedicalRecordRes.builder()
                 .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
                 .clinicalHistoryCatalog(clinicalHistoryCatalogMapper.toDto(entity.getClinicalHistoryCatalog()))
-                .date(entity.getDate().toLocalDate())
+                .date(entity.getAppointmentDate().toLocalDate())
                 .build();
     }
 }

@@ -29,6 +29,6 @@ public class PatientClinicalHistoryModel extends AuditModel {
     @JoinColumn(name = "fk_patient")
     private PatientModel patient;
 
-    @Column(name = "date")
-    private LocalDateTime date;
+    @Column(name = "appointment_date")
+    private LocalDateTime appointmentDate;
 }

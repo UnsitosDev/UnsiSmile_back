@@ -21,7 +21,7 @@ public class ClinicalHistoryCatalogResponse {
 
     private Long medicalRecordNumber;
 
-    private LocalDateTime date;
+    private LocalDateTime appointmentDate;
 
     List<FormSectionResponse> formSections;
 }
