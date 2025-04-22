@@ -41,9 +41,7 @@ public class SecurityConfig {
             // 1) Permitir el handshake de SockJS en /notifications y /review
             .requestMatchers(HttpMethod.GET,  basePath + "/notifications/**").permitAll()
             .requestMatchers(HttpMethod.POST, basePath + "/notifications/**").permitAll()
-            .requestMatchers(HttpMethod.GET,  basePath + "/review/**").permitAll()
-            .requestMatchers(HttpMethod.POST, basePath + "/review/**").permitAll()
-
+            
             // 2) Rutas de autenticación REST (login, registro, etc.)
             .requestMatchers(basePath + "/auth/**").permitAll()
 

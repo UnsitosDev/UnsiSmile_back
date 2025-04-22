@@ -30,7 +30,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/unsismile/api/v1/notifications", "/unsismile/api/v1/review")
+        registry.addEndpoint("/unsismile/api/v1/notifications")
                 .setAllowedOrigins(
                         "http://localhost:8081",
                         "https://unsismile.unsis.edu.mx",
