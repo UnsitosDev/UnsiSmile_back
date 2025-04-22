@@ -12,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,16 +19,6 @@ import java.util.Optional;
 public interface IPatientRepository extends JpaRepository<PatientModel, String> {
 
     Optional<PatientModel> findByIdPatient(String idPatient);
-
-    List<PatientModel> findByAdmissionDate(LocalDate admissionDate);
-
-    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate > :cutoffDate")
-    List<PatientModel> findMinorPatients(@Param("cutoffDate") LocalDate cutoffDate);
-
-    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate <= :cutoffDate")
-    List<PatientModel> findAdultPatients(@Param("cutoffDate") LocalDate cutoffDate);
-
-    List<PatientModel> findByHasDisability(Boolean hasDisability);
 
     List<PatientModel> findByNationality(NationalityModel nationality);
 

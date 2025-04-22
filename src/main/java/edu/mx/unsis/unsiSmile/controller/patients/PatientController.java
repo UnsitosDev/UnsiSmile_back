@@ -19,9 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @RestController
 @RequestMapping("/unsismile/api/v1/patients")
 @RequiredArgsConstructor
@@ -56,24 +53,6 @@ public class PatientController {
     public ResponseEntity<PatientResponse> getPatientById(@PathVariable String id) {
         PatientResponse patientResponse = patientService.getPatientById(id);
         return ResponseEntity.ok(patientResponse);
-    }
-
-    @GetMapping("/admissionDate/{admissionDate}")
-    public ResponseEntity<List<PatientResponse>> getPatientsByAdmissionDate(@PathVariable LocalDate admissionDate) {
-        List<PatientResponse> patients = patientService.getPatientsByAdmissionDate(admissionDate);
-        return ResponseEntity.ok(patients);
-    }
-
-    @GetMapping("/isMinor/{isMinor}")
-    public ResponseEntity<List<PatientResponse>> getPatientsByIsMinor(@PathVariable Boolean isMinor) {
-        List<PatientResponse> patients = patientService.getPatientsByMinorStatus(isMinor);
-        return ResponseEntity.ok(patients);
-    }
-
-    @GetMapping("/hasDisability/{hasDisability}")
-    public ResponseEntity<List<PatientResponse>> getPatientsByHasDisability(@PathVariable Boolean hasDisability) {
-        List<PatientResponse> patients = patientService.getPatientsByHasDisability(hasDisability);
-        return ResponseEntity.ok(patients);
     }
 
     // Implement similar methods for other search criteria like nationality, person,
