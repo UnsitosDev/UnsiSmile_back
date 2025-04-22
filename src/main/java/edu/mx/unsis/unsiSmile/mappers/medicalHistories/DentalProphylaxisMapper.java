@@ -30,7 +30,7 @@ public class DentalProphylaxisMapper implements BaseMapper<DentalProphylaxisResp
     public DentalProphylaxisResponse toDto(DentalProphylaxisModel entity) {
         return DentalProphylaxisResponse.builder()
                 .idDentalProphylaxis(entity.getIdDentalProphylaxis())
-                .date(entity.getCreatedAt().toLocalDateTime().toLocalDate())
+                .creationDate(entity.getCreatedAt().toLocalDateTime().toLocalDate())
                 .teethProphylaxis(Collections.emptyList())
                 .build();
     }

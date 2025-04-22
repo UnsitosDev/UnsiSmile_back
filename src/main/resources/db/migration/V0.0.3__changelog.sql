@@ -149,7 +149,7 @@ CREATE TABLE patient_clinical_histories (
                                             id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
                                             fk_clinical_history_catalog bigint(20) DEFAULT NULL,
                                             fk_patient CHAR(36) NOT NULL,
-                                            date datetime DEFAULT NULL,
+                                            appointment_date DATETIME(6) DEFAULT NULL,
                                             created_at DATETIME(6) DEFAULT NULL,
                                             created_by VARCHAR(255) DEFAULT NULL,
                                             status_key VARCHAR(255) DEFAULT NULL,

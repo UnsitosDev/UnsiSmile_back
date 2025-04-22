@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,5 +10,5 @@ import java.time.LocalDate;
 public class PatientMedicalRecordRes {
     private Long idPatientClinicalHistory;
     private ClinicalHistoryCatalogResponse clinicalHistoryCatalog;
-    private LocalDate date;
+    private LocalDate appointmentDate;
 }

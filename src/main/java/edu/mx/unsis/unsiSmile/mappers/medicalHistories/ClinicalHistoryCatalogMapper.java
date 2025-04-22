@@ -26,7 +26,7 @@ public class ClinicalHistoryCatalogMapper implements BaseMapper<ClinicalHistoryC
                 .idClinicalHistoryCatalog(entity.getIdClinicalHistoryCatalog())
                 .clinicalHistoryName(entity.getClinicalHistoryName())
                 .medicalRecordNumber(null)
-                .date(null)
+                .appointmentDate(null)
                 .formSections(Collections.emptyList())
                 .build();
     }

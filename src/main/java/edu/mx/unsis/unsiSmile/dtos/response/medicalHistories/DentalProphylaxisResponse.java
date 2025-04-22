@@ -14,6 +14,6 @@ import java.util.List;
 @Builder
 public class DentalProphylaxisResponse {
     private Long idDentalProphylaxis;
-    private LocalDate date;
+    private LocalDate creationDate;
     private List<ToothResponse> teethProphylaxis;
 }
