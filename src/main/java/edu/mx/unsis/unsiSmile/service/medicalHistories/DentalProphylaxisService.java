@@ -163,7 +163,7 @@ public class DentalProphylaxisService {
 
         return DentalProphylaxisResponse.builder()
                 .idDentalProphylaxis(dentalProphylaxisId)
-                .date(createdAt.toLocalDateTime().toLocalDate())
+                .creationDate(createdAt.toLocalDateTime().toLocalDate())
                 .teethProphylaxis(teethProphylaxisList)
                 .build();
     }
