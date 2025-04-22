@@ -78,7 +78,7 @@ public class PatientService {
             Optional<PatientModel> existingPatient = patientRepository.findByPerson(personModel);
 
             if (existingPatient.isPresent()) {
-                throw new AppException("A patient with the given person already exists", HttpStatus.CONFLICT);
+                throw new AppException( ResponseMessages.PATIENT_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             validatePatientRequest(patientRequest);
@@ -118,12 +118,32 @@ public class PatientService {
     }
 
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
-        if (validationUtils.isMinor(patientRequest.getPerson().getBirthDate())) {
-            GuardianModel guardianModel = Optional.ofNullable(patientRequest.getGuardian())
-                    .map(this::createGuardianEntity)
-                    .orElseThrow(() -> new AppException("The patient needs to have a guardian", HttpStatus.BAD_REQUEST));
-            patientModel.setGuardian(guardianModel);
+        boolean hasDisability = Optional.ofNullable(patientRequest.getHasDisability()).orElse(false);
+        boolean hasGuardianRequest = patientRequest.getGuardian() != null;
+        
+        if (requiresGuardian(patientRequest) && !hasGuardianRequest) {
+            throw new AppException(ResponseMessages.PATIENT_NEEDS_GUARDIAN, HttpStatus.BAD_REQUEST);
         }
+
+        if (hasGuardianRequest && requiresGuardian(patientRequest)) {
+            setGuardianForPatient(patientRequest.getGuardian(), patientModel);
+            return;
+        }
+
+        if (hasGuardianRequest && hasDisability) {
+            setGuardianForPatient(patientRequest.getGuardian(), patientModel);
+            return;
+        }
+
+    }
+
+    private boolean requiresGuardian(PatientRequest patientRequest) {
+        return validationUtils.isMinor(patientRequest.getPerson().getBirthDate());
+    }
+
+    private void setGuardianForPatient(GuardianRequest guardianRequest, PatientModel patientModel) {
+        GuardianModel guardianModel = createGuardianEntity(guardianRequest);
+        patientModel.setGuardian(guardianModel);
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
@@ -167,8 +187,12 @@ public class PatientService {
 
     // Method to create a guardian entity
     private GuardianModel createGuardianEntity(GuardianRequest guardianRequest) {
-        Assert.notNull(guardianRequest, "GuardianRequest cannot be null");
-        return guardianRepository.save(guardianMapper.toEntity(guardianRequest));
+        Assert.notNull(guardianRequest, ResponseMessages.GUARDIAN_REQUEST_CANNOT_BE_NULL);
+        try {
+            return guardianRepository.save(guardianMapper.toEntity(guardianRequest));
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.GUARDIAN_ERROR_CREATING , HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 
     @Transactional(readOnly = true)

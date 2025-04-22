@@ -58,7 +58,9 @@ public class ResponseMessages {
     public static final String ERROR_REPORT_NOT_FOUND = "No se pudo encontrar el archivo de notas de evolución: ";
     public static final String ERROR_GENERATING_REPORT = "Error al generar el PDF de notas de evolución: ";
     public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
-    public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser nulL.";
+    public static final String PATIENT_ALREADY_EXISTS = "El paciente ya se encuentra registrado en el sistema";
+    public static final String PATIENT_NEEDS_GUARDIAN = "El paciente necesita un tutor";
+    public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser null";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String STUDENT_GROUP_NOT_FOUND = "El estudiante no está registrado en el grupo.";
@@ -175,6 +177,7 @@ public class ResponseMessages {
     public static final String GUARDIAN_NOT_FOUND = "Tutor no encontrado";
     public static final String GUARDIAN_UPDATE_FAILED = "Error al actualizar el tutor.";
     public static final String GUARDIAN_REQUEST_CANNOT_BE_NULL = "El objeto GuardianRequest no puede ser nulo.";
+    public static final String GUARDIAN_ERROR_CREATING = "Error al crear el tutor";
 
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
