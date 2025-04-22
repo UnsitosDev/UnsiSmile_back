@@ -365,20 +365,3 @@ CREATE TABLE
         CONSTRAINT FKghwwjdkti37jnwnwrtiepotgr FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
         CONSTRAINT FKl4jl7bcm6vqrmlcg1l8ir6bo1 FOREIGN KEY (fk_student) REFERENCES students (enrollment)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-CREATE TABLE
-    students_semesters (
-        id_student_semester BIGINT (20) NOT NULL AUTO_INCREMENT,
-        fk_semester BIGINT (20) DEFAULT NULL,
-        fk_student VARCHAR(255) DEFAULT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (id_student_semester),
-        KEY FK1ngs2h47y6743rfr8fk9gi0bw (fk_semester),
-        KEY FKlpipqdy7xqasfotfpfhjxmure (fk_student),
-        CONSTRAINT FK1ngs2h47y6743rfr8fk9gi0bw FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester),
-        CONSTRAINT FKlpipqdy7xqasfotfpfhjxmure FOREIGN KEY (fk_student) REFERENCES students (enrollment)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
