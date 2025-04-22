@@ -148,7 +148,7 @@ public class PatientClinicalHistoryService {
         return PatientMedicalRecordRes.builder()
                 .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
                 .clinicalHistoryCatalog(clinicalHistoryCatalogMapper.toDto(entity.getClinicalHistoryCatalog()))
-                .date(entity.getAppointmentDate().toLocalDate())
+                .appointmentDate(entity.getAppointmentDate().toLocalDate())
                 .build();
     }
 }
