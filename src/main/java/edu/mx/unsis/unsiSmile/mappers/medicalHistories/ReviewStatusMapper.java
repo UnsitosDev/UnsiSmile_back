@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
 import java.util.List;
 
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import org.springframework.stereotype.Component;
@@ -58,6 +59,14 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
                 .professorClinicalArea(ProfessorClinicalAreaModel.builder()
                         .idProfessorClinicalArea(idProfessorClinicalArea)
                         .build())
+                .build();
+    }
+
+    public ReviewSectionResponse toReviewSectionResponse(ReviewStatusModel entity) {
+        return ReviewSectionResponse.builder()
+                .idReviewStatus(entity.getIdReviewStatus())
+                .status(entity.getStatus().toString())
+                .message(entity.getMessage())
                 .build();
     }
 }
