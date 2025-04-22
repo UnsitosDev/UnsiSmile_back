@@ -257,48 +257,6 @@ public class PatientService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<PatientResponse> getPatientsByAdmissionDate(@NonNull LocalDate admissionDate) {
-        try {
-            List<PatientModel> patients = patientRepository.findByAdmissionDate(admissionDate);
-            return patients.stream()
-                    .map(patientMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch patients by admission date", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<PatientResponse> getPatientsByMinorStatus(@NonNull Boolean isMinor) {
-        try {
-            List<PatientModel> patients;
-            if (isMinor) {
-                patients = patientRepository.findMinorPatients(LocalDate.now().minusYears(18));
-            } else {
-                patients = patientRepository.findAdultPatients(LocalDate.now().minusYears(18));
-            }
-            return patients.stream()
-                    .map(patientMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch patients by minor status", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<PatientResponse> getPatientsByHasDisability(@NonNull Boolean hasDisability) {
-        try {
-            List<PatientModel> patients = patientRepository.findByHasDisability(hasDisability);
-            return patients.stream()
-                    .map(patientMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch patients by disability status", HttpStatus.INTERNAL_SERVER_ERROR,
-                    ex);
-        }
-    }
-
     @Transactional
     public PatientResponse updatePatient(@NonNull String idPatient, @NonNull PatientRequest updatedPatientRequest) {
         try {

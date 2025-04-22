@@ -21,16 +21,6 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
 
     Optional<PatientModel> findByIdPatient(String idPatient);
 
-    List<PatientModel> findByAdmissionDate(LocalDate admissionDate);
-
-    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate > :cutoffDate")
-    List<PatientModel> findMinorPatients(@Param("cutoffDate") LocalDate cutoffDate);
-
-    @Query("SELECT p FROM PatientModel p JOIN p.person per WHERE per.birthDate <= :cutoffDate")
-    List<PatientModel> findAdultPatients(@Param("cutoffDate") LocalDate cutoffDate);
-
-    List<PatientModel> findByHasDisability(Boolean hasDisability);
-
     List<PatientModel> findByNationality(NationalityModel nationality);
 
     Optional<PatientModel> findByPerson(PersonModel person);
