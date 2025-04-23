@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/unsismile/api/v1/guardian")
+@RequestMapping("/unsismile/api/v1/guardians")
 public class GuardianController {
 
     private final GuardianService guardianService;
@@ -45,7 +45,8 @@ public class GuardianController {
     }
 
     @PutMapping("/{id}")
-        public ResponseEntity<GuardianResponse> updateGuardian(@Valid @PathVariable Long id, @RequestBody GuardianRequest updatedGuardianRequest) {
+    public ResponseEntity<GuardianResponse> updateGuardian(@Valid @PathVariable Long id,
+            @RequestBody GuardianRequest updatedGuardianRequest) {
         GuardianResponse updatedGuardian = guardianService.updateGuardian(id, updatedGuardianRequest);
         return ResponseEntity.ok(updatedGuardian);
     }
@@ -55,4 +56,11 @@ public class GuardianController {
         guardianService.deleteGuardianById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/CURP/{curp}")
+    public ResponseEntity<GuardianResponse> getGuardianByCurp(@PathVariable String curp) {
+        GuardianResponse guardianResponse = guardianService.getGuardianByCurp(curp);
+        return ResponseEntity.ok(guardianResponse);
+    }
+
 }

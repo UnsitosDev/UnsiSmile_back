@@ -192,7 +192,7 @@ public class PatientService {
         } catch (AppException ex) {
             throw ex;
         } catch (Exception e) {
-            throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            throw new AppException(ResponseMessages.FAILED_TO_ASSIGN_PATIENT, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -206,7 +206,7 @@ public class PatientService {
                 return getAllPatientsPage(pageable, keyword);
             }
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch patients", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.PATIENT_FETCH_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -279,7 +279,7 @@ public class PatientService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_PATIENT_WITH_ID, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -360,7 +360,7 @@ public class PatientService {
         if (optionalPatient.isPresent()) {
             return patientMapper.toDto(optionalPatient.get());
         } else {
-            throw new AppException("Student does not have access to this patient", HttpStatus.FORBIDDEN);
+            throw new AppException(ResponseMessages.WITHOUT_PERMITS_FOR_GET_PATIENT, HttpStatus.FORBIDDEN);
         }
     }
 
@@ -387,6 +387,19 @@ public class PatientService {
         if (updatedPatientRequest.getAddress() != null) {
             AddressModel addressModel = addressService.findOrCreateAddress(updatedPatientRequest.getAddress());
             patientModel.setAddress(addressModel);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public PatientResponse getPatientByCurp(@NonNull String curp) {
+        try {
+            PatientModel patientModel = patientRepository.findByCurp(curp)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+            return patientMapper.toDto(patientModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.PATIENT_FETCH_FAILED, HttpStatus.NOT_FOUND, ex);
         }
     }
 }
