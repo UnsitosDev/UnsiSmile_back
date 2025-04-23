@@ -25,7 +25,7 @@ public class GuardianModel extends AuditModel {
     private CatalogOptionModel parentalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_person", referencedColumnName = "curp", nullable = false)
+    @JoinColumn(name = "fk_person", referencedColumnName = "curp", nullable = false, unique = true)
     private PersonModel person;
 
     @Column(name = "doctor_name", length = 100)

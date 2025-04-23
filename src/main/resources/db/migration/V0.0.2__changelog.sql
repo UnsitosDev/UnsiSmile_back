@@ -264,7 +264,7 @@ CREATE TABLE
     guardians (
         id_guardian BIGINT (20) NOT NULL AUTO_INCREMENT,
         fk_parental_status BIGINT (20) NOT NULL,
-        fk_person VARCHAR(20) NOT NULL,
+        fk_person VARCHAR(20) NOT NULL UNIQUE,
         doctor_name VARCHAR(100) DEFAULT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
