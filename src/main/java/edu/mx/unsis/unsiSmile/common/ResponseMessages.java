@@ -51,7 +51,13 @@ public class ResponseMessages {
     public static final String PASSWORD_WEAK_SPECIAL_CHAR = "Contraseña débil: debe incluir al menos un carácter especial (@$!%*?&)";
     public static final String PASSWORD_INVALID_SPECIFIC_CHAR = "Carácter inválido en la contraseña: '%s' no está permitido";
 
+    //PATIENTS
     public static final String PATIENT_NOT_FOUND = "Paciente no encontrado";
+    public static final String WITHOUT_PERMITS_FOR_GET_PATIENT = "Sin permisos para el paciente";
+    public static final String FAILED_TO_ASSIGN_PATIENT = "Error al asignar el paciente";
+    public static final String FAILED_TO_FETCH_PATIENT_WITH_ID = "Error al obtener el paciente con ID: ";
+
+
     public static final String ERROR_CREATING_PROGRESS_NOTE = "Error al crear la nota de evolución. ";
     public static final String ERROR_FETCHING_PROGRESS_NOTES = "Error al obtener las notas de evolución del paciente.";
     public static final String PATIENT_NOT_FOUND_PROGRESS_NOTES = "No se encontraron notas de evolución para el paciente con ID: ";
@@ -61,6 +67,7 @@ public class ResponseMessages {
     public static final String PATIENT_ALREADY_EXISTS = "El paciente ya se encuentra registrado en el sistema";
     public static final String PATIENT_NEEDS_GUARDIAN = "El paciente necesita un tutor";
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser null";
+    public static final String PATIENT_FETCH_FAILED = "Error al obtener el paciente";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String STUDENT_GROUP_NOT_FOUND = "El estudiante no está registrado en el grupo.";
@@ -76,7 +83,7 @@ public class ResponseMessages {
     public static final String INVALID_ROLE = "Rol no válido";
     public static final String ROLE_NOT_FOUND = "Rol no encontrado";
     public static final String FAILED_CHANGE_ROLE = "Error al cambiar el rol del profesor";
-  
+
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
     public static final String PERSON_REQUEST_NULL = "PersonRequest no puede ser nulo";
     public static final String PERSON_ALREADY_EXISTS = "La persona con CURP %s ya existe";
@@ -145,7 +152,7 @@ public class ResponseMessages {
     public static final String FAILED_TO_ENABLE_PROFESSOR_CLINICAL_AREA = "Error al habilitar el área clínica del profesor.";
     public static final String CATALOG_NOT_FOUND = "Catálogo no encontrado.";
 
-    public static final String CATALOG_OPTION_NOT_FOUND= "Opción de catálogo no encontrada";
+    public static final String CATALOG_OPTION_NOT_FOUND = "Opción de catálogo no encontrada";
 
     public static final String GROUP_NOT_FOUND = "Grupo no encontrado";
     public static final String ERROR_CREATING_STUDENT_GROUP = "Ocurrió un error al agregar un estudiante a un grupo.";
@@ -174,10 +181,21 @@ public class ResponseMessages {
     public static final String OCCUPATION_NOT_FOUND = "No se pudo encontrar o crear la ocupación";
     public static final String ERROR_CREATING_OCCUPATION = "Error al crear la ocupación";
 
+    // GUARDIAN VALIDATION
     public static final String GUARDIAN_NOT_FOUND = "Tutor no encontrado";
     public static final String GUARDIAN_UPDATE_FAILED = "Error al actualizar el tutor.";
     public static final String GUARDIAN_REQUEST_CANNOT_BE_NULL = "El objeto GuardianRequest no puede ser nulo.";
     public static final String GUARDIAN_ERROR_CREATING = "Error al crear el tutor";
+    public static final String GUARDIAN_FETCH_FAILED = "Error al obtener el tutor";
+    public static final String GUARDIAN_ALREADY_EXISTS = "El tutor ya existe";
+    public static final String GUARDIAN_NOT_FOUND_ID = "No se encontró el tutor con ID: %s";
+    public static final String GUARDIAN_CREATION_ERROR = "Error al crear el tutor";
+    public static final String GUARDIAN_UPDATE_ERROR = "Error al actualizar el tutor";
+    public static final String GUARDIAN_DELETE_ERROR = "Error al eliminar el tutor";
+    public static final String GUARDIAN_FETCH_ERROR = "Error al obtener el tutor";
+    public static final String GUARDIAN_VALIDATION_ERROR = "Datos del tutor inválidos";
+    public static final String GUARDIAN_PERSON_NOT_FOUND = "No se encontró la persona asociada al tutor";
+    
 
     // PERSON VALIDATION REQUEST
     public static final String NOT_BLANK_CURP = "El CURP no puede estar en blanco";
@@ -219,7 +237,8 @@ public class ResponseMessages {
     public static final String NOT_BLANK_RELIGION_DESCRIPTION = "La descripción de la religión no puede estar en blanco";
     public static final String MAX_SIZE_RELIGION_DESCRIPTION = "La descripción de la religión debe tener un máximo de 100 caracteres";
 
-    //public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con el número de empleado: ";
+    // public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no
+    // encontrado con el número de empleado: ";
     public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
     public static final String FAILED_CREATE_ADMINISTRATOR = "Error al crear el administrador";
@@ -253,11 +272,11 @@ public class ResponseMessages {
     public static final String NOT_NULL_CAREER = "El campo career no puede ser nulo";
     public static final String NOT_BLANK_CAREER = "El campo career no puede estar vacío";
 
-    //DASHBOARD
+    // DASHBOARD
     public static final String ERROR_STUDENT_DASHBOARD = "Error al acceder a los datos del dashboard del estudiante";
     public static final String ERROR_PROFESSOR_DASHBOARD = "Error al acceder a los datos del dashboard del profesor";
     public static final String ERROR_ADMIN_DASHBOARD = "Error al acceder a los datos del dashboard del administrador";
-  
+
     public static final String FORM_SECTION_REQUEST_NULL = "FormSectionRequest no puede ser nulo";
     public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";
     public static final String FORM_SECTION_NOT_FOUND = "Sección de formulario no encontrada con el ID: ";
@@ -333,7 +352,6 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_FORM_COMPONENT_TOOTH_CONDITION = "Error al actualizar la condición de diente del componente";
     public static final String FAILED_DELETE_FORM_COMPONENT_TOOTH_CONDITION = "Error al eliminar la condición de diente del componente";
 
-
     // TreatmentScope request
     public static final String NOT_NULL_TREATMENT_SCOPE_ID = "El campo idScopeTreatment no puede ser nulo";
     public static final String NOT_NULL_TREATMENT_SCOPE = "El campo alcance del tratamiento no puede ser nulo";
@@ -378,8 +396,8 @@ public class ResponseMessages {
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
-    public static final String TREATMENT_START_DATE_CANNOT_BE_NULL  = "La fecha de inicio del tratamiento no puede ser nula";
-    public static final String TREATMENT_END_DATE_CANNOT_BE_NULL  = "La fecha de finalización del tratamiento no puede ser nula";
+    public static final String TREATMENT_START_DATE_CANNOT_BE_NULL = "La fecha de inicio del tratamiento no puede ser nula";
+    public static final String TREATMENT_END_DATE_CANNOT_BE_NULL = "La fecha de finalización del tratamiento no puede ser nula";
     public static final String SIZE_TREATMENT_STATUS = "El estado del tratamiento debe tener como máximo 50 caracteres";
 
     // TreatmentDetail
@@ -391,7 +409,7 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
 
-    //TreatmentDetailTooth
+    // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
     public static final String DUPLICATE_TEETH_IDS = "IDs de dientes duplicados en el request.";
     public static final String FAILED_CREATE_TREATMENT_DETAIL_TEETH = "Error al guardar los dientes del tratamiento.";
@@ -408,7 +426,14 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_CLINICAL_AREA = "Error al actualizar el área clínica";
     public static final String FAILED_DELETE_CLINICAL_AREA = "Error al eliminar el área clínica";
 
-    //ReviewStatus Request
+    // ReviewStatus Request
     public static final String STATUS_NULL = "El estatus no puede ser nulo";
     public static final String ID_REVIEW_STATUS_NULL = "El ID del estatus de revisión no puede ser nulo";
+
+    // PARENTAL STATUS VALIDATION
+    public static final String PARENTAL_STATUS_CANNOT_BE_NULL = "El estatus parental no puede ser nulo";
+
+    // DOCTOR NAME VALIDATION
+    public static final String DOCTOR_NAME_CANNOT_BE_NULL = "El nombre del doctor no puede ser nulo";
+    public static final String DOCTOR_NAME_MAX_STRING_LENGTH = "El nombre del doctor no puede exceder los 100 caracteres";
 }

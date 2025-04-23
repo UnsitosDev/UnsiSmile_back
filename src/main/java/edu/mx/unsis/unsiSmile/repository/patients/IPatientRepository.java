@@ -35,6 +35,9 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
     List<PatientModel> findByReligion(ReligionModel religion);
 
     List<PatientModel> findByGuardian(GuardianModel guardian);
+    
+    @Query("SELECT p FROM PatientModel p WHERE p.person.curp = :curp AND p.statusKey = 'A'")
+    Optional<PatientModel> findByCurp(@Param("curp") String curp);
 
     @Query("SELECT p FROM PatientModel p WHERE p.person.curp LIKE %:keyword% " +
             "OR p.person.firstName LIKE %:keyword% " +

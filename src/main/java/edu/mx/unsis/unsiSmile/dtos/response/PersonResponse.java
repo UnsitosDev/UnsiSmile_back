@@ -21,4 +21,11 @@ public class PersonResponse {
     private LocalDate birthDate;
     private String email;
     private GenderResponse gender;
+
+    public String getFullName() {
+        return firstName + " " +
+                ((secondName != null && !secondName.trim().isEmpty()) ? secondName + " " : "") +
+                firstLastName + " " +
+                secondLastName;
+    }
 }
