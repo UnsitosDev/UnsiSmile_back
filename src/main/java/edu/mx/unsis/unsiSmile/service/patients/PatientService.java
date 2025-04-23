@@ -1,5 +1,26 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
@@ -13,7 +34,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
@@ -21,7 +41,11 @@ import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.patients.*;
+import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.INationalityRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -29,19 +53,6 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,14 +65,13 @@ public class PatientService {
     private final IReligionRepository religionRepository;
     private final OccupationService occupationService;
     private final PatientMapper patientMapper;
-    private final IGuardianRepository guardianRepository;
-    private final GuardianMapper guardianMapper;
     private final AddressService addressService;
     private final UserService userService;
     private final StudentPatientService studentPatientService;
     private final StudentService studentService;
     private final PersonService personService;
     private final ValidationUtils validationUtils;
+    private final GuardianService guardianService;
     @Value("${max.medical.record.number}")
     private int maxFileNumberProperties;
 
@@ -70,14 +80,14 @@ public class PatientService {
         try {
             List<String> invalidCurp = new ArrayList<>();
             PersonModel personModel = personService.createPersonEntity(patientRequest.getPerson(), invalidCurp);
-            if(!invalidCurp.isEmpty()) {
+            if (!invalidCurp.isEmpty()) {
                 throw new AppException(invalidCurp.getFirst(), HttpStatus.BAD_REQUEST);
             }
 
             Optional<PatientModel> existingPatient = patientRepository.findByPerson(personModel);
 
             if (existingPatient.isPresent()) {
-                throw new AppException( ResponseMessages.PATIENT_ALREADY_EXISTS, HttpStatus.CONFLICT);
+                throw new AppException(ResponseMessages.PATIENT_ALREADY_EXISTS, HttpStatus.CONFLICT);
             }
 
             validatePatientRequest(patientRequest);
@@ -119,7 +129,7 @@ public class PatientService {
     private void validateAndSetGuardian(PatientRequest patientRequest, PatientModel patientModel) {
         boolean hasDisability = Optional.ofNullable(patientRequest.getHasDisability()).orElse(false);
         boolean hasGuardianRequest = patientRequest.getGuardian() != null;
-        
+
         if (requiresGuardian(patientRequest) && !hasGuardianRequest) {
             throw new AppException(ResponseMessages.PATIENT_NEEDS_GUARDIAN, HttpStatus.BAD_REQUEST);
         }
@@ -141,7 +151,9 @@ public class PatientService {
     }
 
     private void setGuardianForPatient(GuardianRequest guardianRequest, PatientModel patientModel) {
-        GuardianModel guardianModel = createGuardianEntity(guardianRequest);
+
+        GuardianModel guardianModel = guardianService.createGuardianEntity(guardianRequest);
+
         patientModel.setGuardian(guardianModel);
     }
 
@@ -181,16 +193,6 @@ public class PatientService {
             throw ex;
         } catch (Exception e) {
             throw new AppException("Failed to assign student", HttpStatus.INTERNAL_SERVER_ERROR, e);
-        }
-    }
-
-    // Method to create a guardian entity
-    private GuardianModel createGuardianEntity(GuardianRequest guardianRequest) {
-        Assert.notNull(guardianRequest, ResponseMessages.GUARDIAN_REQUEST_CANNOT_BE_NULL);
-        try {
-            return guardianRepository.save(guardianMapper.toEntity(guardianRequest));
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.GUARDIAN_ERROR_CREATING , HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -247,7 +249,8 @@ public class PatientService {
         return studentMap;
     }
 
-    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients, Map<String, StudentRes> studentMap) {
+    private List<PatientResponse> mapPatientsToResponses(Page<PatientModel> allPatients,
+            Map<String, StudentRes> studentMap) {
         return allPatients.stream()
                 .map(patient -> {
                     PatientResponse patientResponse = patientMapper.toDto(patient);
@@ -268,12 +271,12 @@ public class PatientService {
             UserResponse user = userService.getCurrentUser();
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
-                List<PatientModel> patients = getPatientsByStudents(studentResponse,  null, null);
+                List<PatientModel> patients = getPatientsByStudents(studentResponse, null, null);
                 return getPatientByIdByStudent(patients, idPatient);
             } else {
                 return patientMapper.toDto(patientModel);
             }
-        }catch (AppException e) {
+        } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -329,7 +332,8 @@ public class PatientService {
                 .build();
     }
 
-    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse, String keyword, Pageable  pageable) {
+    private List<PatientModel> getPatientsByStudents(StudentResponse studentResponse, String keyword,
+            Pageable pageable) {
         List<StudentPatientResponse> studentPatientResponses = studentPatientService
                 .getAllStudentPatients(studentResponse.getEnrollment(), keyword, pageable);
 
@@ -369,7 +373,8 @@ public class PatientService {
         patientMapper.updateEntity(updatedPatientRequest, patientModel);
 
         if (updatedPatientRequest.getOccupation() != null) {
-            OccupationModel occupationModel = occupationService.findOrCreateOccupation(updatedPatientRequest.getOccupation());
+            OccupationModel occupationModel = occupationService
+                    .findOrCreateOccupation(updatedPatientRequest.getOccupation());
             patientModel.setOccupation(occupationModel);
         }
 

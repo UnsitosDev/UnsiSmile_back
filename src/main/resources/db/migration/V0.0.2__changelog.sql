@@ -51,24 +51,6 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
-    guardians (
-        id_guardian BIGINT (20) NOT NULL AUTO_INCREMENT,
-        email VARCHAR(50) DEFAULT NULL,
-        first_name VARCHAR(50) DEFAULT NULL,
-        last_name VARCHAR(50) DEFAULT NULL,
-        phone VARCHAR(20) DEFAULT NULL,
-        fk_parental_status BIGINT (20) NOT NULL,
-        doctor_name VARCHAR(100) DEFAULT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (id_guardian),
-        UNIQUE KEY UK_c4gd8eub8nnr1e5nhvuapmasm (phone)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-CREATE TABLE
     housings (
         id_housing VARCHAR(2) NOT NULL,
         category TEXT DEFAULT NULL,
@@ -129,11 +111,11 @@ CREATE TABLE
 
 CREATE TABLE
     roles (
-        id BIGINT(20) NOT NULL AUTO_INCREMENT,
+        id BIGINT (20) NOT NULL AUTO_INCREMENT,
         role VARCHAR(50) NOT NULL,
         PRIMARY KEY (id),
         UNIQUE (role)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
     states (
@@ -183,17 +165,18 @@ CREATE TABLE
         CONSTRAINT FKqdulr8m8up4rj2d5lpgm3nvp8 FOREIGN KEY (fk_neighborhood) REFERENCES neighborhoods (id_neighborhood)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-create table profile_pictures (
-    id_profile_picture CHAR(36) NOT NULL,
-    url VARCHAR(255) NOT NULL,
-    extention_picture VARCHAR(6) NOT NULL,
-    created_at DATETIME (6) DEFAULT NULL,
-    created_by VARCHAR(255) DEFAULT NULL,
-    status_key VARCHAR(255) DEFAULT NULL,
-    updated_at DATETIME (6) DEFAULT NULL,
-    updated_by VARCHAR(255) DEFAULT NULL,
-    PRIMARY KEY (id_profile_picture)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+create table
+    profile_pictures (
+        id_profile_picture CHAR(36) NOT NULL,
+        url VARCHAR(255) NOT NULL,
+        extention_picture VARCHAR(6) NOT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (id_profile_picture)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
     user_app (
@@ -275,6 +258,21 @@ CREATE TABLE
         PRIMARY KEY (id_group),
         KEY FK2r3h2ds7hdwal6t2gdwbs7xq9 (fk_career),
         CONSTRAINT FK2r3h2ds7hdwal6t2gdwbs7xq9 FOREIGN KEY (fk_career) REFERENCES careers (id_career)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+CREATE TABLE
+    guardians (
+        id_guardian BIGINT (20) NOT NULL AUTO_INCREMENT,
+        fk_parental_status BIGINT (20) NOT NULL,
+        fk_person VARCHAR(20) NOT NULL,
+        doctor_name VARCHAR(100) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (id_guardian),
+        FOREIGN KEY (fk_person) REFERENCES people (curp)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE

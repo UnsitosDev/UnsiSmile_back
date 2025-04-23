@@ -17,16 +17,14 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.service.patients.GuardianService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/unsismile/api/v1/guardian")
 public class GuardianController {
 
     private final GuardianService guardianService;
-
-    public GuardianController(GuardianService guardianService) {
-        this.guardianService = guardianService;
-    }
 
     @PostMapping
     public ResponseEntity<GuardianResponse> createGuardian(@Valid @RequestBody GuardianRequest guardianRequest) {
@@ -37,18 +35,6 @@ public class GuardianController {
     @GetMapping("/{id}")
     public ResponseEntity<GuardianResponse> getGuardianById(@Valid @PathVariable Long id) {
         GuardianResponse guardianResponse = guardianService.getGuardianById(id);
-        return ResponseEntity.ok(guardianResponse);
-    }
-
-    @GetMapping("/phone/{phone}")
-    public ResponseEntity<GuardianResponse> getGuardianByPhone(@Valid @PathVariable String phone) {
-        GuardianResponse guardianResponse = guardianService.getGuardianByPhone(phone);
-        return ResponseEntity.ok(guardianResponse);
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<GuardianResponse> getGuardianByEmail(@Valid @PathVariable String email) {
-        GuardianResponse guardianResponse = guardianService.getGuardianByEmail(email);
         return ResponseEntity.ok(guardianResponse);
     }
 

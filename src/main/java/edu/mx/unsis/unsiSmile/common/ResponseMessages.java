@@ -173,7 +173,8 @@ public class ResponseMessages {
 
     public static final String OCCUPATION_NOT_FOUND = "No se pudo encontrar o crear la ocupación";
     public static final String ERROR_CREATING_OCCUPATION = "Error al crear la ocupación";
-
+    
+    // GUARDIAN VALIDATION
     public static final String GUARDIAN_NOT_FOUND = "Tutor no encontrado";
     public static final String GUARDIAN_UPDATE_FAILED = "Error al actualizar el tutor.";
     public static final String GUARDIAN_REQUEST_CANNOT_BE_NULL = "El objeto GuardianRequest no puede ser nulo.";
@@ -411,4 +412,11 @@ public class ResponseMessages {
     //ReviewStatus Request
     public static final String STATUS_NULL = "El estatus no puede ser nulo";
     public static final String ID_REVIEW_STATUS_NULL = "El ID del estatus de revisión no puede ser nulo";
+
+    //PARENTAL STATUS VALIDATION
+    public static final String PARENTAL_STATUS_CANNOT_BE_NULL = "El estatus parental no puede ser nulo";
+
+    // DOCTOR NAME VALIDATION
+    public static final String DOCTOR_NAME_CANNOT_BE_NULL = "El nombre del doctor no puede ser nulo";
+    public static final String DOCTOR_NAME_MAX_STRING_LENGTH = "El nombre del doctor no puede exceder los 100 caracteres";
 }

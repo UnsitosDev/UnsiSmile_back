@@ -1,21 +1,21 @@
 package edu.mx.unsis.unsiSmile.mappers.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientRes;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
-import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientRes;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
+import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
@@ -72,7 +72,7 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
                 .medicalRecordNumber(patientResponse.getMedicalRecordNumber())
                 .creationDate(LocalDate.now())
                 .isMinor(patientResponse.getIsMinor() != null ? patientResponse.getIsMinor() : false)
-                .guardian(patientResponse.getGuardian() != null ? mapGuardianName(patientResponse.getGuardian()) : null)
+                .guardian(patientResponse.getGuardian() != null ? patientResponse.getGuardian().getPerson().getFullName() : null)
                 .gender(patientResponse.getPerson().getGender().getGender())
                 .build();
     }
@@ -86,10 +86,6 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
 
     private Long calculateAge(LocalDate birthDate) {
         return (birthDate != null) ? (long) Period.between(birthDate, LocalDate.now()).getYears() : 0L;
-    }
-
-    private String mapGuardianName(GuardianResponse guardianResponse) {
-        return String.format("%s %s", guardianResponse.getFirstName(), guardianResponse.getLastName());
     }
 
     private String formatTimestamp(Timestamp timestamp) {

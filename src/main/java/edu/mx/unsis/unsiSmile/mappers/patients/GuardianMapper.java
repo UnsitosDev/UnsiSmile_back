@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
+import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +17,15 @@ import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 @AllArgsConstructor
 public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequest, GuardianModel> {
     private final CatalogOptionMapper catalogOptionMapper;
+    private final PersonMapper personMapper;
+
     @Override
     public GuardianModel toEntity(GuardianRequest dto) {
         return GuardianModel.builder()
                 .idGuardian(dto.getIdGuardian())
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .phone(dto.getPhone())
-                .email(dto.getEmail())
                 .parentalStatus(catalogOptionMapper.toEntity(dto.getParentalStatus()))
-                .doctorName(dto.getDoctorName())          
+                .doctorName(dto.getDoctorName())
+                .person(personMapper.toEntity(dto.getPerson()))          
                 .build();
     }
 
@@ -33,12 +33,9 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
     public GuardianResponse toDto(GuardianModel entity) {
         return GuardianResponse.builder()
                 .idGuardian(entity.getIdGuardian())
-                .firstName(entity.getFirstName())
-                .lastName(entity.getLastName())
-                .phone(entity.getPhone())
-                .email(entity.getEmail())
                 .parentalStatus(catalogOptionMapper.toDto(entity.getParentalStatus()))
-                .doctorName(entity.getDoctorName())          
+                .doctorName(entity.getDoctorName())      
+                .person(personMapper.toDto(entity.getPerson()))    
                 .build();
     }
 
@@ -51,12 +48,9 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
 
     @Override
     public void updateEntity(GuardianRequest request, GuardianModel entity) {
-        entity.setFirstName(request.getFirstName() != null ? request.getFirstName() : entity.getFirstName());
-        entity.setLastName(request.getLastName() != null ? request.getLastName() : entity.getLastName());
-        entity.setPhone(request.getPhone() != null ? request.getPhone() : entity.getPhone());
-        entity.setEmail(request.getEmail() != null ? request.getEmail() : entity.getEmail());
         entity.setParentalStatus(request.getParentalStatus() != null ?
                 catalogOptionMapper.toEntity(request.getParentalStatus()) : entity.getParentalStatus());
         entity.setDoctorName(request.getDoctorName() != null ? request.getDoctorName() : entity.getDoctorName());
     }
+
 }

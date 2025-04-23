@@ -11,9 +11,6 @@ import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 public interface IGuardianRepository extends JpaRepository<GuardianModel, Long> {
 
     Optional<GuardianModel> findByIdGuardian(Long idGuardian);
-
-    Optional<GuardianModel> findByPhone(String phone);
-
-    Optional<GuardianModel> findByEmail(String email);
-
+    Optional<GuardianModel> findByPerson_Curp(String curp);
+    
 }
