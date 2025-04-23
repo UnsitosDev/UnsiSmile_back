@@ -18,8 +18,13 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
     Optional<ReviewStatusModel> findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(
             Long idPatientClinicalHistory, Long idSection);
 
-    Optional<ReviewStatusModel> findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
-            String idPatient, Long idSection);
+    @Query("SELECT s FROM ReviewStatusModel s " +
+            "WHERE s.patientClinicalHistory.patient.idPatient = :idPatient " +
+            "AND s.formSection.idFormSection = :idSection " +
+            "ORDER BY s.createdAt DESC")
+    List<ReviewStatusModel> findAllByPatientIdAndSectionOrdered(
+            @Param("idPatient") String idPatient,
+            @Param("idSection") Long idSection);
 
     @Query("SELECT DISTINCT s FROM ReviewStatusModel s " +
             "WHERE s.status = :status " +

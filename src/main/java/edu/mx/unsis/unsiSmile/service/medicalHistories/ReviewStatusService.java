@@ -72,9 +72,13 @@ public class ReviewStatusService {
             PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            return reviewStatusRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(
-                            patientClinicalHistoryModel.getPatient().getIdPatient(),
-                            idSection)
+            List<ReviewStatusModel> results = reviewStatusRepository.findAllByPatientIdAndSectionOrdered(
+                    patientClinicalHistoryModel.getPatient().getIdPatient(),
+                    idSection
+            );
+
+            return results.stream()
+                    .findFirst()
                     .orElseThrow(() -> new AppException(ResponseMessages.STATUS_NOT_FOUND, HttpStatus.NOT_FOUND));
         } catch (AppException ex) {
             throw ex;
@@ -144,8 +148,10 @@ public class ReviewStatusService {
 
     @Transactional(readOnly = true)
     public ReviewStatusModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, Long idSection) {
-        return reviewStatusRepository.findByPatientClinicalHistory_Patient_IdPatientAndFormSection_IdFormSection(idPatient, idSection)
-                            .orElse(null);
+        return reviewStatusRepository.findAllByPatientIdAndSectionOrdered(idPatient, idSection)
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     @Transactional(readOnly = true)
