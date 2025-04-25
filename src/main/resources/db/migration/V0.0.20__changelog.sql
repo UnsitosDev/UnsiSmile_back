@@ -26,7 +26,7 @@ CREATE TABLE dental_prophylaxis (
     updated_by VARCHAR(255) DEFAULT NULL,
     CONSTRAINT FK_dental_prophylaxis_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
     CONSTRAINT FK_dental_prophylaxis_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE prophylaxis_tooth_condition_assignments (
     dental_prophylaxis_id BIGINT,
@@ -41,7 +41,7 @@ CREATE TABLE prophylaxis_tooth_condition_assignments (
     FOREIGN KEY (dental_prophylaxis_id) REFERENCES dental_prophylaxis (id_dental_prophylaxis),
     FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
     FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE prophylaxis_toothface_conditions_assignments (
     dental_prophylaxis_id BIGINT,
@@ -63,7 +63,7 @@ CREATE TABLE prophylaxis_toothface_conditions_assignments (
     FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
     FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions (id_toothface_conditions),
     FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
 VALUES

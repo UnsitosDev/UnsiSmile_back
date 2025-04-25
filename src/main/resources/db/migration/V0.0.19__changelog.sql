@@ -6,7 +6,7 @@ CREATE TABLE form_components (
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE form_component_tooth_conditions (
     id_form_component_tooth_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -19,7 +19,7 @@ CREATE TABLE form_component_tooth_conditions (
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_form_component) REFERENCES form_components(id_form_component),
     FOREIGN KEY (fk_tooth_condition) REFERENCES tooth_conditions(id_tooth_condition)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE form_component_tooth_faces (
     id_form_component_tooth_face BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -32,7 +32,7 @@ CREATE TABLE form_component_tooth_faces (
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_form_component) REFERENCES form_components(id_form_component),
     FOREIGN KEY (fk_tooth_face) REFERENCES tooth_faces(id_tooth_face)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE form_component_toothface_conditions (
     id_form_component_toothface_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +45,7 @@ CREATE TABLE form_component_toothface_conditions (
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_form_component) REFERENCES form_components(id_form_component),
     FOREIGN KEY (fk_toothface_condition) REFERENCES toothface_conditions(id_toothface_conditions)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 INSERT INTO
     form_components (description)
