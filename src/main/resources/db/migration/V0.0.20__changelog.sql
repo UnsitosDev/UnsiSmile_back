@@ -82,6 +82,6 @@ INSERT INTO form_component_toothface_conditions (fk_form_component, fk_toothface
 VALUES
     (2, 5);
 
-INSERT INTO form_component_toothface_conditions (fk_form_component, fk_toothface_condition)
+INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
 VALUES
     (1, 14); -- Nueva condición para el odontograma
