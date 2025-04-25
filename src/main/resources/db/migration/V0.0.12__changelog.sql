@@ -101,6 +101,13 @@ VALUES (1, '1696', '2025-04-16', 'A'),
        (2, '1709', '2025-04-16', 'A'),
        (3, '1691', '2025-04-16', 'A');
 
+-- catalogo estado civil
+INSERT INTO catalogs
+(catalog_name)
+VALUES
+    ("Estados civiles"),
+    ("Catedráticos responsables de área");
+
 INSERT INTO
     catalog_options (fk_catalog, option_name, status_key)
 VALUES
