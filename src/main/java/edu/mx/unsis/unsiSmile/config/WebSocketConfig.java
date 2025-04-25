@@ -6,9 +6,14 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
-import org.springframework.web.socket.config.annotation.*;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
+import org.springframework.web.socket.server.standard.TomcatRequestUpgradeStrategy;
+import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -22,26 +27,35 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic", "/queue");
-        registry.setApplicationDestinationPrefixes("/unsismile/api/v1");
+        registry.setApplicationDestinationPrefixes("/app")
+                .enableSimpleBroker("/topic", "/queue");
         registry.setUserDestinationPrefix("/user");
-        log.info("WebSocket broker configurado con destinos /topic, /queue y prefijo /unsismile/api/v1");
+        log.info("WebSocket broker configurado con destinos /topic, /queue y prefijo /app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/unsismile/api/v1/notifications")
-                .setAllowedOrigins(
+                .setAllowedOriginPatterns(
                         "http://localhost:8081",
                         "https://unsismile.unsis.edu.mx",
                         "https://132.18.41.181:8081")
+                .setHandshakeHandler(new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy()))
                 .withSockJS();
-        log.info("STOMP endpoints registrados en /unsismile/api/v1/notifications y /unsismile/api/v1/review con SockJS habilitado.");
+        
+        log.info("STOMP endpoint para '/unsismile/api/v1/notifications' registrado (soporta WebSocket nativo y SockJS fallback).");
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new JwtAuthChannelInterceptor(jwtTokenProvider));
+    }
+
+    @Override
+    public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+        registry.setMessageSizeLimit(512 * 1024)
+                .setSendBufferSizeLimit(1024 * 1024)
+                .setSendTimeLimit(20000);
     }
 
     // Interceptor desacoplado para claridad y reutilización
@@ -77,7 +91,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
                 } catch (Exception ex) {
                     log.error("Error al autenticar conexión WebSocket: {}", ex.getMessage(), ex);
-                    throw new IllegalArgumentException("Error de autenticación en conexión WebSocket: " + ex.getMessage());
+                    throw new IllegalArgumentException(
+                            "Error de autenticación en conexión WebSocket: " + ex.getMessage());
                 }
             }
 
