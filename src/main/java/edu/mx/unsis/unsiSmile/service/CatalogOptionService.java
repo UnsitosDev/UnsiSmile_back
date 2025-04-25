@@ -122,8 +122,8 @@ public class CatalogOptionService {
             ProfessorModel professor = professorRepository.findById(option.getOptionName())
                     .stream().findFirst().orElse(null);
 
-            if (professor != null) {
-                String fullName = validationUtils.getFullNameFromPerson(professor.getPerson());
+            if (professor != null && professor.getPerson() != null) {
+                String fullName = professor.getPerson().getFullName();
                 option.setOptionName(fullName);
             }
         }

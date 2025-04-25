@@ -7,7 +7,7 @@ CREATE TABLE treatment_scopes (
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE treatments (
     id_treatment BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
@@ -22,7 +22,7 @@ CREATE TABLE treatments (
     fk_clinical_history_catalog BIGINT(20) NOT NULL,
     FOREIGN KEY (fk_treatment_scope) REFERENCES treatment_scopes(id_treatment_scope),
     FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE treatment_details (
     id_treatment_detail BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
@@ -43,7 +43,7 @@ CREATE TABLE treatment_details (
     FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
     FOREIGN KEY (fk_treatment) REFERENCES treatments(id_treatment),
     FOREIGN KEY (fk_professor) REFERENCES professors(id_professor)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE treatment_detail_teeth (
     id_detail_tooth BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
@@ -56,7 +56,7 @@ CREATE TABLE treatment_detail_teeth (
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details(id_treatment_detail),
     FOREIGN KEY (fk_tooth) REFERENCES teeth(id_tooth)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- Agregar las HC que faltan según los tratamientos listados
 INSERT INTO clinical_history_catalogs (clinical_history_name) VALUES

@@ -141,8 +141,8 @@ public class ProgressNoteService {
 
                 progressNoteResponse.setFiles(fileResponses);
 
-                String professorName = validationUtils.getFullNameFromPerson(progressNote.getProfessor().getPerson());
-                String patientName = validationUtils.getFullNameFromPerson(patient.getPerson());
+                String professorName = progressNote.getProfessor().getPerson().getFullName();
+                String patientName = patient.getPerson().getFullName();
 
                 progressNoteResponse.setStudent(this.getStudent(progressNote.getCreatedBy()));
                 progressNoteResponse.setProfessor(professorName);
@@ -167,7 +167,7 @@ public class ProgressNoteService {
         
         try {
             ProgressNoteReportParameters parameters = new ProgressNoteReportParameters();
-            parameters.setName(validationUtils.getFullNameFromPerson(patient.getPerson()));
+            parameters.setName(patient.getPerson().getFullName());
             parameters.setBirthDate(java.sql.Date.valueOf(patient.getPerson().getBirthDate()));
             parameters.setAge(calculateAge(patient.getPerson().getBirthDate()));
             parameters.setGender(progressNote.getPatient().getPerson().getGender().getGender());
@@ -214,11 +214,11 @@ public class ProgressNoteService {
         if (ERole.ROLE_PROFESSOR.toString().equals(role)) {
             ProfessorModel professor = professorRepository.findById(username)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
-            return validationUtils.getFullNameFromPerson(professor.getPerson());
+            return professor.getPerson().getFullName();
         } else if (ERole.ROLE_STUDENT.toString().equals(role)) {
             StudentModel student = studentRepository.findById(username)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-            return validationUtils.getFullNameFromPerson(student.getPerson());
+            return student.getPerson().getFullName();
         } else {
             throw new AppException(ResponseMessages.INVALID_ROLE, HttpStatus.BAD_REQUEST);
         }

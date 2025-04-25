@@ -13,13 +13,6 @@ import java.util.List;
 public class ValidationUtils {
     private final ValidateCurp curpValidator;
 
-    public String getFullNameFromPerson(PersonModel person) {
-        return person.getFirstName() + " " +
-                ((person.getSecondName() != null && !person.getSecondName().trim().isEmpty()) ? person.getSecondName() + " " : "") +
-                person.getFirstLastName() + " " +
-                person.getSecondLastName();
-    }
-
     public boolean isMinor(LocalDate birthDate) {
         LocalDate today = LocalDate.now();
         return Period.between(birthDate, today).getYears() < 18;
