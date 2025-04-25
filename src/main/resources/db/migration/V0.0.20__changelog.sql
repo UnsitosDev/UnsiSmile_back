@@ -8,7 +8,8 @@ values("Sección contestada", 56, 3, 1, true);
 
 INSERT INTO
     tooth_conditions (description)
-values ("Diente no presente");
+values ("Diente no presente"), -- profilaxis
+       ("Resto radicular"); -- odontograma
 
 INSERT INTO
     toothface_conditions (description)
@@ -67,7 +68,8 @@ CREATE TABLE prophylaxis_toothface_conditions_assignments (
 
 INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
 VALUES
-    (2, 13);
+    (2, 13),
+    (2, 3);
 
 INSERT INTO form_component_tooth_faces (fk_form_component, fk_tooth_face)
 VALUES
@@ -79,3 +81,7 @@ VALUES
 INSERT INTO form_component_toothface_conditions (fk_form_component, fk_toothface_condition)
 VALUES
     (2, 5);
+
+INSERT INTO form_component_toothface_conditions (fk_form_component, fk_toothface_condition)
+VALUES
+    (1, 14); -- Nueva condición para el odontograma
