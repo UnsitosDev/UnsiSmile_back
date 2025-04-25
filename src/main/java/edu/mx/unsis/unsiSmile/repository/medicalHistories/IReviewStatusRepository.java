@@ -45,4 +45,12 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
     Page<ReviewStatusModel> findByStatusAndProfessor(@Param("professorId") String professorId,
                                                      @Param("status") ReviewStatus status,
                                                      Pageable pageable);
+
+    @Query("SELECT COUNT(r) FROM ReviewStatusModel r " +
+            "WHERE r.professorClinicalArea.professor.idProfessor = :idProfessor " +
+            "AND r.status = :status " +
+            "AND r.statusKey = :statusKey")
+    Long countByStatus(@Param("idProfessor") String idProfessor,
+                       @Param("status") ReviewStatus status,
+                       @Param("statusKey") String statusKey);
 }

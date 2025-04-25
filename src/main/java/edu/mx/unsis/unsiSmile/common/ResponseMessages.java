@@ -276,6 +276,7 @@ public class ResponseMessages {
     public static final String ERROR_STUDENT_DASHBOARD = "Error al acceder a los datos del dashboard del estudiante";
     public static final String ERROR_PROFESSOR_DASHBOARD = "Error al acceder a los datos del dashboard del profesor";
     public static final String ERROR_ADMIN_DASHBOARD = "Error al acceder a los datos del dashboard del administrador";
+    public static final String ERROR_CLINICAL_SUPERVISOR_DASHBOARD = "Error al acceder a los datos del dashboard del supervisor clínico";
 
     public static final String FORM_SECTION_REQUEST_NULL = "FormSectionRequest no puede ser nulo";
     public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";

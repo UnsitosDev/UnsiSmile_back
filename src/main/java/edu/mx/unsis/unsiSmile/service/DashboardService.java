@@ -2,12 +2,12 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.ProfessorDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.StudentDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.*;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -15,6 +15,7 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class DashboardService {
     private final IStudentGroupRepository studentGroupRepository;
     private final IProfessorRepository professorRepository;
     private final UserService userService;
+    private final IReviewStatusRepository reviewStatusRepository;
+    private final ITreatmentDetailRepository treatmentDetailRepository;
 
     @Transactional(readOnly = true)
     public StudentDashboardResponse getStudentDashboardMetrics() {
@@ -65,14 +68,9 @@ public class DashboardService {
     public ProfessorDashboardResponse getProfessorDashboardMetrics() {
         try {
             String employeeNumber = getUserName();
-            List<ProfessorGroupModel> professorGroups = professorGroupRepository
-                    .findByProfessorAndGroupStatus(employeeNumber, Constants.ACTIVE);
-
-            Set<Long> idsGroups = professorGroups.stream()
-                    .map(professorGroup -> professorGroup.getGroup().getIdGroup())
-                    .collect(Collectors.toSet());
-
-            Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
+            Pair<List<ProfessorGroupModel>, Long> data = getProfessorGroupsAndStudentCount(employeeNumber);
+            List<ProfessorGroupModel> professorGroups = data.getLeft();
+            Long studentCount = data.getRight();
 
             return ProfessorDashboardResponse.builder()
                     .totalGroups(professorGroups.size())
@@ -117,5 +115,49 @@ public class DashboardService {
     private String getUserName() {
         UserResponse user = userService.getCurrentUser();
         return user.getUsername();
+    }
+
+    @Transactional(readOnly = true)
+    public ClinicalSupervisorDashboardResponse getClinicalSupervisorDashboardMetrics() {
+        try {
+            String employeeNumber = getUserName();
+            Pair<List<ProfessorGroupModel>, Long> data = getProfessorGroupsAndStudentCount(employeeNumber);
+            List<ProfessorGroupModel> professorGroups = data.getLeft();
+            Long studentCount = data.getRight();
+
+            return ClinicalSupervisorDashboardResponse.builder()
+                    .totalGroups(professorGroups.size())
+                    .totalStudents(studentCount)
+                    .clinicalHistoriesInReview(
+                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
+                    )
+                    .clinicalHistoriesRejected(
+                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
+                    )
+                    .clinicalHistoriesAccepted(
+                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
+                    )
+                    .treatmentsCompleted(
+                            treatmentDetailRepository.countActiveTreatmentsByProfessorId(
+                                    employeeNumber, ReviewStatus.APPROVED.name()
+                            )
+                    )
+                    .build();
+        } catch (DataAccessException e) {
+            throw new AppException(ResponseMessages.ERROR_CLINICAL_SUPERVISOR_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private Pair<List<ProfessorGroupModel>, Long> getProfessorGroupsAndStudentCount(String employeeNumber) {
+        List<ProfessorGroupModel> professorGroups = professorGroupRepository
+                .findByProfessorAndGroupStatus(employeeNumber, Constants.ACTIVE);
+
+        Set<Long> idsGroups = professorGroups.stream()
+                .map(professorGroup -> professorGroup.getGroup().getIdGroup())
+                .collect(Collectors.toSet());
+
+        Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
+
+        return Pair.of(professorGroups, studentCount);
     }
 }
