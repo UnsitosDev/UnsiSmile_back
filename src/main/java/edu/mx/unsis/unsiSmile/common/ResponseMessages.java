@@ -436,4 +436,9 @@ public class ResponseMessages {
     // DOCTOR NAME VALIDATION
     public static final String DOCTOR_NAME_CANNOT_BE_NULL = "El nombre del doctor no puede ser nulo";
     public static final String DOCTOR_NAME_MAX_STRING_LENGTH = "El nombre del doctor no puede exceder los 100 caracteres";
+
+    //NOTIFICATIONS
+    public static final String NOTIFICATION_SEND_ERROR = "Error al enviar la notificación";
+    public static final String REVIEW_STATUS_UPDATE_ERROR = "Error al actualizar el estado de revisión";
+
 }

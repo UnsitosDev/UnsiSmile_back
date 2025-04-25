@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import jakarta.validation.constraints.NotBlank;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class ReviewStatusRequest {
     private Long idReviewStatus;
 
     @NotNull(message = ResponseMessages.STATUS_NULL)
-    private String status;
+    private ReviewStatus status;
 
     private String message;
 }

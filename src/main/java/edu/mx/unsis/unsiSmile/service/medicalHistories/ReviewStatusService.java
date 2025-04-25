@@ -1,5 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
@@ -22,14 +31,6 @@ import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,7 @@ public class ReviewStatusService {
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final UserService userService;
+    private final ReviewNotificationService notificationService;
 
     @Transactional
     public void updateReviewStatus(ReviewStatusRequest request) {
@@ -51,11 +53,15 @@ public class ReviewStatusService {
                     .findById(request.getIdReviewStatus())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.STATUS_NOT_FOUND, request.getIdReviewStatus()),
-                            HttpStatus.NOT_FOUND
-                    ));
+                            HttpStatus.NOT_FOUND));
             reviewStatusMapper.updateEntity(request, statusModel);
 
             reviewStatusRepository.save(statusModel);
+            notificationService.broadcastReviewStatus(
+                    statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory(),
+                    statusModel.getPatientClinicalHistory().getPatient().getIdPatient(),
+                    buildNotification(statusModel));
+
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + request.getStatus(), HttpStatus.BAD_REQUEST);
         } catch (AppException e) {
@@ -69,13 +75,14 @@ public class ReviewStatusService {
     @Transactional(readOnly = true)
     public ReviewStatusModel getStatusModelByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
         try {
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientMedicalRecord)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, HttpStatus.NOT_FOUND));
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository
+                    .findById(idPatientMedicalRecord)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND,
+                            HttpStatus.NOT_FOUND));
 
             List<ReviewStatusModel> results = reviewStatusRepository.findAllByPatientIdAndSectionOrdered(
                     patientClinicalHistoryModel.getPatient().getIdPatient(),
-                    idSection
-            );
+                    idSection);
 
             return results.stream()
                     .findFirst()
@@ -90,8 +97,8 @@ public class ReviewStatusService {
     @Transactional(readOnly = true)
     public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
         try {
-            ReviewStatusModel statusModel =
-                    this.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord, idSection);
+            ReviewStatusModel statusModel = this.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord,
+                    idSection);
             return reviewStatusMapper.toDto(statusModel);
 
         } catch (AppException ex) {
@@ -102,11 +109,12 @@ public class ReviewStatusService {
     }
 
     @Transactional
-    public void sendToReview(Long idPatientMedicalRecord,  Long idSection, Long idProfessorClinicalArea) {
+    public void sendToReview(Long idPatientMedicalRecord, Long idSection, Long idProfessorClinicalArea) {
         try {
             validateEntitiesExist(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
 
-            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
+            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(idPatientMedicalRecord, idSection,
+                    idProfessorClinicalArea);
 
             reviewStatusRepository.save(statusModel);
         } catch (AppException e) {
@@ -128,7 +136,7 @@ public class ReviewStatusService {
                 statusModels = reviewStatusRepository.findByStatus(clinicalHistoryStatus, pageable);
             } else if (user.getRole().getRole() == ERole.ROLE_CLINICAL_AREA_SUPERVISOR) {
                 statusModels = reviewStatusRepository.findByStatusAndProfessor(
-                        user.getUsername(),clinicalHistoryStatus, pageable);
+                        user.getUsername(), clinicalHistoryStatus, pageable);
             } else {
                 throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
             }
@@ -139,7 +147,7 @@ public class ReviewStatusService {
             });
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + status, HttpStatus.BAD_REQUEST);
-        }catch (AppException e) {
+        } catch (AppException e) {
             throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_FETCHING_STATUS_LIST, HttpStatus.INTERNAL_SERVER_ERROR, e);
@@ -175,7 +183,8 @@ public class ReviewStatusService {
                 .collect(Collectors.toList());
     }
 
-    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(PatientClinicalHistoryModel patientClinicalHistoryModel) {
+    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(
+            PatientClinicalHistoryModel patientClinicalHistoryModel) {
         return PatientClinicalHistoryResponse.builder()
                 .id(patientClinicalHistoryModel.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog())
                 .clinicalHistoryName(patientClinicalHistoryModel.getClinicalHistoryCatalog().getClinicalHistoryName())
@@ -186,14 +195,17 @@ public class ReviewStatusService {
 
     private void validateEntitiesExist(Long idPatientClinicalHistory, Long idSection, Long idProfessorClinicalArea) {
         patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
-                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory,
+                .orElseThrow(() -> new AppException(
+                        ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory,
                         HttpStatus.NOT_FOUND));
 
         formSectionRepository.findById(idSection)
-                .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + idSection, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + idSection,
+                        HttpStatus.NOT_FOUND));
 
         professorClinicalAreaRepository.findById(idProfessorClinicalArea)
-                .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + idProfessorClinicalArea,
+                .orElseThrow(() -> new AppException(
+                        ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + idProfessorClinicalArea,
                         HttpStatus.NOT_FOUND));
     }
 
@@ -207,7 +219,18 @@ public class ReviewStatusService {
         return statusModel != null
                 ? reviewStatusMapper.toReviewSectionResponse(statusModel)
                 : ReviewSectionResponse.builder()
-                .status("NO_STATUS")
+                        .status("NO_STATUS")
+                        .build();
+    }
+
+    private ReviewStatusResponse buildNotification(ReviewStatusModel status) {
+        return ReviewStatusResponse.builder()
+                .idPatientClinicalHistory(status.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                .idSection(status.getFormSection().getIdFormSection())
+                .idProfessorClinicalArea(status.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .status(status.getStatus().name())
+                .message(status.getMessage())
+                .idReviewStatus(status.getIdReviewStatus())
                 .build();
     }
 }

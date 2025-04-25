@@ -20,7 +20,7 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
     @Override
     public ReviewStatusModel toEntity(ReviewStatusRequest dto) {
         return ReviewStatusModel.builder()
-                .status(ReviewStatus.valueOf(dto.getStatus()))
+                .status(dto.getStatus())
                 .message(dto.getMessage())
                 .build();
     }
@@ -42,7 +42,7 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
 
     @Override
     public void updateEntity(ReviewStatusRequest request, ReviewStatusModel entity) {
-        entity.setStatus(ReviewStatus.valueOf(request.getStatus()));
+        entity.setStatus(request.getStatus());
         entity.setMessage(request.getMessage());
     }
 
