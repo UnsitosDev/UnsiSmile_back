@@ -11,7 +11,10 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -26,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -98,16 +103,17 @@ public class TreatmentDetailService {
     private TreatmentDetailResponse toDto(TreatmentDetailModel treatmentDetailModel) {
         TreatmentDetailResponse treatmentDetail = treatmentDetailMapper.toDto(treatmentDetailModel);
 
-        if (treatmentDetailModel.getProfessor() != null && treatmentDetailModel.getProfessor().getPerson() != null) {
-            String professorName = validationUtils.getFullNameFromPerson(treatmentDetailModel.getProfessor().getPerson());
-            treatmentDetail.setProfessorName(professorName);
-        } else {
-            treatmentDetail.setProfessorName(null);
-        }
+        String professorName = Optional.ofNullable(treatmentDetailModel.getProfessor())
+                .map(ProfessorModel::getPerson)
+                .map(PersonModel::getFullName)
+                .orElse(null);
+        treatmentDetail.setProfessorName(professorName);
 
-        String patientName = validationUtils.getFullNameFromPerson(
-                treatmentDetailModel.getPatientClinicalHistory().getPatient().getPerson()
-        );
+        String patientName = Optional.ofNullable(treatmentDetailModel.getPatientClinicalHistory())
+                .map(PatientClinicalHistoryModel::getPatient)
+                .map(PatientModel::getPerson)
+                .map(PersonModel::getFullName)
+                .orElse(null);
         treatmentDetail.setPatientName(patientName);
 
         if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {

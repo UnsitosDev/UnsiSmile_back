@@ -29,11 +29,4 @@ public class PatientResponse {
     private ReligionResponse religion;
     private GuardianResponse guardian;
     private StudentRes student;
-
-    public String getFullName() {
-        return person.getFirstName() + " " +
-        ((person.getSecondName() != null && !person.getSecondName().trim().isEmpty()) ? person.getSecondName() + " " : "") +
-        person.getFirstLastName() + " " +
-        person.getSecondLastName();
-    }
 }
