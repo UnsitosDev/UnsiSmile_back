@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @RequestMapping("/unsismile/api/v1/people")
 public class PersonController {
-    
+
     private final PersonService personService;
 
     @PostMapping
@@ -34,4 +35,10 @@ public class PersonController {
             @PathVariable String curp, @RequestBody PersonRequest request) {
         return ResponseEntity.ok(personService.updatePerson(curp, request));
     }
+
+    @GetMapping("/{curp}")
+    public ResponseEntity<PersonResponse> getPersonByCURP(@PathVariable String curp) {
+        return ResponseEntity.ok(personService.getPersonByCurp(curp));
+    }
+
 }

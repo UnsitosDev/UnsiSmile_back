@@ -151,4 +151,17 @@ public class PersonService {
 
         return personRepository.save(personModel);
     }
+
+    @Transactional(readOnly = true)
+    public PersonResponse getPersonByCurp(@NonNull String curp) {
+        try {
+            return personRepository.findByCurp(curp)
+                    .map(personMapper::toDto)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PERSON_NOT_FOUND, curp),
+                            HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_PERSON, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }
