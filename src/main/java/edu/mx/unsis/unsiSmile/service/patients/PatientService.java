@@ -29,11 +29,13 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
@@ -65,6 +67,7 @@ public class PatientService {
     private final IReligionRepository religionRepository;
     private final OccupationService occupationService;
     private final PatientMapper patientMapper;
+    private final GuardianMapper guardianMapper;
     private final AddressService addressService;
     private final UserService userService;
     private final StudentPatientService studentPatientService;
@@ -151,6 +154,14 @@ public class PatientService {
     }
 
     private void setGuardianForPatient(GuardianRequest guardianRequest, PatientModel patientModel) {
+
+        //create or set guardian
+        GuardianResponse guardianResponse = guardianService.getGuardianById(guardianRequest.getIdGuardian());
+        if (guardianResponse == null) {
+            GuardianModel guardianModel = guardianMapper.toEntity(guardianRequest);
+            patientModel.setGuardian(guardianModel);
+            return;
+        }
 
         GuardianModel guardianModel = guardianService.createGuardianEntity(guardianRequest);
 
