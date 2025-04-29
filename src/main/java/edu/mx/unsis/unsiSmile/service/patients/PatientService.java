@@ -34,7 +34,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
@@ -67,7 +66,6 @@ public class PatientService {
     private final IReligionRepository religionRepository;
     private final OccupationService occupationService;
     private final PatientMapper patientMapper;
-    private final GuardianMapper guardianMapper;
     private final AddressService addressService;
     private final UserService userService;
     private final StudentPatientService studentPatientService;
@@ -155,19 +153,23 @@ public class PatientService {
     }
 
     private void setGuardianForPatient(GuardianRequest guardianRequest, PatientModel patientModel) {
+        String curp = guardianRequest.getPerson().getCurp();
+        GuardianModel guardianModel = null;
 
-        GuardianModel guardianModel = guardianRepository.findById(guardianRequest.getIdGuardian())
-                .orElse(null);
+        if (curp != null) {
+            guardianModel = guardianRepository.findByPerson_CurpAndStatusKey(curp, "A").orElse(null);
+        }
 
-        // create or set guardian
         if (guardianModel != null) {
+            // Se asocia el guardian existente
             patientModel.setGuardian(guardianModel);
             return;
         }
 
+        // Se crea un nuevo guardian y se asocia
         guardianModel = guardianService.createGuardianEntity(guardianRequest);
-
         patientModel.setGuardian(guardianModel);
+
     }
 
     private PatientModel preparePatientModel(PatientRequest patientRequest, PersonModel person) {
