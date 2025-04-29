@@ -25,9 +25,6 @@ public interface IProfessorClinicalAreaRepository extends JpaRepository<Professo
 
     Optional<ProfessorClinicalAreaModel> findByProfessorAndStatusKey(@Param("professor") ProfessorModel professor, @Param("statusKey") String statusKey);
 
-    @Query("SELECT p FROM ProfessorClinicalAreaModel p WHERE p.professor.idProfessor = :professorId AND p.statusKey = 'A'")
-    Optional<ProfessorClinicalAreaModel> findByProfessorId(@Param("professorId") String professorId);
-
     @Query("SELECT p FROM ProfessorClinicalAreaModel p " +
             "WHERE p.clinicalArea = :clinicalArea AND p.statusKey = :statusKey")
     Page<ProfessorClinicalAreaModel> findByClinicalAreaAndStatusKey(

@@ -105,27 +105,11 @@ public class CatalogOptionService {
 
             List<CatalogOptionModel> optionModelList = catalogOptionRepository.findAllByCatalogIdAndStatusKey(catalogId, Constants.ACTIVE);
 
-            if ("Catedráticos responsables de área".equals(catalogModel.getCatalogName())) {
-                processProfessorOptions(optionModelList);
-            }
-
             return optionModelList.stream()
                     .map(catalogOptionMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new AppException("Failed to fetch catalog options", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    private void processProfessorOptions(List<CatalogOptionModel> optionModelList) {
-        for (CatalogOptionModel option : optionModelList) {
-            ProfessorModel professor = professorRepository.findById(option.getOptionName())
-                    .stream().findFirst().orElse(null);
-
-            if (professor != null && professor.getPerson() != null) {
-                String fullName = professor.getPerson().getFullName();
-                option.setOptionName(fullName);
-            }
         }
     }
 }
