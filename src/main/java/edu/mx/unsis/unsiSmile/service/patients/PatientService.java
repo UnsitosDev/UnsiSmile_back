@@ -29,7 +29,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
@@ -44,6 +43,7 @@ import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.INationalityRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
@@ -75,6 +75,7 @@ public class PatientService {
     private final PersonService personService;
     private final ValidationUtils validationUtils;
     private final GuardianService guardianService;
+    private final IGuardianRepository guardianRepository;
     @Value("${max.medical.record.number}")
     private int maxFileNumberProperties;
 
@@ -155,15 +156,16 @@ public class PatientService {
 
     private void setGuardianForPatient(GuardianRequest guardianRequest, PatientModel patientModel) {
 
-        //create or set guardian
-        GuardianResponse guardianResponse = guardianService.getGuardianById(guardianRequest.getIdGuardian());
-        if (guardianResponse == null) {
-            GuardianModel guardianModel = guardianMapper.toEntity(guardianRequest);
+        GuardianModel guardianModel = guardianRepository.findById(guardianRequest.getIdGuardian())
+                .orElse(null);
+
+        // create or set guardian
+        if (guardianModel != null) {
             patientModel.setGuardian(guardianModel);
             return;
         }
 
-        GuardianModel guardianModel = guardianService.createGuardianEntity(guardianRequest);
+        guardianModel = guardianService.createGuardianEntity(guardianRequest);
 
         patientModel.setGuardian(guardianModel);
     }
@@ -290,7 +292,8 @@ public class PatientService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_TO_FETCH_PATIENT_WITH_ID, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_PATIENT_WITH_ID, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
