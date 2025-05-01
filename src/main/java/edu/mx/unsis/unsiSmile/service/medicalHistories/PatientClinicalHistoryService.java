@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMap
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class PatientClinicalHistoryService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
     private final IPatientRepository patientRepository;
     private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
+    private final IClinicalHistoryCatalogRepository clinicalHistoryCatalogRepository;
 
     @Transactional
     public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
@@ -58,7 +60,9 @@ public class PatientClinicalHistoryService {
         try {
             return patientClinicalHistoryRepository.findById(id)
                     .map(this::toDto)
-                    .orElseThrow(() -> new AppException("Patient clinical history not found with ID: " + id, HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -107,12 +111,26 @@ public class PatientClinicalHistoryService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryModel> findByPatient(String idPatient) {
+    @Transactional
+    public PatientClinicalHistoryModel findGeneralMedicalRecordByPatientId(String idPatient) {
         try {
-            return patientClinicalHistoryRepository.findAllByPatientId(idPatient);
+            PatientClinicalHistoryModel existing = patientClinicalHistoryRepository
+                    .findTopByPatientIdAndRecordName(idPatient, Constants.GENERAL_MEDICAL_RECORD);
+
+            if (existing != null) {
+                return this.toDto(existing);
+            }
+
+            ClinicalHistoryCatalogModel catalog = clinicalHistoryCatalogRepository
+                    .findByClinicalHistoryName(Constants.GENERAL_MEDICAL_RECORD)
+                    .orElseThrow(() -> new AppException(ResponseMessages.GENERAL_MEDICAL_RECORD_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            PatientClinicalHistoryModel modelSaved = save(idPatient, catalog.getIdClinicalHistoryCatalog());
+            return this.toDto(modelSaved);
+        } catch (AppException ex) {
+            throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch patient clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to get or create general medical record", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

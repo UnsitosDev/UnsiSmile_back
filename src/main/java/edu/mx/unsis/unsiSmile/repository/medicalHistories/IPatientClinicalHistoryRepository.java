@@ -6,14 +6,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface IPatientClinicalHistoryRepository extends JpaRepository<PatientClinicalHistoryModel, Long> {
 
-    @Query("SELECT pch FROM PatientClinicalHistoryModel pch where pch.patient.idPatient = :patientId")
-    List<PatientClinicalHistoryModel> findAllByPatientId(@Param("patientId") String patientId);
+    @Query("SELECT pch FROM PatientClinicalHistoryModel pch " +
+            "WHERE pch.patient.idPatient = :patientId " +
+            "AND pch.clinicalHistoryCatalog.clinicalHistoryName = :medicalRecordName " +
+            "ORDER BY pch.createdAt DESC")
+    PatientClinicalHistoryModel findTopByPatientIdAndRecordName(@Param("patientId") String patientId,
+                                                                @Param("medicalRecordName") String medicalRecordName);
 
     Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
             String patientId, Long clinicalHistoryCatalogId);

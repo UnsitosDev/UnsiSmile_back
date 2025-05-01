@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
@@ -57,10 +56,10 @@ public class ClinicalHistoryCatalogController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
-    @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient) {
-        List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
+    @Operation(summary = "Obtiene la historia clínica general del paciente.")
+    @GetMapping("/general")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> searchGeneralMedicalRecord(@RequestParam String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.searchGeneralMedicalRecord(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -81,5 +80,13 @@ public class ClinicalHistoryCatalogController {
     ) {
         ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Obtiene una historia clínica por su ID.")
+    @GetMapping("/{id}")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
+            @PathVariable Long id) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
