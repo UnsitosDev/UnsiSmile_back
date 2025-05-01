@@ -1,12 +1,12 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,4 +23,7 @@ public class OdontogramRequest {
     private Long idPatientClinicalHistory;
     @NotNull(message = "The id of form section cannot be null")
     private Long idFormSection;
+
+    private String observations;
+
 }
