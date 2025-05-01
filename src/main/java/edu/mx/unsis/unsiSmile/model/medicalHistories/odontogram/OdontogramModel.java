@@ -38,6 +38,9 @@ public class OdontogramModel extends AuditModel {
     @Column(name = "id_odontogram")
     private Long idOdontogram;
 
+    @Column(name = "observations")
+    private String observations;
+
     @ManyToOne
     @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
     private PatientModel patient;

@@ -1,16 +1,16 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {
@@ -27,10 +27,11 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
     @Query("SELECT tfca FROM ToothfaceConditionsAssignmentModel tfca WHERE tfca.odontogram.idOdontogram = :odontogramId")
     List<ToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByOdontogramId(Long odontogramId);
 
-    @Query("SELECT o.idOdontogram FROM OdontogramModel o WHERE o.patient.idPatient = :patientId ORDER BY o.createdAt DESC")
-    List<Long> findOdontogramIdsByPatient(@Param("patientId") String patientId, Pageable pageable);
+    @Query("SELECT o FROM OdontogramModel o WHERE o.patient.id = :patientId ORDER BY o.createdAt DESC limit 1")
+    Optional<OdontogramModel> findLatestOdontogramByPatientId(@Param("patientId") String patientId);
 
     @Query("SELECT o FROM OdontogramModel o WHERE o.formSection.id = :formSectionId AND o.patient.id = :patientId")
     Optional<OdontogramModel> findByFormSectionIdAndPatientId(@Param("formSectionId") Long formSectionId, @Param("patientId") String patientId);
 
+    Optional<OdontogramModel> findFirstByPatient_IdPatientOrderByCreatedAtDesc(String patientId);
 }

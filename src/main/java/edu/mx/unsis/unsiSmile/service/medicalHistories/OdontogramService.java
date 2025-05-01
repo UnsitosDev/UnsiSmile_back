@@ -1,14 +1,9 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -17,10 +12,7 @@ import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
@@ -133,119 +125,10 @@ public class OdontogramService {
 
     public OdontogramResponse getOdontogramDetails(String patientId) {
 
-        Long odontogramId = getLatestOdontogramIdByPatient(patientId).orElseThrow(
-                () -> new AppException("Odontogram not found with ID: " + patientId, HttpStatus.NOT_FOUND));
-
-        // Obtener todas las asignaciones de condiciones de dientes
-        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
-                .findToothConditionAssignmentsByOdontogramId(odontogramId);
-
-        // Obtener todas las condiciones de caras de dientes
-        List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
-                .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
-
-        // Mapa para agrupar los datos por diente
-        Map<String, ToothResponse> adultTeethMap = new HashMap<>();
-        Map<String, ToothResponse> childTeethMap = new HashMap<>();
-
-        // Procesar ToothConditionAssignments
-        for (ToothConditionAssignmentModel tca : toothConditionAssignments) {
-
-            // Mapeo de ConditionDTO (para tooth conditions)
-            ConditionResponse conditionDTO = ConditionResponse.builder()
-                    .idCondition(tca.getToothCondition().getIdToothCondition())
-                    .condition(tca.getToothCondition().getDescription())
-                    .description(tca.getToothCondition().getDescription())
-                    .build();
-
-            // Verificar si el diente ya existe en el mapa
-            if (tca.getTooth().isAdult()) {
-                ToothResponse adultTheetResponse = adultTeethMap.computeIfAbsent(
-                        tca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-                adultTheetResponse.getConditions().add(conditionDTO);
-            } else {
-                ToothResponse childTeethResponse = childTeethMap.computeIfAbsent(
-                        tca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-                childTeethResponse.getConditions().add(conditionDTO);
-            }
-
-        }
-
-        // Procesar ToothFaceConditions
-        for (ToothfaceConditionsAssignmentModel tfca : toothFaceConditions) {
-            // Mapeo de ConditionDTO (para face conditions)
-            ConditionResponse conditionDTO = new ConditionResponse(
-                    tfca.getToothFaceCondition().getIdToothFaceCondition(),
-                    tfca.getToothFaceCondition().getDescription(),
-                    "Tooth face condition description" // Ajustar según el modelo
-            );
-
-            // Verificar si el diente ya existe en el mapa
-            if (tfca.getTooth().isAdult()) {
-                ToothResponse adultToothResponse = adultTeethMap.computeIfAbsent(
-                        tfca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-
-                // Buscar o crear la FaceDTO
-                FaceResponse adultFace = adultToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
-                        .findFirst()
-                        .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(),
-                                    new ArrayList<>());
-                            adultToothResponse.getFaces().add(newFace);
-                            return newFace;
-                        });
-
-                // Agregar la condición a la cara del diente
-                adultFace.getConditions().add(conditionDTO);
-            } else {
-                ToothResponse childToothResponse = childTeethMap.computeIfAbsent(
-                        tfca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-
-                // Buscar o crear la FaceDTO
-                FaceResponse childFace = childToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
-                        .findFirst()
-                        .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(),
-                                    new ArrayList<>());
-                            childToothResponse.getFaces().add(newFace);
-                            return newFace;
-                        });
-
-                // Agregar la condición a la cara del diente
-                childFace.getConditions().add(conditionDTO);
-            }
-
-        }
-
-        // Crear la lista de ToothDTO a partir del mapa
-        List<ToothResponse> adultToothResponseList = new ArrayList<>(adultTeethMap.values());
-        List<ToothResponse> childToothResponseList = new ArrayList<>(childTeethMap.values());
-
-        // Crear y devolver el OdontogramDTO
-        return OdontogramResponse.builder()
-                .idOdontogram(odontogramId)
-                .adultArcade(adultToothResponseList)
-                .childArcade(childToothResponseList)
-                .build();
-    }
-
-    public Optional<Long> getLatestOdontogramIdByPatient(String patientId) {
-        List<Long> results = odontogramRepository.findOdontogramIdsByPatient(patientId, PageRequest.of(0, 1));
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
-    }
-
-    //obtener el odontograma por id de form section y el id del paciente
-    public OdontogramResponse getOdontogramByFormSectionId(Long formSectionId, String patientId) {
-        OdontogramModel odontogramModel = odontogramRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                .orElseThrow(() -> new AppException("Odontogram not found with form section ID: " + formSectionId,
+        OdontogramModel odontogramModel = odontogramRepository.findLatestOdontogramByPatientId(patientId)
+                .orElseThrow(() -> new AppException("Odontogram not found for patient ID: " + patientId,
                         HttpStatus.NOT_FOUND));
-        
+
         Long odontogramId = odontogramModel.getIdOdontogram();
 
         // Obtener todas las asignaciones de condiciones de dientes
@@ -256,95 +139,39 @@ public class OdontogramService {
         List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
                 .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
 
-        // Mapa para agrupar los datos por diente
-        Map<String, ToothResponse> adultTeethMap = new HashMap<>();
-        Map<String, ToothResponse> childTeethMap = new HashMap<>();
+        OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
+                toothFaceConditions);
+        odontogramResponse.setIdOdontogram(odontogramId);
+        odontogramResponse.setObservations(odontogramModel.getObservations());
 
-        // Procesar ToothConditionAssignments
-        for (ToothConditionAssignmentModel tca : toothConditionAssignments) {
+        return odontogramResponse;
 
-            // Mapeo de ConditionDTO (para tooth conditions)
-            ConditionResponse conditionDTO = ConditionResponse.builder()
-                    .idCondition(tca.getToothCondition().getIdToothCondition())
-                    .condition(tca.getToothCondition().getDescription())
-                    .description(tca.getToothCondition().getDescription())
-                    .build();
+    }
 
-            // Verificar si el diente ya existe en el mapa
-            if (tca.getTooth().isAdult()) {
-                ToothResponse adultTheetResponse = adultTeethMap.computeIfAbsent(
-                        tca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-                adultTheetResponse.getConditions().add(conditionDTO);
-            } else {
-                ToothResponse childTeethResponse = childTeethMap.computeIfAbsent(
-                        tca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
-                childTeethResponse.getConditions().add(conditionDTO);
-            }
+    // obtener el odontograma por id de form section y el id del paciente
+    public OdontogramResponse getOdontogramByFormSectionId(Long formSectionId, String patientId) {
+        OdontogramModel odontogramModel = odontogramRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
+                .orElseThrow(() -> new AppException("Odontogram not found with form section ID: " + formSectionId,
+                        HttpStatus.NOT_FOUND));
 
-        }
+        Long odontogramId = odontogramModel.getIdOdontogram();
 
-        // Procesar ToothFaceConditions
-        for (ToothfaceConditionsAssignmentModel tfca : toothFaceConditions) {
-            // Mapeo de ConditionDTO (para face conditions)
-            ConditionResponse conditionDTO = new ConditionResponse(
-                    tfca.getToothFaceCondition().getIdToothFaceCondition(),
-                    tfca.getToothFaceCondition().getDescription(),
-                    "Tooth face condition description" // Ajustar según el modelo
-            );
+        // Obtener todas las asignaciones de condiciones de dientes
+        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
+                .findToothConditionAssignmentsByOdontogramId(odontogramId);
 
-            // Verificar si el diente ya existe en el mapa
-            if (tfca.getTooth().isAdult()) {
-                ToothResponse adultToothResponse = adultTeethMap.computeIfAbsent(
-                        tfca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
+        // Obtener todas las condiciones de caras de dientes
+        List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
+                .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
 
-                // Buscar o crear la FaceDTO
-                FaceResponse adultFace = adultToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
-                        .findFirst()
-                        .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(),
-                                    new ArrayList<>());
-                            adultToothResponse.getFaces().add(newFace);
-                            return newFace;
-                        });
+        odontogramMapper.mapConditionsAssignments(toothConditionAssignments, toothFaceConditions);
 
-                // Agregar la condición a la cara del diente
-                adultFace.getConditions().add(conditionDTO);
-            } else {
-                ToothResponse childToothResponse = childTeethMap.computeIfAbsent(
-                        tfca.getTooth().getIdTooth(),
-                        id -> new ToothResponse(id, new ArrayList<>(), new ArrayList<>()));
+        OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
+                toothFaceConditions);
+        odontogramResponse.setIdOdontogram(odontogramId);
+        odontogramResponse.setObservations(odontogramModel.getObservations());
 
-                // Buscar o crear la FaceDTO
-                FaceResponse childFace = childToothResponse.getFaces().stream()
-                        .filter(f -> f.getIdFace().equals(tfca.getToothFace().getIdToothFace()))
-                        .findFirst()
-                        .orElseGet(() -> {
-                            FaceResponse newFace = new FaceResponse(tfca.getToothFace().getIdToothFace(),
-                                    new ArrayList<>());
-                            childToothResponse.getFaces().add(newFace);
-                            return newFace;
-                        });
-
-                // Agregar la condición a la cara del diente
-                childFace.getConditions().add(conditionDTO);
-            }
-
-        }
-
-        // Crear la lista de ToothDTO a partir del mapa
-        List<ToothResponse> adultToothResponseList = new ArrayList<>(adultTeethMap.values());
-        List<ToothResponse> childToothResponseList = new ArrayList<>(childTeethMap.values());
-
-        // Crear y devolver el OdontogramDTO
-        return OdontogramResponse.builder()
-                .idOdontogram(odontogramId)
-                .adultArcade(adultToothResponseList)
-                .childArcade(childToothResponseList)
-                .build();
+        return odontogramResponse;
     }
 
 }
