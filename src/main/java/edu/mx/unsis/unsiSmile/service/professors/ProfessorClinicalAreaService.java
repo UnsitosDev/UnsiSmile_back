@@ -36,9 +36,6 @@ import java.util.Optional;
 public class ProfessorClinicalAreaService {
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final ProfessorClinicalAreaMapper professorClinicalAreaMapper;
-    private final CatalogOptionMapper catalogOptionMapper;
-    private final ICatalogOptionRepository catalogOptionRepository;
-    private final ICatalogRepository catalogRepository;
     private final UserService userService;
     private final IProfessorRepository professorRepository;
     private final ProfessorMapper professorMapper;
@@ -49,9 +46,7 @@ public class ProfessorClinicalAreaService {
             ProfessorModel professorModel = getProfessorById(request.getIdProfessor());
 
             ProfessorClinicalAreaModel professorClinicalAreaModel = professorClinicalAreaMapper.toEntity(request);
-            ProfessorClinicalAreaModel professorClinicalAreaSaved = professorClinicalAreaRepository.save(professorClinicalAreaModel);
-
-            createCatalogOptionForProfessor(professorClinicalAreaSaved);
+            professorClinicalAreaRepository.save(professorClinicalAreaModel);
 
             assignRoleToProfessor(professorModel, ERole.ROLE_CLINICAL_AREA_SUPERVISOR);
         } catch (AppException e) {
@@ -123,40 +118,6 @@ public class ProfessorClinicalAreaService {
         }
     }
 
-    private void createCatalogOptionForProfessor(ProfessorClinicalAreaModel professorClinicalAreaSaved) {
-        String professorId = professorClinicalAreaSaved.getProfessor().getIdProfessor();
-        Optional<CatalogOptionModel> existingOptionOpt = catalogOptionRepository.findByOptionName(professorId);
-
-        if(existingOptionOpt.isPresent()){
-            CatalogOptionModel existingOption = existingOptionOpt.get();
-            existingOption.setStatusKey(Constants.ACTIVE);
-            catalogOptionRepository.save(existingOption);
-        } else {
-            Long idCatalog = catalogRepository.findIdByCatalogName("Catedráticos responsables de área")
-                    .orElseThrow(() -> new AppException(ResponseMessages.CATALOG_NOT_FOUND, HttpStatus.NOT_FOUND));
-
-            CatalogOptionModel catalogOptionModel = catalogOptionMapper.toEntity(
-                    CatalogOptionRequest.builder()
-                            .optionName(professorId)
-                            .idCatalog(idCatalog)
-                            .build()
-            );
-            catalogOptionRepository.save(catalogOptionModel);
-        }
-    }
-
-    private void toggleCatalogOptionForProfessor(ProfessorClinicalAreaModel professorClinicalAreaModel) {
-        String professorId = professorClinicalAreaModel.getProfessor().getIdProfessor();
-        Optional<CatalogOptionModel> existingOptionOpt = catalogOptionRepository.findByOptionName(professorId);
-
-        if (existingOptionOpt.isPresent()) {
-            CatalogOptionModel existingOption = existingOptionOpt.get();
-            String newStatus = Constants.ACTIVE.equals(existingOption.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE;
-            existingOption.setStatusKey(newStatus);
-            catalogOptionRepository.save(existingOption);
-        }
-    }
-
     @Transactional
     public void toggleProfessorClinicalAreaStatus(@NotNull Long id) {
         try {
@@ -173,9 +134,6 @@ public class ProfessorClinicalAreaService {
                     ? Constants.INACTIVE : Constants.ACTIVE;
             professorClinicalAreaModel.setStatusKey(newStatus);
             professorClinicalAreaRepository.save(professorClinicalAreaModel);
-
-            toggleCatalogOptionForProfessor(professorClinicalAreaModel);
-
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {

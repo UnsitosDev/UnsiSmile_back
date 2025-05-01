@@ -105,15 +105,4 @@ VALUES (1, '1696', '2025-04-16', 'A'),
 INSERT INTO catalogs
 (catalog_name)
 VALUES
-    ("Estados civiles"),
-    ("Catedráticos responsables de área");
-
-INSERT INTO
-    catalog_options (fk_catalog, option_name, status_key)
-VALUES
-    (13, '1701', 'A'),
-    (13, '1574', 'A'),
-    (13, '1691', 'A'),
-    (13, '1709', 'A'),
-    (13, '1696', 'A'),
-    (13, '1695', 'A');
+    ("Estados civiles");
