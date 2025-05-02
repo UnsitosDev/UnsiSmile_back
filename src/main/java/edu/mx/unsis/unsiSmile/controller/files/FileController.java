@@ -56,20 +56,20 @@ public class FileController {
     }
 
     @Operation(summary = "Obtiene todos los archivos generales")
-    @GetMapping("general-files")
+    @GetMapping("/general-files")
     public ResponseEntity<List<FileResponse>> getAllGeneralFiles() {
         List<FileResponse> response = generalFileService.getAllGeneralFiles();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene un archivo general para su descarga")
-    @GetMapping("general-file/{id}")
+    @GetMapping("/general-files/{id}")
     public ResponseEntity<byte[]> downloadGeneralFile(@PathVariable String id) {
         return generalFileService.downloadGeneralFileById(id);
     }
 
     @Operation(summary = "Elimina un archivo general")
-    @DeleteMapping("general-file/{id}")
+    @DeleteMapping("/general-files/{id}")
     public ResponseEntity<Void> deleteGeneralFile(@PathVariable String id) {
         generalFileService.deleteGeneralFileById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

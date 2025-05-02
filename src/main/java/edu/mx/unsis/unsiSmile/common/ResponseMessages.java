@@ -80,6 +80,7 @@ public class ResponseMessages {
     public static final String FAILED_TO_FETCH_FILES = "Error al obtener los archivos.";
     public static final String ERROR_WHILE_DOWNLOAD_FILE = "Error durante la descarga del archivo.";
     public static final String FAILED_TO_DELETE_FILE = "Error al eliminar el archivo.";
+    public static final String EMPTY_FILE = "El archivo está vacío.";
 
     public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado";
     public static final String INVALID_ROLE = "Rol no válido";

@@ -28,7 +28,7 @@ public class GeneralFileService {
     @Transactional
     public void uploadGeneralFiles(List<MultipartFile> files) {
         if (files.isEmpty()) {
-            throw new AppException("Empty file", HttpStatus.BAD_REQUEST);
+            throw new AppException(ResponseMessages.EMPTY_FILE, HttpStatus.BAD_REQUEST);
         }
 
         fileService.processUpload(files, null, true);
@@ -37,7 +37,7 @@ public class GeneralFileService {
     @Transactional
     public ResponseEntity<byte[]> downloadGeneralFileById(String id) {
         GeneralFileModel fileModel = generalFileRepository.findById(id)
-                .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
         return fileService.buildFileDownloadResponse(fileModel.getUrl(), fileModel.getName());
     }
 
