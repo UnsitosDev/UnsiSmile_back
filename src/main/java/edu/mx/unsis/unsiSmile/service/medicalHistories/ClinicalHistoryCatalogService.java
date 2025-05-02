@@ -165,21 +165,6 @@ public class ClinicalHistoryCatalogService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long id) {
-        try {
-            Assert.notNull(id, ResponseMessages.PATIENT_CLINICAL_HISTORY_ID_NULL);
-
-            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findById(id);
-
-            return this.toResponse(patientClinicalHistory);
-        } catch (AppException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
     private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(Object[] result) {
         return PatientClinicalHistoryResponse.builder()
                 .id(((Number) result[0]).longValue())

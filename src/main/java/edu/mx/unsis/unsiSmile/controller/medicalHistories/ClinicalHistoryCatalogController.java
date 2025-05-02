@@ -96,12 +96,4 @@ public class ClinicalHistoryCatalogController {
         ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    @Operation(summary = "Obtiene una historia clínica por su ID.")
-    @GetMapping("/{id}")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
-            @PathVariable Long id) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 }
