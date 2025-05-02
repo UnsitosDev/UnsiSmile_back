@@ -26,5 +26,10 @@ CREATE TABLE progress_note_files (
                                      url VARCHAR(255) NOT NULL,
                                      extension VARCHAR(6) NOT NULL,
                                      fk_progress_note CHAR(36) NOT NULL,
+                                     created_at DATETIME(6),
+                                     created_by VARCHAR(255) DEFAULT NULL,
+                                     status_key VARCHAR(255) DEFAULT NULL,
+                                     updated_at DATETIME(6),
+                                     updated_by VARCHAR(255) DEFAULT NULL,
                                      CONSTRAINT fk_progress_note FOREIGN KEY (fk_progress_note) REFERENCES progress_notes(id_progress_note)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

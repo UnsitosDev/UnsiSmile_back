@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "progress_note_files")
-public class ProgressNoteFileModel {
+public class ProgressNoteFileModel extends AuditModel {
     @Id
     @Column(name = "id_progress_note_file", nullable = false, updatable = false, length = 36)
     private String idProgressNoteFile;
