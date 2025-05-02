@@ -18,6 +18,6 @@ public interface IPatientClinicalHistoryRepository extends JpaRepository<Patient
     PatientClinicalHistoryModel findTopByPatientIdAndRecordName(@Param("patientId") String patientId,
                                                                 @Param("medicalRecordName") String medicalRecordName);
 
-    Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
-            String patientId, Long clinicalHistoryCatalogId);
+    Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndIdPatientClinicalHistory(
+            String patientId, Long idPatientClinicalHistory);
 }

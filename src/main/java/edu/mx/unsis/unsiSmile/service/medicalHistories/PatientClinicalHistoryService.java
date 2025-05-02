@@ -161,21 +161,21 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(String idPatient, Long idClinicalHistory) {
+    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(String idPatient, Long idPatientClinicalHistory) {
         try {
             Optional<PatientClinicalHistoryModel> patientClinicalHistory = patientClinicalHistoryRepository
-                    .findByPatient_IdPatientAndClinicalHistoryCatalog_IdClinicalHistoryCatalog(
-                            idPatient, idClinicalHistory);
+                    .findByPatient_IdPatientAndIdPatientClinicalHistory(
+                            idPatient, idPatientClinicalHistory);
             if (patientClinicalHistory.isPresent()) {
                 return this.toDto(patientClinicalHistory.get());
             } else {
                 throw new AppException("Patient clinical history not found for idPatient: " + idPatient +
-                        " and idClinicalHistory: " + idClinicalHistory, HttpStatus.NOT_FOUND);
+                        " and idPatientClinicalHistory: " + idPatientClinicalHistory, HttpStatus.NOT_FOUND);
             }
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to find patient clinical history with idPatient: " + idPatient + " and idClinicalHistory: " + idClinicalHistory, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to find patient clinical history with idPatient: " + idPatient + " and idClinicalHistory: " + idPatientClinicalHistory, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
