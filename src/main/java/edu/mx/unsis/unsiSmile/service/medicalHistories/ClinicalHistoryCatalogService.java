@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
@@ -124,6 +125,21 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {//falta validar que primero exista el paciente, si no devolver un error
+        try {
+            List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
+            if (results.isEmpty()) {
+                throw new AppException("No clinical history found for patient with ID: " + idPatient, HttpStatus.NOT_FOUND);
+            }
+            return results.stream()
+                    .map(this::mapToClinicalHistoryResponse)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new AppException("Failed to search clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public ClinicalHistoryCatalogResponse searchGeneralMedicalRecord(@NonNull String idPatient) {
         try {
             patientService.getPatientById(idPatient);
@@ -149,5 +165,14 @@ public class ClinicalHistoryCatalogService {
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(Object[] result) {
+        return PatientClinicalHistoryResponse.builder()
+                .id(((Number) result[0]).longValue())
+                .clinicalHistoryName((String) result[1])
+                .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
+                .patientId(result[3] != null ? result[3].toString() : null)
+                .build();
     }
 }
