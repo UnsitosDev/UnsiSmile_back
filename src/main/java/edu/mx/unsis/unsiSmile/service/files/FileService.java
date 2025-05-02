@@ -1,20 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.files;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -23,11 +8,27 @@ import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
+import edu.mx.unsis.unsiSmile.model.files.GeneralFileModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
+import edu.mx.unsis.unsiSmile.repository.files.IGeneralFileRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class FileService {
     private final IAnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IGeneralFileRepository generalFileRepository;
 
     public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
         if (files.isEmpty() || idPatientClinicalHistory == null || idQuestion == null) {
@@ -47,39 +49,43 @@ public class FileService {
     }
 
     private void uploadFile(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
-
-        Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
-        if (!Files.exists(uploadDir)) {
-            try {
-                Files.createDirectories(uploadDir);
-            } catch (Exception e) {
-                throw new AppException("Could not create upload directory", HttpStatus.INTERNAL_SERVER_ERROR, e);
-            }
-        }
-
         Long answerId = this.createFromFile(idPatientClinicalHistory, idQuestion);
+        processUpload(files, answerId, false);
+    }
+
+    public void processUpload(List<MultipartFile> files, Long answerId, boolean isGeneral) {
+        ensureUploadDirectoryExists();
 
         for (MultipartFile file : files) {
             try {
-                byte[] bytes = file.getBytes();
-                String fileId = UUID.randomUUID().toString();
-                Path path = Paths.get(Constants.UPLOAD_PATH + fileId);
-                String fileName = file.getOriginalFilename();
-                if (fileName == null) {
+                String originalName = file.getOriginalFilename();
+                if (originalName == null) {
                     throw new AppException("Filename is null", HttpStatus.BAD_REQUEST);
                 }
-                String ext = fileName.substring(fileName.lastIndexOf(".") + 1); // Extraer la extensión sin el punto
-                Files.write(path, bytes);
 
-                FileModel fileModel = FileModel.builder()
-                        .idFile(fileId)
-                        .filePath(path.toString())
-                        .fileName(fileName)
-                        .fileType(ext)
-                        .answer(AnswerModel.builder().idAnswer(answerId).build())
-                        .build();
+                String fileId = UUID.randomUUID().toString();
+                String ext = originalName.substring(originalName.lastIndexOf('.') + 1);
+                Path path = Paths.get(Constants.UPLOAD_PATH + fileId);
+                Files.write(path, file.getBytes());
 
-                fileRepository.save(fileModel);
+                if (isGeneral) {
+                    GeneralFileModel generalFile = GeneralFileModel.builder()
+                            .idFile(fileId)
+                            .url(path.toString())
+                            .name(originalName)
+                            .extension(ext)
+                            .build();
+                    generalFileRepository.save(generalFile);
+                } else {
+                    FileModel fileModel = FileModel.builder()
+                            .idFile(fileId)
+                            .filePath(path.toString())
+                            .fileName(originalName)
+                            .fileType(ext)
+                            .answer(AnswerModel.builder().idAnswer(answerId).build())
+                            .build();
+                    fileRepository.save(fileModel);
+                }
             } catch (Exception e) {
                 throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
             }
@@ -180,18 +186,7 @@ public class FileService {
     public ResponseEntity<byte[]> downloadFileById(String id) {
         FileModel fileModel = fileRepository.findById(id)
                 .orElseThrow(() -> new AppException("File not found", HttpStatus.NOT_FOUND));
-
-        try {
-            Path filePath = Paths.get(fileModel.getFilePath());
-            byte[] fileBytes = Files.readAllBytes(filePath); // Leer los bytes del archivo
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileModel.getFileName() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
-                    .body(fileBytes);
-        } catch (Exception e) {
-            throw new AppException("Error while downloading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
-        }
+        return buildFileDownloadResponse(fileModel.getFilePath(), fileModel.getFileName());
     }
 
     private Long createFromFile(Long idPatientClinicalHistory, Long idQuestion) {
@@ -224,17 +219,28 @@ public class FileService {
         }
     }
 
-    public void uploadGeneralFiles(List<MultipartFile> files, Long idQuestion) {
+    public ResponseEntity<byte[]> buildFileDownloadResponse(String path, String fileName) {
         try {
-            if (files.isEmpty() || idQuestion == null) {
-                throw new AppException("Empty file or idQuestion", HttpStatus.BAD_REQUEST);
-            }
+            Path filePath = Paths.get(path);
+            byte[] fileBytes = Files.readAllBytes(filePath);
 
-            this.uploadFile(files, null, idQuestion);
-        } catch (AppException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new AppException("Failed to upload general files", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(filePath))
+                    .body(fileBytes);
+        } catch (Exception e) {
+            throw new AppException("Error while downloading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+    }
+
+    private void ensureUploadDirectoryExists() {
+        Path uploadDir = Paths.get(Constants.UPLOAD_PATH);
+        if (!Files.exists(uploadDir)) {
+            try {
+                Files.createDirectories(uploadDir);
+            } catch (Exception e) {
+                throw new AppException("Could not create upload directory", HttpStatus.INTERNAL_SERVER_ERROR, e);
+            }
         }
     }
 }
