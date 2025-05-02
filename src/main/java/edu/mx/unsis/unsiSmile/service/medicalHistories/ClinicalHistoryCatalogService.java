@@ -153,6 +153,19 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
+    public ClinicalHistoryCatalogResponse createNewGeneralMedicalRecord(@NonNull String idPatient) {
+        try {
+            patientService.getPatientById(idPatient);
+            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.createNewGeneralMedicalRecord(idPatient);
+            return this.toResponse(patientClinicalHistory);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException("Failed to search clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public ClinicalHistoryCatalogResponse findById(Long id) {
         try {
             Assert.notNull(id, ResponseMessages.PATIENT_CLINICAL_HISTORY_ID_NULL);

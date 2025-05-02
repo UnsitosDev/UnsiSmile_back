@@ -71,6 +71,13 @@ public class ClinicalHistoryCatalogController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "Crear la historia clínica general del paciente.")
+    @PostMapping("/general")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> createNewGeneralMedicalRecord(@RequestParam String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.createNewGeneralMedicalRecord(idPatient);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientMedicalRecordRes> createPatientClinicalHistory(

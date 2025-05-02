@@ -396,7 +396,11 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
     public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
-    public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND = "No se encontró la historia clínica general";
+    public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND = "No se encontró la historia clínica general.";
+    public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND_FOR_PATIENT = "No se encontró la historia clínica general del paciente.";
+    public static final String FAILED_CREATE_GENERAL_MEDICAL_RECORD = "Error al crear la historia clínica general del paciente.";
+    public static final String FAILED_FETCH_GENERAL_MEDICAL_RECORD = "Error al obtener la historia clínica general del paciente.";
+    public static final String DUPLICATED_GENERAL_MEDICAL_RECORD = "Ya existe una historia clínica general para dicho paciente.";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
     public static final String TREATMENT_START_DATE_CANNOT_BE_NULL = "La fecha de inicio del tratamiento no puede ser nula";
