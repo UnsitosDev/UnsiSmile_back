@@ -10,13 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface IPatientClinicalHistoryRepository extends JpaRepository<PatientClinicalHistoryModel, Long> {
-
-    @Query("SELECT pch FROM PatientClinicalHistoryModel pch " +
-            "WHERE pch.patient.idPatient = :patientId " +
-            "AND pch.clinicalHistoryCatalog.clinicalHistoryName = :medicalRecordName " +
-            "ORDER BY pch.createdAt DESC")
-    PatientClinicalHistoryModel findTopByPatientIdAndRecordName(@Param("patientId") String patientId,
-                                                                @Param("medicalRecordName") String medicalRecordName);
+    PatientClinicalHistoryModel findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(
+            String patientId, String medicalRecordName);
 
     Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndIdPatientClinicalHistory(
             String patientId, Long idPatientClinicalHistory);

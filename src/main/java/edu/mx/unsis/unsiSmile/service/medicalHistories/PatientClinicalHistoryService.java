@@ -132,7 +132,7 @@ public class PatientClinicalHistoryService {
 
     private PatientClinicalHistoryModel findExistingGeneralMedicalRecord(String idPatient) {
         PatientClinicalHistoryModel existing = patientClinicalHistoryRepository
-                .findTopByPatientIdAndRecordName(idPatient, Constants.GENERAL_MEDICAL_RECORD);
+                .findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(idPatient, Constants.GENERAL_MEDICAL_RECORD);
 
         return existing != null ? this.toDto(existing) : null;
     }
