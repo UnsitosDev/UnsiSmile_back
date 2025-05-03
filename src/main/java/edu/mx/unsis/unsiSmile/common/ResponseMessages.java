@@ -64,6 +64,7 @@ public class ResponseMessages {
     public static final String ERROR_REPORT_NOT_FOUND = "No se pudo encontrar el archivo de notas de evolución: ";
     public static final String ERROR_GENERATING_REPORT = "Error al generar el PDF de notas de evolución: ";
     public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
+    public static final String PATIENT_ID_CANNOT_BE_ZERO = "El ID del paciente no puede ser cero.";
     public static final String PATIENT_ALREADY_EXISTS = "El paciente ya se encuentra registrado en el sistema";
     public static final String PATIENT_NEEDS_GUARDIAN = "El paciente necesita un tutor";
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser null";
@@ -290,6 +291,9 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
     public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
     public static final String FAILED_FETCH_MEDICAL_RECORD = "Error al obtener la historia clínica";
+    public static final String MEDICAL_RECORD_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
+    public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
+
 
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
     public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
