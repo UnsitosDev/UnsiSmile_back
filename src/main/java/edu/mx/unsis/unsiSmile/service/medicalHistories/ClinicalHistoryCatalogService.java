@@ -37,14 +37,14 @@ public class ClinicalHistoryCatalogService {
     @Transactional
     public void save(ClinicalHistoryCatalogRequest request) {
         try {
-            Assert.notNull(request, "ClinicalHistoryCatalogRequest cannot be null");
+            Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
             ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogMapper.toEntity(request);
 
             ClinicalHistoryCatalogModel savedCatalog = clinicalHistoryCatalogRepository.save(clinicalHistoryCatalogModel);
 
         } catch (Exception ex) {
-            throw new AppException("Failed to save clinical history catalog due to an internal server error", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_CREATE_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -76,15 +76,11 @@ public class ClinicalHistoryCatalogService {
         try {
             List<ClinicalHistoryCatalogModel> clinicalHistoryCatalogList = clinicalHistoryCatalogRepository.findAll();
 
-            if (clinicalHistoryCatalogList.isEmpty()) {
-                throw new AppException("No clinical history catalogs found", HttpStatus.NOT_FOUND);
-            } else {
-                return clinicalHistoryCatalogList.stream()
-                        .map(clinicalHistoryCatalogMapper::toDto)
-                        .collect(Collectors.toList());
-            }
+            return clinicalHistoryCatalogList.stream()
+                    .map(clinicalHistoryCatalogMapper::toDto)
+                    .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch clinical history catalogs", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_CATALOG, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -99,11 +95,15 @@ public class ClinicalHistoryCatalogService {
                       clinicalHistoryCatalogRepository.save(catalog);
                     },
                     () -> {
-                        throw new AppException("Clinical history catalog not found with ID: " + id, HttpStatus.NOT_FOUND);
+                        throw new AppException(String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, id),
+                                HttpStatus.NOT_FOUND);
                     }
             );
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to delete clinical history catalog with ID: " + id, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(String.format(ResponseMessages.FAILED_DELETE_MEDICAL_RECORD_CATALOG, id),
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -125,17 +125,18 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {//falta validar que primero exista el paciente, si no devolver un error
+    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {
         try {
+            patientService.getPatientById(idPatient);
+
             List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
-            if (results.isEmpty()) {
-                throw new AppException("No clinical history found for patient with ID: " + idPatient, HttpStatus.NOT_FOUND);
-            }
             return results.stream()
                     .map(this::mapToClinicalHistoryResponse)
                     .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to search clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -148,7 +149,7 @@ public class ClinicalHistoryCatalogService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to search clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_GENERAL_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

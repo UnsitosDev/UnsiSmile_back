@@ -291,6 +291,7 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
     public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
     public static final String FAILED_FETCH_MEDICAL_RECORD = "Error al obtener la historia clínica";
+    public static final String FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS = "Error al obtener las historias clínicas del paciente.";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
 
@@ -400,11 +401,14 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
     public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
+    public static final String FAILED_DELETE_MEDICAL_RECORD_CATALOG = "Error al eliminar la historia clínica del catálogo, con ID: %s";
+    public static final String FAILED_TO_FETCH_MEDICAL_RECORD_CATALOG = "Error al obtener el catálogo de historias clínicas.";
     public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND = "No se encontró la historia clínica general.";
     public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND_FOR_PATIENT = "No se encontró la historia clínica general del paciente.";
     public static final String FAILED_CREATE_GENERAL_MEDICAL_RECORD = "Error al crear la historia clínica general del paciente.";
     public static final String FAILED_FETCH_GENERAL_MEDICAL_RECORD = "Error al obtener la historia clínica general del paciente.";
     public static final String DUPLICATED_GENERAL_MEDICAL_RECORD = "La historia clínica general del paciente ya ha sido registrada.";
+    public static final String FAILED_CREATE_MEDICAL_RECORD = "Error al crear la historia clínica del paciente.";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
     public static final String TREATMENT_START_DATE_CANNOT_BE_NULL = "La fecha de inicio del tratamiento no puede ser nula";
