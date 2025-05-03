@@ -400,7 +400,7 @@ public class ResponseMessages {
     public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND_FOR_PATIENT = "No se encontró la historia clínica general del paciente.";
     public static final String FAILED_CREATE_GENERAL_MEDICAL_RECORD = "Error al crear la historia clínica general del paciente.";
     public static final String FAILED_FETCH_GENERAL_MEDICAL_RECORD = "Error al obtener la historia clínica general del paciente.";
-    public static final String DUPLICATED_GENERAL_MEDICAL_RECORD = "Ya existe una historia clínica general para dicho paciente.";
+    public static final String DUPLICATED_GENERAL_MEDICAL_RECORD = "La historia clínica general del paciente ya ha sido registrada.";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
     public static final String TREATMENT_START_DATE_CANNOT_BE_NULL = "La fecha de inicio del tratamiento no puede ser nula";

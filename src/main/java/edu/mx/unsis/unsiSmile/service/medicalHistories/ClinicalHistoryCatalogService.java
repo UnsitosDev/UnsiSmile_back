@@ -49,10 +49,10 @@ public class ClinicalHistoryCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long idPatientClinicalHistory, String idPatient) {
+    public ClinicalHistoryCatalogResponse findById(Long idPatientMedicalRecord, String idPatient) {
         try {
-            Assert.notNull(idPatientClinicalHistory, "Clinical History Id cannot be null");
-            if (idPatientClinicalHistory == 0) {
+            Assert.notNull(idPatientMedicalRecord, "Clinical History Id cannot be null");
+            if (idPatientMedicalRecord == 0) {
                 throw new AppException("Clinical History Id cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
@@ -61,13 +61,13 @@ public class ClinicalHistoryCatalogService {
                 throw new AppException("Patient ID cannot be 0", HttpStatus.BAD_REQUEST);
             }
 
-            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, idPatientClinicalHistory);
+            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, idPatientMedicalRecord);
 
             return this.toResponse(patientClinicalHistory);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to find clinical history catalog with id: " + idPatientClinicalHistory, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to find clinical history catalog with id: " + idPatientMedicalRecord, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
