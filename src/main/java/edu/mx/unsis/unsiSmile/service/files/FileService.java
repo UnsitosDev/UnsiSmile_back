@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.files;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
@@ -58,9 +59,15 @@ public class FileService {
 
         for (MultipartFile file : files) {
             try {
+                if (file.getSize() > 5 * 1024 * 1024) {
+                    throw new AppException(
+                            String.format(ResponseMessages.FILE_SIZE_EXCEEDED, file.getOriginalFilename()),
+                            HttpStatus.BAD_REQUEST);
+                }
+
                 String originalName = file.getOriginalFilename();
                 if (originalName == null) {
-                    throw new AppException("Filename is null", HttpStatus.BAD_REQUEST);
+                    throw new AppException(ResponseMessages.FILE_NAME_NULL, HttpStatus.BAD_REQUEST);
                 }
 
                 String fileId = UUID.randomUUID().toString();
@@ -87,7 +94,7 @@ public class FileService {
                     fileRepository.save(fileModel);
                 }
             } catch (Exception e) {
-                throw new AppException("Error while uploading file", HttpStatus.INTERNAL_SERVER_ERROR, e);
+                throw new AppException(ResponseMessages.ERROR_WHILE_UPLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
             }
         }
     }
