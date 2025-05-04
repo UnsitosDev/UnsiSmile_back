@@ -24,21 +24,21 @@ public class TreatmentDetailController {
 
     private final TreatmentDetailService treatmentDetailService;
 
-    @Operation(summary = "Crea un nuevo detalle de tratamiento")
+    @Operation(summary = "Crea un nuevo tratamiento para un paciente.")
     @PostMapping
     public ResponseEntity<TreatmentDetailResponse> createTreatmentDetail(@Valid @RequestBody TreatmentDetailRequest request) {
         TreatmentDetailResponse response = treatmentDetailService.createTreatmentDetail(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtiene un detalle de tratamiento por su ID")
+    @Operation(summary = "Obtiene el tratamiento de un paciente por el ID.")
     @GetMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> getTreatmentDetailById(@PathVariable Long id) {
         TreatmentDetailResponse response = treatmentDetailService.getTreatmentDetailById(id);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtiene todos los detalles de tratamiento de un paciente con paginación y ordenamiento")
+    @Operation(summary = "Obtiene todos los tratamientos de un paciente con paginación y ordenamiento")
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByPatient(
             @PathVariable String patientId,
@@ -56,24 +56,23 @@ public class TreatmentDetailController {
         return ResponseEntity.ok(treatmentDetails);
     }
 
-    @Operation(summary = "Actualiza un detalle de tratamiento existente")
+    @Operation(summary = "Actualiza un tratamiento de un paciente.")
     @PutMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> updateTreatmentDetail(
             @PathVariable Long id,
-            @RequestBody TreatmentDetailRequest request
-    ) {
+            @RequestBody TreatmentDetailRequest request) {
         TreatmentDetailResponse response = treatmentDetailService.updateTreatmentDetail(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Elimina un detalle de tratamiento por su ID")
+    @Operation(summary = "Elimina un tratamiento de un paciente por su ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTreatmentDetail(@PathVariable Long id) {
         treatmentDetailService.deleteTreatmentDetail(id);
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Obtiene todos los tratamientos de todos los pacientes asignados a un alumno.")
+    @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno.")
     @GetMapping("/students/{idStudent}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByStudent(
             @PathVariable String idStudent,
