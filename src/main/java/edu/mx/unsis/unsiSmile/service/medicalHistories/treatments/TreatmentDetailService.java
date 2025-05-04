@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
