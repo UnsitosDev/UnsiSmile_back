@@ -93,6 +93,8 @@ public class FileService {
                             .build();
                     fileRepository.save(fileModel);
                 }
+            } catch (AppException e) {
+                throw e;
             } catch (Exception e) {
                 throw new AppException(ResponseMessages.ERROR_WHILE_UPLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR, e);
             }
