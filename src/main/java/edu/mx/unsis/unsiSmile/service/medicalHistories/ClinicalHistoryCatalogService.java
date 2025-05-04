@@ -61,6 +61,8 @@ public class ClinicalHistoryCatalogService {
                 throw new AppException(ResponseMessages.PATIENT_ID_CANNOT_BE_ZERO, HttpStatus.BAD_REQUEST);
             }
 
+            patientService.getPatientById(idPatient);
+
             PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, idPatientMedicalRecord);
 
             return this.toResponse(patientClinicalHistory);

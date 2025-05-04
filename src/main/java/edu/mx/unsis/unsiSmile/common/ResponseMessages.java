@@ -53,7 +53,7 @@ public class ResponseMessages {
 
     //PATIENTS
     public static final String PATIENT_NOT_FOUND = "Paciente no encontrado";
-    public static final String WITHOUT_PERMITS_FOR_GET_PATIENT = "Sin permisos para el paciente";
+    public static final String WITHOUT_PERMITS_FOR_GET_PATIENT = "No estás autorizado para ver la información de este paciente.";
     public static final String FAILED_TO_ASSIGN_PATIENT = "Error al asignar el paciente";
     public static final String FAILED_TO_FETCH_PATIENT_WITH_ID = "Error al obtener el paciente con ID: ";
 
