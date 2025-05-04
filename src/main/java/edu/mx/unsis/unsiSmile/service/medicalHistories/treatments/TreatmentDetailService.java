@@ -10,6 +10,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -19,6 +20,7 @@ import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
@@ -41,6 +43,7 @@ public class TreatmentDetailService {
 
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IStudentRepository studentRepository;
+    private final IProfessorRepository professorRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
@@ -48,6 +51,7 @@ public class TreatmentDetailService {
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
+    private final TreatmentDetailToothMapper treatmentDetailToothMapper;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -250,5 +254,68 @@ public class TreatmentDetailService {
                             HttpStatus.NOT_FOUND
                     ));
         }
+    }
+
+    @Transactional
+    public TreatmentDetailResponse sendToReview(Long id, String professorId) {
+        try {
+            TreatmentDetailModel treatment = getValidTreatment(id, null);
+
+            if (!treatment.getStatus().equals(ReviewStatus.IN_PROGRESS.toString()) &&
+                    !treatment.getStatus().equals(ReviewStatus.REJECTED.toString())) {
+                throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS,
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            ProfessorModel professor = professorRepository.findById(professorId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            treatment.setProfessor(professor);
+            treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
+
+            return toDto(treatmentDetailRepository.save(treatment));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public TreatmentDetailResponse finalizeTreatment(Long id, ReviewStatus status) {
+        try {
+            if (status != ReviewStatus.FINISHED && status != ReviewStatus.REJECTED) {
+                throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS,
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+            TreatmentDetailModel treatment = getValidTreatment(id, ReviewStatus.IN_REVIEW);
+
+            treatment.setStatus(status.toString());
+
+            return toDto(treatmentDetailRepository.save(treatment));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(
+                    ResponseMessages.FAILED_FINALIZE_TREATMENT_DETAIL,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    private TreatmentDetailModel getValidTreatment(Long id, ReviewStatus requiredCurrentStatus) {
+        TreatmentDetailModel treatment = treatmentDetailRepository.findById(id)
+                .orElseThrow(() -> new AppException(
+                        String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
+                        HttpStatus.NOT_FOUND));
+
+        if (requiredCurrentStatus != null && !treatment.getStatus().equals(requiredCurrentStatus.toString())) {
+            throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS_REVIEW,
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        return treatment;
     }
 }

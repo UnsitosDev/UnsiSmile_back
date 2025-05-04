@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -89,5 +90,25 @@ public class TreatmentDetailController {
         Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailService.getAllTreatmentDetailsByStudent(pageable, idStudent, idTreatment);
 
         return ResponseEntity.ok(treatmentDetails);
+    }
+
+    @Operation(summary = "Envía un tratamiento a revisión")
+    @PatchMapping("/{id}/revision")
+    public ResponseEntity<TreatmentDetailResponse> sendToReview(
+            @PathVariable Long id,
+            @RequestParam String professorId) {
+
+        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, professorId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Finaliza un tratamiento")
+    @PatchMapping("/{id}/finalization")
+    public ResponseEntity<TreatmentDetailResponse> finalizeTreatment(
+            @PathVariable Long id,
+            @RequestParam ReviewStatus status) {
+
+        TreatmentDetailResponse response = treatmentDetailService.finalizeTreatment(id, status);
+        return ResponseEntity.ok(response);
     }
 }

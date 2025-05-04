@@ -430,6 +430,11 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_DETAILS = "Error al obtener los detalles del tratamiento";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS = "Solo los tratamientos en curso, o rechazados pueden enviarse a revisión";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS_REVIEW = "El tratamiento no se encuentra en revisión.";
+    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
+    public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED o REJECTED";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
