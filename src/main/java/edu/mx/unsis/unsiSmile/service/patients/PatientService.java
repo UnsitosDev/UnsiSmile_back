@@ -1,26 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
@@ -38,15 +17,12 @@ import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.INationalityRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.*;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -54,6 +30,19 @@ import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +53,7 @@ public class PatientService {
     private final IMaritalStatusRepository maritalStatusRepository;
     private final IEthnicGroupRepository ethnicGroupRepository;
     private final IReligionRepository religionRepository;
+    private final ITreatmentDetailRepository treatmentDetailRepository;
     private final OccupationService occupationService;
     private final PatientMapper patientMapper;
     private final AddressService addressService;
@@ -284,13 +274,23 @@ public class PatientService {
             PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
             UserResponse user = userService.getCurrentUser();
+            PatientResponse response;
             if (user.getRole().getRole() == ERole.ROLE_STUDENT) {
                 StudentResponse studentResponse = studentService.getStudentByUser(buildUserRequest(user));
                 List<PatientModel> patients = getPatientsByStudents(studentResponse, null, null);
-                return getPatientByIdByStudent(patients, idPatient);
+                response = getPatientByIdByStudent(patients, idPatient);
             } else {
-                return patientMapper.toDto(patientModel);
+                response = patientMapper.toDto(patientModel);
             }
+
+            boolean hasInProgress = treatmentDetailRepository
+                    .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
+                            idPatient,
+                            ReviewStatus.IN_PROGRESS.toString()
+                    );
+            response.setHasTreatmentInProgress(hasInProgress);
+
+            return response;
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
