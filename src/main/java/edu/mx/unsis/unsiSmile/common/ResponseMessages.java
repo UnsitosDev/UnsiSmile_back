@@ -380,6 +380,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_SCOPES_BY_TYPE = "Error al obtener los alcances del tratamiento por tipo";
     public static final String FAILED_UPDATE_TREATMENT_SCOPE = "Error al actualizar el alcance del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_SCOPE = "Error al eliminar el alcance del tratamiento";
+    public static final String TREATMENT_DETAIL_ALREADY_IN_PROGRESS = "El paciente tiene un tratamiento en proceso que debe finalizar antes de agregar uno nuevo.";
 
     // Treatment Request
     public static final String NOT_BLANK_TREATMENT_NAME = "El nombre del tratamiento no puede estar vacío";

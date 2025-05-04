@@ -12,6 +12,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -45,12 +46,22 @@ public class TreatmentDetailService {
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
-    private final ValidationUtils validationUtils;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
         try {
             validateRequestDependencies(request);
+
+            String patientId = request.getPatientId();
+
+            boolean existsInReview = treatmentDetailRepository
+                    .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
+                            patientId, ReviewStatus.IN_PROGRESS.toString()
+                    );
+
+            if (existsInReview) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_ALREADY_IN_PROGRESS, HttpStatus.CONFLICT);
+            }
 
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
             String scope = treatmentResponse.getTreatmentScope().getName();

@@ -13,4 +13,6 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     @Query("SELECT COUNT(t) FROM TreatmentDetailModel t WHERE t.professor.idProfessor = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
     Long countActiveTreatmentsByProfessorId(String professorId, String status);
+
+    boolean existsByPatientClinicalHistory_Patient_idPatientAndStatus(String patientId, String status);
 }
