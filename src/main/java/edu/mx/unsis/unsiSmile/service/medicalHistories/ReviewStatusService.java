@@ -77,7 +77,8 @@ public class ReviewStatusService {
         try {
             PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository
                     .findById(idPatientMedicalRecord)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND,
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientMedicalRecord),
                             HttpStatus.NOT_FOUND));
 
             List<ReviewStatusModel> results = reviewStatusRepository.findAllByPatientIdAndSectionOrdered(
@@ -196,7 +197,7 @@ public class ReviewStatusService {
     private void validateEntitiesExist(Long idPatientClinicalHistory, Long idSection, Long idProfessorClinicalArea) {
         patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
                 .orElseThrow(() -> new AppException(
-                        ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory,
+                        String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientClinicalHistory),
                         HttpStatus.NOT_FOUND));
 
         formSectionRepository.findById(idSection)

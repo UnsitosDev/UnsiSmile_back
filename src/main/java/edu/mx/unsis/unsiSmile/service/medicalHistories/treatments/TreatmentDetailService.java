@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
@@ -12,6 +11,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -20,7 +20,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentD
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
-import edu.mx.unsis.unsiSmile.service.professors.ProfessorService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -40,17 +39,26 @@ public class TreatmentDetailService {
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
-    private final ProfessorService professorService;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
-    private final ValidationUtils validationUtils;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
         try {
             validateRequestDependencies(request);
+
+            String patientId = request.getPatientId();
+
+            boolean existsInReview = treatmentDetailRepository
+                    .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
+                            patientId, ReviewStatus.IN_PROGRESS.toString()
+                    );
+
+            if (existsInReview) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_ALREADY_IN_PROGRESS, HttpStatus.CONFLICT);
+            }
 
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
             String scope = treatmentResponse.getTreatmentScope().getName();
@@ -78,10 +86,6 @@ public class TreatmentDetailService {
     private void validateRequestDependencies(TreatmentDetailRequest request) {
             patientService.getPatientById(request.getPatientId());
             treatmentService.getTreatmentById(request.getTreatmentId());
-
-            if (request.getProfessorId() != null) {
-                professorService.getProfessor(request.getProfessorId());
-            }
     }
 
     private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request, TreatmentResponse treatmentResponse) {
@@ -145,7 +149,8 @@ public class TreatmentDetailService {
         try {
             patientService.getPatientById(patientId);
             Page<TreatmentDetailModel> page = treatmentDetailRepository
-                    .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);            return page.map(this::toDto);
+                    .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);
+            return page.map(this::toDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

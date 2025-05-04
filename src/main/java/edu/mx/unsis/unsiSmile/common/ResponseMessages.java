@@ -53,7 +53,7 @@ public class ResponseMessages {
 
     //PATIENTS
     public static final String PATIENT_NOT_FOUND = "Paciente no encontrado";
-    public static final String WITHOUT_PERMITS_FOR_GET_PATIENT = "Sin permisos para el paciente";
+    public static final String WITHOUT_PERMITS_FOR_GET_PATIENT = "No estás autorizado para ver la información de este paciente.";
     public static final String FAILED_TO_ASSIGN_PATIENT = "Error al asignar el paciente";
     public static final String FAILED_TO_FETCH_PATIENT_WITH_ID = "Error al obtener el paciente con ID: ";
 
@@ -64,6 +64,7 @@ public class ResponseMessages {
     public static final String ERROR_REPORT_NOT_FOUND = "No se pudo encontrar el archivo de notas de evolución: ";
     public static final String ERROR_GENERATING_REPORT = "Error al generar el PDF de notas de evolución: ";
     public static final String PATIENT_ID_CANNOT_BE_EMPTY = "El ID del paciente no puede estar vacío.";
+    public static final String PATIENT_ID_CANNOT_BE_ZERO = "El ID del paciente no puede ser cero.";
     public static final String PATIENT_ALREADY_EXISTS = "El paciente ya se encuentra registrado en el sistema";
     public static final String PATIENT_NEEDS_GUARDIAN = "El paciente necesita un tutor";
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser null";
@@ -281,7 +282,7 @@ public class ResponseMessages {
     public static final String FORM_SECTION_REQUEST_NULL = "FormSectionRequest no puede ser nulo";
     public static final String FORM_SECTION_ID_NULL = "El ID no puede ser nulo";
     public static final String FORM_SECTION_NOT_FOUND = "Sección de formulario no encontrada con el ID: ";
-    public static final String PATIENT_CLINICAL_HISTORY_NOT_FOUND = "Historial clínico del paciente no encontrado con el ID: ";
+    public static final String PATIENT_CLINICAL_HISTORY_NOT_FOUND = "No se econtró la historia clínica del paciente con el ID: %s";
     public static final String PATIENT_CLINICAL_HISTORY_ID_NULL = "El ID de la historia clínica del paciente no puede ser nulo";
     public static final String NO_FORM_SECTIONS = "No se encontraron secciones de formulario";
     public static final String FAILED_SAVE_FORM_SECTION = "Error al guardar la sección de formulario debido a un error interno del servidor";
@@ -289,6 +290,11 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_FORM_SECTIONS = "Error al obtener las secciones de formulario";
     public static final String FAILED_DELETE_FORM_SECTION = "Error al eliminar la sección de formulario con el ID: ";
     public static final String FAILED_FETCH_SUBFORM = "Error al obtener el modelo de la subsección del formulario";
+    public static final String FAILED_FETCH_MEDICAL_RECORD = "Error al obtener la historia clínica";
+    public static final String FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS = "Error al obtener las historias clínicas del paciente.";
+    public static final String MEDICAL_RECORD_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
+    public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
+
 
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
     public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
@@ -374,6 +380,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_SCOPES_BY_TYPE = "Error al obtener los alcances del tratamiento por tipo";
     public static final String FAILED_UPDATE_TREATMENT_SCOPE = "Error al actualizar el alcance del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_SCOPE = "Error al eliminar el alcance del tratamiento";
+    public static final String TREATMENT_DETAIL_ALREADY_IN_PROGRESS = "El paciente tiene un tratamiento en proceso que debe finalizar antes de agregar uno nuevo.";
 
     // Treatment Request
     public static final String NOT_BLANK_TREATMENT_NAME = "El nombre del tratamiento no puede estar vacío";
@@ -395,6 +402,14 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT = "Error al actualizar el tratamiento";
     public static final String FAILED_DELETE_TREATMENT = "Error al eliminar el tratamiento";
     public static final String CLINICAL_HISTORY_CATALOG_NOT_FOUND = "No se encontró la historia clínica con ID: %s";
+    public static final String FAILED_DELETE_MEDICAL_RECORD_CATALOG = "Error al eliminar la historia clínica del catálogo, con ID: %s";
+    public static final String FAILED_TO_FETCH_MEDICAL_RECORD_CATALOG = "Error al obtener el catálogo de historias clínicas.";
+    public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND = "No se encontró la historia clínica general.";
+    public static final String GENERAL_MEDICAL_RECORD_NOT_FOUND_FOR_PATIENT = "No se encontró la historia clínica general del paciente.";
+    public static final String FAILED_CREATE_GENERAL_MEDICAL_RECORD = "Error al crear la historia clínica general del paciente.";
+    public static final String FAILED_FETCH_GENERAL_MEDICAL_RECORD = "Error al obtener la historia clínica general del paciente.";
+    public static final String DUPLICATED_GENERAL_MEDICAL_RECORD = "La historia clínica general del paciente ya ha sido registrada.";
+    public static final String FAILED_CREATE_MEDICAL_RECORD = "Error al crear la historia clínica del paciente.";
     public static final String TREATMENT_ID_CANNOT_BE_NULL = "El ID del tratamiento no puede ser nulo";
     public static final String POSITIVE_TREATMENT_ID = "El ID del tratamiento debe ser un número positivo";
     public static final String TREATMENT_START_DATE_CANNOT_BE_NULL = "La fecha de inicio del tratamiento no puede ser nula";

@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
-
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.utils.ClinicalHistorySectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistorySectionRepository;

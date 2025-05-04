@@ -81,7 +81,9 @@ public class FormSectionService {
 
     private PatientClinicalHistoryModel findPatientClinicalHistoryById(Long idPatientClinicalHistory) {
         return patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
-                .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND + idPatientClinicalHistory, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(
+                        String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientClinicalHistory),
+                        HttpStatus.NOT_FOUND));
     }
 
     private FormSectionResponse buildFormSectionResponse(FormSectionModel formSectionModel, PatientClinicalHistoryModel patientClinicalHistoryModel) {

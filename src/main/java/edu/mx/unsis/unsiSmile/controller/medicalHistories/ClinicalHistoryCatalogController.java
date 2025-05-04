@@ -35,11 +35,11 @@ public class ClinicalHistoryCatalogController {
     }
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")
-    @GetMapping("/{idClinicalHistory}/patients/{idPatient}")
+    @GetMapping("/{idPatientMedicalRecord}/patients/{idPatient}")
     public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
-            @PathVariable Long idClinicalHistory,
+            @PathVariable Long idPatientMedicalRecord,
             @PathVariable String idPatient) {
-        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idClinicalHistory, idPatient);
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findById(idPatientMedicalRecord, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -61,6 +61,20 @@ public class ClinicalHistoryCatalogController {
     @GetMapping("/patient-clinical-histories")
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient) {
         List<PatientClinicalHistoryResponse> response = clinicalHistoryCatalogService.searchClinicalHistory(idPatient);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Obtiene la historia clínica general del paciente.")
+    @GetMapping("/general")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> searchGeneralMedicalRecord(@RequestParam String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.searchGeneralMedicalRecord(idPatient);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Crear la historia clínica general del paciente.")
+    @PostMapping("/general")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> createNewGeneralMedicalRecord(@RequestParam String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.createNewGeneralMedicalRecord(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

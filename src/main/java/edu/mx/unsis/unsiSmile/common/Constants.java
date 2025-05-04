@@ -20,4 +20,6 @@ public class Constants {
     public static final String FLUOROSIS =  "Fluorosis";
 
     public static final String TOOTH = "Diente";
+
+    public static final String GENERAL_MEDICAL_RECORD = "General";
 }

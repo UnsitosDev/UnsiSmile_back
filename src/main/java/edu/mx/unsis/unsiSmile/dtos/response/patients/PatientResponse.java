@@ -29,4 +29,5 @@ public class PatientResponse {
     private ReligionResponse religion;
     private GuardianResponse guardian;
     private StudentRes student;
+    private Boolean hasTreatmentInProgress;
 }
