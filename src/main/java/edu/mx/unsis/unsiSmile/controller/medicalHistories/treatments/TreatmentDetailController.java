@@ -72,4 +72,23 @@ public class TreatmentDetailController {
         treatmentDetailService.deleteTreatmentDetail(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Obtiene todos los tratamientos de todos los pacientes asignados a un alumno.")
+    @GetMapping("/students/{idStudent}")
+    public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByStudent(
+            @PathVariable String idStudent,
+            @RequestParam(required = false) Long idTreatment,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Field key for ordering", example = "idTreatmentDetail")
+            @RequestParam(defaultValue = "idTreatmentDetail") String order,
+            @RequestParam(defaultValue = "false") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailService.getAllTreatmentDetailsByStudent(pageable, idStudent, idTreatment);
+
+        return ResponseEntity.ok(treatmentDetails);
+    }
 }

@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
@@ -16,7 +17,9 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailM
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
@@ -29,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +40,7 @@ import java.util.Optional;
 public class TreatmentDetailService {
 
     private final ITreatmentDetailRepository treatmentDetailRepository;
+    private final IStudentRepository studentRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
@@ -196,6 +201,54 @@ public class TreatmentDetailService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudent(Pageable pageable, String idStudent, Long idTreatment) {
+        try {
+            StudentModel studentModel = getStudentModel(idStudent);
+
+            List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
+
+            if (studentGroups.isEmpty()) {
+                return Page.empty();
+            }
+
+            Page<TreatmentDetailModel> page;
+
+            if (idTreatment != null) {
+                treatmentService.getTreatmentById(idTreatment);
+                page = treatmentDetailRepository
+                        .findAllByStudentGroupInAndTreatment_IdTreatment(studentGroups, idTreatment, pageable);
+            } else {
+                page = treatmentDetailRepository
+                        .findAllByStudentGroupIn(studentGroups, pageable);
+            }
+
+            return page.map(this::toDto);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private StudentModel getStudentModel(String idStudent) {
+        UserResponse currentUser = userService.getCurrentUser();
+
+        if (currentUser.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
+            return studentRepository.findById(currentUser.getUsername())
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.STUDENT_NOT_FOUND,
+                            HttpStatus.NOT_FOUND
+                    ));
+        } else {
+            return studentRepository.findById(idStudent)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.STUDENT_NOT_FOUND,
+                            HttpStatus.NOT_FOUND
+                    ));
         }
     }
 }
