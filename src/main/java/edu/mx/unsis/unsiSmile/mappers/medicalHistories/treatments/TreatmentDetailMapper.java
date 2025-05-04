@@ -6,7 +6,6 @@ import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
-import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +28,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         dto.getStartDate() : null)
                 .endDate(dto.getEndDate() != null ?
                         dto.getEndDate() : null)
-                .professor(dto.getProfessorId() != null ? ProfessorModel.builder()
-                        .idProfessor(dto.getProfessorId())
-                        .build() : null)
                 .status(ReviewStatus.IN_PROGRESS.toString())
                 .build();
     }
@@ -65,9 +61,5 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .build());
         entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
-        entity.setProfessor(ProfessorModel.builder()
-                .idProfessor(request.getProfessorId())
-                .build());
-        entity.setStatus(request.getStatus());
     }
 }

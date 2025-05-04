@@ -20,7 +20,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentD
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
-import edu.mx.unsis.unsiSmile.service.professors.ProfessorService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,6 @@ public class TreatmentDetailService {
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
-    private final ProfessorService professorService;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
     private final UserService userService;
@@ -88,10 +86,6 @@ public class TreatmentDetailService {
     private void validateRequestDependencies(TreatmentDetailRequest request) {
             patientService.getPatientById(request.getPatientId());
             treatmentService.getTreatmentById(request.getTreatmentId());
-
-            if (request.getProfessorId() != null) {
-                professorService.getProfessor(request.getProfessorId());
-            }
     }
 
     private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request, TreatmentResponse treatmentResponse) {
@@ -155,7 +149,8 @@ public class TreatmentDetailService {
         try {
             patientService.getPatientById(patientId);
             Page<TreatmentDetailModel> page = treatmentDetailRepository
-                    .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);            return page.map(this::toDto);
+                    .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);
+            return page.map(this::toDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
