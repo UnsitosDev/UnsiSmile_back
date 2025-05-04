@@ -7,7 +7,10 @@ VALUES
     ("Periodoncia"),
     ("Operatoria dental"),
     ("Cirugía bucal"),
-    ("Odontología preventiva y salud pública");
+    ("Odontología preventiva y salud pública"),
+    ('Endodoncia'),
+    ('Pulpotomía'),
+    ('Pulpectomía');
 
 -- secciones padre
 INSERT INTO form_sections

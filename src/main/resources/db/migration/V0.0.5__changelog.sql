@@ -1,187 +1,501 @@
 CREATE TABLE
-    odontograms (
-        id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
-        observations TEXT DEFAULT NULL,
-        fk_patient CHAR(36) NOT NULL,
-        fk_form_section BIGINT NOT NULL,
+    professors (
+        id_professor VARCHAR(15) NOT NULL,
+        fk_person VARCHAR(20) NOT NULL,
+        fk_user CHAR(36) NOT NULL,
+        fk_career VARCHAR(3) NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+        PRIMARY KEY (id_professor),
+        FOREIGN KEY (fk_person) REFERENCES people (curp),
+        FOREIGN KEY (fk_user) REFERENCES user_app (id),
+        FOREIGN KEY (fk_career) REFERENCES careers (id_career)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
-    tooth_faces (
-        id_tooth_face VARCHAR(3) PRIMARY KEY,
-        description VARCHAR(255) NOT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE
-    teeth (
-        id_tooth VARCHAR(3) PRIMARY KEY,
-        is_adult BOOLEAN,
-        description VARCHAR(255) NOT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE
-    tooth_conditions (
-        id_tooth_condition BIGINT AUTO_INCREMENT PRIMARY KEY,
-        description VARCHAR(50) NOT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE
-    tooth_condition_assignments (
-        odontogram_id BIGINT,
-        tooth_id VARCHAR(3),
-        tooth_condition_id BIGINT,
+    professor_groups (
+        id_professor_group BIGINT (20) NOT NULL AUTO_INCREMENT,
+        fk_professor VARCHAR(15) NOT NULL,
+        fk_group BIGINT (20) DEFAULT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
-        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
-        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
-        FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition)
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+        PRIMARY KEY (id_professor_group),
+        FOREIGN KEY (fk_professor) REFERENCES professors (id_professor),
+        FOREIGN KEY (fk_group) REFERENCES groups (id_group)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
-    toothface_conditions (
-        id_toothface_conditions BIGINT AUTO_INCREMENT PRIMARY KEY,
-        description VARCHAR(50) NOT NULL,
-        created_at DATETIME (6) DEFAULT NULL,
-        created_by VARCHAR(255) DEFAULT NULL,
-        status_key VARCHAR(255) DEFAULT NULL,
-        updated_at DATETIME (6) DEFAULT NULL,
-        updated_by VARCHAR(255) DEFAULT NULL
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE
-    toothface_conditions_assignments (
-        odontogram_id BIGINT,
-        tooth_face_id VARCHAR(3),
-        toothface_condition_id BIGINT,
-        tooth_id VARCHAR(3),
+    clinical_areas (
+        id_clinical_area BIGINT (20) NOT NULL AUTO_INCREMENT,
+        clinical_area VARCHAR(100) NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (
-            odontogram_id,
-            tooth_face_id,
-            toothface_condition_id,
-            tooth_id
-        ),
-        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
-        FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
-        FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions (id_toothface_conditions),
-        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
-    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+        PRIMARY KEY (id_clinical_area)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+CREATE TABLE
+    professor_clinical_areas (
+        id_professor_clinical_area BIGINT (20) NOT NULL AUTO_INCREMENT,
+        fk_clinical_area BIGINT (20) NOT NULL,
+        fk_professor VARCHAR(15) NOT NULL,
+        start_date DATE NOT NULL,
+        end_date DATE DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (id_professor_clinical_area),
+        FOREIGN KEY (fk_clinical_area) REFERENCES clinical_areas (id_clinical_area),
+        FOREIGN KEY (fk_professor) REFERENCES professors (id_professor)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- *-*-*-*-*-*-*-*-* carreras *-*-*-*-*-*-*-*-*-
+INSERT INTO
+    careers (id_career, career)
+VALUES
+    ("13", "Licenciatura en Odontología");
+
+-- *-*-*-*-*-*-*-*-* ciclos *-*-*-*-*-*-*-*-*-
+INSERT INTO
+    cycles (cycle_name)
+VALUES
+    ("A"),
+    ("B");
+
+CREATE TABLE
+    student_groups (
+        id_student_groups BIGINT (20) NOT NULL AUTO_INCREMENT,
+        fk_student VARCHAR(255) DEFAULT NULL,
+        fk_group BIGINT (20) DEFAULT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (id_student_groups),
+        FOREIGN KEY (fk_student) REFERENCES students (enrollment),
+        FOREIGN KEY (fk_group) REFERENCES groups (id_group)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- Poblado profesores y áreas clínicas
+INSERT INTO
+    user_app (
+        id,
+        password,
+        status,
+        username,
+        first_login,
+        role_id
+    )
+VALUES
+    (
+        'ac04114a-5be2-4f2b-95f9-88e2badce85d',
+        '$2a$10$4nOcZULVdDegRx.hWRkKduiHY36SXP6rEl5cySrnqJSvzPrWMc5Ki',
+        1,
+        '1701',
+        0,
+        4
+    ),
+    (
+        'e1cc88bb-85d5-43bc-824d-83d5739cf071',
+        '$2a$10$0YRsGWVqlAE3bGjKLldBheEFm4LZGUytm1lGiSlCYw8KjqgNIlwu.',
+        1,
+        '1574',
+        0,
+        4
+    ),
+    (
+        '737a531d-7067-4b56-8528-c5c32ed79425',
+        '$2a$10$VBTfBqVSdipn/LFTnEXZgugGX0og0jaqvSs0r3YmDUJdDhsTCniVG',
+        1,
+        '1691',
+        0,
+        4
+    ),
+    (
+        'f3694095-748f-4a04-b5e0-272bb5558127',
+        '$2a$10$cCAHlSXaOuEP/.hQStPFfeDzOFcWzNmT/7Fuezv0IyuHmDvRkRI1y',
+        1,
+        '1709',
+        0,
+        4
+    ),
+    (
+        '413f36e6-11ac-457c-9aa5-b8f1e475f65a',
+        '$2a$10$2B5649TYQWLvAU0NLYAKkuIH5TR3tQyy2bd.UC4YiV7DB18cSR0Oi',
+        1,
+        '1696',
+        0,
+        4
+    ),
+    (
+        '53f0d8c9-dcd7-4384-af27-6599f352dfe9',
+        '$2a$10$HN8vhrvPkFskQkYLdNAyeuzs2iIdD8LGTwF1Qv9maC6IAzoRcIJhu',
+        1,
+        '1695',
+        0,
+        4
+    );
 
 INSERT INTO
-    tooth_conditions (description)
-VALUES
-    ('Prótesis removible'),
-    ('Puente'),
-    ('Diente extraido'),
-    ('Fístula'),
-    ('Diente con fluorosis'),
-    ('Diente con hipoplasia'),
-    ('Diente en mal posición derecha'),
-    ('Diente en mal posición izquierda'),
-    ('Diente parcialmente erupcionado'),
-    ('Diente con corona'),
-    ('Mantenedor de espacio con corona'),
-    ('Mantenedor de espacio con banda');
+    people (
+        curp,
+        first_name,
+        second_name,
+        first_lastname,
+        second_lastname,
+        birth_date,
+        fk_gender,
+        email,
+        phone,
+        status_key
+    )
+values
+    (
+        'JAHB850330MOCCRT06',
+        'Beatriz',
+        null,
+        'Jacinto',
+        'Hernández',
+        '1985-03-30',
+        2,
+        'beatrizjh85@gmail.com',
+        '9512495995',
+        'A'
+    ),
+    (
+        'MOGL821019MOCRNR08',
+        'Laura',
+        'Alejandra',
+        'Mora',
+        'González',
+        '1982-10-19',
+        2,
+        'lauraalejandramora82@gmail.com',
+        '9514714787',
+        'A'
+    ),
+    (
+        'QUOM980619MDFRRY06',
+        'Mayra',
+        'Leticia',
+        'Quiroz',
+        'Ortega',
+        '1998-06-19',
+        2,
+        'quirozleticia22@gmail.com',
+        '5568767440',
+        'A'
+    ),
+    (
+        'JIST950918MMCMNN03',
+        'Tania',
+        'Madai',
+        'Jiménez',
+        'Sánchez',
+        '1995-09-18',
+        2,
+        'madaysanchez1995@gmail.com',
+        '5554736982',
+        'A'
+    ),
+    (
+        'LORD990222MOCPYM02',
+        'Damary',
+        null,
+        'López',
+        'Reyes',
+        '1999-02-22',
+        2,
+        'damm.lopr@gmail.com',
+        '9511690241',
+        'A'
+    ),
+    (
+        'JUMP990823HOCRJD03',
+        'Pedro',
+        'Eleazar',
+        'Juárez',
+        'Mejía',
+        '1999-08-23',
+        1,
+        'eleazmej10@gmail.com',
+        '9513661237',
+        'A'
+    );
 
 INSERT INTO
-    toothface_conditions (description)
-VALUES
-    ('Diente obturado con caries'),
-    ('Diente obturado'),
-    ('Diente cariado'),
-    ('Diente con fractura');
+    professors (
+        id_professor,
+        fk_person,
+        fk_user,
+        fk_career,
+        status_key
+    )
+values
+    (
+        '1701',
+        'JAHB850330MOCCRT06',
+        'ac04114a-5be2-4f2b-95f9-88e2badce85d',
+        '13',
+        'A'
+    ),
+    (
+        '1574',
+        'MOGL821019MOCRNR08',
+        'e1cc88bb-85d5-43bc-824d-83d5739cf071',
+        '13',
+        'A'
+    ),
+    (
+        '1691',
+        'QUOM980619MDFRRY06',
+        '737a531d-7067-4b56-8528-c5c32ed79425',
+        '13',
+        'A'
+    ),
+    (
+        '1709',
+        'JIST950918MMCMNN03',
+        'f3694095-748f-4a04-b5e0-272bb5558127',
+        '13',
+        'A'
+    ),
+    (
+        '1696',
+        'LORD990222MOCPYM02',
+        '413f36e6-11ac-457c-9aa5-b8f1e475f65a',
+        '13',
+        'A'
+    ),
+    (
+        '1695',
+        'JUMP990823HOCRJD03',
+        '53f0d8c9-dcd7-4384-af27-6599f352dfe9',
+        '13',
+        'A'
+    );
 
 INSERT INTO
-    teeth (`description`, `is_adult`, `id_tooth`)
+    clinical_areas (clinical_area, status_key)
 VALUES
-    ('1', TRUE, '18'),
-    ('2', TRUE, '17'),
-    ('3', TRUE, '16'),
-    ('4', TRUE, '15'),
-    ('5', TRUE, '14'),
-    ('6', TRUE, '13'),
-    ('7', TRUE, '12'),
-    ('8', TRUE, '11'),
-    ('9', TRUE, '28'),
-    ('10', TRUE, '27'),
-    ('11', TRUE, '26'),
-    ('12', TRUE, '25'),
-    ('13', TRUE, '24'),
-    ('14', TRUE, '23'),
-    ('15', TRUE, '22'),
-    ('16', TRUE, '21'),
-    ('17', TRUE, '38'),
-    ('18', TRUE, '37'),
-    ('19', TRUE, '36'),
-    ('20', TRUE, '35'),
-    ('21', TRUE, '34'),
-    ('22', TRUE, '33'),
-    ('23', TRUE, '32'),
-    ('24', TRUE, '31'),
-    ('25', TRUE, '48'),
-    ('26', TRUE, '47'),
-    ('27', TRUE, '46'),
-    ('28', TRUE, '45'),
-    ('29', TRUE, '44'),
-    ('30', TRUE, '43'),
-    ('31', TRUE, '42'),
-    ('32', TRUE, '41'),
-    ('33', FALSE, '55'),
-    ('34', FALSE, '54'),
-    ('35', FALSE, '53'),
-    ('36', FALSE, '52'),
-    ('37', FALSE, '51'),
-    ('38', FALSE, '65'),
-    ('39', FALSE, '64'),
-    ('40', FALSE, '63'),
-    ('41', FALSE, '62'),
-    ('42', FALSE, '61'),
-    ('43', FALSE, '75'),
-    ('44', FALSE, '74'),
-    ('45', FALSE, '73'),
-    ('46', FALSE, '72'),
-    ('47', FALSE, '71'),
-    ('48', FALSE, '85'),
-    ('49', FALSE, '84'),
-    ('50', FALSE, '83'),
-    ('51', FALSE, '82'),
-    ('52', FALSE, '81');
+    ('Clínica integral', 'A'),
+    ('Geriatría', 'A'),
+    ('Exodoncia', 'A');
 
 INSERT INTO
-    tooth_faces (`id_tooth_face`, `description`)
+    professor_clinical_areas (
+        fk_clinical_area,
+        fk_professor,
+        start_date,
+        status_key
+    )
 VALUES
-    ('1', 'medio'),
-    ('2', 'arriba'),
-    ('3', 'derecha'),
-    ('4', 'abajo'),
-    ('5', 'izquierda');
+    (1, '1696', '2025-04-16', 'A'),
+    (1, '1695', '2025-04-16', 'A'),
+    (1, '1691', '2025-04-16', 'A'),
+    (1, '1701', '2025-04-16', 'A'),
+    (1, '1574', '2025-04-16', 'A'),
+    (2, '1709', '2025-04-16', 'A'),
+    (3, '1691', '2025-04-16', 'A');
+
+-- Script mejorado para poblar la base de datos
+-- Creado: 2025-02-25
+-- 1. Inserción de usuarios en la tabla user_app
+INSERT INTO
+    `user_app` (
+        `id`,
+        `password`,
+        `status`,
+        `username`,
+        `first_login`,
+        `role_id`
+    )
+VALUES
+    -- Usuario estudiante 1 (role_id = 2)
+    (
+        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m15',
+        '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',
+        1,
+        '2019060310',
+        0,
+        2
+    ),
+    -- Usuario administrador (role_id = 1)
+    (
+        '8d3213f2-362c-4c1a-be17-10e774ba362d',
+        '$2a$10$Ubqh3CQEMOuar//DzeDkleZw7dBuojtg485aUdYOdCD1/e68ZcOLi',
+        1,
+        'E12345',
+        1,
+        1
+    ),
+    -- Usuario estudiante 2 (role_id = 2)
+    (
+        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m14',
+        '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',
+        1,
+        '2023070425',
+        1,
+        2
+    );
+
+-- 2. Inserción de personas en la tabla people
+INSERT INTO
+    `people` (
+        `curp`,
+        `first_name`,
+        `second_name`,
+        `first_lastname`,
+        `second_lastname`,
+        `birth_date`,
+        `fk_gender`,
+        `email`,
+        `phone`,
+        `created_at`,
+        `created_by`,
+        `status_key`,
+        `updated_at`,
+        `updated_by`
+    )
+VALUES
+    -- Administrador
+    (
+        'ABCD901215HDFRRN08',
+        'Juan',
+        'Carlos',
+        'García',
+        'Hernández',
+        '1990-12-15',
+        1,
+        'juancarlos.garcia@example.com',
+        '5551234567',
+        '2025-02-25 17:47:03.618100',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    ),
+    -- Estudiante 1
+    (
+        'AOPS011028HOCNRLA9',
+        'JUAN',
+        'LUIS',
+        'ANTONIO',
+        'Martíez',
+        '2003-06-04',
+        1,
+        'example@gmail.com',
+        '5645123541',
+        '2025-02-25 17:47:03.618100',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    ),
+    -- Estudiante 2
+    (
+        'FIMJ011004HOCGRLA8',
+        'Joel',
+        'Francisco',
+        'Figueroa',
+        'Martinez',
+        '2001-10-04',
+        1,
+        'froste@gmail.com',
+        '5018221525',
+        '2025-02-25 17:47:03.618100',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    );
+
+-- 3. Inserción en la tabla administrators
+INSERT INTO
+    `administrators` (
+        `employee_number`,
+        `fk_person`,
+        `fk_user`,
+        `created_at`,
+        `created_by`,
+        `status_key`,
+        `updated_at`,
+        `updated_by`
+    )
+VALUES
+    (
+        'E12345',
+        'ABCD901215HDFRRN08',
+        '8d3213f2-362c-4c1a-be17-10e774ba362d',
+        '2025-02-25 17:47:03.642645',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    );
+
+-- 4. Inserción en la tabla students
+-- Estudiante 1 - Joel Figueroa
+INSERT INTO
+    `students` (
+        `enrollment`,
+        `fk_person`,
+        `fk_user`,
+        `created_at`,
+        `created_by`,
+        `status_key`,
+        `updated_at`,
+        `updated_by`
+    )
+VALUES
+    (
+        '2019060310',
+        'FIMJ011004HOCGRLA8',
+        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m15',
+        '2025-02-25 17:47:03.618100',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    );
+
+-- Estudiante 2 - Juan Antonio
+INSERT INTO
+    `students` (
+        `enrollment`,
+        `fk_person`,
+        `fk_user`,
+        `created_at`,
+        `created_by`,
+        `status_key`,
+        `updated_at`,
+        `updated_by`
+    )
+VALUES
+    (
+        '2023070425',
+        'AOPS011028HOCNRLA9',
+        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m14',
+        '2025-02-25 17:47:03.618100',
+        '123e4567-e89b-12d3-a456-426614174000',
+        'A',
+        NULL,
+        NULL
+    );
+
+-- catalogo estado civil
+INSERT INTO
+    catalogs (catalog_name)
+VALUES
+    ("Estados civiles");

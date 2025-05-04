@@ -1,184 +1,130 @@
--- Script mejorado para poblar la base de datos
--- Creado: 2025-02-25
--- 1. Inserción de usuarios en la tabla user_app
-INSERT INTO
-    `user_app` (
-        `id`,
-        `password`,
-        `status`,
-        `username`,
-        `first_login`,
-        `role_id`
-    )
-VALUES
-    -- Usuario estudiante 1 (role_id = 2)
-    (
-        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m15',
-        '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',
-        1,
-        '2019060310',
-        0,
-        2
-    ),
-    -- Usuario administrador (role_id = 1)
-    (
-        '8d3213f2-362c-4c1a-be17-10e774ba362d',
-        '$2a$10$Ubqh3CQEMOuar//DzeDkleZw7dBuojtg485aUdYOdCD1/e68ZcOLi',
-        1,
-        'E12345',
-        1,
-        1
-    ),
-    -- Usuario estudiante 2 (role_id = 2)
-    (
-        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m14',
-        '$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW',
-        1,
-        '2023070425',
-        1,
-        2
-    );
 
--- 2. Inserción de personas en la tabla people
-INSERT INTO
-    `people` (
-        `curp`,
-        `first_name`,
-        `second_name`,
-        `first_lastname`,
-        `second_lastname`,
-        `birth_date`,
-        `fk_gender`,
-        `email`,
-        `phone`,
-        `created_at`,
-        `created_by`,
-        `status_key`,
-        `updated_at`,
-        `updated_by`
-    )
-VALUES
-    -- Administrador
-    (
-        'ABCD901215HDFRRN08',
-        'Juan',
-        'Carlos',
-        'García',
-        'Hernández',
-        '1990-12-15',   
-        1,
-        'juancarlos.garcia@example.com',
-        '5551234567',
-        '2025-02-25 17:47:03.618100',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    ),
-    -- Estudiante 1
-    (
-        'AOPS011028HOCNRLA9',
-        'JUAN',
-        'LUIS',
-        'ANTONIO',
-        'Martíez',
-        '2003-06-04',
-        1,
-        'example@gmail.com',
-        '5645123541',
-        '2025-02-25 17:47:03.618100',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    ),
-    -- Estudiante 2
-    (
-        'FIMJ011004HOCGRLA8',
-        'Joel',
-        'Francisco',
-        'Figueroa',
-        'Martinez',
-        '2001-10-04',
-        1,
-        'froste@gmail.com',
-        '5018221525',
-        '2025-02-25 17:47:03.618100',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    );
+CREATE TABLE
+    odontograms (
+        id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
+        observations TEXT DEFAULT NULL,
+        fk_patient CHAR(36) NOT NULL,
+        fk_form_section BIGINT NOT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
+        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
--- 3. Inserción en la tabla administrators
-INSERT INTO
-    `administrators` (
-        `employee_number`,
-        `fk_person`,
-        `fk_user`,
-        `created_at`,
-        `created_by`,
-        `status_key`,
-        `updated_at`,
-        `updated_by`
-    )
-VALUES
-    (
-        'E12345',
-        'ABCD901215HDFRRN08',
-        '8d3213f2-362c-4c1a-be17-10e774ba362d',
-        '2025-02-25 17:47:03.642645',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    );
 
--- 4. Inserción en la tabla students
--- Estudiante 1 - Joel Figueroa
-INSERT INTO
-    `students` (
-        `enrollment`,
-        `fk_person`,
-        `fk_user`,
-        `created_at`,
-        `created_by`,
-        `status_key`,
-        `updated_at`,
-        `updated_by`
-    )
-VALUES
-    (
-        '2019060310',
-        'FIMJ011004HOCGRLA8',
-        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m15',
-        '2025-02-25 17:47:03.618100',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    );
+CREATE TABLE
+    tooth_condition_assignments (
+        odontogram_id BIGINT,
+        tooth_id VARCHAR(3),
+        tooth_condition_id BIGINT,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (odontogram_id, tooth_id, tooth_condition_id),
+        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth),
+        FOREIGN KEY (tooth_condition_id) REFERENCES tooth_conditions (id_tooth_condition)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Estudiante 2 - Juan Antonio
-INSERT INTO
-    `students` (
-        `enrollment`,
-        `fk_person`,
-        `fk_user`,
-        `created_at`,
-        `created_by`,
-        `status_key`,
-        `updated_at`,
-        `updated_by`
-    )
-VALUES
-    (
-        '2023070425',
-        'AOPS011028HOCNRLA9',
-        'a1b2c3d4-e5f6-7g8h-9i10-j11k12l13m14',
-        '2025-02-25 17:47:03.618100',
-        '123e4567-e89b-12d3-a456-426614174000',
-        'A',
-        NULL,
-        NULL
-    );
+
+CREATE TABLE
+    toothface_conditions_assignments (
+        odontogram_id BIGINT,
+        tooth_face_id VARCHAR(3),
+        toothface_condition_id BIGINT,
+        tooth_id VARCHAR(3),
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        PRIMARY KEY (
+            odontogram_id,
+            tooth_face_id,
+            toothface_condition_id,
+            tooth_id
+        ),
+        FOREIGN KEY (odontogram_id) REFERENCES odontograms (id_odontogram),
+        FOREIGN KEY (tooth_face_id) REFERENCES tooth_faces (id_tooth_face),
+        FOREIGN KEY (toothface_condition_id) REFERENCES toothface_conditions (id_toothface_conditions),
+        FOREIGN KEY (tooth_id) REFERENCES teeth (id_tooth)
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- 1. Tabla principal para la evaluación periodontal global
+CREATE TABLE
+    periodontograms (
+        id_periodontogram BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_patient CHAR(36) NOT NULL,
+        plaque_index DECIMAL(5, 2),
+        bleeding_index DECIMAL(5, 2),
+        evaluation_date DATETIME NOT NULL,
+        notes TEXT,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        fk_form_section BIGINT NOT NULL,
+        FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
+        CONSTRAINT FK_periodontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
+        UNIQUE (fk_patient, fk_form_section)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- 2. Tabla secundaria para registrar los datos de cada diente evaluado
+CREATE TABLE
+    tooth_evaluations (
+        id_tooth_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_periodontogram BIGINT NOT NULL,
+        id_tooth VARCHAR(3) NOT NULL,
+        mobility INT,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        CONSTRAINT FK_tooth_eval_periodontograms FOREIGN KEY (fk_periodontogram) REFERENCES periodontograms (id_periodontogram),
+        CONSTRAINT FK_tooth_eval_teeth FOREIGN KEY (id_tooth) REFERENCES teeth (id_tooth)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- 3. Tabla para las superficies de cada diente evaluado
+CREATE TABLE
+    surface_evaluations (
+        id_surface_evaluation BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_tooth_evaluation BIGINT NOT NULL,
+        surface ENUM (
+            'VESTIBULAR',
+            'PALATINO',
+            'LINGUAL',
+            'VESTIBULAR_INFERIOR'
+        ) NOT NULL,
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (fk_tooth_evaluation) REFERENCES tooth_evaluations (id_tooth_evaluation)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+-- 4. Tabla para registrar las mediciones en cada superficie
+CREATE TABLE
+    surface_measurements (
+        id_surface_measurement BIGINT PRIMARY KEY AUTO_INCREMENT,
+        tooth_position ENUM ('MESIAL', 'CENTRAL', 'DISTAL') NOT NULL,
+        pocket_depth DECIMAL(5, 2),
+        lesion_level DECIMAL(5, 2),
+        plaque BOOLEAN,
+        bleeding BOOLEAN,
+        calculus BOOLEAN,   
+        created_at DATETIME (6) DEFAULT NULL,
+        created_by VARCHAR(255) DEFAULT NULL,
+        status_key VARCHAR(255) DEFAULT NULL,
+        updated_at DATETIME (6) DEFAULT NULL,
+        updated_by VARCHAR(255) DEFAULT NULL,
+        fk_surface_evaluation BIGINT NOT NULL,
+        FOREIGN KEY (fk_surface_evaluation) REFERENCES surface_evaluations (id_surface_evaluation)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
