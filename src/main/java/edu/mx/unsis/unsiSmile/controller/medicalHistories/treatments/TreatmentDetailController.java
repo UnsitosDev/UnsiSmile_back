@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -129,6 +130,15 @@ public class TreatmentDetailController {
         Page<PatientResponse> response = treatmentDetailService.getPatientsWithTreatmentsInReview(
                 professorId, pageable);
 
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Obtener el tratamiento en revisión de un paciente")
+    @GetMapping("/patients/{patientId}/revision")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> getPatientTreatmentInReview(
+            @PathVariable String patientId) {
+
+        ClinicalHistoryCatalogResponse response = treatmentDetailService.getTreatmentInReviewByPatientId(patientId);
         return ResponseEntity.ok(response);
     }
 }

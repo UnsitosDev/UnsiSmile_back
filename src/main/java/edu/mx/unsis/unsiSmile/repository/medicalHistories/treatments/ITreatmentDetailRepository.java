@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetailModel, Long> {
@@ -27,4 +28,7 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     Page<TreatmentDetailModel> findAllByProfessorAndStatus(
             ProfessorModel professor, String status, Pageable pageable);
+
+    Optional<TreatmentDetailModel> findByPatientClinicalHistory_Patient_IdPatientAndStatus(
+            String patientId, String status);
 }
