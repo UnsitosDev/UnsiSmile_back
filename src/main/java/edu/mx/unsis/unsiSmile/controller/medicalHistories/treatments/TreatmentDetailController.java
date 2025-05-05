@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -109,6 +110,25 @@ public class TreatmentDetailController {
             @RequestParam ReviewStatus status) {
 
         TreatmentDetailResponse response = treatmentDetailService.finalizeTreatment(id, status);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Obtener pacientes con tratamientos en revisión asignados a un profesor")
+    @GetMapping("/professor/{professorId}/patients")
+    public ResponseEntity<Page<PatientResponse>> getPatientsWithTreatmentsInReview(
+            @PathVariable String professorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Campo para ordenar", example = "createdAt")
+            @RequestParam(defaultValue = "patient.name") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<PatientResponse> response = treatmentDetailService.getPatientsWithTreatmentsInReview(
+                professorId, pageable);
+
         return ResponseEntity.ok(response);
     }
 }

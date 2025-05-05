@@ -8,9 +8,11 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -52,6 +54,7 @@ public class TreatmentDetailService {
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
     private final TreatmentDetailToothMapper treatmentDetailToothMapper;
+    private final PatientMapper patientMapper;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -317,5 +320,28 @@ public class TreatmentDetailService {
         }
 
         return treatment;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PatientResponse> getPatientsWithTreatmentsInReview(String professorId, Pageable pageable) {
+        try {
+            ProfessorModel professorModel = professorRepository.findById(professorId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            Page<TreatmentDetailModel> treatments = treatmentDetailRepository
+                    .findAllByProfessorAndStatus(
+                            professorModel,
+                            ReviewStatus.IN_REVIEW.toString(),
+                            pageable);
+
+            return treatments
+                    .map(TreatmentDetailModel::getPatientClinicalHistory)
+                    .map(PatientClinicalHistoryModel::getPatient)
+                    .map(patientMapper::toDto);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 }

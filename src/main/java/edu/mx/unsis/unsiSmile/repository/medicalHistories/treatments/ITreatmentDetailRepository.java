@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,7 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     Page<TreatmentDetailModel> findAllByStudentGroupInAndTreatment_IdTreatment(
             List<StudentGroupModel> studentGroups, Long idTreatment, Pageable pageable);
+
+    Page<TreatmentDetailModel> findAllByProfessorAndStatus(
+            ProfessorModel professor, String status, Pageable pageable);
 }

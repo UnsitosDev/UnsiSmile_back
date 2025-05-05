@@ -435,6 +435,7 @@ public class ResponseMessages {
     public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
     public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
     public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED o REJECTED";
+    public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
