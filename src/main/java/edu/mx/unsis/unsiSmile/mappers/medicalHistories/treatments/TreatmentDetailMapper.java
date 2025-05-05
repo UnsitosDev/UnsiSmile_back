@@ -44,6 +44,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .professorId(entity.getProfessor() != null ?
                         entity.getProfessor().getIdProfessor() : null)
                 .status(entity.getStatus())
+                .patientId(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                 .build();
     }
 

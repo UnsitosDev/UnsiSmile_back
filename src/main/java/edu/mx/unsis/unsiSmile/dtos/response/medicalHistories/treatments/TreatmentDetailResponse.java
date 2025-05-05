@@ -13,6 +13,7 @@ public class TreatmentDetailResponse {
 
     private Long idTreatmentDetail;
     private Long patientClinicalHistoryId;
+    private String patientId;
     private String patientName;
     private TreatmentResponse treatment;
     List<TreatmentDetailToothResponse> teeth;
