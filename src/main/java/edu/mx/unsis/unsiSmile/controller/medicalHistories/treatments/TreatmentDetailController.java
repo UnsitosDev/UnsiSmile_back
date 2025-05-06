@@ -1,9 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,6 +77,7 @@ public class TreatmentDetailController {
     @GetMapping("/students/{idStudent}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByStudent(
             @PathVariable String idStudent,
+            @Parameter(description = "ID del tipo de tratamiento, ejemplo: 1  para las resinas")
             @RequestParam(required = false) Long idTreatment,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -114,31 +113,22 @@ public class TreatmentDetailController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtener pacientes con tratamientos en revisión asignados a un profesor")
-    @GetMapping("/professor/{professorId}/patients")
-    public ResponseEntity<Page<PatientResponse>> getPatientsWithTreatmentsInReview(
+    @Operation(summary = "Obtener los tratamientos en revisión asignados a un profesor")
+    @GetMapping("/professors/{professorId}")
+    public ResponseEntity<Page<TreatmentDetailResponse>> getPatientsWithTreatmentsInReview(
             @PathVariable String professorId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "Campo para ordenar", example = "createdAt")
-            @RequestParam(defaultValue = "patient.name") String order,
+            @RequestParam(defaultValue = "createdAt") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<PatientResponse> response = treatmentDetailService.getPatientsWithTreatmentsInReview(
+        Page<TreatmentDetailResponse> response = treatmentDetailService.getTreatmentsInReviewByProfessor(
                 professorId, pageable);
 
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(summary = "Obtener el tratamiento en revisión de un paciente")
-    @GetMapping("/patients/{patientId}/revision")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> getPatientTreatmentInReview(
-            @PathVariable String patientId) {
-
-        ClinicalHistoryCatalogResponse response = treatmentDetailService.getTreatmentInReviewByPatientId(patientId);
         return ResponseEntity.ok(response);
     }
 }

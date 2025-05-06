@@ -9,10 +9,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -54,7 +52,6 @@ public class TreatmentDetailService {
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
-    private final PatientMapper patientMapper;
     private final ClinicalHistoryCatalogService clinicalHistoryCatalogService;
 
     @Transactional
@@ -324,7 +321,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PatientResponse> getPatientsWithTreatmentsInReview(String professorId, Pageable pageable) {
+    public Page<TreatmentDetailResponse> getTreatmentsInReviewByProfessor(String professorId, Pageable pageable) {
         try {
             ProfessorModel professorModel = professorRepository.findById(professorId)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
@@ -335,10 +332,7 @@ public class TreatmentDetailService {
                             ReviewStatus.IN_REVIEW.toString(),
                             pageable);
 
-            return treatments
-                    .map(TreatmentDetailModel::getPatientClinicalHistory)
-                    .map(PatientClinicalHistoryModel::getPatient)
-                    .map(patientMapper::toDto);
+            return treatments.map(this::toDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
