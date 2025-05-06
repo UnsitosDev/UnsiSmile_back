@@ -28,7 +28,4 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     Page<TreatmentDetailModel> findAllByProfessorAndStatus(
             ProfessorModel professor, String status, Pageable pageable);
-
-    Optional<TreatmentDetailModel> findByPatientClinicalHistory_Patient_IdPatientAndStatus(
-            String patientId, String status);
 }

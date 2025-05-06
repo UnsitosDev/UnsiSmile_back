@@ -6,7 +6,6 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -23,7 +22,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentD
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
@@ -52,7 +50,6 @@ public class TreatmentDetailService {
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
-    private final ClinicalHistoryCatalogService clinicalHistoryCatalogService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -337,24 +334,6 @@ public class TreatmentDetailService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse getTreatmentInReviewByPatientId(String patientId) {
-        try {
-            patientService.getPatientById(patientId);
-
-            TreatmentDetailModel treatment = treatmentDetailRepository
-                    .findByPatientClinicalHistory_Patient_IdPatientAndStatus(patientId, ReviewStatus.IN_REVIEW.toString())
-                    .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW,
-                            HttpStatus.NOT_FOUND));
-            return clinicalHistoryCatalogService.findById(
-                    treatment.getPatientClinicalHistory().getIdPatientClinicalHistory(), patientId);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_IN_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
