@@ -463,4 +463,9 @@ public class ResponseMessages {
     public static final String NOTIFICATION_SEND_ERROR = "Error al enviar la notificación";
     public static final String REVIEW_STATUS_UPDATE_ERROR = "Error al actualizar el estado de revisión";
 
+    public static final String FAILED_FETCH_FLUOROSIS = "Error al obtener la fluorosis";
+    public static final String FLUOROSIS_NOT_FOUND = "No se encontró la fluorosis con ID: ";
+    public static final String FAILED_DELETE_FLUOROSIS = "Error al eliminar la fluorosis";
+    public static final String FLUOROSIS_NOT_FOUND_BY_SECTION = "No se encontró la fluorosis con el ID de la sección del formulario: ";
+    public static final String FAILED_FETCH_FLUOROSIS_BY_PATIENT = "Error al obtener la fluorosis por ID de paciente";
 }
