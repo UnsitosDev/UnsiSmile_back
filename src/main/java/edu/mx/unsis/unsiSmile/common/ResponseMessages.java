@@ -308,6 +308,7 @@ public class ResponseMessages {
     public static final String STATUS_NOT_FOUND = "No se encontró el registro de estado de revisión con ID: %s";
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
+    public static final String ERROR_SECTIONS_IN_REVIEW = "No puede enviar el tratamiento a revisión porque hay secciones por revisar.";
 
     // Dental Prophylaxis Request
     public static final String PATIENT_ID_CANNOT_BE_NULL = "El ID del paciente no puede ser nulo";

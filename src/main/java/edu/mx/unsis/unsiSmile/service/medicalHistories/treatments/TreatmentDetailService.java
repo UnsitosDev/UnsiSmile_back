@@ -19,6 +19,7 @@ import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -46,6 +47,7 @@ public class TreatmentDetailService {
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
+    private final IReviewStatusRepository reviewStatusRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
@@ -265,6 +267,16 @@ public class TreatmentDetailService {
             if (!treatment.getStatus().equals(ReviewStatus.IN_PROGRESS.toString()) &&
                     !treatment.getStatus().equals(ReviewStatus.REJECTED.toString())) {
                 throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS,
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            boolean isSectionInReview = reviewStatusRepository.existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
+                    treatment.getPatientClinicalHistory().getIdPatientClinicalHistory(),
+                    ReviewStatus.IN_REVIEW
+            );
+
+            if (isSectionInReview) {
+                throw new AppException(ResponseMessages.ERROR_SECTIONS_IN_REVIEW,
                         HttpStatus.BAD_REQUEST);
             }
 
