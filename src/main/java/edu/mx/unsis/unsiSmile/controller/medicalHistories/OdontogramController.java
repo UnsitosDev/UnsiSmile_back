@@ -64,13 +64,10 @@ public class OdontogramController {
         return odontogramService.getOdontogramDetails(patientId);
     }
 
-    // obtener un odontograma por el id del formulario y el id del paciente
-    @GetMapping("/form-section/{formSectionId}/patient/{patientId}")
-    public ResponseEntity<OdontogramResponse> getOdontogramByFormSectionIdAndPatientId(@PathVariable Long formSectionId,
-            @PathVariable String patientId) {
-        OdontogramResponse odontogramResponse = odontogramService.getOdontogramByFormSectionId(formSectionId,
-                patientId);
-        return ResponseEntity.ok(odontogramResponse);
+    @GetMapping("/treatment/{treatmentId}")
+    public ResponseEntity<List<OdontogramResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
+        List<OdontogramResponse> odontograms = odontogramService.getOdontogramsByTreatmentId(treatmentId);
+        return ResponseEntity.ok(odontograms);
     }
 
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ToothFaceConditionRequest {
+    
     private Long idToothFaceCondition;
 
     @NotBlank(message = "Description cannot be blank")

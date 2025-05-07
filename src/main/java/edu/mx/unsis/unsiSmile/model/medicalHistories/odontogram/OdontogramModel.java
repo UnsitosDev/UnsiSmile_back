@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
 
 import java.util.List;
 
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
@@ -29,7 +29,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "odontograms", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"fk_patient", "fk_form_section"})
+        @UniqueConstraint(columnNames = { "fk_patient", "fk_form_section" })
 })
 public class OdontogramModel extends AuditModel {
 
@@ -46,8 +46,8 @@ public class OdontogramModel extends AuditModel {
     private PatientModel patient;
 
     @ManyToOne
-    @JoinColumn(name = "fk_form_section", referencedColumnName = "id_form_section")
-    private FormSectionModel formSection;
+    @JoinColumn(name = "fk_treatment", referencedColumnName = "id_treatment")
+    private TreatmentModel treatment;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ToothConditionAssignmentModel> toothConditionAssignments;

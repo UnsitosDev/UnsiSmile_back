@@ -30,8 +30,8 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
     @Query("SELECT o FROM OdontogramModel o WHERE o.patient.id = :patientId ORDER BY o.createdAt DESC limit 1")
     Optional<OdontogramModel> findLatestOdontogramByPatientId(@Param("patientId") String patientId);
 
-    @Query("SELECT o FROM OdontogramModel o WHERE o.formSection.id = :formSectionId AND o.patient.id = :patientId")
-    Optional<OdontogramModel> findByFormSectionIdAndPatientId(@Param("formSectionId") Long formSectionId, @Param("patientId") String patientId);
-
     Optional<OdontogramModel> findFirstByPatient_IdPatientOrderByCreatedAtDesc(String patientId);
+
+    List<OdontogramModel> findByTreatment_IdTreatment(Long idTreatment);
+
 }

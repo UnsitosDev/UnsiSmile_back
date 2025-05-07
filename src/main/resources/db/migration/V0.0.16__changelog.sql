@@ -4,14 +4,14 @@ CREATE TABLE
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
         observations TEXT DEFAULT NULL,
         fk_patient CHAR(36) NOT NULL,
-        fk_form_section BIGINT NOT NULL,
+        fk_treatment BIGINT NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
         CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-        CONSTRAINT FK_odontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+        CONSTRAINT FK_odontograms_treatments FOREIGN KEY (fk_treatment) REFERENCES treatments (id_treatment)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 

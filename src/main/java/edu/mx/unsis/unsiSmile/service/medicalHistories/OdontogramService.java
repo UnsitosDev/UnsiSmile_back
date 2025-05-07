@@ -148,30 +148,14 @@ public class OdontogramService {
 
     }
 
-    // obtener el odontograma por id de form section y el id del paciente
-    public OdontogramResponse getOdontogramByFormSectionId(Long formSectionId, String patientId) {
-        OdontogramModel odontogramModel = odontogramRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                .orElseThrow(() -> new AppException("Odontogram not found with form section ID: " + formSectionId,
-                        HttpStatus.NOT_FOUND));
-
-        Long odontogramId = odontogramModel.getIdOdontogram();
-
-        // Obtener todas las asignaciones de condiciones de dientes
-        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
-                .findToothConditionAssignmentsByOdontogramId(odontogramId);
-
-        // Obtener todas las condiciones de caras de dientes
-        List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
-                .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
-
-        odontogramMapper.mapConditionsAssignments(toothConditionAssignments, toothFaceConditions);
-
-        OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
-                toothFaceConditions);
-        odontogramResponse.setIdOdontogram(odontogramId);
-        odontogramResponse.setObservations(odontogramModel.getObservations());
-
-        return odontogramResponse;
+    public List<OdontogramResponse> getOdontogramsByTreatmentId(Long idTreatment) {
+        try {
+            List<OdontogramModel> odontograms = odontogramRepository.findByTreatment_IdTreatment(idTreatment);
+            return odontograms.stream()
+                    .map(odontogramMapper::toDto)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch odontograms by treatment ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
-
 }

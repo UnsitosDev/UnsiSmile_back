@@ -19,7 +19,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
@@ -27,6 +26,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 
 @Component
@@ -45,6 +45,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 .adultArcade(Collections.emptyList())
                                 .childArcade(Collections.emptyList())
                                 .observations(entity.getObservations())
+                                .idTreatment(entity.getTreatment().getIdTreatment())
                                 .build();
         }
 
@@ -62,11 +63,11 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
         public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
                 OdontogramModel odontogramModel = OdontogramModel.builder()
-                                .patient(
-                                                PatientModel.builder().idPatient(dto.getIdPatient())
-                                                                .build())
-                                .formSection(FormSectionModel.builder().idFormSection(dto.getIdFormSection()).build())
+                                .patient(PatientModel.builder().idPatient(dto.getIdPatient()).build())
                                 .observations(dto.getObservations())
+                                .treatment(TreatmentModel.builder()
+                                                .idTreatment(dto.getIdTreatment())
+                                                .build())
                                 .build();
 
                 // Mapeo de ToothConditionAssignments
