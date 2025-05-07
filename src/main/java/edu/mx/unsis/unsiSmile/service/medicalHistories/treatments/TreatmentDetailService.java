@@ -132,6 +132,13 @@ public class TreatmentDetailService {
                 .orElse(null);
         treatmentDetail.setPatientName(patientName);
 
+        String studentName = Optional.ofNullable(treatmentDetailModel.getStudentGroup())
+                .map(StudentGroupModel::getStudent)
+                .map(StudentModel::getPerson)
+                .map(PersonModel::getFullName)
+                .orElse(null);
+        treatmentDetail.setStudentName(studentName);
+
         if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
             treatmentDetail.setTeeth(
                     treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(

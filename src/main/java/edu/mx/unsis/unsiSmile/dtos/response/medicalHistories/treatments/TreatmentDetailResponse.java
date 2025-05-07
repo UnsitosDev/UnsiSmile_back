@@ -1,6 +1,9 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,5 +25,6 @@ public class TreatmentDetailResponse {
     private Long studentGroupId;
     private String professorId;
     private String professorName;
+    private String studentName;
     private String status;
 }
