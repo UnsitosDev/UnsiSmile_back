@@ -15,10 +15,12 @@ import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -43,6 +45,7 @@ public class TreatmentDetailService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
+    private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
@@ -255,7 +258,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, String professorId) {
+    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -265,10 +268,12 @@ public class TreatmentDetailService {
                         HttpStatus.BAD_REQUEST);
             }
 
-            ProfessorModel professor = professorRepository.findById(professorId)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+            ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(professorClinicalAreaId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + professorClinicalAreaId,
+                            HttpStatus.NOT_FOUND));
 
-            treatment.setProfessor(professor);
+            treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
 
             return toDto(treatmentDetailRepository.save(treatment));

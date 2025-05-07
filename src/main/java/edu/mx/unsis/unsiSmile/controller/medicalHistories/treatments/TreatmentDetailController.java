@@ -97,9 +97,9 @@ public class TreatmentDetailController {
     @PatchMapping("/{id}/revision")
     public ResponseEntity<TreatmentDetailResponse> sendToReview(
             @PathVariable Long id,
-            @RequestParam String professorId) {
+            @RequestParam Long professorClinicalAreaId) {
 
-        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, professorId);
+        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, professorClinicalAreaId);
         return ResponseEntity.ok(response);
     }
 
