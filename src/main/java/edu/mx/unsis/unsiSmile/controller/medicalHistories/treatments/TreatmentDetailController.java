@@ -40,7 +40,7 @@ public class TreatmentDetailController {
     }
 
     @Operation(summary = "Obtiene todos los tratamientos de un paciente con paginación y ordenamiento")
-    @GetMapping("/patient/{patientId}")
+    @GetMapping("/patients/{patientId}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByPatient(
             @PathVariable String patientId,
             @RequestParam(defaultValue = "0") int page,
@@ -103,13 +103,13 @@ public class TreatmentDetailController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Finaliza un tratamiento")
-    @PatchMapping("/{id}/finalization")
-    public ResponseEntity<TreatmentDetailResponse> finalizeTreatment(
+    @Operation(summary = "Actualiza el estado de un tratamiento (Finalizado/Rechazado)")
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<TreatmentDetailResponse> statusTreatment(
             @PathVariable Long id,
             @RequestParam ReviewStatus status) {
 
-        TreatmentDetailResponse response = treatmentDetailService.finalizeTreatment(id, status);
+        TreatmentDetailResponse response = treatmentDetailService.statusTreatment(id, status);
         return ResponseEntity.ok(response);
     }
 

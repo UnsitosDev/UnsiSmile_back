@@ -336,7 +336,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse finalizeTreatment(Long id, ReviewStatus status) {
+    public TreatmentDetailResponse statusTreatment(Long id, ReviewStatus status) {
         try {
             if (status != ReviewStatus.FINISHED && status != ReviewStatus.REJECTED) {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS,
