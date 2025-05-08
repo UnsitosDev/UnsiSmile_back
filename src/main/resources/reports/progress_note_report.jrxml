@@ -241,7 +241,7 @@ FR:__________
 				<textElement>
 					<font size="13"/>
 				</textElement>
-				<text><![CDATA[Tratamiento/terapéutica empleada:__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+				<text><![CDATA[ __________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="120" width="390" height="30" uuid="66e15a7f-3567-4781-9a5f-47b67853962f"/>
@@ -297,9 +297,16 @@ Nombre y firma del profesor responsable:______________________________]]></text>
 				<textFieldExpression><![CDATA[$P{student}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="476" width="214" height="18" uuid="5aaf85d8-ecca-4548-b476-fa0b2d0235df"/>
+				<reportElement x="255" y="473" width="214" height="18" uuid="5aaf85d8-ecca-4548-b476-fa0b2d0235df"/>
 				<textFieldExpression><![CDATA[$P{professor}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="10" y="150" width="328" height="18" uuid="6b33579b-f902-4fe4-819c-a8a7998e8462"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Tratamiento/terapéutica empleada: ]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
