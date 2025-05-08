@@ -53,4 +53,7 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
     Long countByStatus(@Param("idProfessor") String idProfessor,
                        @Param("status") ReviewStatus status,
                        @Param("statusKey") String statusKey);
+
+    boolean existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
+            Long idPatientMedicalRecord, ReviewStatus status);
 }

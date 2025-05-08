@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -54,4 +56,6 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "AND sg.statusKey = 'A' " +
             "ORDER BY sg.idStudentGroups DESC LIMIT 1")
     Optional<StudentGroupModel> findLatestActiveByStudent(@Param("enrollment") String enrollment);
+
+    List<StudentGroupModel> findAllByStudent(StudentModel student);
 }

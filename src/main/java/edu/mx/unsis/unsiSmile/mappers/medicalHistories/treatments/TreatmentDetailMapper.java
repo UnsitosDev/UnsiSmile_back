@@ -44,6 +44,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .professorId(entity.getProfessor() != null ?
                         entity.getProfessor().getIdProfessor() : null)
                 .status(entity.getStatus())
+                .patientId(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                 .build();
     }
 
@@ -56,10 +57,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
 
     @Override
     public void updateEntity(TreatmentDetailRequest request, TreatmentDetailModel entity) {
-        entity.setTreatment(TreatmentModel.builder()
-                .idTreatment(request.getTreatmentId())
-                .build());
-        entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
     }
 }

@@ -110,12 +110,12 @@ public class ReviewStatusService {
     }
 
     @Transactional
-    public void sendToReview(Long idPatientMedicalRecord, Long idSection, Long idProfessorClinicalArea) {
+    public void sendToReview(Long patientMedicalRecordId, Long sectionId, Long professorClinicalAreaId) {
         try {
-            validateEntitiesExist(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
+            validateEntitiesExist(patientMedicalRecordId, sectionId, professorClinicalAreaId);
 
-            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(idPatientMedicalRecord, idSection,
-                    idProfessorClinicalArea);
+            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientMedicalRecordId, sectionId,
+                    professorClinicalAreaId);
 
             reviewStatusRepository.save(statusModel);
         } catch (AppException e) {

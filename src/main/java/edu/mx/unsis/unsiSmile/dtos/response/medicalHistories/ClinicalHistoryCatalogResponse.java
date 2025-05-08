@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ClinicalHistoryCatalogResponse {
+    private Long idPatientMedicalRecord;
 
     private Long idClinicalHistoryCatalog;
 

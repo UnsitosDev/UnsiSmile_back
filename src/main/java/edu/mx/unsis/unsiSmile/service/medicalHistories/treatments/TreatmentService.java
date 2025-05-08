@@ -73,8 +73,11 @@ public class TreatmentService {
     @Transactional(readOnly = true)
     public List<TreatmentResponse> getTreatmentsByTreatmentScope(Long treatmentScopeId) {
         try {
+            treatmentScopeService.getTreatmentScopeById(treatmentScopeId);
             List<TreatmentModel> models = treatmentRepository.findByTreatmentScope_IdTreatmentScope(treatmentScopeId);
             return treatmentMapper.toDtos(models);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENTS_BY_SCOPE, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
