@@ -468,4 +468,5 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_FLUOROSIS = "Error al eliminar la fluorosis";
     public static final String FLUOROSIS_NOT_FOUND_BY_SECTION = "No se encontró la fluorosis con el ID de la sección del formulario: ";
     public static final String FAILED_FETCH_FLUOROSIS_BY_PATIENT = "Error al obtener la fluorosis por ID de paciente";
+    public static final String FAILED_FETCH_FLUOROSIS_BY_SECTION = "Error al obtener la fluorosis por ID de sección: %s";
 }

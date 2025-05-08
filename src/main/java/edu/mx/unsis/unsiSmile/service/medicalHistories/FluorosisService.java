@@ -97,22 +97,29 @@ public class FluorosisService {
         } catch (Exception e) {
             throw new AppException(e.getCause().toString(), HttpStatus.BAD_REQUEST, e);
         }
-
     }
 
+    @Transactional(readOnly = true)
     public FluorosisResponse getFluorosisByFormSectionId(Long formSectionId, String patientId) {
-        FluorosisModel fluorosisModel = fluorosisRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                .orElseThrow(() -> new AppException(ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + formSectionId, HttpStatus.NOT_FOUND));
+        try {
+            FluorosisModel fluorosisModel = fluorosisRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + formSectionId, HttpStatus.NOT_FOUND));
 
-        Long fluorosisId = fluorosisModel.getIdFluorosis();
+            Long fluorosisId = fluorosisModel.getIdFluorosis();
 
-        List<FluorosisToothConditionAssignmentModel> toothConditionAssignments = fluorosisRepository
-                .findToothConditionAssignmentsByFluorosisId(fluorosisId);
+            List<FluorosisToothConditionAssignmentModel> toothConditionAssignments = fluorosisRepository
+                    .findToothConditionAssignmentsByFluorosisId(fluorosisId);
 
-        List<FluorosisToothfaceConditionsAssignmentModel> toothFaceConditions = fluorosisRepository
-                .findToothFaceConditionsAssignmentByFluorosisId(fluorosisId);
+            List<FluorosisToothfaceConditionsAssignmentModel> toothFaceConditions = fluorosisRepository
+                    .findToothFaceConditionsAssignmentByFluorosisId(fluorosisId);
 
-        return buildFluorosisResponse(fluorosisId, fluorosisModel.getCreatedAt(), toothConditionAssignments, toothFaceConditions);
+            return buildFluorosisResponse(fluorosisId, fluorosisModel.getCreatedAt(), toothConditionAssignments, toothFaceConditions);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_FLUOROSIS_BY_SECTION, formSectionId),
+                    HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
     }
 
     private FluorosisResponse buildFluorosisResponse(
