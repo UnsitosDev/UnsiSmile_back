@@ -110,7 +110,7 @@ public class TreatmentDetailService {
         );
 
         UserResponse currentUser = userService.getCurrentUser();
-        StudentGroupModel studentGroup = studentGroupService.getStudentGroup(currentUser.getUsername());
+        StudentGroupModel studentGroup = studentGroupService.getStudentGroupByStudent(currentUser.getUsername());
 
         TreatmentDetailModel model = treatmentDetailMapper.toEntity(request);
         model.setPatientClinicalHistory(clinicalHistory);
