@@ -23,6 +23,8 @@ public class ProgressNoteReportParameters {
     private String treatment;
     private String indications;
     private String creationDate;
+    private String student;
+    private String professor;
 
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
@@ -42,6 +44,8 @@ public class ProgressNoteReportParameters {
         map.put("treatment", treatment);
         map.put("indications", indications);
         map.put("creationDate", creationDate);
+        map.put("student", student);
+        map.put("professor", professor);
         return map;
     }
 }

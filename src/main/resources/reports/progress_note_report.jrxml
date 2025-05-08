@@ -19,6 +19,8 @@
 	<parameter name="treatment" class="java.lang.String"/>
 	<parameter name="indications" class="java.lang.String"/>
 	<parameter name="creationDate" class="java.lang.String"/>
+	<parameter name="student" class="java.lang.String"/>
+	<parameter name="professor" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -239,7 +241,7 @@ FR:__________
 				<textElement>
 					<font size="13"/>
 				</textElement>
-				<text><![CDATA[Tratamiento/terapéutica.empleada:__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
+				<text><![CDATA[Tratamiento/terapéutica empleada:__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="10" y="120" width="390" height="30" uuid="66e15a7f-3567-4781-9a5f-47b67853962f"/>
@@ -289,6 +291,15 @@ ________________________________________________________________________________
 Firma del paciente:_________________
 Nombre y firma del profesor responsable:______________________________]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="296" y="444" width="234" height="16" uuid="696441d4-9b12-45f3-8644-bd99a748688f"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$P{student}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="476" width="214" height="18" uuid="5aaf85d8-ecca-4548-b476-fa0b2d0235df"/>
+				<textFieldExpression><![CDATA[$P{professor}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
