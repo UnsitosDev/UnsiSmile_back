@@ -96,6 +96,9 @@ public class TreatmentDetailService {
     }
 
     private void validateRequestDependencies(TreatmentDetailRequest request) {
+        if(request.getStartDate().isAfter(request.getEndDate())){
+            throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE, HttpStatus.BAD_REQUEST);
+        }
         patientService.getPatientById(request.getPatientId());
         treatmentService.getTreatmentById(request.getTreatmentId());
     }
@@ -187,20 +190,49 @@ public class TreatmentDetailService {
 
             validateRequestDependencies(request);
 
-            TreatmentDetailModel updated = treatmentDetailMapper.toEntity(request);
+            treatmentDetailMapper.updateEntity(request, existing);
 
-            updated.setIdTreatmentDetail(existing.getIdTreatmentDetail());
-            updated.setPatientClinicalHistory(existing.getPatientClinicalHistory());
-            updated.setStudentGroup(existing.getStudentGroup());
+            TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
+            String scope = treatmentResponse.getTreatmentScope().getName();
 
-            TreatmentDetailModel saved = treatmentDetailRepository.save(updated);
+            TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
+
+            if (scope.equals(Constants.TOOTH)) {
+                TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
+
+                if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
+                    throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
+                }
+
+                Long treatmentDetailId = saved.getIdTreatmentDetail();
+                List<String> currentTeeth = treatmentDetailToothService.getAllTeethByTreatmentDetailId(treatmentDetailId);
+                List<String> updatedTeeth = toothRequest.getIdTeeth();
+
+                List<String> toDelete = currentTeeth.stream()
+                        .filter(d -> !updatedTeeth.contains(d))
+                        .toList();
+                treatmentDetailToothService.deleteTeethByCodes(treatmentDetailId, toDelete);
+
+                List<String> toAdd = updatedTeeth.stream()
+                        .filter(d -> !currentTeeth.contains(d))
+                        .toList();
+
+                if (!toAdd.isEmpty()) {
+                    TreatmentDetailToothRequest toAddRequest = new TreatmentDetailToothRequest();
+                    toAddRequest.setIdTreatmentDetail(treatmentDetailId);
+                    toAddRequest.setIdTeeth(toAdd);
+                    treatmentDetailToothService.createTreatmentDetailTeeth(toAddRequest);
+                }
+            }
+
             return toDto(saved);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional
     public void deleteTreatmentDetail(Long id) {

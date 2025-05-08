@@ -58,7 +58,7 @@ public class TreatmentDetailController {
     }
 
     @Operation(summary = "Actualiza un tratamiento de un paciente.")
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> updateTreatmentDetail(
             @PathVariable Long id,
             @RequestBody TreatmentDetailRequest request) {

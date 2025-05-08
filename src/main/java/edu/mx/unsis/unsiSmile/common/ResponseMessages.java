@@ -439,6 +439,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
     public static final String FAILED_FETCH_TREATMENT_IN_REVIEW = "Error al obtener el tratamiento en revisión del paciente.";
     public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";
+    public static final String TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE = "La fecha de inicio del tratamiento debe ser menor a la fecha de finalización";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
@@ -448,6 +449,7 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
     public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
+    public static final String TEETH_NOT_FOUND = "No se encontraron dientes";
 
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";

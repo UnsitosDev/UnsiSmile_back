@@ -57,10 +57,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
 
     @Override
     public void updateEntity(TreatmentDetailRequest request, TreatmentDetailModel entity) {
-        entity.setTreatment(TreatmentModel.builder()
-                .idTreatment(request.getTreatmentId())
-                .build());
-        entity.setStartDate(request.getStartDate());
         entity.setEndDate(request.getEndDate());
     }
 }
