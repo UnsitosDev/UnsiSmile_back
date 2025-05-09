@@ -122,6 +122,7 @@ public class ClinicalHistoryCatalogService {
         clinicalHistoryCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
 
         clinicalHistoryCatalogResponse.setFormSections(sections);
+        clinicalHistoryCatalogResponse.setIdPatientMedicalRecord(patientClinicalHistory.getIdPatientClinicalHistory());
 
         return clinicalHistoryCatalogResponse;
     }

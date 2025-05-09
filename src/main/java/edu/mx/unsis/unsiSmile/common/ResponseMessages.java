@@ -72,6 +72,7 @@ public class ResponseMessages {
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String STUDENT_GROUP_NOT_FOUND = "El estudiante no está registrado en el grupo.";
+    public static final String FAILED_TO_FETCH_STUDENT_GROUP = "Error al obtener el grupo del estudiante";
     public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado";
     public static final String FAILED_TO_UPDATE_STUDENT = "Error al actualizar el estudiante";
     public static final String FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA = "Error al obtener los profesores por área clínica";
@@ -308,6 +309,7 @@ public class ResponseMessages {
     public static final String STATUS_NOT_FOUND = "No se encontró el registro de estado de revisión con ID: %s";
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
+    public static final String ERROR_SECTIONS_IN_REVIEW = "No puede enviar el tratamiento a revisión porque hay secciones por revisar.";
 
     // Dental Prophylaxis Request
     public static final String PATIENT_ID_CANNOT_BE_NULL = "El ID del paciente no puede ser nulo";
@@ -430,6 +432,15 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_DETAILS = "Error al obtener los detalles del tratamiento";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS = "Solo los tratamientos en curso, o rechazados pueden enviarse a revisión";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS_REVIEW = "El tratamiento no se encuentra en revisión.";
+    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
+    public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED o REJECTED";
+    public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
+    public static final String FAILED_FETCH_TREATMENT_IN_REVIEW = "Error al obtener el tratamiento en revisión del paciente.";
+    public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";
+    public static final String TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE = "La fecha de inicio del tratamiento debe ser menor a la fecha de finalización";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
@@ -439,6 +450,7 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
     public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
+    public static final String TEETH_NOT_FOUND = "No se encontraron dientes";
 
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";

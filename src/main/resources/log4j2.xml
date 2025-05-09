@@ -62,6 +62,21 @@
     </Appenders>
 
     <Loggers>
+        <Logger name="org.springframework.web.socket" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DebugFile"/>
+        </Logger>
+
+        <Logger name="org.springframework.messaging" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DebugFile"/>
+        </Logger>
+
+        <Logger name="org.springframework.web" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="InfoFile"/>
+        </Logger>
+
         <Logger name="edu.mx.unsis.unsiSmile" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="DebugFile"/>
@@ -76,4 +91,5 @@
             <AppenderRef ref="ErrorFile"/>
         </Root>
     </Loggers>
+
 </Configuration>

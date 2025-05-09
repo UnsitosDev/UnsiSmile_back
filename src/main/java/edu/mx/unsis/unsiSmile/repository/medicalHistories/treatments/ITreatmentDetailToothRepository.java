@@ -10,4 +10,8 @@ import java.util.List;
 public interface ITreatmentDetailToothRepository extends JpaRepository<TreatmentDetailToothModel, Long> {
     List<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetail(Long treatmentDetailId);
     void deleteByTreatmentDetail_IdTreatmentDetail(Long treatmentDetailId);
+
+    List<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetailAndTooth_IdToothIn(
+            Long treatmentDetailId, List<String> toothCodes
+    );
 }

@@ -121,4 +121,42 @@ public class TreatmentDetailToothService {
         treatmentDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id), HttpStatus.NOT_FOUND));
     }
+
+    @Transactional(readOnly = true)
+    public List<String> getAllTeethByTreatmentDetailId(Long treatmentDetailId) {
+        try {
+            verifyTreatmentDetailExists(treatmentDetailId);
+
+            List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
+                    .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
+
+            return models.stream()
+                    .map(model -> model.getTooth().getIdTooth())
+                    .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAIL_TEETH, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public void deleteTeethByCodes(Long treatmentDetailId, List<String> toothCodes) {
+        try {
+            verifyTreatmentDetailExists(treatmentDetailId);
+
+            List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
+                    .findByTreatmentDetail_IdTreatmentDetailAndTooth_IdToothIn(treatmentDetailId, toothCodes);
+
+            if (models.isEmpty()) {
+                return;
+            }
+
+            treatmentDetailToothRepository.deleteAll(models);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT_DETAIL_TEETH, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

@@ -43,16 +43,16 @@ public class TreatmentController {
     }
 
     @Operation(summary = "Obtiene los tratamientos asociados a un tipo de alcance")
-    @GetMapping("/by-treatment-scope/{treatmentScopeId}")
+    @GetMapping("/scopes/{treatmentScopeId}")
     public ResponseEntity<List<TreatmentResponse>> getTreatmentsByScope(@PathVariable Long treatmentScopeId) {
         List<TreatmentResponse> responses = treatmentService.getTreatmentsByTreatmentScope(treatmentScopeId);
         return ResponseEntity.ok(responses);
     }
 
     @Operation(summary = "Obtiene los tratamientos asociados a una historia clínica")
-    @GetMapping("/by-clinical-history/{catalogId}")
-    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByClinicalHistory(@PathVariable Long catalogId) {
-        List<TreatmentResponse> responses = treatmentService.getTreatmentsByClinicalHistory(catalogId);
+    @GetMapping("/medical-records/{medicalRecordId}")
+    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByClinicalHistory(@PathVariable Long medicalRecordId) {
+        List<TreatmentResponse> responses = treatmentService.getTreatmentsByClinicalHistory(medicalRecordId);
         return ResponseEntity.ok(responses);
     }
 

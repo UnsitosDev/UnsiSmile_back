@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class StudentGroupService {
@@ -85,5 +87,22 @@ public class StudentGroupService {
     @Transactional(readOnly = true)
     public StudentGroupModel getStudentGroup(String enrollment) {
         return studentGroupRepository.findLatestActiveByStudent(enrollment).orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudentGroupModel> getAllStudentGroupsByStudent(StudentModel student) {
+        return studentGroupRepository.findAllByStudent(student);
+    }
+
+    @Transactional(readOnly = true)
+    public StudentGroupModel getStudentGroupByStudent(String enrollment) {
+        try {
+            return studentGroupRepository.findLatestActiveByStudent(enrollment)
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_GROUP_NOT_FOUND, HttpStatus.NOT_FOUND));
+        } catch (AppException e)  {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_STUDENT_GROUP, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -37,12 +37,12 @@ public class ReviewStatusController {
     }
 
     @Operation(summary = "Enviar una historia clínica a revisión")
-    @PostMapping("/send-to-review/patient-medical-records/{idPatientMedicalRecord}/sections/{idSection}/professor-clinical-areas/{idProfessorClinicalArea}")
+    @PostMapping("/{patientMedicalRecordId}/sections/{sectionId}/review/{professorClinicalAreaId}")
     public ResponseEntity<Void> sendToReview(
-            @PathVariable Long idPatientMedicalRecord,
-            @PathVariable Long idSection,
-            @PathVariable Long idProfessorClinicalArea) {
-        reviewStatusService.sendToReview(idPatientMedicalRecord, idSection, idProfessorClinicalArea);
+            @PathVariable Long patientMedicalRecordId,
+            @PathVariable Long sectionId,
+            @PathVariable Long professorClinicalAreaId) {
+        reviewStatusService.sendToReview(patientMedicalRecordId, sectionId, professorClinicalAreaId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -66,7 +66,7 @@ public class ReviewStatusController {
     }
 
     @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado de revisión.")
-    @GetMapping("/patient-medical-records")
+    @GetMapping("/patients")
     public ResponseEntity<List<PatientClinicalHistoryResponse>> searchMedicalRecords(@RequestParam String idPatient,
                                                                                       @RequestParam String status) {
         List<PatientClinicalHistoryResponse> response = reviewStatusService.searchMedicalRecords(idPatient, status);
