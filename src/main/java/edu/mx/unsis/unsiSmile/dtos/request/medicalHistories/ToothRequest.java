@@ -21,7 +21,6 @@ public class ToothRequest {
     @NotNull(message = "At least one condition must be associated with the tooth.")
     @Size(min = 1, message = "At least one condition must be associated with the tooth.")
     private List<ConditionRequest> conditions;
-
     @NotNull(message = "At least one facial view must be associated with the tooth.")
     @Size(min = 1, message = "At least one facial view must be associated with the tooth.")
     private List<FaceRequest> faces;

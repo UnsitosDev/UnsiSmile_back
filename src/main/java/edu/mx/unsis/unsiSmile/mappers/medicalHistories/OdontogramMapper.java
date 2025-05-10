@@ -27,7 +27,6 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionMod
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {
@@ -61,32 +60,47 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
 
         }
 
+        // Modifica el método toOdontogramModel para manejar listas nulas en ToothRequest
         public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
                 OdontogramModel odontogramModel = OdontogramModel.builder()
-                                .patient(PatientModel.builder().idPatient(dto.getIdPatient()).build())
                                 .observations(dto.getObservations())
                                 .treatment(TreatmentModel.builder()
                                                 .idTreatment(dto.getIdTreatment())
                                                 .build())
                                 .build();
 
-                // Mapeo de ToothConditionAssignments
+                // Mapeo de ToothConditionAssignments con verificación de nulos
                 List<ToothConditionAssignmentModel> toothConditionAssignments = dto.getTeeth().stream()
-                                .flatMap(toothDTO -> toothDTO.getConditions().stream()
-                                                .map(conditionDTO -> mapToToothConditionAssignmentModel(toothDTO,
-                                                                conditionDTO)))
+                                .flatMap(toothDTO -> {
+                                        List<ConditionRequest> conditions = toothDTO.getConditions() != null
+                                                        ? toothDTO.getConditions()
+                                                        : Collections.emptyList();
+                                        return conditions.stream()
+                                                        .map(conditionDTO -> mapToToothConditionAssignmentModel(toothDTO,
+                                                                        conditionDTO));
+                                })
                                 .collect(Collectors.toList());
-
                 odontogramModel.setToothConditionAssignments(toothConditionAssignments);
 
-                // Mapeo de ToothFaceConditions
+                // Mapeo de ToothFaceConditionsAssignments con verificación de nulos
                 List<ToothfaceConditionsAssignmentModel> toothFaceConditionsAssignments = dto.getTeeth().stream()
-                                .flatMap(toothDTO -> toothDTO.getFaces().stream()
-                                                .flatMap(faceDTO -> faceDTO.getConditions().stream()
-                                                                .map(conditionDTO -> mapToToothfaceConditionsAssignmentModel(
-                                                                                toothDTO, faceDTO, conditionDTO))))
+                                .flatMap(toothDTO -> {
+                                        List<FaceRequest> faces = toothDTO.getFaces() != null
+                                                        ? toothDTO.getFaces()
+                                                        : Collections.emptyList();
+                                        return faces.stream()
+                                                        .flatMap(faceDTO -> {
+                                                                List<ToothFaceConditionRequest> faceConditions = faceDTO
+                                                                                .getConditions() != null
+                                                                                                ? faceDTO.getConditions()
+                                                                                                : Collections.emptyList();
+                                                                return faceConditions.stream()
+                                                                                .map(conditionDTO -> mapToToothfaceConditionsAssignmentModel(
+                                                                                                toothDTO, faceDTO,
+                                                                                                conditionDTO));
+                                                        });
+                                })
                                 .collect(Collectors.toList());
-
                 odontogramModel.setToothFaceConditionsAssignments(toothFaceConditionsAssignments);
 
                 return odontogramModel;

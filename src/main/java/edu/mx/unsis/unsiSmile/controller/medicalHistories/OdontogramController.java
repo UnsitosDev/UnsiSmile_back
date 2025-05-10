@@ -59,10 +59,10 @@ public class OdontogramController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/latest/{patientId}")
-    public OdontogramResponse getOdontogramDetails(@PathVariable String patientId) {
-        return odontogramService.getOdontogramDetails(patientId);
-    }
+    @GetMapping("/latest/{treatmentId}")
+    public OdontogramResponse getOdontogramDetails(@PathVariable Long treatmentId) {
+        return odontogramService.getOdontogramDetails(treatmentId);
+    }       
 
     @GetMapping("/treatment/{treatmentId}")
     public ResponseEntity<List<OdontogramResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
