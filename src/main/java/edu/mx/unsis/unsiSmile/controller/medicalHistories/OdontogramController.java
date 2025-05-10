@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;
 import jakarta.validation.Valid;
 
@@ -29,14 +30,14 @@ public class OdontogramController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OdontogramResponse> getOdontogramById(@Valid @PathVariable Long id) {
-        OdontogramResponse odontogramResponse = odontogramService.getOdontogramById(id);
+    public ResponseEntity<OdontogramSimpleResponse> getOdontogramById(@Valid @PathVariable Long id) {
+        OdontogramSimpleResponse odontogramResponse = odontogramService.getOdontogramById(id);
         return ResponseEntity.ok(odontogramResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<OdontogramResponse>> getAllOdontograms() {
-        List<OdontogramResponse> allOdontograms = odontogramService.getAllOdontograms();
+    public ResponseEntity<List<OdontogramSimpleResponse>> getAllOdontograms() {
+        List<OdontogramSimpleResponse> allOdontograms = odontogramService.getAllOdontograms();
         return ResponseEntity.ok(allOdontograms);
     }
 
@@ -65,8 +66,8 @@ public class OdontogramController {
     }       
 
     @GetMapping("/treatment/{treatmentId}")
-    public ResponseEntity<List<OdontogramResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
-        List<OdontogramResponse> odontograms = odontogramService.getOdontogramsByTreatmentId(treatmentId);
+    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
+        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByTreatmentId(treatmentId);
         return ResponseEntity.ok(odontograms);
     }
 

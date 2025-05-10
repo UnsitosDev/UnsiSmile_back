@@ -12,8 +12,10 @@ import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramSimpleMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
@@ -30,25 +32,26 @@ public class OdontogramService {
     private final IToothFaceConditionAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final OdontogramMapper odontogramMapper;
+    private final OdontogramSimpleMapper odontogramSimpleMapper;
 
     @Transactional(readOnly = true)
-    public OdontogramResponse getOdontogramById(@NonNull Long id) {
+    public OdontogramSimpleResponse getOdontogramById(@NonNull Long id) {
         try {
             OdontogramModel odontogramModel = odontogramRepository.findById(id)
                     .orElseThrow(() -> new AppException("Odontogram not found with ID: " + id, HttpStatus.NOT_FOUND));
 
-            return odontogramMapper.toDto(odontogramModel);
+            return odontogramSimpleMapper.toDto(odontogramModel);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch odontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
-    public List<OdontogramResponse> getAllOdontograms() {
+    public List<OdontogramSimpleResponse> getAllOdontograms() {
         try {
             List<OdontogramModel> allOdontograms = odontogramRepository.findAll();
             return allOdontograms.stream()
-                    .map(odontogramMapper::toDto)
+                    .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new AppException("Failed to fetch odontograms", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -136,11 +139,11 @@ public class OdontogramService {
 
     }
 
-    public List<OdontogramResponse> getOdontogramsByTreatmentId(Long idTreatment) {
+    public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long idTreatment) {
         try {
             List<OdontogramModel> odontograms = odontogramRepository.findByTreatment_IdTreatment(idTreatment);
             return odontograms.stream()
-                    .map(odontogramMapper::toDto)
+                    .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new AppException("Failed to fetch odontograms by treatment ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
