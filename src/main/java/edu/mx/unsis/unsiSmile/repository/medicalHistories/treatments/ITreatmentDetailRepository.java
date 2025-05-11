@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -55,8 +56,11 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     Long countByStatusAndStatusKey(String status, String statusKey);
 
+    List<TreatmentDetailModel> findByStudentGroup_StudentAndStatusAndStatusKey(StudentModel student, String status, String statusKey);
+
     @Query("SELECT t FROM TreatmentDetailModel t " +
-            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A' " +
+            "WHERE t.studentGroup.student.enrollment = ?1 AND t.studentGroup.group.semester.idSemester = ?2 " +
+            "AND t.status = ?3 AND t.statusKey = 'A' " +
             "ORDER BY t.treatment.name")
-    List<TreatmentDetailModel> findByStudentEnrollmentAndStatus(String enrollment, String status);
+    List<TreatmentDetailModel> findByStudentAndSemester(String enrollment, Long semesterId, String status);
 }

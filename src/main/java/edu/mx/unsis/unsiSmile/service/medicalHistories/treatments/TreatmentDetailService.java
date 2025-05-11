@@ -24,6 +24,7 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepositor
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
@@ -60,6 +61,7 @@ public class TreatmentDetailService {
     private final PatientService patientService;
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
+    private final ISemesterRepository semesterRepository;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -405,10 +407,20 @@ public class TreatmentDetailService {
             StudentModel student = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            List<TreatmentDetailModel> treatments = treatmentDetailRepository.findByStudentEnrollmentAndStatus(
-                    enrollment,
-                    status.toString()
-            );
+            List<TreatmentDetailModel> treatments;
+
+            if (semesterId != null) {
+                semesterRepository.findById(semesterId)
+                        .orElseThrow(() -> new AppException(ResponseMessages.SEMESTER_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+                treatments = treatmentDetailRepository.findByStudentAndSemester(
+                        enrollment, semesterId, status.toString()
+                );
+            } else {
+                treatments = treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(
+                        student, status.toString(), Constants.ACTIVE
+                );
+            }
 
             String studentName = student.getPerson().getFullName();
 
@@ -467,5 +479,4 @@ public class TreatmentDetailService {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_REPORT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }
