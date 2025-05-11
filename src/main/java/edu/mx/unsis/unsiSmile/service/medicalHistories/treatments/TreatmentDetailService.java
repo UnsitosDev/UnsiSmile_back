@@ -407,20 +407,11 @@ public class TreatmentDetailService {
             StudentModel student = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            List<TreatmentDetailModel> treatments;
+            LocalDate endDateNormalized = normalizeDates(startDate, endDate);
 
-            if (semesterId != null) {
-                semesterRepository.findById(semesterId)
-                        .orElseThrow(() -> new AppException(ResponseMessages.SEMESTER_NOT_FOUND, HttpStatus.NOT_FOUND));
+            List<TreatmentDetailModel> treatments = getTreatments(enrollment, student, semesterId, status);
 
-                treatments = treatmentDetailRepository.findByStudentAndSemester(
-                        enrollment, semesterId, status.toString()
-                );
-            } else {
-                treatments = treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(
-                        student, status.toString(), Constants.ACTIVE
-                );
-            }
+            treatments = filterByDateRange(treatments, startDate, endDateNormalized);
 
             String studentName = student.getPerson().getFullName();
 
@@ -478,5 +469,39 @@ public class TreatmentDetailService {
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_REPORT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private LocalDate normalizeDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate != null && endDate == null) {
+            return LocalDate.now();
+        }
+
+        if (startDate != null && endDate.isBefore(startDate)) {
+            throw new AppException(ResponseMessages.END_DATE_MUST_BE_GREATER_THAN_START_DATE, HttpStatus.BAD_REQUEST);
+        }
+
+        return endDate;
+    }
+
+    private List<TreatmentDetailModel> getTreatments(String enrollment, StudentModel student, Long semesterId, ReviewStatus status) {
+        if (semesterId != null) {
+            semesterRepository.findById(semesterId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.SEMESTER_NOT_FOUND, HttpStatus.NOT_FOUND));
+            return treatmentDetailRepository.findByStudentAndSemester(enrollment, semesterId, status.toString());
+        } else {
+            return treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(student, status.toString(), Constants.ACTIVE);
+        }
+    }
+
+    private List<TreatmentDetailModel> filterByDateRange(List<TreatmentDetailModel> treatments, LocalDate startDate, LocalDate endDate) {
+        if (startDate == null || endDate == null) return treatments;
+
+        return treatments.stream()
+                .filter(t -> {
+                    LocalDate treatmentDate = t.getEndDate().toLocalDate();
+                    return (treatmentDate.isEqual(startDate) || treatmentDate.isAfter(startDate)) &&
+                            (treatmentDate.isEqual(endDate) || treatmentDate.isBefore(endDate));
+                })
+                .collect(Collectors.toList());
     }
 }
