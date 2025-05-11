@@ -30,11 +30,18 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             ProfessorModel professor, String status, Pageable pageable);
 
     @Query("SELECT COUNT (*) FROM TreatmentDetailModel t WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
-    Long countActiveTreatmentsByStudentEnrollment(String studentEnrollment, String status);
+    Long countByStudentAndStatus(String studentEnrollment, String status);
 
     @Query("SELECT t.treatment.name, COUNT(*) FROM TreatmentDetailModel t " +
             "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 " +
             "AND t.statusKey = 'A' " +
             "GROUP BY t.treatment.name")
     List<Object[]> countTreatmentsByStudentGrouped(String studentEnrollment, String status);
+
+    @Query("select t.treatment.name,CASE WHEN t.treatment.treatmentScope.name = 'Diente' THEN COUNT(tt.idDetailTooth) " +
+            "ELSE COUNT(distinct t.idTreatmentDetail) END as totalCount from TreatmentDetailModel  t " +
+            "left join TreatmentDetailToothModel tt on tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "where t.studentGroup.student.enrollment = ?1 and t.status = ?2 " +
+            "and t.statusKey = 'A' GROUP BY t.treatment.name")
+    List<Object[]> countTreatmentsByStudentGroupedWithTeeth(String studentEnrollment, String status);
 }

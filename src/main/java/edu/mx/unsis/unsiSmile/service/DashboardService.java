@@ -49,7 +49,7 @@ public class DashboardService {
             String enrollment = getUserName();
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGrouped(enrollment, ReviewStatus.FINISHED.toString());
+            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGroupedWithTeeth(enrollment, ReviewStatus.FINISHED.toString());
 
             StudentDashboardResponse.StudentDashboardResponseBuilder builder = StudentDashboardResponse.builder()
                     .totalPatients(studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE))
@@ -58,7 +58,10 @@ public class DashboardService {
                     .patientsByNationality(convertToMap(studentPatientRepository.countPatientsByNationalityByStudent(enrollment, Constants.ACTIVE)))
                     .patientsUnder18(studentPatientRepository.countPatientsUnder18ByStudent(enrollment, Constants.ACTIVE))
                     .patientsBetween18And60(studentPatientRepository.countPatientsBetween18And60ByStudent(enrollment, Constants.ACTIVE))
-                    .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE));
+                    .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE))
+                    .rejectedTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.REJECTED.toString()))
+                    .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
+                    .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
 
             for (Object[] row : treatmentCounts) {
                 String name = (String) row[0];

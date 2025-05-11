@@ -33,4 +33,7 @@ public class StudentDashboardResponse {
     @Builder.Default private Long distalWedges = 0L;
     @Builder.Default private Long pulpotomyAndCrowns = 0L;
     @Builder.Default private Long pulpectomyAndCrowns = 0L;
+    private Long rejectedTreatments;
+    private Long progressingTreatments;
+    private Long inReviewTreatments;
 }
