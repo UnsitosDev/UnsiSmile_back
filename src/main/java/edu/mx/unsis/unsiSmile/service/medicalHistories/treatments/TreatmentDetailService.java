@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
@@ -36,8 +37,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -392,4 +397,75 @@ public class TreatmentDetailService {
             throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<TreatmentReportResponse> getReport(String enrollment, Long semesterId,
+                                                   LocalDate startDate, LocalDate endDate, ReviewStatus status) {
+        try {
+            StudentModel student = studentRepository.findById(enrollment)
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            List<TreatmentDetailModel> treatments = treatmentDetailRepository.findByStudentEnrollmentAndStatus(
+                    enrollment,
+                    status.toString()
+            );
+
+            String studentName = student.getPerson().getFullName();
+
+            Map<String, List<TreatmentDetailModel>> groupedByTreatmentName = treatments.stream()
+                    .collect(Collectors.groupingBy(t -> t.getTreatment().getName()));
+
+            List<TreatmentReportResponse.GroupedTreatmentResponse> groupedTreatments = new ArrayList<>();
+
+            for (Map.Entry<String, List<TreatmentDetailModel>> entry : groupedByTreatmentName.entrySet()) {
+                String treatmentName = entry.getKey();
+                List<TreatmentDetailModel> treatmentDetails = entry.getValue();
+
+                List<TreatmentReportResponse.TreatmentReportDetailResponse> detailResponses = new ArrayList<>();
+
+                for (TreatmentDetailModel t : treatmentDetails) {
+                    String scope = t.getTreatment().getTreatmentScope().getName();
+
+                    if (Constants.TOOTH.equals(scope)) {
+                        List<String> teeth = treatmentDetailToothService.getAllTeethByTreatmentDetailId(t.getIdTreatmentDetail());
+                        for (String toothId : teeth) {
+                            detailResponses.add(TreatmentReportResponse.TreatmentReportDetailResponse.builder()
+                                    .treatmentDate(t.getEndDate().toLocalDate())
+                                    .toothId(toothId)
+                                    .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                                    .medicalRecordNumber(String.valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                    .professorName(t.getProfessor().getPerson().getFullName())
+                                    .build());
+                        }
+                    } else {
+                        detailResponses.add(TreatmentReportResponse.TreatmentReportDetailResponse.builder()
+                                .treatmentDate(t.getEndDate().toLocalDate())
+                                .toothId(null)
+                                .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                                .medicalRecordNumber(String.valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                .professorName(t.getProfessor().getPerson().getFullName())
+                                .build());
+                    }
+                }
+
+                groupedTreatments.add(TreatmentReportResponse.GroupedTreatmentResponse.builder()
+                        .treatmentName(treatmentName)
+                        .details(detailResponses)
+                        .build());
+            }
+
+            return List.of(
+                    TreatmentReportResponse.builder()
+                            .studentName(studentName)
+                            .treatments(groupedTreatments)
+                            .build()
+            );
+
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_REPORT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }

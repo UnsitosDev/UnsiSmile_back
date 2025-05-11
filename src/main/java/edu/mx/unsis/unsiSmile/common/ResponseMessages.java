@@ -441,6 +441,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_IN_REVIEW = "Error al obtener el tratamiento en revisión del paciente.";
     public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";
     public static final String TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE = "La fecha de inicio del tratamiento debe ser menor a la fecha de finalización";
+    public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";

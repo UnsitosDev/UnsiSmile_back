@@ -53,6 +53,10 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "GROUP BY t.treatment.name")
     List<Object[]> countAllGeneralScopeTreatments(String status);
 
-
     Long countByStatusAndStatusKey(String status, String statusKey);
+
+    @Query("SELECT t FROM TreatmentDetailModel t " +
+            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A' " +
+            "ORDER BY t.treatment.name")
+    List<TreatmentDetailModel> findByStudentEnrollmentAndStatus(String enrollment, String status);
 }
