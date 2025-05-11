@@ -31,19 +31,28 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
     @Query("SELECT COUNT (*) FROM TreatmentDetailModel t WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
     Long countByStudentAndStatus(String studentEnrollment, String status);
 
-    @Query("select t.treatment.name,CASE WHEN t.treatment.treatmentScope.name = 'Diente' THEN COUNT(tt.idDetailTooth) " +
-            "ELSE COUNT(distinct t.idTreatmentDetail) END as totalCount from TreatmentDetailModel  t " +
-            "left join TreatmentDetailToothModel tt on tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
-            "where t.studentGroup.student.enrollment = ?1 and t.status = ?2 " +
-            "and t.statusKey = 'A' GROUP BY t.treatment.name")
-    List<Object[]> countTreatmentsByStudentGroupedWithTeeth(String studentEnrollment, String status);
+    @Query("SELECT t.treatment.name, COUNT(tt.idDetailTooth) FROM TreatmentDetailModel t " +
+            "LEFT JOIN TreatmentDetailToothModel tt ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name = 'Diente' " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countToothScopeTreatmentsByStudent(String enrollment, String status);
 
-    @Query("SELECT t.treatment.name, CASE WHEN t.treatment.treatmentScope.name = 'Diente' " +
-            "THEN COUNT(tt.idDetailTooth) ELSE COUNT(DISTINCT t.idTreatmentDetail) END AS totalCount " +
-            "FROM TreatmentDetailModel t LEFT JOIN TreatmentDetailToothModel tt " +
-            "ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
-            "WHERE t.status = ?1 AND t.statusKey = 'A' GROUP BY t.treatment.name")
-    List<Object[]> countAllActiveTreatmentsGrouped(String status);
+    @Query("SELECT t.treatment.name, COUNT(DISTINCT t.idTreatmentDetail) FROM TreatmentDetailModel t " +
+            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name <> 'Diente' " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countGeneralScopeTreatmentsByStudent(String enrollment, String status);
+
+    @Query("SELECT t.treatment.name, COUNT(tt.idDetailTooth) FROM TreatmentDetailModel t " +
+            "LEFT JOIN TreatmentDetailToothModel tt ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "WHERE t.status = ?1 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name = 'Diente' " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countAllToothScopeTreatments(String status);
+
+    @Query("SELECT t.treatment.name, COUNT(DISTINCT t.idTreatmentDetail) FROM TreatmentDetailModel t " +
+            "WHERE t.status = ?1 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name <> 'Diente' " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countAllGeneralScopeTreatments(String status);
+
 
     Long countByStatusAndStatusKey(String status, String statusKey);
 }

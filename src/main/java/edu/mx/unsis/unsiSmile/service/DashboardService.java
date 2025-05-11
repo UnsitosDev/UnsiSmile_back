@@ -61,13 +61,13 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
 
-            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGroupedWithTeeth(enrollment, ReviewStatus.FINISHED.toString());
+            List<Object[]> toothScope = treatmentDetailRepository.countToothScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
+            List<Object[]> generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
 
-            TreatmentCountResponse.TreatmentCountResponseBuilder treatmentBuilder = TreatmentCountResponse.builder();
+            Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
 
-            mapTreatmentCountsToBuilder(treatmentCounts, treatmentBuilder);
-
-            builder.treatments(treatmentBuilder.build());
+            TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
+            builder.treatments(treatments);
 
             return builder.build();
         } catch (Exception e) {
@@ -109,13 +109,12 @@ public class DashboardService {
                     .progressingTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_PROGRESS.toString(), Constants.ACTIVE))
                     .inReviewTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_REVIEW.toString(), Constants.ACTIVE));
 
-            List<Object[]> treatmentCounts = treatmentDetailRepository.countAllActiveTreatmentsGrouped(ReviewStatus.FINISHED.toString());
+            List<Object[]> toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED.toString());
+            List<Object[]> generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED.toString());
 
-            TreatmentCountResponse.TreatmentCountResponseBuilder treatmentBuilder = TreatmentCountResponse.builder();
-
-            mapTreatmentCountsToBuilder(treatmentCounts, treatmentBuilder);
-
-            builder.treatments(treatmentBuilder.build());
+            Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+            TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
+            builder.treatments(treatments);
 
             return builder.build();
         } catch (DataAccessException e) {
@@ -184,11 +183,10 @@ public class DashboardService {
         return Pair.of(professorGroups, studentCount);
     }
 
-    private void mapTreatmentCountsToBuilder(List<Object[]> treatmentCounts, TreatmentCountResponse.TreatmentCountResponseBuilder builder) {
-        for (Object[] row : treatmentCounts) {
-            String name = (String) row[0];
-            Long count = (Long) row[1];
+    private TreatmentCountResponse mapToTreatmentCountResponse(Map<String, Long> treatmentCounts) {
+        TreatmentCountResponse.TreatmentCountResponseBuilder builder = TreatmentCountResponse.builder();
 
+        treatmentCounts.forEach((name, count) -> {
             switch (name) {
                 case "Resinas" -> builder.resins(count);
                 case "Profilaxis" -> builder.prophylaxis(count);
@@ -205,6 +203,19 @@ public class DashboardService {
                 case "Pulpotomía y corona" -> builder.pulpotomyAndCrowns(count);
                 case "Pulpectomía y corona" -> builder.pulpectomyAndCrowns(count);
             }
+        });
+
+        return builder.build();
+    }
+
+    private Map<String, Long> mergeTreatmentCounts(List<Object[]> list1, List<Object[]> list2) {
+        Map<String, Long> result = new HashMap<>();
+        for (Object[] row : list1) {
+            result.put((String) row[0], (Long) row[1]);
         }
+        for (Object[] row : list2) {
+            result.merge((String) row[0], (Long) row[1], Long::sum);
+        }
+        return result;
     }
 }
