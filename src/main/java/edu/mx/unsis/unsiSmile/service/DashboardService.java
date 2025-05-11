@@ -49,20 +49,44 @@ public class DashboardService {
             String enrollment = getUserName();
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            return StudentDashboardResponse.builder()
+            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGrouped(enrollment, ReviewStatus.FINISHED.toString());
+
+            StudentDashboardResponse.StudentDashboardResponseBuilder builder = StudentDashboardResponse.builder()
                     .totalPatients(studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE))
                     .patientsWithDisability(studentPatientRepository.countPatientsWithDisabilityByStudent(enrollment, Constants.ACTIVE))
                     .patientsRegisteredLastMonth(studentPatientRepository.countPatientsRegisteredSinceByStudent(enrollment, lastMonthTimestamp, Constants.ACTIVE))
                     .patientsByNationality(convertToMap(studentPatientRepository.countPatientsByNationalityByStudent(enrollment, Constants.ACTIVE)))
                     .patientsUnder18(studentPatientRepository.countPatientsUnder18ByStudent(enrollment, Constants.ACTIVE))
                     .patientsBetween18And60(studentPatientRepository.countPatientsBetween18And60ByStudent(enrollment, Constants.ACTIVE))
-                    .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE))
-                    .build();
+                    .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE));
+
+            for (Object[] row : treatmentCounts) {
+                String name = (String) row[0];
+                Long count = (Long) row[1];
+
+                switch (name) {
+                    case "Resinas" -> builder.resins(count);
+                    case "Profilaxis" -> builder.prophylaxis(count);
+                    case "Fluorosis" -> builder.fluorosis(count);
+                    case "Selladores de fosetas y fisuras" -> builder.pitAndFissureSealers(count);
+                    case "Exodoncias" -> builder.extractions(count);
+                    case "Prótesis removible" -> builder.removableProsthesis(count);
+                    case "Prótesis fija" -> builder.prosthesisRemovable(count);
+                    case "Prostodoncia" -> builder.prosthodontics(count);
+                    case "Endodoncias" -> builder.rootCanals(count);
+                    case "Raspado y alisado" -> builder.scrapedAndSmoothed(count);
+                    case "Cerrado y abierto" -> builder.closedAndOpen(count);
+                    case "Cuña distal" -> builder.distalWedges(count);
+                    case "Pulpotomía y corona" -> builder.pulpotomyAndCrowns(count);
+                    case "Pulpectomía y corona" -> builder.pulpectomyAndCrowns(count);
+                }
+            }
+
+            return builder.build();
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @Transactional(readOnly = true)
     public ProfessorDashboardResponse getProfessorDashboardMetrics() {

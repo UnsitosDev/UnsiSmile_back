@@ -28,4 +28,13 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     Page<TreatmentDetailModel> findAllByProfessorAndStatus(
             ProfessorModel professor, String status, Pageable pageable);
+
+    @Query("SELECT COUNT (*) FROM TreatmentDetailModel t WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
+    Long countActiveTreatmentsByStudentEnrollment(String studentEnrollment, String status);
+
+    @Query("SELECT t.treatment.name, COUNT(*) FROM TreatmentDetailModel t " +
+            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 " +
+            "AND t.statusKey = 'A' " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countTreatmentsByStudentGrouped(String studentEnrollment, String status);
 }
