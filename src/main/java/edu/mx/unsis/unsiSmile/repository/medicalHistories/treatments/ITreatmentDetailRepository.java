@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetailModel, Long> {
@@ -32,16 +31,19 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
     @Query("SELECT COUNT (*) FROM TreatmentDetailModel t WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
     Long countByStudentAndStatus(String studentEnrollment, String status);
 
-    @Query("SELECT t.treatment.name, COUNT(*) FROM TreatmentDetailModel t " +
-            "WHERE t.studentGroup.student.enrollment = ?1 AND t.status = ?2 " +
-            "AND t.statusKey = 'A' " +
-            "GROUP BY t.treatment.name")
-    List<Object[]> countTreatmentsByStudentGrouped(String studentEnrollment, String status);
-
     @Query("select t.treatment.name,CASE WHEN t.treatment.treatmentScope.name = 'Diente' THEN COUNT(tt.idDetailTooth) " +
             "ELSE COUNT(distinct t.idTreatmentDetail) END as totalCount from TreatmentDetailModel  t " +
             "left join TreatmentDetailToothModel tt on tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
             "where t.studentGroup.student.enrollment = ?1 and t.status = ?2 " +
             "and t.statusKey = 'A' GROUP BY t.treatment.name")
     List<Object[]> countTreatmentsByStudentGroupedWithTeeth(String studentEnrollment, String status);
+
+    @Query("SELECT t.treatment.name, CASE WHEN t.treatment.treatmentScope.name = 'Diente' " +
+            "THEN COUNT(tt.idDetailTooth) ELSE COUNT(DISTINCT t.idTreatmentDetail) END AS totalCount " +
+            "FROM TreatmentDetailModel t LEFT JOIN TreatmentDetailToothModel tt " +
+            "ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "WHERE t.status = ?1 AND t.statusKey = 'A' GROUP BY t.treatment.name")
+    List<Object[]> countAllActiveTreatmentsGrouped(String status);
+
+    Long countByStatusAndStatusKey(String status, String statusKey);
 }

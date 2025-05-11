@@ -49,8 +49,6 @@ public class DashboardService {
             String enrollment = getUserName();
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGroupedWithTeeth(enrollment, ReviewStatus.FINISHED.toString());
-
             StudentDashboardResponse.StudentDashboardResponseBuilder builder = StudentDashboardResponse.builder()
                     .totalPatients(studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE))
                     .patientsWithDisability(studentPatientRepository.countPatientsWithDisabilityByStudent(enrollment, Constants.ACTIVE))
@@ -63,27 +61,13 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
 
-            for (Object[] row : treatmentCounts) {
-                String name = (String) row[0];
-                Long count = (Long) row[1];
+            List<Object[]> treatmentCounts = treatmentDetailRepository.countTreatmentsByStudentGroupedWithTeeth(enrollment, ReviewStatus.FINISHED.toString());
 
-                switch (name) {
-                    case "Resinas" -> builder.resins(count);
-                    case "Profilaxis" -> builder.prophylaxis(count);
-                    case "Fluorosis" -> builder.fluorosis(count);
-                    case "Selladores de fosetas y fisuras" -> builder.pitAndFissureSealers(count);
-                    case "Exodoncias" -> builder.extractions(count);
-                    case "Prótesis removible" -> builder.removableProsthesis(count);
-                    case "Prótesis fija" -> builder.prosthesisRemovable(count);
-                    case "Prostodoncia" -> builder.prosthodontics(count);
-                    case "Endodoncias" -> builder.rootCanals(count);
-                    case "Raspado y alisado" -> builder.scrapedAndSmoothed(count);
-                    case "Cerrado y abierto" -> builder.closedAndOpen(count);
-                    case "Cuña distal" -> builder.distalWedges(count);
-                    case "Pulpotomía y corona" -> builder.pulpotomyAndCrowns(count);
-                    case "Pulpectomía y corona" -> builder.pulpectomyAndCrowns(count);
-                }
-            }
+            TreatmentCountResponse.TreatmentCountResponseBuilder treatmentBuilder = TreatmentCountResponse.builder();
+
+            mapTreatmentCountsToBuilder(treatmentCounts, treatmentBuilder);
+
+            builder.treatments(treatmentBuilder.build());
 
             return builder.build();
         } catch (Exception e) {
@@ -113,7 +97,7 @@ public class DashboardService {
         try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            return AdminDashboardResponse.builder()
+            AdminDashboardResponse.AdminDashboardResponseBuilder builder = AdminDashboardResponse.builder()
                     .totalPatients(patientRepository.countTotalPatients(Constants.ACTIVE))
                     .patientsWithDisability(patientRepository.countPatientsWithDisability(Constants.ACTIVE))
                     .patientsRegisteredLastMonth(patientRepository.countPatientsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
@@ -121,7 +105,19 @@ public class DashboardService {
                     .totalStudents(studentRepository.countTotalStudents(Constants.ACTIVE))
                     .studentsRegisteredLastMonth(studentRepository.countStudentsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
                     .totalProfessors(professorRepository.countTotalProfessors(Constants.ACTIVE))
-                    .build();
+                    .rejectedTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.REJECTED.toString(), Constants.ACTIVE))
+                    .progressingTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_PROGRESS.toString(), Constants.ACTIVE))
+                    .inReviewTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_REVIEW.toString(), Constants.ACTIVE));
+
+            List<Object[]> treatmentCounts = treatmentDetailRepository.countAllActiveTreatmentsGrouped(ReviewStatus.FINISHED.toString());
+
+            TreatmentCountResponse.TreatmentCountResponseBuilder treatmentBuilder = TreatmentCountResponse.builder();
+
+            mapTreatmentCountsToBuilder(treatmentCounts, treatmentBuilder);
+
+            builder.treatments(treatmentBuilder.build());
+
+            return builder.build();
         } catch (DataAccessException e) {
             throw new AppException(ResponseMessages.ERROR_ADMIN_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -186,5 +182,29 @@ public class DashboardService {
         Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
 
         return Pair.of(professorGroups, studentCount);
+    }
+
+    private void mapTreatmentCountsToBuilder(List<Object[]> treatmentCounts, TreatmentCountResponse.TreatmentCountResponseBuilder builder) {
+        for (Object[] row : treatmentCounts) {
+            String name = (String) row[0];
+            Long count = (Long) row[1];
+
+            switch (name) {
+                case "Resinas" -> builder.resins(count);
+                case "Profilaxis" -> builder.prophylaxis(count);
+                case "Fluorosis" -> builder.fluorosis(count);
+                case "Selladores de fosetas y fisuras" -> builder.pitAndFissureSealers(count);
+                case "Exodoncias" -> builder.extractions(count);
+                case "Prótesis removible" -> builder.removableProsthesis(count);
+                case "Prótesis fija" -> builder.prosthesisRemovable(count);
+                case "Prostodoncia" -> builder.prosthodontics(count);
+                case "Endodoncias" -> builder.rootCanals(count);
+                case "Raspado y alisado" -> builder.scrapedAndSmoothed(count);
+                case "Cerrado y abierto" -> builder.closedAndOpen(count);
+                case "Cuña distal" -> builder.distalWedges(count);
+                case "Pulpotomía y corona" -> builder.pulpotomyAndCrowns(count);
+                case "Pulpectomía y corona" -> builder.pulpectomyAndCrowns(count);
+            }
+        }
     }
 }
