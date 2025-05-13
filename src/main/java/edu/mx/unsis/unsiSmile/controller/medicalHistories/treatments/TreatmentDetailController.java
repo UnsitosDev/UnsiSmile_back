@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Tag(name = "Treatment Details")
 @RestController
@@ -130,5 +134,17 @@ public class TreatmentDetailController {
                 professorId, pageable);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/reports")
+    public ResponseEntity<List<TreatmentReportResponse>> getTreatmentReport(
+            @RequestParam String enrollment,
+            @RequestParam(required = false) Long semester,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(defaultValue = "FINISHED") ReviewStatus status
+    ) {
+        List<TreatmentReportResponse> report = treatmentDetailService.getReport(enrollment, semester, startDate, endDate, status);
+        return ResponseEntity.ok(report);
     }
 }
