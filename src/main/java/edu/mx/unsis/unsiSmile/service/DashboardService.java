@@ -49,7 +49,7 @@ public class DashboardService {
             String enrollment = getUserName();
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            return StudentDashboardResponse.builder()
+            StudentDashboardResponse.StudentDashboardResponseBuilder builder = StudentDashboardResponse.builder()
                     .totalPatients(studentPatientRepository.countPatientsForStudent(enrollment, Constants.ACTIVE))
                     .patientsWithDisability(studentPatientRepository.countPatientsWithDisabilityByStudent(enrollment, Constants.ACTIVE))
                     .patientsRegisteredLastMonth(studentPatientRepository.countPatientsRegisteredSinceByStudent(enrollment, lastMonthTimestamp, Constants.ACTIVE))
@@ -57,12 +57,23 @@ public class DashboardService {
                     .patientsUnder18(studentPatientRepository.countPatientsUnder18ByStudent(enrollment, Constants.ACTIVE))
                     .patientsBetween18And60(studentPatientRepository.countPatientsBetween18And60ByStudent(enrollment, Constants.ACTIVE))
                     .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE))
-                    .build();
+                    .rejectedTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.REJECTED.toString()))
+                    .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
+                    .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
+
+            List<Object[]> toothScope = treatmentDetailRepository.countToothScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
+            List<Object[]> generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
+
+            Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+
+            TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
+            builder.treatments(treatments);
+
+            return builder.build();
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @Transactional(readOnly = true)
     public ProfessorDashboardResponse getProfessorDashboardMetrics() {
@@ -86,7 +97,7 @@ public class DashboardService {
         try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
-            return AdminDashboardResponse.builder()
+            AdminDashboardResponse.AdminDashboardResponseBuilder builder = AdminDashboardResponse.builder()
                     .totalPatients(patientRepository.countTotalPatients(Constants.ACTIVE))
                     .patientsWithDisability(patientRepository.countPatientsWithDisability(Constants.ACTIVE))
                     .patientsRegisteredLastMonth(patientRepository.countPatientsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
@@ -94,7 +105,18 @@ public class DashboardService {
                     .totalStudents(studentRepository.countTotalStudents(Constants.ACTIVE))
                     .studentsRegisteredLastMonth(studentRepository.countStudentsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
                     .totalProfessors(professorRepository.countTotalProfessors(Constants.ACTIVE))
-                    .build();
+                    .rejectedTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.REJECTED.toString(), Constants.ACTIVE))
+                    .progressingTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_PROGRESS.toString(), Constants.ACTIVE))
+                    .inReviewTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_REVIEW.toString(), Constants.ACTIVE));
+
+            List<Object[]> toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED.toString());
+            List<Object[]> generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED.toString());
+
+            Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+            TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
+            builder.treatments(treatments);
+
+            return builder.build();
         } catch (DataAccessException e) {
             throw new AppException(ResponseMessages.ERROR_ADMIN_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -159,5 +181,41 @@ public class DashboardService {
         Long studentCount = studentGroupRepository.countStudentsByGroupIds(idsGroups);
 
         return Pair.of(professorGroups, studentCount);
+    }
+
+    private TreatmentCountResponse mapToTreatmentCountResponse(Map<String, Long> treatmentCounts) {
+        TreatmentCountResponse.TreatmentCountResponseBuilder builder = TreatmentCountResponse.builder();
+
+        treatmentCounts.forEach((name, count) -> {
+            switch (name) {
+                case "Resinas" -> builder.resins(count);
+                case "Profilaxis" -> builder.prophylaxis(count);
+                case "Fluorosis" -> builder.fluorosis(count);
+                case "Selladores de fosetas y fisuras" -> builder.pitAndFissureSealers(count);
+                case "Exodoncias" -> builder.extractions(count);
+                case "Prótesis removible" -> builder.removableProsthesis(count);
+                case "Prótesis fija" -> builder.prosthesisRemovable(count);
+                case "Prostodoncia" -> builder.prosthodontics(count);
+                case "Endodoncias" -> builder.rootCanals(count);
+                case "Raspado y alisado" -> builder.scrapedAndSmoothed(count);
+                case "Cerrado y abierto" -> builder.closedAndOpen(count);
+                case "Cuña distal" -> builder.distalWedges(count);
+                case "Pulpotomía y corona" -> builder.pulpotomyAndCrowns(count);
+                case "Pulpectomía y corona" -> builder.pulpectomyAndCrowns(count);
+            }
+        });
+
+        return builder.build();
+    }
+
+    private Map<String, Long> mergeTreatmentCounts(List<Object[]> list1, List<Object[]> list2) {
+        Map<String, Long> result = new HashMap<>();
+        for (Object[] row : list1) {
+            result.put((String) row[0], (Long) row[1]);
+        }
+        for (Object[] row : list2) {
+            result.merge((String) row[0], (Long) row[1], Long::sum);
+        }
+        return result;
     }
 }

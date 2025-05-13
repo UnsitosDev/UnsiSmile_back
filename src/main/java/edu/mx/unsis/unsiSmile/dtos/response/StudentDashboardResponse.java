@@ -19,4 +19,8 @@ public class StudentDashboardResponse {
     private Long patientsUnder18;
     private Long patientsBetween18And60;
     private Long patientsOver60;
+    private TreatmentCountResponse treatments;
+    private Long rejectedTreatments;
+    private Long progressingTreatments;
+    private Long inReviewTreatments;
 }
