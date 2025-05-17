@@ -17,6 +17,12 @@ services:
       JWT_SECRET: JSqfAVUtqCf6esHIUJSjNR1g637M7jrz9ggxVUPYziCtA2uHCSb39T3hN1UWlPnLt5Ll/Isu7btUV90/e411VuvMWd4kjC8bxmnhLaEjWzNa5y1MtKgeGfZfUdq3vU9LxrmnAjgcz5iDignW7y3nuXvppK9eSjg5AbUvxO+fNRqPlb93Zmf2EqHvxX89RGmxoWtPYCkvIh8tL+YSLucZH/IiyQIexMP0QzATRWdapmg9vXNerHxmipbzPU6LYWNbU4s4vxgSFDO65iz2Lstq9OAyA1hvzdrWArzRndoZWG9UW+EVhbQfwfsB/T4MNHzdrVZzK2kbSNr/UdTgjM3lIA==
 
       FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
+
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: example@gmail.com
+      MAIL_PASSWORD: example
+      MAIL_SSL_TRUST: smtp.gmail.com
     networks:
       - unsismile_network
     volumes:
