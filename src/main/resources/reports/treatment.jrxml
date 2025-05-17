@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17c48516-a2c8-4c84-a546-8f0e9acbf613">
+	<!-- Mantener estilos existentes -->
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#FCFCFC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Dataset1" uuid="a26b0338-6ae4-4278-ba6f-eb374e262a60">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+	</subDataset>
+	<subDataset name="Empty Dataset1" uuid="2c2ca3b2-c756-4a9b-8515-b6d126240c1d"/>
+	<subDataset name="Dataset2" uuid="8718a080-8d3e-49c5-9010-babae8185fee">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<parameter name="teeth" class="java.lang.String"/>
+		<parameter name="creationDate" class="java.lang.String"/>
+		<parameter name="patientName" class="java.lang.String"/>
+		<parameter name="patientClinicalHistoryId" class="java.lang.Integer"/>
+		<parameter name="professorName" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="teeth" class="java.lang.String"/>
+		<field name="creationDate" class="java.lang.String"/>
+		<field name="patientName" class="java.lang.String"/>
+		<field name="patientClinicalHistoryId" class="java.lang.String"/>
+		<field name="professorName" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="nameStudent" class="java.lang.String"/>
+	<parameter name="group" class="java.lang.String"/>
+	
+	<!-- Definir los campos que vienen en cada registro del datasource -->
+	<field name="teeth" class="java.lang.String"/>
+	<field name="creationDate" class="java.lang.String"/>
+	<field name="patientName" class="java.lang.String"/>
+	<field name="patientClinicalHistoryId" class="java.lang.String"/>
+	<field name="professorName" class="java.lang.String"/>
+	
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement x="152" y="3" width="250" height="30" uuid="ff1ef57f-87d2-4825-8166-3eae59a4b89f"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Universidad de la Sierra Sur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="36" width="196" height="24" uuid="d3ce1952-d286-4bb2-a0a5-9060e40ecc8d"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Licenciatura en odontología]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="122" splitType="Stretch">
+			<staticText>
+				<reportElement x="134" y="3" width="290" height="59" uuid="e932e730-3e1e-4d74-b340-4902d36a2d2b"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[CONTROL DE TRATAMIENTOS OPERATORIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="57" width="120" height="20" uuid="d499ca7f-eadb-4c3d-b99c-d39676190edb"/>
+				<textElement textAlignment="Center" rotation="None">
+					<font size="13" isUnderline="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[RESINAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="90" width="120" height="20" uuid="b59d2d5a-c1f0-4bdf-a1e3-7d65253210d3"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Nombre del alumno:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="91" width="120" height="20" uuid="3440a1e1-2067-4953-a3db-1fd85f08f39e"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Grupo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="148" y="92" width="252" height="18" uuid="01e07754-8b93-4e29-b10e-d56f2f6325f6"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[_______________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="92" width="112" height="18" uuid="5d46b924-868d-42c0-acaa-abb89cd0dc0e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[_______________________________________________________________]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="152" y="91" width="248" height="20" uuid="d4511013-4ae0-4862-a2ce-33fc105c886b"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{nameStudent}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="92" width="100" height="18" uuid="994d045c-b51b-4339-975f-94a0c98e3692"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{group}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="10" width="60" height="30" uuid="243a193c-8125-4c78-a2c0-f2a2965d3e98"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Organo dentario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="10" width="70" height="30" uuid="47d4c7a5-7d10-4e9c-bf4e-50ae4306a504"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de tratamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="10" width="170" height="30" uuid="b062d3c4-541c-4af5-850e-7b9795676e18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de paciente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="10" width="70" height="30" uuid="670406c3-bb06-4eba-88f5-85427d2ef6ff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de expediente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="10" width="140" height="30" uuid="68ccc37c-4472-4f34-a037-4d0b8b51ad16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profesor a cargo]]></text>
+			</staticText>
+			<line>
+				<reportElement x="20" y="39" width="510" height="1" uuid="71e666a9-b1b9-47b0-bf3d-86603052e738"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="20" y="0" width="60" height="30" uuid="4d268a52-34ab-44b7-885a-9b24002f310b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{teeth}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="80" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="150" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="320" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="140" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{professorName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="20" y="29" width="510" height="1" uuid="b7ced32e-5af8-4578-b9c5-c749f79335ac"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="30" y="15" width="134" height="19" uuid="d2d60626-4c3b-443d-9aad-2243c4b18d74"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Firma del alumno ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="15" width="152" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Firma del jefe de clinica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="15" width="134" height="19" uuid="9d2a2996-1719-4758-beb0-466f243eb71f"/>
+				<textElement>
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Sello de la clinica]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

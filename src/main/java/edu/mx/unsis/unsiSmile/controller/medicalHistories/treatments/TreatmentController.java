@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TreatmentController {
 
     private final TreatmentService treatmentService;
+    private final TreatmentReportService treatmentReportService;
 
     @Operation(summary = "Crea un nuevo tratamiento")
     @PostMapping
@@ -70,5 +73,14 @@ public class TreatmentController {
     public ResponseEntity<Void> deleteTreatmentById(@PathVariable Long id) {
         treatmentService.deleteTreatmentById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Genera un reporte PDF de tratamientos para un estudiante")
+    @GetMapping("/reports/students/{idStudent}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_PROFESSOR') or hasRole('ROLE_STUDENT')")
+    public ResponseEntity<byte[]> getTreatmentReportByStudent(
+            @PathVariable String idStudent,
+            @RequestParam(required = false) Long idTreatment) {
+        return treatmentReportService.generateTreatmentReportByStudent(idStudent, idTreatment);
     }
 }
