@@ -477,4 +477,10 @@ public class ResponseMessages {
     public static final String NOTIFICATION_SEND_ERROR = "Error al enviar la notificación";
     public static final String REVIEW_STATUS_UPDATE_ERROR = "Error al actualizar el estado de revisión";
 
+    // Emails
+    public static final String EMAIL_SEND_ERROR = "Error al enviar el correo";
+    public static final String EMAIL_SUBJECT_CANNOT_BE_NULL = "El asunto del correo no puede ser nulo";
+    public static final String EMAIL_BODY_CANNOT_BE_NULL = "El cuerpo del correo no puede ser nulo";
+    public static final String EMAIL_RECIPIENTS_CANNOT_BE_NULL = "La lista de destinatarios no puede ser nula";
+    public static final String INVALID_EMAIL_ADDRESS = "Dirección de correo inválida";
 }
