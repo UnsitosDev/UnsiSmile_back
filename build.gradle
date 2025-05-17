@@ -95,6 +95,9 @@ dependencies {
     // Dependencias adicionales para resolver conflictos
     implementation('com.itextpdf:itext-asian:5.2.0')
     implementation('org.olap4j:olap4j:1.2.0')
+
+    // Email
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 bootBuildImage {
