@@ -26,6 +26,7 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaReposi
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
 import edu.mx.unsis.unsiSmile.service.reports.ProgressNoteReportParameters;
@@ -62,6 +63,7 @@ public class ProgressNoteService {
     private final UserService userService;
     private final ProgressNoteFileMapper progressNoteFileMapper;
     private final JasperReportService jasperReportService;
+    private final FileService fileService;
 
     @Transactional
     public ProgressNoteResponse createProgressNote(@NonNull ProgressNoteRequest request) {
@@ -161,9 +163,11 @@ public class ProgressNoteService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadProgressNoteById(String id) {
+    public ResponseEntity<byte[]> buildProgressNotePdfById(String id) {
         ProgressNoteModel progressNote = progressNoteRepository.findById(id)
-                .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(
+                        String.format(ResponseMessages.PROGRESS_NOTE_NOT_FOUND, id),
+                        HttpStatus.NOT_FOUND));
 
         PatientModel patient = progressNote.getPatient();
         
@@ -231,5 +235,22 @@ public class ProgressNoteService {
     private PatientModel getPatientById(String patientId) {
         return patientRepository.findById(patientId)
                 .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con ID: " + patientId, HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional
+    public ResponseEntity<byte[]> downloadProgressNoteFile(String id) {
+        try {
+            ProgressNoteFileModel progressNoteFile = progressNoteFileRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ResponseMessages.FILE_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            String filePath = progressNoteFile.getUrl();
+            String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+
+            return fileService.buildFileDownloadResponse(filePath, fileName);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.ERROR_WHILE_DOWNLOAD_FILE, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
