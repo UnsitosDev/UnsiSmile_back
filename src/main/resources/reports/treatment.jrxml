@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.21.3.final using JasperReports Library version 6.21.3-4a3078d20785ebe464f18037d738d12fc98c13cf  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17c48516-a2c8-4c84-a546-8f0e9acbf613">
-	<!-- Mantener estilos existentes -->
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -135,14 +134,12 @@
 	</subDataset>
 	<parameter name="nameStudent" class="java.lang.String"/>
 	<parameter name="group" class="java.lang.String"/>
-	
-	<!-- Definir los campos que vienen en cada registro del datasource -->
+	<parameter name="treatment" class="java.lang.String"/>
 	<field name="teeth" class="java.lang.String"/>
 	<field name="creationDate" class="java.lang.String"/>
 	<field name="patientName" class="java.lang.String"/>
 	<field name="patientClinicalHistoryId" class="java.lang.String"/>
 	<field name="professorName" class="java.lang.String"/>
-	
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -174,14 +171,7 @@
 				<text><![CDATA[CONTROL DE TRATAMIENTOS OPERATORIA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="223" y="57" width="120" height="20" uuid="d499ca7f-eadb-4c3d-b99c-d39676190edb"/>
-				<textElement textAlignment="Center" rotation="None">
-					<font size="13" isUnderline="true" isStrikeThrough="false"/>
-				</textElement>
-				<text><![CDATA[RESINAS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="30" y="90" width="120" height="20" uuid="b59d2d5a-c1f0-4bdf-a1e3-7d65253210d3"/>
+				<reportElement x="25" y="90" width="139" height="20" uuid="b59d2d5a-c1f0-4bdf-a1e3-7d65253210d3"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
@@ -213,6 +203,13 @@
 				<reportElement x="441" y="92" width="100" height="18" uuid="994d045c-b51b-4339-975f-94a0c98e3692"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$P{group}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="52" width="185" height="30" uuid="85cdd326-f1b9-4d27-a6e7-8a9eb3ec07be"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{treatment}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -303,7 +300,7 @@
 				<text><![CDATA[Firma del alumno ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="198" y="15" width="152" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
+				<reportElement x="198" y="15" width="182" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
