@@ -302,6 +302,8 @@ public class ResponseMessages {
     public static final String FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS = "Error al obtener las historias clínicas del paciente.";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
+    public static final String MEDICAL_RECORD_NOT_FOUND = "No se encontró historia clínica del tipo %s para el paciente con ID %s";
+    public static final String ERROR_FETCHING_MEDICAL_RECORD = "Error al obtener la historia clínica por tipo y paciente";
 
 
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
