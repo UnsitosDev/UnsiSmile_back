@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCata
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistoryCatalogService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
@@ -95,5 +96,14 @@ public class ClinicalHistoryCatalogController {
     ) {
         ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Obtiene una historia clínica por tipo de HC y paciente.")
+    @GetMapping("/catalog/{medicalRecord}/patients/{idPatient}")
+    public ResponseEntity<ClinicalHistoryCatalogResponse> findByMedicalRecordAndPatient(
+            @PathVariable EMedicalRecords medicalRecord,
+            @PathVariable String idPatient) {
+        ClinicalHistoryCatalogResponse response = clinicalHistoryCatalogService.findByMedicalRecordAndPatient(medicalRecord, idPatient);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
