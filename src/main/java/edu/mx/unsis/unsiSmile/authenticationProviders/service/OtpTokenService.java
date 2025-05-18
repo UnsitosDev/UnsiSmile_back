@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.OtpValidationRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.OtpValidationResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.OtpTokenModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.IOtpTokenRepository;
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.EmailRequest;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -63,6 +64,12 @@ public class OtpTokenService {
             OtpTokenModel token = otpTokenRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new AppException(ResponseMessages.OTP_NOT_FOUND, HttpStatus.NOT_FOUND));
 
+            if (!token.getCode().equals(request.getOtp())) {
+                token.setAttempts((byte) (token.getAttempts() + 1));
+                otpTokenRepository.save(token);
+                throw new AppException(ResponseMessages.INVALID_OTP_CODE, HttpStatus.UNAUTHORIZED);
+            }
+
             if (token.isUsed()) {
                 throw new AppException(ResponseMessages.OTP_ALREADY_USED, HttpStatus.UNAUTHORIZED);
             }
@@ -71,17 +78,12 @@ public class OtpTokenService {
                 throw new AppException(ResponseMessages.OTP_TOO_MANY_ATTEMPTS, HttpStatus.UNAUTHORIZED);
             }
 
-            if (!token.getCode().equals(request.getOtp())) {
-                token.setAttempts((byte) (token.getAttempts() + 1));
-                otpTokenRepository.save(token);
-                throw new AppException(ResponseMessages.INVALID_OTP_CODE, HttpStatus.UNAUTHORIZED);
-            }
-
             if (token.getExpiresAt().isBefore(LocalDateTime.now())) {
                 throw new AppException(ResponseMessages.OTP_CODE_EXPIRED, HttpStatus.UNAUTHORIZED);
             }
 
             token.setUsed(true);
+            token.setValidatedAt(LocalDateTime.now());
             otpTokenRepository.save(token);
 
             return OtpValidationResponse.builder()
@@ -91,7 +93,7 @@ public class OtpTokenService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.OTP_CODE_VALIDATION_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

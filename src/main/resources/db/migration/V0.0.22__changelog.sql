@@ -8,6 +8,7 @@ CREATE TABLE otp_tokens (
     attempts TINYINT DEFAULT 0 NOT NULL,     -- Intentos fallidos
 
     email VARCHAR(255) NOT NULL,
+    validated_at TIMESTAMP DEFAULT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.authenticationProviders.controller;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.*;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.service.AuthService;
+import edu.mx.unsis.unsiSmile.authenticationProviders.service.OtpTokenService;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
+    private final OtpTokenService otpTokenService;
 
     /**
      * Inicia sesión en la aplicación.
@@ -78,4 +80,11 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
+    @Operation(summary = "Valida el código OTP para recuperación de contraseña")
+    @PostMapping("/password/validate-otp")
+    public ResponseEntity<OtpValidationResponse> validateOtp(
+            @RequestBody @Valid OtpValidationRequest request) {
+        OtpValidationResponse response = otpTokenService.validateCode(request);
+        return ResponseEntity.ok(response);
+    }
 }

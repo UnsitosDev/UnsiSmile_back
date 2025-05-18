@@ -38,6 +38,9 @@ public class OtpTokenModel {
     @Column(name = "email", length = 255, nullable = false)
     private String email;
 
+    @Column(name = "validated_at", updatable = false)
+    private LocalDateTime validatedAt;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
