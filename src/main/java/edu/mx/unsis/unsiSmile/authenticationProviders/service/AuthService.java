@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepository;
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +41,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final UserService userService;
+    private final OtpTokenService otpTokenService;
 
     public ResponseEntity<ApiResponse<Object>> login(LoginRequest request) {
 
@@ -179,12 +182,12 @@ public class AuthService {
         try {
             ResponseEntity<?> userInformation = userService.getInformationUser(username);
 
-            String defaultPassword = getString(userInformation);
+            PersonResponse person = getPersonResponse(userInformation);
 
             UserModel user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException(ResponseMessages.USER_NOT_FOUND));
 
-            String encodedPassword = passwordEncoder.encode(defaultPassword);
+            String encodedPassword = passwordEncoder.encode(person.getCurp());
 
             user.setPassword(encodedPassword);
             user.setFirstLogin(true);
@@ -194,14 +197,14 @@ public class AuthService {
         }
     }
 
-    private static String getString(ResponseEntity<?> userInformation) {
+    private static PersonResponse getPersonResponse(ResponseEntity<?> userInformation) {
         Object associatedPerson = userInformation.getBody();
 
         if (associatedPerson == null) {
             throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        PersonResponse person = switch (associatedPerson) {
+        return switch (associatedPerson) {
             case ProfessorResponse professorResponse -> professorResponse.getPerson();
 
             case StudentResponse studentResponse -> studentResponse.getPerson();
@@ -211,7 +214,18 @@ public class AuthService {
 
             default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
         };
-
-        return person.getCurp();
     }
+
+    @Transactional
+    public void sendRecoveryCode(String email) {
+        try {
+            String subject = Constants.RECOVERY_PASSWORD_SUBJECT;
+            String textBody = Constants.RECOVERY_PASSWORD_TEXT_BODY;
+
+            otpTokenService.generateAndSendOtp(email, subject, Constants.RECOVERY_PASSWORD, textBody, null);
+        } catch (AppException e) {
+            throw e;
+        }
+    }
+
 }

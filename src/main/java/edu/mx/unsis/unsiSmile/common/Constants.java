@@ -22,4 +22,9 @@ public class Constants {
     public static final String TOOTH = "Diente";
 
     public static final String GENERAL_MEDICAL_RECORD = "General";
+
+    // Email
+    public static final String RECOVERY_PASSWORD = "RECOVERY PASSWORD";
+    public static final String RECOVERY_PASSWORD_SUBJECT = "Recuperación de contraseña";
+    public static final String RECOVERY_PASSWORD_TEXT_BODY = "Tu código de recuperación es: {code}\nEste código expirará en 10 minutos.";
 }
