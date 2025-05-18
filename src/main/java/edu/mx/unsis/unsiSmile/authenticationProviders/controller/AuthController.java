@@ -87,4 +87,12 @@ public class AuthController {
         OtpValidationResponse response = otpTokenService.validateCode(request);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Establece una nueva contraseña después de validar el código OTP")
+    @PatchMapping("/password/recovery")
+    public ResponseEntity<Void> setNewPassword(
+            @RequestBody @Valid NewPasswordRequest request) {
+        authService.updatePasswordWithRecovery(request);
+        return ResponseEntity.ok().build();
+    }
 }

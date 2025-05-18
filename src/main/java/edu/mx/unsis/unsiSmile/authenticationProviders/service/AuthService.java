@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.authenticationProviders.service;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.NewPasswordRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.JwtService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
@@ -228,4 +229,33 @@ public class AuthService {
         }
     }
 
+    @Transactional
+    public void updatePasswordWithRecovery(NewPasswordRequest request) {
+        try {
+            otpTokenService.verifyPreviouslyValidatedOtp(request.getEmail(), request.getOtp(), Constants.RECOVERY_PASSWORD);
+
+            UserModel user = userRepository.findByUsername(request.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException(ResponseMessages.USER_NOT_FOUND));
+
+            ResponseEntity<?> userInformation = userService.getInformationUser(request.getUsername());
+
+            PersonResponse person = getPersonResponse(userInformation);
+
+            if (!person.getEmail().equals(request.getEmail())) {
+                throw new AppException(ResponseMessages.EMAIL_NOT_MATCH, HttpStatus.BAD_REQUEST);
+            }
+
+            validatePasswordsMatch(request.getNewPassword(), request.getConfirmNewPassword());
+            validateNewPassword(user, request.getNewPassword());
+
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            user.setFirstLogin(false);
+
+            userRepository.save(user);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.ERROR_RECOVERING_PASSWORD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

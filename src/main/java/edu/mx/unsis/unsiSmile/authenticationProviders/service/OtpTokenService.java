@@ -114,4 +114,26 @@ public class OtpTokenService {
                 .htmlBody(htmlBody)
                 .build();
     }
+
+    @Transactional(readOnly = true)
+    public void verifyPreviouslyValidatedOtp(String email, String otp, String purpose) {
+        try {
+            OtpTokenModel token = otpTokenRepository.findByEmailAndPurpose(email, Constants.RECOVERY_PASSWORD)
+                    .orElseThrow(() -> new AppException(ResponseMessages.OTP_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            if (!token.isUsed() || token.getValidatedAt() == null) {
+                throw new AppException(ResponseMessages.OTP_CODE_NOT_VALIDATED, HttpStatus.UNAUTHORIZED);
+            }
+
+            if (!token.getCode().equals(otp)) {
+                throw new AppException(ResponseMessages.OTP_CODE_NOT_MATCH, HttpStatus.UNAUTHORIZED);
+            }
+
+            if (token.getValidatedAt().isBefore(LocalDateTime.now().minusMinutes(5))) {
+                throw new AppException(ResponseMessages.OTP_CODE_VALIDATION_EXPIRED, HttpStatus.UNAUTHORIZED);
+            }
+        } catch (AppException e) {
+            throw e;
+        }
+    }
 }

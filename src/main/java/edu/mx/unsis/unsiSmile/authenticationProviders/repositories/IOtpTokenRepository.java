@@ -10,4 +10,6 @@ public interface IOtpTokenRepository extends JpaRepository<OtpTokenModel, String
     Optional<OtpTokenModel> findByCode(String token);
 
     Optional<OtpTokenModel> findByEmail(String email);
+
+    Optional<OtpTokenModel> findByEmailAndPurpose(String email, String purpose);
 }
