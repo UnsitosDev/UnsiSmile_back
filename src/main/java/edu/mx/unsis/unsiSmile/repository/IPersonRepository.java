@@ -14,4 +14,6 @@ public interface IPersonRepository extends JpaRepository<PersonModel, String> {
     
     @Query("SELECT p FROM PersonModel p WHERE p.curp = :curp AND p.statusKey = 'A'")
     Optional<PersonModel> findByCurp(@Param("curp") String curp);
+
+    boolean existsByEmail(String email);
 }

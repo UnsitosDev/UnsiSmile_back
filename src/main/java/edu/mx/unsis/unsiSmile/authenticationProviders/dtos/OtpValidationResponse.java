@@ -1,0 +1,15 @@
+package edu.mx.unsis.unsiSmile.authenticationProviders.dtos;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class OtpValidationResponse {
+    private boolean valid;
+    private String message;
+}
