@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
@@ -37,6 +38,7 @@ public class TreatmentReportService {
     private final TreatmentDetailService treatmentDetailService;
     private final IStudentRepository studentRepository;
     private final JasperReportService jasperReportService;
+    private final TreatmentService treatmentService;
 
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> generateTreatmentReportByStudent(String idStudent, Long idTreatment) {
@@ -47,6 +49,17 @@ public class TreatmentReportService {
 
             // Por el momento, establecemos el grupo como "N/A"
             String groupCode = "N/A";
+
+            // Obtenemos el nombre del tratamiento si se proporciona un idTreatment
+            String treatmentName = "TODOS LOS TRATAMIENTOS";
+            if (idTreatment != null) {
+                try {
+                    TreatmentResponse treatment = treatmentService.getTreatmentById(idTreatment);
+                    treatmentName = treatment.getName().toUpperCase();
+                } catch (Exception e) {
+                    // Si no se puede obtener el tratamiento, mantenemos el valor por defecto
+                }
+            }
 
             // Obtenemos todos los tratamientos del estudiante (sin paginación)
             Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudent(
@@ -61,6 +74,10 @@ public class TreatmentReportService {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("nameStudent", student.getPerson().getFullName());
             parameters.put("group", groupCode);
+            parameters.put("treatment", treatmentName);
+            
+            // Agregamos el logo
+            parameters.put("logo", new ClassPathResource("reports/logo.png").getInputStream());
 
             // Generamos el PDF
             byte[] pdfBytes = generatePdfReport(parameters, reportDataList);
@@ -91,7 +108,7 @@ public class TreatmentReportService {
             if (treatment.getTeeth() != null && !treatment.getTeeth().isEmpty()) {
                 for (TreatmentDetailToothResponse tooth : treatment.getTeeth()) {
                     Map<String, Object> item = new HashMap<>();
-                    item.put("teeth", tooth.getIdTooth());
+                    item.put("teeth", tooth.getIdTooth()); // Usamos el ID del diente directamente
                     item.put("creationDate", treatment.getEndDate() != null ? 
                             treatment.getEndDate().format(dateFormatter) : "");
                     item.put("patientName", treatment.getPatientName());
@@ -100,9 +117,9 @@ public class TreatmentReportService {
                     dataList.add(item);
                 }
             } else {
-                // Si no tiene dientes, creamos una sola entrada para el tratamiento
+                // Si no tiene dientes, creamos una sola entrada vacía para el tratamiento
                 Map<String, Object> item = new HashMap<>();
-                item.put("teeth", "N/A");
+                item.put("teeth", "N/A"); // Dejamos el campo vacío en lugar de "N/A"
                 item.put("creationDate", treatment.getEndDate() != null ? 
                         treatment.getEndDate().format(dateFormatter) : "");
                 item.put("patientName", treatment.getPatientName());

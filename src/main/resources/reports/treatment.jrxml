@@ -132,6 +132,7 @@
 		<field name="patientClinicalHistoryId" class="java.lang.String"/>
 		<field name="professorName" class="java.lang.String"/>
 	</subDataset>
+	<parameter name="logo" class="java.io.InputStream"/>
 	<parameter name="nameStudent" class="java.lang.String"/>
 	<parameter name="group" class="java.lang.String"/>
 	<parameter name="treatment" class="java.lang.String"/>
@@ -159,6 +160,10 @@
 				</textElement>
 				<text><![CDATA[Licenciatura en odontología]]></text>
 			</staticText>
+			<image>
+				<reportElement x="29" y="0" width="106" height="66" uuid="e60e119c-99ad-4954-bd9e-45e30f22ce94"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
