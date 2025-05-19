@@ -25,6 +25,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,12 +113,13 @@ public class DentalProphylaxisService {
         List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions = dentalProphylaxisRepository
                 .findToothFaceConditionsAssignmentByProphylaxisId(dentalProphylaxisId);
 
-        return buildDentalProphylaxisResponse(dentalProphylaxisId, dentalProphylaxisModel.getCreatedAt(), toothConditionAssignments, toothFaceConditions);
+        return buildDentalProphylaxisResponse(dentalProphylaxisId, dentalProphylaxisModel.getCreatedAt(), dentalProphylaxisModel.getPercentage(), toothConditionAssignments, toothFaceConditions);
     }
 
     private DentalProphylaxisResponse buildDentalProphylaxisResponse(
             Long dentalProphylaxisId,
             Timestamp createdAt,
+            BigDecimal percentage,
             List<ProphylaxisToothConditionAssignmentModel> toothConditionAssignments,
             List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions) {
 
@@ -164,6 +166,7 @@ public class DentalProphylaxisService {
         return DentalProphylaxisResponse.builder()
                 .idDentalProphylaxis(dentalProphylaxisId)
                 .creationDate(createdAt.toLocalDateTime().toLocalDate())
+                .percentage(percentage)
                 .teethProphylaxis(teethProphylaxisList)
                 .build();
     }
@@ -181,7 +184,7 @@ public class DentalProphylaxisService {
                 List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions = dentalProphylaxisRepository
                         .findToothFaceConditionsAssignmentByProphylaxisId(dentalProphylaxisId);
 
-                return buildDentalProphylaxisResponse(dentalProphylaxisId,dentalProphylaxisModel.getCreatedAt(), toothConditionAssignments, toothFaceConditions);
+                return buildDentalProphylaxisResponse(dentalProphylaxisId, dentalProphylaxisModel.getCreatedAt(), dentalProphylaxisModel.getPercentage(), toothConditionAssignments, toothFaceConditions);
             });
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);

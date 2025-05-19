@@ -20,6 +20,7 @@ CREATE TABLE dental_prophylaxis (
     id_dental_prophylaxis BIGINT AUTO_INCREMENT PRIMARY KEY,
     fk_patient CHAR(36) NOT NULL,
     fk_form_section BIGINT NOT NULL,
+    percentage DECIMAL(5, 2) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,

@@ -316,6 +316,8 @@ public class ResponseMessages {
     public static final String QUESTION_ID_CANNOT_BE_NULL = "El ID de la pregunta no puede ser nulo";
     public static final String CLINICAL_HISTORY_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
     public static final String FORM_SECTION_ID_CANNOT_BE_NULL = "El ID de la sección del formulario no puede ser nulo";
+    public static final String PERCENTAGE_MIN_VALUE_ERROR = "El porcentaje debe ser mínimo 0%";
+    public static final String PERCENTAGE_MAX_VALUE_ERROR = "El porcentaje debe ser máximo 100%";
 
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS = "Error al obtener la profilaxis dental";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "No se encontró la profilaxis dental con ID: ";
