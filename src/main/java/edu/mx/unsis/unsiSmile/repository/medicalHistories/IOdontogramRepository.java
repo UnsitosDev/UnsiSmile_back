@@ -28,10 +28,11 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
     List<ToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByOdontogramId(Long odontogramId);
 
     // Buscar por ID de detalle de tratamiento
-    List<OdontogramModel> findByTreatmentDetail_IdTreatmentDetail(Long idTreatmentDetail);
+    @Query("SELECT o FROM OdontogramModel o WHERE o.treatmentDetail.idTreatmentDetail = :idTreatmentDetail ORDER BY o.createdAt DESC")
+    List<OdontogramModel> findByTreatmentDetail_IdTreatmentDetailOrderByCreatedAtAsc(@Param("idTreatmentDetail") Long idTreatmentDetail);
 
     // Obtener último odontograma por detalle de tratamiento ordenado por fecha de creación
-    @Query("SELECT o FROM OdontogramModel o WHERE o.treatmentDetail.idTreatmentDetail = :idTreatmentDetail ORDER BY o.createdAt DESC")
+    @Query("SELECT o FROM OdontogramModel o WHERE o.treatmentDetail.idTreatmentDetail = :idTreatmentDetail ORDER BY o.createdAt DESC limit 1")
     Optional<OdontogramModel> findLastOdontogramByTreatmentDetailId(@Param("idTreatmentDetail") Long idTreatmentDetail);
 
 

@@ -60,18 +60,6 @@ public class OdontogramService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<OdontogramSimpleResponse> getAllOdontograms() {
-        try {
-            List<OdontogramModel> allOdontograms = odontogramRepository.findAll();
-            return allOdontograms.stream()
-                    .map(odontogramSimpleMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch odontograms", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
     @Transactional
     public OdontogramResponse updateOdontogram(@NonNull Long id, @NonNull OdontogramRequest updatedOdontogramRequest) {
         try {
@@ -156,7 +144,7 @@ public class OdontogramService {
     public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long treatmentDetailsId) {
         try {
             List<OdontogramModel> odontograms = odontogramRepository
-                    .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailsId);
+                    .findByTreatmentDetail_IdTreatmentDetailOrderByCreatedAtAsc(treatmentDetailsId);
             return odontograms.stream()
                     .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());

@@ -35,12 +35,6 @@ public class OdontogramController {
         return ResponseEntity.ok(odontogramResponse);
     }
 
-    @GetMapping
-    public ResponseEntity<List<OdontogramSimpleResponse>> getAllOdontograms() {
-        List<OdontogramSimpleResponse> allOdontograms = odontogramService.getAllOdontograms();
-        return ResponseEntity.ok(allOdontograms);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<OdontogramResponse> updateOdontogram(@Valid @PathVariable Long id,
             @Valid @RequestBody OdontogramRequest updateRequest) {
