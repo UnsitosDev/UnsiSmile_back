@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -33,16 +34,14 @@ import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,26 +127,6 @@ public class TreatmentDetailService {
 
     private TreatmentDetailResponse toDto(TreatmentDetailModel treatmentDetailModel) {
         TreatmentDetailResponse treatmentDetail = treatmentDetailMapper.toDto(treatmentDetailModel);
-
-        String professorName = Optional.ofNullable(treatmentDetailModel.getProfessor())
-                .map(ProfessorModel::getPerson)
-                .map(PersonModel::getFullName)
-                .orElse(null);
-        treatmentDetail.setProfessorName(professorName);
-
-        String patientName = Optional.ofNullable(treatmentDetailModel.getPatientClinicalHistory())
-                .map(PatientClinicalHistoryModel::getPatient)
-                .map(PatientModel::getPerson)
-                .map(PersonModel::getFullName)
-                .orElse(null);
-        treatmentDetail.setPatientName(patientName);
-
-        String studentName = Optional.ofNullable(treatmentDetailModel.getStudentGroup())
-                .map(StudentGroupModel::getStudent)
-                .map(StudentModel::getPerson)
-                .map(PersonModel::getFullName)
-                .orElse(null);
-        treatmentDetail.setStudentName(studentName);
 
         if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
             treatmentDetail.setTeeth(
@@ -279,7 +258,11 @@ public class TreatmentDetailService {
                         .findAllByStudentGroupIn(studentGroups, pageable);
             }
 
-            return page.map(this::toDto);
+            List<TreatmentDetailResponse> allResponses = page.getContent().stream()
+                    .flatMap(model -> toDtoList(model).stream())
+                    .collect(Collectors.toList());
+
+            return new PageImpl<>(allResponses, pageable, allResponses.size());
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -503,5 +486,25 @@ public class TreatmentDetailService {
                             (treatmentDate.isEqual(endDate) || treatmentDate.isBefore(endDate));
                 })
                 .collect(Collectors.toList());
+    }
+
+    private List<TreatmentDetailResponse> toDtoList(TreatmentDetailModel treatmentDetailModel) {
+        if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
+            List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
+                    treatmentDetailModel.getIdTreatmentDetail()
+            );
+
+            return teeth.stream()
+                    .map(tooth -> {
+                        TreatmentDetailResponse response = treatmentDetailMapper.toDto(treatmentDetailModel);
+                        response.setTeeth(List.of(tooth));
+                        return response;
+                    })
+                    .collect(Collectors.toList());
+        } else {
+            TreatmentDetailResponse response = treatmentDetailMapper.toDto(treatmentDetailModel);
+            response.setTeeth(null);
+            return Collections.singletonList(response);
+        }
     }
 }

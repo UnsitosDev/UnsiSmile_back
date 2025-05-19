@@ -39,7 +39,7 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                 .idTreatment(entity.getIdTreatment())
                 .name(entity.getName())
                 .treatmentScope(treatmentScopeMapper.toDto(entity.getTreatmentScope()))
-                .cost(entity.getCost())
+                .cost(entity.getCost() != null ? entity.getCost() : BigDecimal.ZERO)
                 .clinicalHistoryCatalogId(entity.getClinicalHistoryCatalog() != null ?
                         entity.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog() : null)
                 .clinicalHistoryCatalogName(entity.getClinicalHistoryCatalog() != null ?
