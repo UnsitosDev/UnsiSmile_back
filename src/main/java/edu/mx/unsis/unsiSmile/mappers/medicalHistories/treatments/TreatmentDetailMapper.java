@@ -43,6 +43,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .patient(TreatmentDetailResponse.PatientResponse.builder()
                         .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                         .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                        .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
                         .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                         .build())
                 .professor(entity.getProfessor() != null ?

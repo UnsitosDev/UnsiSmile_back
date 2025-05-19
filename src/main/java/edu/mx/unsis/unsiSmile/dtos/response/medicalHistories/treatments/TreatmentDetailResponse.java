@@ -33,6 +33,7 @@ public class TreatmentDetailResponse {
     public static class PatientResponse {
         private String id;
         private String name;
+        private Long medicalRecordNumber;
         private Long idPatientMedicalRecord;
     }
 
