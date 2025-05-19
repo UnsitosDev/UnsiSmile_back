@@ -114,10 +114,10 @@ public class OdontogramService {
 
     }
 
-    public OdontogramResponse getOdontogramDetails(Long treatmentId) {
+    public OdontogramResponse getOdontogramDetails(Long treatmentDetailsId) {
 
-        OdontogramModel odontogramModel = odontogramRepository.findLastOdontogramByTreatmentId(treatmentId)
-                .orElseThrow(() -> new AppException("No odontogram found for treatment ID: " + treatmentId,
+        OdontogramModel odontogramModel = odontogramRepository.findLastOdontogramByTreatmentDetailId(treatmentDetailsId)
+                .orElseThrow(() -> new AppException("No odontogram found for treatment ID: " + treatmentDetailsId,
                         HttpStatus.NOT_FOUND));
 
         Long odontogramId = odontogramModel.getIdOdontogram();
@@ -139,9 +139,9 @@ public class OdontogramService {
 
     }
 
-    public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long idTreatment) {
+    public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long treatmentDetailsId) {
         try {
-            List<OdontogramModel> odontograms = odontogramRepository.findByTreatment_IdTreatment(idTreatment);
+            List<OdontogramModel> odontograms = odontogramRepository.findByTreatmentDetail_IdTreatmentDetail(treatmentDetailsId);
             return odontograms.stream()
                     .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());

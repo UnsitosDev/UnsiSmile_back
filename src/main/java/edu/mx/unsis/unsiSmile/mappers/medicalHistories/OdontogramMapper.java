@@ -26,7 +26,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {
@@ -44,7 +44,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 .adultArcade(Collections.emptyList())
                                 .childArcade(Collections.emptyList())
                                 .observations(entity.getObservations())
-                                .idTreatment(entity.getTreatment().getIdTreatment())
+                                .idTreatmentDetail(entity.getTreatmentDetail().getIdTreatmentDetail())
                                 .build();
         }
 
@@ -64,8 +64,8 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
                 OdontogramModel odontogramModel = OdontogramModel.builder()
                                 .observations(dto.getObservations())
-                                .treatment(TreatmentModel.builder()
-                                                .idTreatment(dto.getIdTreatment())
+                                .treatmentDetail(TreatmentDetailModel.builder()
+                                                .idTreatmentDetail(dto.getIdTreatmentDetail())
                                                 .build())
                                 .build();
 

@@ -23,7 +23,7 @@ public class OdontogramSimpleMapper implements BaseMapper<OdontogramSimpleRespon
         public OdontogramSimpleResponse toDto(OdontogramModel entity) {
                 return OdontogramSimpleResponse.builder()
                                 .idOdontogram(entity.getIdOdontogram())
-                                .idTreatment(entity.getTreatment().getIdTreatment())
+                                .idTreatmentDetail(entity.getTreatmentDetail().getIdTreatmentDetail())
                                 .creationDate(entity.getCreatedAt() != null ? entity.getCreatedAt().toLocalDateTime().toLocalDate() : null)
                                 .build();
         }
