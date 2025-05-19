@@ -55,9 +55,15 @@ public class ProgressNoteController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Obtiene un archivo para su descarga")
-    @GetMapping("files/{id}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String id) {
-        return progressNoteService.downloadProgressNoteById(id);
+    @Operation(summary = "Genera el pdf basado en la información de la nota de evolución.")
+    @GetMapping("files/{id}/generate-pdf")
+    public ResponseEntity<byte[]> buildProgressNotePdfById(@PathVariable String id) {
+        return progressNoteService.buildProgressNotePdfById(id);
+    }
+
+    @Operation(summary = "Descarga el archivo de nota de evolución.")
+    @GetMapping("files/{id}/download")
+    public ResponseEntity<byte[]> downloadProgressNoteFile(@PathVariable String id) {
+        return progressNoteService.downloadProgressNoteFile(id);
     }
 }
