@@ -35,12 +35,26 @@ public class OdontogramService {
     private final OdontogramSimpleMapper odontogramSimpleMapper;
 
     @Transactional(readOnly = true)
-    public OdontogramSimpleResponse getOdontogramById(@NonNull Long id) {
+    public OdontogramResponse getOdontogramById(@NonNull Long id) {
         try {
             OdontogramModel odontogramModel = odontogramRepository.findById(id)
                     .orElseThrow(() -> new AppException("Odontogram not found with ID: " + id, HttpStatus.NOT_FOUND));
 
-            return odontogramSimpleMapper.toDto(odontogramModel);
+            // Obtener todas las asignaciones de condiciones de dientes
+            List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
+                    .findToothConditionAssignmentsByOdontogramId(id);
+
+            // Obtener todas las condiciones de caras de dientes
+            List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
+                    .findToothFaceConditionsAssignmentByOdontogramId(id);
+
+            OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
+                    toothFaceConditions);
+            odontogramResponse.setIdOdontogram(id);
+            odontogramResponse.setObservations(odontogramModel.getObservations());
+
+            return odontogramResponse;
+            
         } catch (Exception ex) {
             throw new AppException("Failed to fetch odontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -99,13 +113,13 @@ public class OdontogramService {
             for (ToothConditionAssignmentModel assignment : odontogram.getToothConditionAssignments()) {
                 assignment.setOdontogram(odontogram);
                 toothConditionAssignmentRepository.save(assignment);
-            }   
+            }
 
             for (ToothfaceConditionsAssignmentModel condition : odontogram.getToothFaceConditionsAssignments()) {
                 condition.setOdontogram(odontogram);
                 toothFaceConditionAssignmentRepository.save(condition);
             }
-            
+
         } catch (DataIntegrityViolationException e) {
             throw new AppException("Duplicate entry", HttpStatus.CONFLICT, e);
         } catch (Exception e) {
@@ -141,7 +155,8 @@ public class OdontogramService {
 
     public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long treatmentDetailsId) {
         try {
-            List<OdontogramModel> odontograms = odontogramRepository.findByTreatmentDetail_IdTreatmentDetail(treatmentDetailsId);
+            List<OdontogramModel> odontograms = odontogramRepository
+                    .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailsId);
             return odontograms.stream()
                     .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());

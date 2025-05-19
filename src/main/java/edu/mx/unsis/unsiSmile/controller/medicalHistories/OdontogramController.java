@@ -30,8 +30,8 @@ public class OdontogramController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OdontogramSimpleResponse> getOdontogramById(@Valid @PathVariable Long id) {
-        OdontogramSimpleResponse odontogramResponse = odontogramService.getOdontogramById(id);
+    public ResponseEntity<OdontogramResponse> getOdontogramById(@Valid @PathVariable Long id) {
+        OdontogramResponse odontogramResponse = odontogramService.getOdontogramById(id);
         return ResponseEntity.ok(odontogramResponse);
     }
 
