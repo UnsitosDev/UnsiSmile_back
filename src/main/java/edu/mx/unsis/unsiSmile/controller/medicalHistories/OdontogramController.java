@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;
 import jakarta.validation.Valid;
 
@@ -32,12 +33,6 @@ public class OdontogramController {
     public ResponseEntity<OdontogramResponse> getOdontogramById(@Valid @PathVariable Long id) {
         OdontogramResponse odontogramResponse = odontogramService.getOdontogramById(id);
         return ResponseEntity.ok(odontogramResponse);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<OdontogramResponse>> getAllOdontograms() {
-        List<OdontogramResponse> allOdontograms = odontogramService.getAllOdontograms();
-        return ResponseEntity.ok(allOdontograms);
     }
 
     @PutMapping("/{id}")
@@ -59,18 +54,15 @@ public class OdontogramController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/latest/{patientId}")
-    public OdontogramResponse getOdontogramDetails(@PathVariable String patientId) {
-        return odontogramService.getOdontogramDetails(patientId);
-    }
+    @GetMapping("/latest/{treatmentId}")
+    public OdontogramResponse getOdontogramDetails(@PathVariable Long treatmentId) {
+        return odontogramService.getOdontogramDetails(treatmentId);
+    }       
 
-    // obtener un odontograma por el id del formulario y el id del paciente
-    @GetMapping("/form-section/{formSectionId}/patient/{patientId}")
-    public ResponseEntity<OdontogramResponse> getOdontogramByFormSectionIdAndPatientId(@PathVariable Long formSectionId,
-            @PathVariable String patientId) {
-        OdontogramResponse odontogramResponse = odontogramService.getOdontogramByFormSectionId(formSectionId,
-                patientId);
-        return ResponseEntity.ok(odontogramResponse);
+    @GetMapping("/treatment/{treatmentId}")
+    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
+        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByTreatmentId(treatmentId);
+        return ResponseEntity.ok(odontograms);
     }
 
 }
