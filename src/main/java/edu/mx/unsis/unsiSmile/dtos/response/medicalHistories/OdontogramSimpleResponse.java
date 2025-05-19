@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OdontogramResponse {
+public class OdontogramSimpleResponse {
     private Long idOdontogram;
-    private List<ToothResponse> adultArcade;
-    private List<ToothResponse> childArcade;
-    private String observations;
     private Long idTreatmentDetail;
+    private LocalDate creationDate;
 }

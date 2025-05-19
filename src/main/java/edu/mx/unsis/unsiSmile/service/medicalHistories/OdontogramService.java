@@ -10,18 +10,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramSimpleMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
-import edu.mx.unsis.unsiSmile.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,7 +32,7 @@ public class OdontogramService {
     private final IToothFaceConditionAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final OdontogramMapper odontogramMapper;
-    private final AnswerService answerService;
+    private final OdontogramSimpleMapper odontogramSimpleMapper;
 
     @Transactional(readOnly = true)
     public OdontogramResponse getOdontogramById(@NonNull Long id) {
@@ -40,21 +40,23 @@ public class OdontogramService {
             OdontogramModel odontogramModel = odontogramRepository.findById(id)
                     .orElseThrow(() -> new AppException("Odontogram not found with ID: " + id, HttpStatus.NOT_FOUND));
 
-            return odontogramMapper.toDto(odontogramModel);
+            // Obtener todas las asignaciones de condiciones de dientes
+            List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
+                    .findToothConditionAssignmentsByOdontogramId(id);
+
+            // Obtener todas las condiciones de caras de dientes
+            List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
+                    .findToothFaceConditionsAssignmentByOdontogramId(id);
+
+            OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
+                    toothFaceConditions);
+            odontogramResponse.setIdOdontogram(id);
+            odontogramResponse.setObservations(odontogramModel.getObservations());
+
+            return odontogramResponse;
+            
         } catch (Exception ex) {
             throw new AppException("Failed to fetch odontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<OdontogramResponse> getAllOdontograms() {
-        try {
-            List<OdontogramModel> allOdontograms = odontogramRepository.findAll();
-            return allOdontograms.stream()
-                    .map(odontogramMapper::toDto)
-                    .collect(Collectors.toList());
-        } catch (Exception ex) {
-            throw new AppException("Failed to fetch odontograms", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -106,27 +108,18 @@ public class OdontogramService {
                 toothFaceConditionAssignmentRepository.save(condition);
             }
 
-            answerService.saveBatch(
-                    List.of(
-                            AnswerRequest.builder()
-                                    .idQuestion(odontogramDTO.getIdQuestion())
-                                    .idPatientClinicalHistory(
-                                            odontogramDTO.getIdPatientClinicalHistory())
-                                    .answerText("")
-                                    .build()));
-
         } catch (DataIntegrityViolationException e) {
             throw new AppException("Duplicate entry", HttpStatus.CONFLICT, e);
         } catch (Exception e) {
-            throw new AppException(e.getCause().toString(), HttpStatus.BAD_REQUEST, e);
+            throw new AppException("Failed to save odontogram", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
 
     }
 
-    public OdontogramResponse getOdontogramDetails(String patientId) {
+    public OdontogramResponse getOdontogramDetails(Long treatmentDetailsId) {
 
-        OdontogramModel odontogramModel = odontogramRepository.findLatestOdontogramByPatientId(patientId)
-                .orElseThrow(() -> new AppException("Odontogram not found for patient ID: " + patientId,
+        OdontogramModel odontogramModel = odontogramRepository.findLastOdontogramByTreatmentDetailId(treatmentDetailsId)
+                .orElseThrow(() -> new AppException("No odontogram found for treatment ID: " + treatmentDetailsId,
                         HttpStatus.NOT_FOUND));
 
         Long odontogramId = odontogramModel.getIdOdontogram();
@@ -148,30 +141,15 @@ public class OdontogramService {
 
     }
 
-    // obtener el odontograma por id de form section y el id del paciente
-    public OdontogramResponse getOdontogramByFormSectionId(Long formSectionId, String patientId) {
-        OdontogramModel odontogramModel = odontogramRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                .orElseThrow(() -> new AppException("Odontogram not found with form section ID: " + formSectionId,
-                        HttpStatus.NOT_FOUND));
-
-        Long odontogramId = odontogramModel.getIdOdontogram();
-
-        // Obtener todas las asignaciones de condiciones de dientes
-        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
-                .findToothConditionAssignmentsByOdontogramId(odontogramId);
-
-        // Obtener todas las condiciones de caras de dientes
-        List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
-                .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
-
-        odontogramMapper.mapConditionsAssignments(toothConditionAssignments, toothFaceConditions);
-
-        OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
-                toothFaceConditions);
-        odontogramResponse.setIdOdontogram(odontogramId);
-        odontogramResponse.setObservations(odontogramModel.getObservations());
-
-        return odontogramResponse;
+    public List<OdontogramSimpleResponse> getOdontogramsByTreatmentId(Long treatmentDetailsId) {
+        try {
+            List<OdontogramModel> odontograms = odontogramRepository
+                    .findByTreatmentDetail_IdTreatmentDetailOrderByCreatedAtAsc(treatmentDetailsId);
+            return odontograms.stream()
+                    .map(odontogramSimpleMapper::toDto)
+                    .collect(Collectors.toList());
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch odontograms by treatment ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
-
 }
