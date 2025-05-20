@@ -148,23 +148,28 @@
 	<title>
 		<band height="69" splitType="Stretch">
 			<staticText>
-				<reportElement x="152" y="3" width="250" height="30" uuid="ff1ef57f-87d2-4825-8166-3eae59a4b89f"/>
+				<reportElement x="152" y="3" width="250" height="26" uuid="ff1ef57f-87d2-4825-8166-3eae59a4b89f"/>
 				<textElement textAlignment="Center">
 					<font size="16"/>
 				</textElement>
 				<text><![CDATA[Universidad de la Sierra Sur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="179" y="36" width="196" height="24" uuid="d3ce1952-d286-4bb2-a0a5-9060e40ecc8d"/>
+				<reportElement x="179" y="23" width="196" height="24" uuid="d3ce1952-d286-4bb2-a0a5-9060e40ecc8d"/>
 				<textElement textAlignment="Center">
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Licenciatura en odontología]]></text>
 			</staticText>
 			<image>
-				<reportElement x="29" y="0" width="106" height="66" uuid="e60e119c-99ad-4954-bd9e-45e30f22ce94"/>
+				<reportElement x="29" y="-18" width="106" height="66" uuid="e60e119c-99ad-4954-bd9e-45e30f22ce94"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+			<rectangle>
+				<reportElement x="8" y="42" width="542" height="2" backcolor="#030303" uuid="8ae5aad8-e435-4046-be29-369f7593b10f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
 		</band>
 	</title>
 	<pageHeader>
@@ -221,7 +226,6 @@
 	</pageHeader>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
-			<!-- Organo dentario -->
 			<staticText>
 				<reportElement x="20" y="10" width="60" height="30" uuid="243a193c-8125-4c78-a2c0-f2a2965d3e98">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
@@ -231,7 +235,6 @@
 				</textElement>
 				<text><![CDATA[Organo dentario]]></text>
 			</staticText>
-			<!-- Fecha de tratamiento -->
 			<staticText>
 				<reportElement x="20" y="10" width="70" height="30" uuid="47d4c7a5-7d10-4e9c-bf4e-50ae4306a504">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -250,7 +253,6 @@
 				</textElement>
 				<text><![CDATA[Fecha de tratamiento]]></text>
 			</staticText>
-			<!-- Nombre de paciente -->
 			<staticText>
 				<reportElement x="90" y="10" width="170" height="30" uuid="b062d3c4-541c-4af5-850e-7b9795676e18">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -269,7 +271,6 @@
 				</textElement>
 				<text><![CDATA[Nombre de paciente]]></text>
 			</staticText>
-			<!-- Número de expediente -->
 			<staticText>
 				<reportElement x="260" y="10" width="70" height="30" uuid="670406c3-bb06-4eba-88f5-85427d2ef6ff">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -288,7 +289,6 @@
 				</textElement>
 				<text><![CDATA[Número de expediente]]></text>
 			</staticText>
-			<!-- Profesor a cargo -->
 			<staticText>
 				<reportElement x="330" y="10" width="200" height="30" uuid="68ccc37c-4472-4f34-a037-4d0b8b51ad16">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -314,7 +314,6 @@
 	</columnHeader>
 	<detail>
 		<band height="30" splitType="Stretch">
-			<!-- Organo dentario -->
 			<textField isBlankWhenNull="true">
 				<reportElement x="20" y="0" width="60" height="30" uuid="4d268a52-34ab-44b7-885a-9b24002f310b">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
@@ -322,7 +321,6 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{teeth}]]></textFieldExpression>
 			</textField>
-			<!-- Fecha de tratamiento -->
 			<textField isBlankWhenNull="true">
 				<reportElement x="20" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -337,7 +335,6 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
 			</textField>
-			<!-- Nombre de paciente -->
 			<textField isBlankWhenNull="true">
 				<reportElement x="90" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -352,7 +349,6 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
 			</textField>
-			<!-- Número de expediente -->
 			<textField isBlankWhenNull="true">
 				<reportElement x="260" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -367,7 +363,6 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
 			</textField>
-			<!-- Profesor a cargo -->
 			<textField isBlankWhenNull="true">
 				<reportElement x="330" y="0" width="200" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
@@ -391,27 +386,34 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="50">
+		<band height="71">
 			<staticText>
-				<reportElement x="30" y="15" width="134" height="19" uuid="d2d60626-4c3b-443d-9aad-2243c4b18d74"/>
+				<reportElement x="29" y="0" width="134" height="19" uuid="d2d60626-4c3b-443d-9aad-2243c4b18d74"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
 				<text><![CDATA[Firma del alumno ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="198" y="15" width="182" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
+				<reportElement x="200" y="-1" width="182" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
 				<text><![CDATA[Firma del jefe de clinica]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="410" y="15" width="134" height="19" uuid="9d2a2996-1719-4758-beb0-466f243eb71f"/>
+				<reportElement x="410" y="-1" width="134" height="19" uuid="9d2a2996-1719-4758-beb0-466f243eb71f"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
 				<text><![CDATA[Sello de la clinica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="30" width="538" height="41" uuid="70b58871-4182-4e03-b4bf-542d5a7c8d7a"/>
+				<textElement textAlignment="Center">
+					<font size="13"/>
+				</textElement>
+				<text><![CDATA[Guillermo Rojas Mijangos s/n, Esq. Av. Universidad Col. Ciudad Universitaria Miahuatlán de Porfirio Diaz, Oax. Mexico C.P. 70800 unsis.edu.mx]]></text>
 			</staticText>
 		</band>
 	</pageFooter>
