@@ -58,16 +58,16 @@ public class TreatmentReportService {
                 }
             }
 
-            // Obtenemos todos los tratamientos del estudiante usando el nuevo endpoint específico para reportes
+            // Obtenemos todos los tratamientos del estudiante usando el método para reportes
             Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(
                     Pageable.unpaged(), idStudent, idTreatment);
 
             List<TreatmentDetailResponse> treatments = new ArrayList<>(treatmentsPage.getContent());
             
-            // Obtenemos el ID del grupo del primer tratamiento, o usamos 0 si no hay tratamientos
+            // Obtenemos el ID del grupo del estudiante o de sus tratamientos
             Long groupId = 0L;
-            if (!treatments.isEmpty()) {
-                groupId = treatments.get(0).getStudentGroupId() != null ? treatments.get(0).getStudentGroupId() : 0L;
+            if (!treatments.isEmpty() && treatments.get(0).getStudent() != null && treatments.get(0).getStudent().getIdGroup() != null) {
+                groupId = treatments.get(0).getStudent().getIdGroup();
             }
 
             // Preparamos los datos para el informe
@@ -76,7 +76,7 @@ public class TreatmentReportService {
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("nameStudent", student.getPerson().getFullName());
-            parameters.put("group", groupId);  // Usamos el ID del grupo obtenido del tratamiento
+            parameters.put("group", groupId);
             parameters.put("treatment", treatmentName);
             
             // Agregamos el logo
@@ -114,20 +114,22 @@ public class TreatmentReportService {
                     item.put("teeth", tooth.getIdTooth()); // Usamos el ID del diente directamente
                     item.put("creationDate", treatment.getEndDate() != null ? 
                             treatment.getEndDate().format(dateFormatter) : "");
-                    item.put("patientName", treatment.getPatientName());
-                    item.put("patientClinicalHistoryId", String.valueOf(treatment.getPatientClinicalHistoryId()));
-                    item.put("professorName", treatment.getProfessorName());
+                    item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
+                    item.put("patientClinicalHistoryId", treatment.getPatient() != null ? 
+                            String.valueOf(treatment.getPatient().getIdPatientMedicalRecord()) : "");
+                    item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getName() : "");
                     dataList.add(item);
                 }
             } else {
-                // Si no tiene dientes, creamos una sola entrada vacía para el tratamiento
+                // Si no tiene dientes, creamos una sola entrada para el tratamiento
                 Map<String, Object> item = new HashMap<>();
-                item.put("teeth", "N/A"); // Dejamos el campo vacío en lugar de "N/A"
+                item.put("teeth", "N/A");
                 item.put("creationDate", treatment.getEndDate() != null ? 
                         treatment.getEndDate().format(dateFormatter) : "");
-                item.put("patientName", treatment.getPatientName());
-                item.put("patientClinicalHistoryId", String.valueOf(treatment.getPatientClinicalHistoryId()));
-                item.put("professorName", treatment.getProfessorName());
+                item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
+                item.put("patientClinicalHistoryId", treatment.getPatient() != null ? 
+                        String.valueOf(treatment.getPatient().getIdPatientMedicalRecord()) : "");
+                item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getName() : "");
                 dataList.add(item);
             }
         }
