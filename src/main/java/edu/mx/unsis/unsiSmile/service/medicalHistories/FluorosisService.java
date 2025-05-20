@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FluorosisRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
@@ -15,7 +14,6 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.FluorosisToothfac
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFluorosisRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFluorosisToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFluorosisToothfaceConditionsAssignmentRepository;
-import edu.mx.unsis.unsiSmile.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -40,7 +38,6 @@ public class FluorosisService {
     private final IFluorosisToothfaceConditionsAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IFluorosisToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final FluorosisMapper fluorosisMapper;
-    private final AnswerService answerService;
 
     @Transactional(readOnly = true)
     public List<FluorosisResponse> getAllFluorosis() {
@@ -82,16 +79,6 @@ public class FluorosisService {
                 condition.setFluorosis(fluorosis);
                 toothFaceConditionAssignmentRepository.save(condition);
             }
-
-            answerService.saveBatch(
-                    List.of(
-                            AnswerRequest.builder()
-                                    .idQuestion(fluorosisDTO.getIdQuestion())
-                                    .idPatientClinicalHistory(
-                                            fluorosisDTO.getIdPatientMedicalRecord())
-                                    .answerText("")
-                                    .build()));
-
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ResponseMessages.DUPLICATE_ENTRY, HttpStatus.CONFLICT, e);
         } catch (Exception e) {

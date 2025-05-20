@@ -19,13 +19,4 @@ public class FluorosisRequest {
 
     @NotNull(message = ResponseMessages.NOT_NULL_TREATMENT_ID)
     private Long idTreatmentDetail;
-
-    @NotNull(message = ResponseMessages.QUESTION_ID_CANNOT_BE_NULL)
-    private Long idQuestion;
-
-    @NotNull(message = ResponseMessages.CLINICAL_HISTORY_ID_CANNOT_BE_NULL)
-    private Long idPatientMedicalRecord;
-
-    @NotNull(message = ResponseMessages.FORM_SECTION_ID_CANNOT_BE_NULL)
-    private Long idFormSection;
 }
