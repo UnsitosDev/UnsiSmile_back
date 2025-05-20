@@ -47,9 +47,6 @@ public class TreatmentReportService {
             StudentModel student = studentRepository.findById(idStudent)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            // Por el momento, establecemos el grupo como "N/A"
-            String groupCode = "N/A";
-
             // Obtenemos el nombre del tratamiento si se proporciona un idTreatment
             String treatmentName = "TODOS LOS TRATAMIENTOS";
             if (idTreatment != null) {
@@ -61,11 +58,17 @@ public class TreatmentReportService {
                 }
             }
 
-            // Obtenemos todos los tratamientos del estudiante (sin paginación)
-            Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudent(
+            // Obtenemos todos los tratamientos del estudiante usando el nuevo endpoint específico para reportes
+            Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(
                     Pageable.unpaged(), idStudent, idTreatment);
 
             List<TreatmentDetailResponse> treatments = new ArrayList<>(treatmentsPage.getContent());
+            
+            // Obtenemos el ID del grupo del primer tratamiento, o usamos 0 si no hay tratamientos
+            Long groupId = 0L;
+            if (!treatments.isEmpty()) {
+                groupId = treatments.get(0).getStudentGroupId() != null ? treatments.get(0).getStudentGroupId() : 0L;
+            }
 
             // Preparamos los datos para el informe
             List<Map<String, Object>> reportDataList = prepareDataForReport(treatments);
@@ -73,7 +76,7 @@ public class TreatmentReportService {
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("nameStudent", student.getPerson().getFullName());
-            parameters.put("group", groupCode);
+            parameters.put("group", groupId);  // Usamos el ID del grupo obtenido del tratamiento
             parameters.put("treatment", treatmentName);
             
             // Agregamos el logo

@@ -287,6 +287,37 @@ public class TreatmentDetailService {
         }
     }
 
+
+    @Transactional(readOnly = true)
+    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(Pageable pageable, String idStudent, Long idTreatment) {
+        try {
+            StudentModel studentModel = getStudentModel(idStudent);
+
+            List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
+
+            if (studentGroups.isEmpty()) {
+                return Page.empty();
+            }
+
+            Page<TreatmentDetailModel> page;
+
+            if (idTreatment != null) {
+                treatmentService.getTreatmentById(idTreatment);
+                page = treatmentDetailRepository
+                        .findAllByStudentGroupInAndTreatment_IdTreatment(studentGroups, idTreatment, pageable);
+            } else {
+                page = treatmentDetailRepository
+                        .findAllByStudentGroupIn(studentGroups, pageable);
+            }
+
+            return page.map(this::toDto);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
     private StudentModel getStudentModel(String idStudent) {
         UserResponse currentUser = userService.getCurrentUser();
 
