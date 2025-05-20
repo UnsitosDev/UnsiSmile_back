@@ -26,6 +26,6 @@ public class SOHIToothCodeModel extends AuditModel {
     private Integer code;
 
     @ManyToOne
-    @JoinColumn(name = "sohi_id", nullable = false)
+    @JoinColumn(name = "fk_sohi", nullable = false)
     private SOHIModel sohi;
 }

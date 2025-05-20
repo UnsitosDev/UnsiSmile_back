@@ -103,12 +103,12 @@ CREATE TABLE sohi_tooth_code (
                                  id_tooth_code BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
                                  fk_tooth VARCHAR(3) NOT NULL,
                                  code INT NOT NULL,
-                                 sohi_id BIGINT(20) NOT NULL,
+                                 fk_sohi BIGINT(20) NOT NULL,
                                  created_at DATETIME(6) DEFAULT NULL,
                                  created_by VARCHAR(255) DEFAULT NULL,
                                  status_key VARCHAR(255) DEFAULT NULL,
                                  updated_at DATETIME(6) DEFAULT NULL,
                                  updated_by VARCHAR(255) DEFAULT NULL,
-                                 FOREIGN KEY (sohi_id) REFERENCES sohi (id_sohi),
+                                 FOREIGN KEY (fk_sohi) REFERENCES sohi (id_sohi),
                                  FOREIGN KEY (fk_tooth) REFERENCES teeth(id_tooth)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
