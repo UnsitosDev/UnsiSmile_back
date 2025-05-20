@@ -31,7 +31,7 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
     public GroupResponse toDto(GroupModel entity) {
         return GroupResponse.builder()
                 .idGroup(entity.getIdGroup())
-                .groupName(formatGroupName(entity))
+                .groupName(entity.getGroupName())
                 .career(careerMapper.toDto(entity.getCareer()))
                 .semester(semesterMapper.toDto(entity.getSemester()))
                 .build();
@@ -47,12 +47,5 @@ public class GroupMapper implements BaseMapper<GroupResponse, GroupRequest, Grou
     @Override
     public void updateEntity(GroupRequest request, GroupModel entity) {
         entity.setGroupName(request.getGroupName());
-    }
-
-    private String formatGroupName(GroupModel entity) {
-        String baseName = entity.getSemesterNumber() + entity.getCareer().getIdCareer();
-        return (entity.getGroupName() != null && !entity.getGroupName().isEmpty())
-                ? baseName + "-" + entity.getGroupName()
-                : baseName;
     }
 }

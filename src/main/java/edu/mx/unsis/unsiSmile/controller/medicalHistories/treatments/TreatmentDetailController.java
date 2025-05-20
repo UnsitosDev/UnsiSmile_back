@@ -85,8 +85,8 @@ public class TreatmentDetailController {
             @RequestParam(required = false) Long idTreatment,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Field key for ordering", example = "idTreatmentDetail")
-            @RequestParam(defaultValue = "idTreatmentDetail") String order,
+            @Parameter(description = "Field key for ordering", example = "createdAt")
+            @RequestParam(defaultValue = "createdAt") String order,
             @RequestParam(defaultValue = "false") boolean asc) {
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();

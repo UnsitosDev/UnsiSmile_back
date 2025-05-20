@@ -36,15 +36,30 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     public TreatmentDetailResponse toDto(TreatmentDetailModel entity) {
         return TreatmentDetailResponse.builder()
                 .idTreatmentDetail(entity.getIdTreatmentDetail())
-                .patientClinicalHistoryId(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
-                .treatment(treatmentMapper.toDto(entity.getTreatment()))
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .studentGroupId(entity.getStudentGroup().getIdStudentGroups())
-                .professorId(entity.getProfessor() != null ?
-                        entity.getProfessor().getIdProfessor() : null)
                 .status(entity.getStatus())
-                .patientId(entity.getPatientClinicalHistory().getPatient().getIdPatient())
+                .treatment(treatmentMapper.toDto(entity.getTreatment()))
+                .patient(TreatmentDetailResponse.PatientResponse.builder()
+                        .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
+                        .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                        .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
+                        .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                        .build())
+                .professor(entity.getProfessor() != null ?
+                        TreatmentDetailResponse.ProfessorResponse.builder()
+                                .id(entity.getProfessor().getIdProfessor())
+                                .name(entity.getProfessor().getPerson().getFullName())
+                                .build() :
+                        null)
+                .student(entity.getStudentGroup() != null ?
+                        TreatmentDetailResponse.StudentResponse.builder()
+                                .id(entity.getStudentGroup().getStudent().getEnrollment())
+                                .name(entity.getStudentGroup().getStudent().getPerson().getFullName())
+                                .group(entity.getStudentGroup().getGroup().getGroupName())
+                                .idGroup(entity.getStudentGroup().getGroup().getIdGroup())
+                                .build() :
+                        null)
                 .build();
     }
 
