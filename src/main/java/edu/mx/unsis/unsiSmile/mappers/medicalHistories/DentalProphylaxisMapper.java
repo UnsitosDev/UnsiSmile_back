@@ -32,6 +32,7 @@ public class DentalProphylaxisMapper implements BaseMapper<DentalProphylaxisResp
                 .idDentalProphylaxis(entity.getIdDentalProphylaxis())
                 .creationDate(entity.getCreatedAt().toLocalDateTime().toLocalDate())
                 .teethProphylaxis(Collections.emptyList())
+                .percentage(entity.getPercentage())
                 .build();
     }
 
