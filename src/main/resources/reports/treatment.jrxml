@@ -136,6 +136,7 @@
 	<parameter name="nameStudent" class="java.lang.String"/>
 	<parameter name="group" class="java.lang.String"/>
 	<parameter name="treatment" class="java.lang.String"/>
+	<parameter name="showTeethColumn" class="java.lang.Boolean"/>
 	<field name="teeth" class="java.lang.String"/>
 	<field name="creationDate" class="java.lang.String"/>
 	<field name="patientName" class="java.lang.String"/>
@@ -220,36 +221,87 @@
 	</pageHeader>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
+			<!-- Organo dentario -->
 			<staticText>
-				<reportElement x="20" y="10" width="60" height="30" uuid="243a193c-8125-4c78-a2c0-f2a2965d3e98"/>
+				<reportElement x="20" y="10" width="60" height="30" uuid="243a193c-8125-4c78-a2c0-f2a2965d3e98">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Organo dentario]]></text>
 			</staticText>
+			<!-- Fecha de tratamiento -->
 			<staticText>
-				<reportElement x="80" y="10" width="70" height="30" uuid="47d4c7a5-7d10-4e9c-bf4e-50ae4306a504"/>
+				<reportElement x="20" y="10" width="70" height="30" uuid="47d4c7a5-7d10-4e9c-bf4e-50ae4306a504">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha de tratamiento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="150" y="10" width="170" height="30" uuid="b062d3c4-541c-4af5-850e-7b9795676e18"/>
+				<reportElement x="80" y="10" width="70" height="30" uuid="47d4c7a5-7d10-4e9c-bf4e-50ae4306a504">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de tratamiento]]></text>
+			</staticText>
+			<!-- Nombre de paciente -->
+			<staticText>
+				<reportElement x="90" y="10" width="170" height="30" uuid="b062d3c4-541c-4af5-850e-7b9795676e18">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre de paciente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="320" y="10" width="70" height="30" uuid="670406c3-bb06-4eba-88f5-85427d2ef6ff"/>
+				<reportElement x="150" y="10" width="170" height="30" uuid="b062d3c4-541c-4af5-850e-7b9795676e18">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de paciente]]></text>
+			</staticText>
+			<!-- Número de expediente -->
+			<staticText>
+				<reportElement x="260" y="10" width="70" height="30" uuid="670406c3-bb06-4eba-88f5-85427d2ef6ff">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Número de expediente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="390" y="10" width="140" height="30" uuid="68ccc37c-4472-4f34-a037-4d0b8b51ad16"/>
+				<reportElement x="320" y="10" width="70" height="30" uuid="670406c3-bb06-4eba-88f5-85427d2ef6ff">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de expediente]]></text>
+			</staticText>
+			<!-- Profesor a cargo -->
+			<staticText>
+				<reportElement x="330" y="10" width="200" height="30" uuid="68ccc37c-4472-4f34-a037-4d0b8b51ad16">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profesor a cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="10" width="140" height="30" uuid="68ccc37c-4472-4f34-a037-4d0b8b51ad16">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -262,28 +314,71 @@
 	</columnHeader>
 	<detail>
 		<band height="30" splitType="Stretch">
+			<!-- Organo dentario -->
 			<textField isBlankWhenNull="true">
-				<reportElement x="20" y="0" width="60" height="30" uuid="4d268a52-34ab-44b7-885a-9b24002f310b"/>
+				<reportElement x="20" y="0" width="60" height="30" uuid="4d268a52-34ab-44b7-885a-9b24002f310b">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{teeth}]]></textFieldExpression>
 			</textField>
+			<!-- Fecha de tratamiento -->
 			<textField isBlankWhenNull="true">
-				<reportElement x="80" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536"/>
+				<reportElement x="20" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="150" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3"/>
+				<reportElement x="80" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
+			</textField>
+			<!-- Nombre de paciente -->
+			<textField isBlankWhenNull="true">
+				<reportElement x="90" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="320" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f"/>
+				<reportElement x="150" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
+			</textField>
+			<!-- Número de expediente -->
+			<textField isBlankWhenNull="true">
+				<reportElement x="260" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="390" y="0" width="140" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c"/>
+				<reportElement x="320" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
+			</textField>
+			<!-- Profesor a cargo -->
+			<textField isBlankWhenNull="true">
+				<reportElement x="330" y="0" width="200" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{professorName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="390" y="0" width="140" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c">
+					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{professorName}]]></textFieldExpression>
 			</textField>

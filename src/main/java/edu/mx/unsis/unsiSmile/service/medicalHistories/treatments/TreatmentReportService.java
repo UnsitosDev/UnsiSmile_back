@@ -70,16 +70,19 @@ public class TreatmentReportService {
                 groupName = treatments.get(0).getStudent().getGroup();
             }
 
+            // Calcular si hay algún tratamiento con dientes asociados
+            boolean showTeethColumn = treatments.stream()
+                .anyMatch(t -> t.getTeeth() != null && !t.getTeeth().isEmpty());
+
             // Preparamos los datos para el informe
             List<Map<String, Object>> reportDataList = prepareDataForReport(treatments);
 
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("nameStudent", student.getPerson().getFullName());
-            parameters.put("group", groupName); // Usar el nombre del grupo
+            parameters.put("group", groupName);
             parameters.put("treatment", treatmentName);
-            
-            // Agregamos el logo
+            parameters.put("showTeethColumn", showTeethColumn); // <-- aquí se pasa el parámetro
             parameters.put("logo", new ClassPathResource("reports/logo.png").getInputStream());
 
             // Generamos el PDF
