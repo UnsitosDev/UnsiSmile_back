@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumToothId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,15 +15,15 @@ import java.util.List;
 public class ToothCodeResponse {
     private Long id;
     private Long idTreatment;
-    private List<ToothResponse> teeth;
+    private List<ToothResp> teeth;
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ToothResponse {
+    public static class ToothResp {
         private Long id;
-        private String idTooth;
+        private EnumToothId idTooth;
         private Integer code;
     }
 }

@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumToothId;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -61,7 +62,7 @@ public class SOHIService {
     private SOHIToothCodeModel buildToothCodeEntity(ToothCodeRequest.ToothReq toothRequest, SOHIModel sohi) {
         return SOHIToothCodeModel.builder()
                 .tooth(ToothModel.builder()
-                        .idTooth(toothRequest.getIdTooth())
+                        .idTooth(toothRequest.getIdTooth().getIdTooth())
                         .build())
                 .code(toothRequest.getCode())
                 .sohi(sohi)
@@ -80,11 +81,11 @@ public class SOHIService {
                             String.format(ResponseMessages.SOHI_NOT_FOUND_FOR_TREATMENT, idTreatment),
                             HttpStatus.NOT_FOUND));
 
-            List<ToothCodeResponse.ToothResponse> teeth = sohiTootCodeRepository.findBySohi(sohi)
+            List<ToothCodeResponse.ToothResp> teeth = sohiTootCodeRepository.findBySohi(sohi)
                     .stream()
-                    .map(tooth -> ToothCodeResponse.ToothResponse.builder()
+                    .map(tooth -> ToothCodeResponse.ToothResp.builder()
                             .id(tooth.getId())
-                            .idTooth(tooth.getTooth().getIdTooth())
+                            .idTooth(EnumToothId.getCodeFromIdTooth(tooth.getTooth().getIdTooth()))
                             .code(tooth.getCode())
                             .build())
                     .toList();

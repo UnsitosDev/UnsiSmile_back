@@ -25,9 +25,8 @@ public class ToothCodeRequest {
     @Builder
     public static class ToothReq {
 
-        @NotBlank(message = ResponseMessages.NOT_BLANK_TOOTH_CODE)
-        @Pattern(regexp = "^[0-9]{2}$", message = ResponseMessages.INVALID_TOOTH_FORMAT)
-        private String idTooth;
+        @NotNull(message = ResponseMessages.NOT_NULL_TOOTH_CODE)
+        private EnumToothId idTooth;
 
         @NotNull(message = ResponseMessages.NOT_NULL_CODE_VALUE)
         @Min(value = 0, message = ResponseMessages.MIN_CODE_VALUE)

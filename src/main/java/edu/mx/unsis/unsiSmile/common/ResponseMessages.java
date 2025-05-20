@@ -322,7 +322,7 @@ public class ResponseMessages {
     public static final String NOT_NULL_TREATMENT_ID = "El ID del tratamiento no puede ser nulo.";
     public static final String NOT_EMPTY_TEETH_LIST = "La lista de dientes no puede estar vacía";
     public static final String TEETH_LIST_SIZE = "Debe haber entre 1 y 32 dientes en la lista";
-    public static final String NOT_BLANK_TOOTH_CODE = "El código del diente no puede estar vacío";
+    public static final String NOT_NULL_TOOTH_CODE = "El código del diente no puede estar vacío";
     public static final String INVALID_TOOTH_FORMAT = "El id del diente debe ser un número de 2 dígitos";
     public static final String NOT_NULL_CODE_VALUE = "El valor del código no puede ser nulo";
     public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
