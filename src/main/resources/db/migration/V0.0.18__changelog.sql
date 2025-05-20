@@ -65,7 +65,8 @@ VALUES
     (1, 9),
     (1, 10),
     (1, 11),
-    (1, 12);
+    (1, 12),
+    (1, 13);
 
 INSERT INTO form_component_tooth_faces (fk_form_component, fk_tooth_face)
 VALUES
