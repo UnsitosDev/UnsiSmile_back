@@ -498,6 +498,13 @@ public class ResponseMessages {
     public static final String NOTIFICATION_SEND_ERROR = "Error al enviar la notificación";
     public static final String REVIEW_STATUS_UPDATE_ERROR = "Error al actualizar el estado de revisión";
 
+    public static final String FAILED_FETCH_FLUOROSIS = "Error al obtener la fluorosis";
+    public static final String FLUOROSIS_NOT_FOUND = "No se encontró la fluorosis con ID: ";
+    public static final String FAILED_DELETE_FLUOROSIS = "Error al eliminar la fluorosis";
+    public static final String FLUOROSIS_NOT_FOUND_BY_SECTION = "No se encontró la fluorosis con el ID de la sección del formulario: ";
+    public static final String FAILED_FETCH_FLUOROSIS_BY_PATIENT = "Error al obtener la fluorosis por ID de paciente";
+    public static final String FAILED_FETCH_FLUOROSIS_BY_SECTION = "Error al obtener la fluorosis por ID de sección: %s";
+
     // Emails
     public static final String EMAIL_SEND_ERROR = "Error al enviar el correo";
     public static final String EMAIL_SUBJECT_CANNOT_BE_NULL = "El asunto del correo no puede ser nulo";
