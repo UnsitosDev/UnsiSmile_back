@@ -318,6 +318,22 @@ public class ResponseMessages {
     public static final String FORM_SECTION_ID_CANNOT_BE_NULL = "El ID de la sección del formulario no puede ser nulo";
     public static final String PERCENTAGE_MIN_VALUE_ERROR = "El porcentaje debe ser mínimo 0%";
     public static final String PERCENTAGE_MAX_VALUE_ERROR = "El porcentaje debe ser máximo 100%";
+    // SOHI REQUEST
+    public static final String NOT_NULL_TREATMENT_ID = "El ID del tratamiento no puede ser nulo.";
+    public static final String NOT_EMPTY_TEETH_LIST = "La lista de dientes no puede estar vacía";
+    public static final String TEETH_LIST_SIZE = "Debe haber entre 1 y 32 dientes en la lista";
+    public static final String NOT_BLANK_TOOTH_CODE = "El código del diente no puede estar vacío";
+    public static final String INVALID_TOOTH_FORMAT = "El id del diente debe ser un número de 2 dígitos";
+    public static final String NOT_NULL_CODE_VALUE = "El valor del código no puede ser nulo";
+    public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
+    public static final String MAX_CODE_VALUE = "El valor máximo permitido es 4";
+    public static final String INVALID_TREATMENT_ID = "El ID del tratamiento no es válido";
+
+    //SOHI SERVICE
+    public static final String ERROR_CREATING_SOHI = "Error al crear el índice de higiene oral simplificado";
+    public static final String ERROR_FETCHING_SOHI = "Error al obtener el índice de higiene oral simplificado";
+    public static final String SOHI_NOT_FOUND = "Índice de higiene oral simplificado no encontrado con ID: %s";
+    public static final String SOHI_NOT_FOUND_FOR_TREATMENT = "Índice de higiene oral simplificado no encontrado para el tratamiento con ID: %s";
 
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS = "Error al obtener la profilaxis dental";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "No se encontró la profilaxis dental con ID: ";

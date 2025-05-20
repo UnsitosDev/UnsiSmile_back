@@ -1,8 +1,11 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DentalProphylaxisRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DentalProphylaxisResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.DentalProphylaxisService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.SOHIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import java.util.List;
 public class DentalProphylaxisController {
 
     private final DentalProphylaxisService dentalProphylaxisService;
+    private final SOHIService sohiService;
 
     @PostMapping
     public ResponseEntity<Void> createDentalProphylaxis(@Valid @RequestBody DentalProphylaxisRequest dentalProphylaxisDTO) {
@@ -66,5 +70,19 @@ public class DentalProphylaxisController {
                 .getDentalProphylaxisByPatientId(patientId, pageable);
 
         return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "Crea un registro de índice de higiene oral simplificado.")
+    @PostMapping("/sohi")
+    public ResponseEntity<Void> create(@Valid @RequestBody ToothCodeRequest request) {
+        sohiService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(summary = "Obtiene un registro de índice de higiene oral simplificado por ID de tratamiento.")
+    @GetMapping("/sohi/treatment/{id}")
+    public ResponseEntity<ToothCodeResponse> getByTreatmentId(@PathVariable("id") Long idTreatment) {
+        ToothCodeResponse response = sohiService.getByTreatmentId(idTreatment);
+        return ResponseEntity.ok(response);
     }
 }
