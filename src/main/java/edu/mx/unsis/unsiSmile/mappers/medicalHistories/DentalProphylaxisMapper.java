@@ -50,6 +50,7 @@ public class DentalProphylaxisMapper implements BaseMapper<DentalProphylaxisResp
     public static DentalProphylaxisModel toDentalProphylaxisModel(DentalProphylaxisRequest dto) {
         DentalProphylaxisModel dentalProphylaxisModel = DentalProphylaxisModel.builder()
                 .patient(PatientModel.builder().idPatient(dto.getIdPatient()).build())
+                .percentage(dto.getPercentage())
                 .formSection(FormSectionModel.builder().idFormSection(dto.getIdFormSection()).build())
                 .build();
 
