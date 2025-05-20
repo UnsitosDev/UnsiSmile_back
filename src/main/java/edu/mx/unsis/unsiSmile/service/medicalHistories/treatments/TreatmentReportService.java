@@ -64,10 +64,10 @@ public class TreatmentReportService {
 
             List<TreatmentDetailResponse> treatments = new ArrayList<>(treatmentsPage.getContent());
             
-            // Obtenemos el ID del grupo del estudiante o de sus tratamientos
-            Long groupId = 0L;
-            if (!treatments.isEmpty() && treatments.get(0).getStudent() != null && treatments.get(0).getStudent().getIdGroup() != null) {
-                groupId = treatments.get(0).getStudent().getIdGroup();
+            // Obtenemos el nombre del grupo del primer tratamiento, o vacío si no hay tratamientos
+            String groupName = "";
+            if (!treatments.isEmpty() && treatments.get(0).getStudent() != null && treatments.get(0).getStudent().getGroup() != null) {
+                groupName = treatments.get(0).getStudent().getGroup();
             }
 
             // Preparamos los datos para el informe
@@ -76,7 +76,7 @@ public class TreatmentReportService {
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("nameStudent", student.getPerson().getFullName());
-            parameters.put("group", groupId);
+            parameters.put("group", groupName); // Usar el nombre del grupo
             parameters.put("treatment", treatmentName);
             
             // Agregamos el logo
@@ -115,8 +115,8 @@ public class TreatmentReportService {
                     item.put("creationDate", treatment.getEndDate() != null ? 
                             treatment.getEndDate().format(dateFormatter) : "");
                     item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
-                    item.put("patientClinicalHistoryId", treatment.getPatient() != null ? 
-                            String.valueOf(treatment.getPatient().getIdPatientMedicalRecord()) : "");
+                    item.put("patientClinicalHistoryId", treatment.getPatient() != null && treatment.getPatient().getMedicalRecordNumber() != null
+                            ? String.valueOf(treatment.getPatient().getMedicalRecordNumber()) : "");
                     item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getName() : "");
                     dataList.add(item);
                 }
@@ -127,8 +127,8 @@ public class TreatmentReportService {
                 item.put("creationDate", treatment.getEndDate() != null ? 
                         treatment.getEndDate().format(dateFormatter) : "");
                 item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
-                item.put("patientClinicalHistoryId", treatment.getPatient() != null ? 
-                        String.valueOf(treatment.getPatient().getIdPatientMedicalRecord()) : "");
+                item.put("patientClinicalHistoryId", treatment.getPatient() != null && treatment.getPatient().getMedicalRecordNumber() != null
+                        ? String.valueOf(treatment.getPatient().getMedicalRecordNumber()) : "");
                 item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getName() : "");
                 dataList.add(item);
             }
