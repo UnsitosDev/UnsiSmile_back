@@ -19,4 +19,8 @@ public class AdminDashboardResponse {
     private Long totalStudents;
     private Long studentsRegisteredLastMonth;
     private Long totalProfessors;
+    private TreatmentCountResponse treatments;
+    private Long rejectedTreatments;
+    private Long progressingTreatments;
+    private Long inReviewTreatments;
 }

@@ -69,9 +69,11 @@ public class ResponseMessages {
     public static final String PATIENT_NEEDS_GUARDIAN = "El paciente necesita un tutor";
     public static final String REQUEST_CANNOT_BE_NULL = "El request no puede ser null";
     public static final String PATIENT_FETCH_FAILED = "Error al obtener el paciente";
+    public static final String PROGRESS_NOTE_NOT_FOUND = "No se encontró la nota de evolución con ID: %s";
 
     public static final String STUDENT_NOT_FOUND = "Estudiante no encontrado";
     public static final String STUDENT_GROUP_NOT_FOUND = "El estudiante no está registrado en el grupo.";
+    public static final String FAILED_TO_FETCH_STUDENT_GROUP = "Error al obtener el grupo del estudiante";
     public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado";
     public static final String FAILED_TO_UPDATE_STUDENT = "Error al actualizar el estudiante";
     public static final String FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA = "Error al obtener los profesores por área clínica";
@@ -300,6 +302,8 @@ public class ResponseMessages {
     public static final String FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS = "Error al obtener las historias clínicas del paciente.";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
+    public static final String MEDICAL_RECORD_NOT_FOUND = "No se encontró historia clínica del tipo %s para el paciente con ID %s";
+    public static final String ERROR_FETCHING_MEDICAL_RECORD = "Error al obtener la historia clínica por tipo y paciente";
 
 
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
@@ -308,12 +312,31 @@ public class ResponseMessages {
     public static final String STATUS_NOT_FOUND = "No se encontró el registro de estado de revisión con ID: %s";
     public static final String ERROR_SENDING_TO_REVIEW = "Error al enviar la historia clínica a revisión";
     public static final String ERROR_FETCHING_STATUS_LIST = "Error al obtener la lista de estados de la historia clínica";
+    public static final String ERROR_SECTIONS_IN_REVIEW = "No puede enviar el tratamiento a revisión porque hay secciones por revisar.";
 
     // Dental Prophylaxis Request
     public static final String PATIENT_ID_CANNOT_BE_NULL = "El ID del paciente no puede ser nulo";
     public static final String QUESTION_ID_CANNOT_BE_NULL = "El ID de la pregunta no puede ser nulo";
     public static final String CLINICAL_HISTORY_ID_CANNOT_BE_NULL = "El ID de la historia clínica no puede ser nulo";
     public static final String FORM_SECTION_ID_CANNOT_BE_NULL = "El ID de la sección del formulario no puede ser nulo";
+    public static final String PERCENTAGE_MIN_VALUE_ERROR = "El porcentaje debe ser mínimo 0%";
+    public static final String PERCENTAGE_MAX_VALUE_ERROR = "El porcentaje debe ser máximo 100%";
+    // SOHI REQUEST
+    public static final String NOT_NULL_TREATMENT_ID = "El ID del tratamiento no puede ser nulo.";
+    public static final String NOT_EMPTY_TEETH_LIST = "La lista de dientes no puede estar vacía";
+    public static final String TEETH_LIST_SIZE = "Debe haber entre 1 y 32 dientes en la lista";
+    public static final String NOT_NULL_TOOTH_CODE = "El código del diente no puede estar vacío";
+    public static final String INVALID_TOOTH_FORMAT = "El id del diente debe ser un número de 2 dígitos";
+    public static final String NOT_NULL_CODE_VALUE = "El valor del código no puede ser nulo";
+    public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
+    public static final String MAX_CODE_VALUE = "El valor máximo permitido es 4";
+    public static final String INVALID_TREATMENT_ID = "El ID del tratamiento no es válido";
+
+    //SOHI SERVICE
+    public static final String ERROR_CREATING_SOHI = "Error al crear el índice de higiene oral simplificado";
+    public static final String ERROR_FETCHING_SOHI = "Error al obtener el índice de higiene oral simplificado";
+    public static final String SOHI_NOT_FOUND = "Índice de higiene oral simplificado no encontrado con ID: %s";
+    public static final String SOHI_NOT_FOUND_FOR_TREATMENT = "Índice de higiene oral simplificado no encontrado para el tratamiento con ID: %s";
 
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS = "Error al obtener la profilaxis dental";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "No se encontró la profilaxis dental con ID: ";
@@ -430,6 +453,17 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_DETAILS = "Error al obtener los detalles del tratamiento";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL = "Error al actualizar el detalle del tratamiento";
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS = "Solo los tratamientos en curso, o rechazados pueden enviarse a revisión";
+    public static final String ERROR_TREATMENT_DETAIL_STATUS_REVIEW = "El tratamiento no se encuentra en revisión.";
+    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
+    public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED o REJECTED";
+    public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
+    public static final String FAILED_FETCH_TREATMENT_IN_REVIEW = "Error al obtener el tratamiento en revisión del paciente.";
+    public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";
+    public static final String TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE = "La fecha de inicio del tratamiento debe ser menor a la fecha de finalización";
+    public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
+    public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha final debe ser mayor a la fecha inicial";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
@@ -439,6 +473,7 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
     public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
+    public static final String TEETH_NOT_FOUND = "No se encontraron dientes";
 
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";
@@ -469,4 +504,11 @@ public class ResponseMessages {
     public static final String FLUOROSIS_NOT_FOUND_BY_SECTION = "No se encontró la fluorosis con el ID de la sección del formulario: ";
     public static final String FAILED_FETCH_FLUOROSIS_BY_PATIENT = "Error al obtener la fluorosis por ID de paciente";
     public static final String FAILED_FETCH_FLUOROSIS_BY_SECTION = "Error al obtener la fluorosis por ID de sección: %s";
+
+    // Emails
+    public static final String EMAIL_SEND_ERROR = "Error al enviar el correo";
+    public static final String EMAIL_SUBJECT_CANNOT_BE_NULL = "El asunto del correo no puede ser nulo";
+    public static final String EMAIL_BODY_CANNOT_BE_NULL = "El cuerpo del correo no puede ser nulo";
+    public static final String EMAIL_RECIPIENTS_CANNOT_BE_NULL = "La lista de destinatarios no puede ser nula";
+    public static final String INVALID_EMAIL_ADDRESS = "Dirección de correo inválida";
 }

@@ -11,7 +11,9 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMap
 import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.NonNull;
@@ -33,6 +35,7 @@ public class ClinicalHistoryCatalogService {
     private final FormSectionService formSectionService;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final PatientService patientService;
+    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     @Transactional
     public void save(ClinicalHistoryCatalogRequest request) {
@@ -122,6 +125,7 @@ public class ClinicalHistoryCatalogService {
         clinicalHistoryCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
 
         clinicalHistoryCatalogResponse.setFormSections(sections);
+        clinicalHistoryCatalogResponse.setIdPatientMedicalRecord(patientClinicalHistory.getIdPatientClinicalHistory());
 
         return clinicalHistoryCatalogResponse;
     }
@@ -175,5 +179,35 @@ public class ClinicalHistoryCatalogService {
                 .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
                 .patientId(result[3] != null ? result[3].toString() : null)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ClinicalHistoryCatalogResponse findByMedicalRecordAndPatient(EMedicalRecords medicalRecord, String idPatient) {
+        try {
+            Assert.notNull(idPatient, ResponseMessages.PATIENT_ID_CANNOT_BE_NULL);
+
+            if ("0".equals(idPatient)) {
+                throw new AppException(ResponseMessages.PATIENT_ID_CANNOT_BE_ZERO, HttpStatus.BAD_REQUEST);
+            }
+
+            patientService.getPatientById(idPatient);
+
+            PatientClinicalHistoryModel patientClinicalHistory =
+                    patientClinicalHistoryRepository.findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(
+                            idPatient, medicalRecord.getDescription());
+
+            if (patientClinicalHistory == null) {
+                throw new AppException(
+                        String.format(ResponseMessages.MEDICAL_RECORD_NOT_FOUND, medicalRecord.getDescription(),
+                                idPatient), HttpStatus.NOT_FOUND);
+            }
+
+            return this.toResponse(patientClinicalHistory);
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.ERROR_FETCHING_MEDICAL_RECORD,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 }
