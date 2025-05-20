@@ -316,63 +316,63 @@
 	</columnHeader>
 	<detail>
 		<band height="30" splitType="Stretch">
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="20" y="0" width="60" height="30" uuid="4d268a52-34ab-44b7-885a-9b24002f310b">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{teeth}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="20" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="80" y="0" width="70" height="30" uuid="fabab70d-ec90-4d75-85be-8ee93f862536">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{creationDate}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="90" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="150" y="0" width="170" height="30" uuid="c34153e5-8c82-4548-84b9-aa295cd307b3">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="260" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="320" y="0" width="70" height="30" uuid="bac5c97d-dce0-411f-9f13-54efdd2a789f">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{patientClinicalHistoryId}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="330" y="0" width="200" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{professorName}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isBlankWhenNull="true" textAdjust="StretchHeight">
 				<reportElement x="390" y="0" width="140" height="30" uuid="0d88f809-3b0b-4b1d-b96c-7858d9087d7c">
 					<printWhenExpression><![CDATA[$P{showTeethColumn} == true]]></printWhenExpression>
 				</reportElement>
