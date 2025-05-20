@@ -15,16 +15,45 @@ import java.util.List;
 public class TreatmentDetailResponse {
 
     private Long idTreatmentDetail;
-    private Long patientClinicalHistoryId;
-    private String patientId;
-    private String patientName;
-    private TreatmentResponse treatment;
-    List<TreatmentDetailToothResponse> teeth;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Long studentGroupId;
-    private String professorId;
-    private String professorName;
-    private String studentName;
     private String status;
+
+    private PatientResponse patient;
+    private ProfessorResponse professor;
+    private StudentResponse student;
+
+    private TreatmentResponse treatment;
+    private List<TreatmentDetailToothResponse> teeth;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PatientResponse {
+        private String id;
+        private String name;
+        private Long medicalRecordNumber;
+        private Long idPatientMedicalRecord;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfessorResponse {
+        private String id;
+        private String name;
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class StudentResponse {
+        private String id;
+        private String name;
+        private Long idGroup;
+        private String group;
+    }
 }

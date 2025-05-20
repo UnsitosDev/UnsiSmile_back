@@ -1,14 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.students;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -38,4 +31,12 @@ public class GroupModel extends AuditModel {
     @ManyToOne
     @JoinColumn(name = "fk_semester")
     private SemesterModel semester;
+
+    @Transient
+    public String getGroupName() {
+        String baseName = semesterNumber + career.getIdCareer();
+        return (groupName != null && !groupName.isEmpty())
+                ? baseName + "-" + groupName
+                : baseName;
+    }
 }

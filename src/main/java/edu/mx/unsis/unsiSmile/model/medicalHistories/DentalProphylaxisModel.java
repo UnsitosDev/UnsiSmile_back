@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -39,4 +40,7 @@ public class DentalProphylaxisModel extends AuditModel {
 
     @OneToMany(mappedBy = "dentalProphylaxis", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditionsAssignments;
+
+    @Column(name = "percentage", nullable = false, precision = 5, scale = 2)
+    private BigDecimal percentage;
 }
