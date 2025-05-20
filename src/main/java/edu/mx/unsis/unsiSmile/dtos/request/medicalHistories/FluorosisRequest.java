@@ -17,8 +17,8 @@ public class FluorosisRequest {
     @NotNull(message = ResponseMessages.REQUEST_CANNOT_BE_NULL)
     private List<ToothRequest> theetFluorosis;
 
-    @NotNull(message = ResponseMessages.PATIENT_ID_CANNOT_BE_NULL)
-    private String idPatient;
+    @NotNull(message = ResponseMessages.NOT_NULL_TREATMENT_ID)
+    private Long idTreatmentDetail;
 
     @NotNull(message = ResponseMessages.QUESTION_ID_CANNOT_BE_NULL)
     private Long idQuestion;

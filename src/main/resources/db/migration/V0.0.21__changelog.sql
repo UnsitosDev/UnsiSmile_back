@@ -9,15 +9,13 @@ values("Sección contestada", 57, 3, 1, true);
 -- Fluorosis
 CREATE TABLE fluorosis (
     id_fluorosis BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fk_patient CHAR(36) NOT NULL,
-    fk_form_section BIGINT NOT NULL,
+    fk_treatment_detail BIGINT(20) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-    FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+    FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details (id_treatment_detail)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE fluorosis_tooth_condition_assignments (

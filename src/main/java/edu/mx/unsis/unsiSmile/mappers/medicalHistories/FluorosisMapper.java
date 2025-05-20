@@ -11,6 +11,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
 
@@ -49,8 +50,9 @@ public class FluorosisMapper implements BaseMapper<FluorosisResponse, FluorosisR
 
     public static FluorosisModel toFluorosisModel(FluorosisRequest dto) {
         FluorosisModel fluorosisModel = FluorosisModel.builder()
-                .patient(PatientModel.builder().idPatient(dto.getIdPatient()).build())
-                .formSection(FormSectionModel.builder().idFormSection(dto.getIdFormSection()).build())
+                .treatmentDetail(TreatmentDetailModel.builder()
+                        .idTreatmentDetail(dto.getIdTreatmentDetail())
+                        .build())
                 .build();
 
         List<FluorosisToothConditionAssignmentModel> toothFluorosisAssignments = dto.getTheetFluorosis().stream()

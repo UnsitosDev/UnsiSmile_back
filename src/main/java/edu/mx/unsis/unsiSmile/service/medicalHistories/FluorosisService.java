@@ -100,10 +100,10 @@ public class FluorosisService {
     }
 
     @Transactional(readOnly = true)
-    public FluorosisResponse getFluorosisByFormSectionId(Long formSectionId, String patientId) {
+    public FluorosisResponse getFluorosisByTreatmentId(Long idTreatment) {
         try {
-            FluorosisModel fluorosisModel = fluorosisRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                    .orElseThrow(() -> new AppException(ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + formSectionId, HttpStatus.NOT_FOUND));
+            FluorosisModel fluorosisModel = fluorosisRepository.findByTreatmentDetail_IdTreatmentDetail(idTreatment)
+                    .orElseThrow(() -> new AppException(ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + idTreatment, HttpStatus.NOT_FOUND));
 
             Long fluorosisId = fluorosisModel.getIdFluorosis();
 
@@ -117,7 +117,7 @@ public class FluorosisService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_FLUOROSIS_BY_SECTION, formSectionId),
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_FLUOROSIS_BY_SECTION, idTreatment),
                     HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
@@ -178,7 +178,7 @@ public class FluorosisService {
     @Transactional(readOnly = true)
     public Page<FluorosisResponse> getFluorosisByPatientId(String patientId, Pageable pageable) {
         try {
-            Page<FluorosisModel> fluorosisPage = fluorosisRepository.findByPatient_IdPatientOrderByCreatedAtDesc(patientId, pageable);
+            Page<FluorosisModel> fluorosisPage = fluorosisRepository.findByPatientId(patientId, pageable);
             return fluorosisPage.map(fluorosisModel -> {
                 Long fluorosisId = fluorosisModel.getIdFluorosis();
 
