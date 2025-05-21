@@ -28,7 +28,7 @@ public class ReviewStatusController {
 
     private final ReviewStatusService reviewStatusService;
 
-    @Operation(summary = "Actualizar el estado de la historia clínica")
+    @Operation(summary = "Actualizar el estado de la historia clínica (aceptar sections)")
     @PatchMapping
     public ResponseEntity<ReviewStatusResponse> updateReviewStatus(@Valid
             @RequestBody ReviewStatusRequest request) {
@@ -36,7 +36,7 @@ public class ReviewStatusController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Enviar una historia clínica a revisión")
+    @Operation(summary = "Enviar una historia clínica a revisión (sections)")
     @PostMapping("/{patientMedicalRecordId}/sections/{sectionId}/review/{professorClinicalAreaId}")
     public ResponseEntity<Void> sendToReview(
             @PathVariable Long patientMedicalRecordId,
