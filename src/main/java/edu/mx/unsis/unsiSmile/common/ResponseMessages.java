@@ -505,6 +505,11 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_FLUOROSIS_BY_PATIENT = "Error al obtener la fluorosis por ID de paciente";
     public static final String FAILED_FETCH_FLUOROSIS_BY_SECTION = "Error al obtener la fluorosis por ID de sección: %s";
 
+    //Dean index
+    public static final String ERROR_CREATING_DEAN_INDEX = "Error al crear el índice de dean";
+    public static final String ERROR_FETCHING_DEAN_INDEX = "Error al obtener el índice de dean";
+    public static final String DEAN_INDEX_NOT_FOUND_FOR_TREATMENT = "Índice de dean no encontrado para el tratamiento con ID: %s";
+
     // Emails
     public static final String EMAIL_SEND_ERROR = "Error al enviar el correo";
     public static final String EMAIL_SUBJECT_CANNOT_BE_NULL = "El asunto del correo no puede ser nulo";
