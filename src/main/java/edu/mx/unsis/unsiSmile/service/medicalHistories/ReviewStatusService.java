@@ -30,6 +30,7 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepositor
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewSectionNotificationService;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -44,7 +45,7 @@ public class ReviewStatusService {
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final UserService userService;
-    private final ReviewNotificationService notificationService;
+    private final ReviewSectionNotificationService reviewSectionNotificationService;
 
     @Transactional
     public void updateReviewStatus(ReviewStatusRequest request) {
@@ -55,12 +56,11 @@ public class ReviewStatusService {
                             String.format(ResponseMessages.STATUS_NOT_FOUND, request.getIdReviewStatus()),
                             HttpStatus.NOT_FOUND));
             reviewStatusMapper.updateEntity(request, statusModel);
-
-            reviewStatusRepository.save(statusModel);
-            notificationService.broadcastReviewStatus(
+            reviewSectionNotificationService.broadcastReviewStatus(
                     statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory(),
                     statusModel.getPatientClinicalHistory().getPatient().getIdPatient(),
-                    buildNotification(statusModel));
+                    reviewStatusMapper.toDto(statusModel));
+            reviewStatusRepository.save(statusModel);
 
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + request.getStatus(), HttpStatus.BAD_REQUEST);
@@ -116,6 +116,11 @@ public class ReviewStatusService {
 
             ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientMedicalRecordId, sectionId,
                     professorClinicalAreaId);
+
+            reviewSectionNotificationService.broadcastReviewStatus(
+                    statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory(),
+                    statusModel.getPatientClinicalHistory().getPatient().getIdPatient(),
+                    reviewStatusMapper.toDto(statusModel));
 
             reviewStatusRepository.save(statusModel);
         } catch (AppException e) {
@@ -222,16 +227,5 @@ public class ReviewStatusService {
                 : ReviewSectionResponse.builder()
                         .status("NO_STATUS")
                         .build();
-    }
-
-    private ReviewStatusResponse buildNotification(ReviewStatusModel status) {
-        return ReviewStatusResponse.builder()
-                .idPatientClinicalHistory(status.getPatientClinicalHistory().getIdPatientClinicalHistory())
-                .idSection(status.getFormSection().getIdFormSection())
-                .idProfessorClinicalArea(status.getProfessorClinicalArea().getIdProfessorClinicalArea())
-                .status(status.getStatus().name())
-                .message(status.getMessage())
-                .idReviewStatus(status.getIdReviewStatus())
-                .build();
     }
 }
