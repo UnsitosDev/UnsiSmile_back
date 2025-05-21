@@ -50,6 +50,8 @@ CREATE TABLE form_component_toothface_conditions (
 INSERT INTO
     form_components (description)
 VALUES ("Odontograma"), ("Profilaxis Dental"), ("Fluorosis");
+
+
 select *
 from form_components;
 INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
@@ -65,8 +67,7 @@ VALUES
     (1, 9),
     (1, 10),
     (1, 11),
-    (1, 12),
-    (1, 13);
+    (1, 12);
 
 INSERT INTO form_component_tooth_faces (fk_form_component, fk_tooth_face)
 VALUES
