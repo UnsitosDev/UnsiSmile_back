@@ -1,7 +1,10 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DeanIndexToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FluorosisRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FluorosisResponse;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.DeanIndexService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.FluorosisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +27,7 @@ import java.util.List;
 public class FluorosisController {
 
     private final FluorosisService fluorosisService;
+    private final DeanIndexService deanIndexService;
 
     @Operation(summary = "Crear un nuevo registro de fluorosis")
     @PostMapping
@@ -68,5 +72,19 @@ public class FluorosisController {
                 .getFluorosisByPatientId(patientId, pageable);
 
         return ResponseEntity.ok(result);
+    }
+
+    @Operation(summary = "Crea un registro de índice de dean.")
+    @PostMapping("/dean-index")
+    public ResponseEntity<Void> create(@Valid @RequestBody DeanIndexToothCodeRequest request) {
+        deanIndexService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(summary = "Obtiene un registro de índice de dean por ID de tratamiento.")
+    @GetMapping("/dean-index/treatment/{id}")
+    public ResponseEntity<DeanIndexToothCodeResponse> getByTreatmentId(@PathVariable("id") Long idTreatment) {
+        DeanIndexToothCodeResponse response = deanIndexService.getByTreatmentId(idTreatment);
+        return ResponseEntity.ok(response);
     }
 }
