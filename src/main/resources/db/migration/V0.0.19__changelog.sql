@@ -70,6 +70,7 @@ CREATE TABLE prophylaxis_toothface_conditions_assignments (
 INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
 VALUES
     (2, 13),
+    (1, 13),
     (2, 3);
 
 INSERT INTO form_component_tooth_faces (fk_form_component, fk_tooth_face)
