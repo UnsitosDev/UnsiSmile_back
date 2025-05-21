@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ReviewStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,20 +45,20 @@ public class ReviewStatusController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener un listado de pacientes con una HC en un determinado estado de revisión.")
+    @Operation(summary = "Obtener un listado de revisiones asignados a un profesor.")
     @GetMapping("/list")
-    public ResponseEntity<Page<PatientResponse>> getPatientsByReviewStatus(
+    public ResponseEntity<Page<ReviewStatusResponse>> getReviewStatusByStatus(
             @RequestParam(defaultValue = "IN_REVIEW") String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Field key for sorting", example = "patientClinicalHistory.idPatientClinicalHistory")
-            @RequestParam(defaultValue = "patientClinicalHistory.idPatientClinicalHistory") String order,
-            @RequestParam(defaultValue = "true") boolean asc){
+            @Parameter(description = "Field key for sorting", example = "createdAt")
+            @RequestParam(defaultValue = "createdAt") String order,
+            @RequestParam(defaultValue = "false") boolean asc){
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest .of(page, size, sort);
 
-        Page<PatientResponse> response = reviewStatusService.getPatientsByReviewStatus(
+        Page<ReviewStatusResponse> response = reviewStatusService.getReviewStatusByStatus(
                 status, pageable);
 
         return ResponseEntity.ok(response);

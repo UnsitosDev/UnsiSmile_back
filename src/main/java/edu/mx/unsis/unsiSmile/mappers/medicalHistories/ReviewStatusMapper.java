@@ -1,18 +1,17 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import java.util.List;
-
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, ReviewStatusRequest, ReviewStatusModel> {
@@ -31,7 +30,17 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
                 .idReviewStatus(entity.getIdReviewStatus())
                 .status(entity.getStatus().toString())
                 .message(entity.getMessage())
-                .idPatientClinicalHistory(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                .idProfessorClinicalArea(entity.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .idSection(entity.getFormSection().getIdFormSection())
+                .patient(ReviewStatusResponse.PatientResp.builder()
+                        .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                        .curp(entity.getPatientClinicalHistory().getPatient().getPerson().getCurp())
+                        .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
+                        .build())
+                .idReviewStatus(entity.getIdReviewStatus())
+                .status(entity.getStatus().toString())
+                .message(entity.getMessage())
                 .build();
     }
 

@@ -7,14 +7,11 @@ import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
@@ -39,7 +36,6 @@ public class ReviewStatusService {
     private final IReviewStatusRepository reviewStatusRepository;
     private final ReviewStatusMapper reviewStatusMapper;
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
-    private final PatientMapper patientMapper;
     private final IPatientRepository patientRepository;
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
@@ -135,7 +131,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PatientResponse> getPatientsByReviewStatus(String status, Pageable pageable) {
+    public Page<ReviewStatusResponse> getReviewStatusByStatus(String status, Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
             ReviewStatus clinicalHistoryStatus = ReviewStatus.valueOf(status.toUpperCase());
@@ -150,11 +146,7 @@ public class ReviewStatusService {
             } else {
                 throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
             }
-
-            return statusModels.map(statusModel -> {
-                PatientModel patient = statusModel.getPatientClinicalHistory().getPatient();
-                return patientMapper.toDto(patient);
-            });
+            return statusModels.map(reviewStatusMapper::toDto);
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + status, HttpStatus.BAD_REQUEST);
         } catch (AppException e) {

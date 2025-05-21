@@ -1,14 +1,24 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @SuperBuilder
 public class ReviewStatusResponse extends ReviewSectionResponse{
-    private Long idPatientClinicalHistory;
+    private Long idPatientMedicalRecord;
     private Long idSection;
     private Long idProfessorClinicalArea;
+    private PatientResp patient;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PatientResp {
+        private String name;
+        private String curp;
+        private Long medicalRecordNumber;
+    }
 }
