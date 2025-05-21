@@ -52,6 +52,7 @@ public class DentalProphylaxisMapper implements BaseMapper<DentalProphylaxisResp
                 .treatmentDetail(TreatmentDetailModel.builder()
                         .idTreatmentDetail(dto.getIdTreatmentDetail())
                         .build())
+                .percentage(dto.getPercentage())
                 .build();
 
         List<ProphylaxisToothConditionAssignmentModel> toothProphylaxisAssignments = dto.getTheetProphylaxis().stream()
