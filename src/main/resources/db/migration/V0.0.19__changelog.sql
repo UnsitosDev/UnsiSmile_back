@@ -18,16 +18,14 @@ values ("Marcado");
 -- Profilaxis dental
 CREATE TABLE dental_prophylaxis (
     id_dental_prophylaxis BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fk_patient CHAR(36) NOT NULL,
-    fk_form_section BIGINT NOT NULL,
+    fk_treatment_detail BIGINT(20) NOT NULL,
     percentage DECIMAL(5, 2) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    CONSTRAINT FK_dental_prophylaxis_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
-    CONSTRAINT FK_dental_prophylaxis_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+    FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details (id_treatment_detail)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE prophylaxis_tooth_condition_assignments (

@@ -342,8 +342,10 @@ public class ResponseMessages {
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "No se encontró la profilaxis dental con ID: ";
     public static final String FAILED_DELETE_DENTAL_PROPHYLAXIS = "Error al eliminar la profilaxis dental";
     public static final String DUPLICATE_ENTRY = "Entrada duplicada";
-    public static final String DENTAL_PROPHYLAXIS_NOT_FOUND_BY_SECTION = "No se encontró la profilaxis dental con el ID de la sección del formulario: ";
+    public static final String DENTAL_PROPHYLAXIS_NOT_FOUND_BY_TREATMENT = "No se encontró la profilaxis dental con el ID de tratamiento: %s";
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT = "Error al obtener la profilaxis dental por ID de paciente";
+    public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_TREATMENT = "Error al obtener la profilaxis dental por ID de tratamiento: %s";
+
 
     public static final String INVALID_STATUS = "Estatus no válido: ";
 

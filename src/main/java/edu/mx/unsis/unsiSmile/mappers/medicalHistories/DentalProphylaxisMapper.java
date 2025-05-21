@@ -3,14 +3,14 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.*;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DentalProphylaxisResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.DentalProphylaxisModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.*;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -49,9 +49,9 @@ public class DentalProphylaxisMapper implements BaseMapper<DentalProphylaxisResp
 
     public static DentalProphylaxisModel toDentalProphylaxisModel(DentalProphylaxisRequest dto) {
         DentalProphylaxisModel dentalProphylaxisModel = DentalProphylaxisModel.builder()
-                .patient(PatientModel.builder().idPatient(dto.getIdPatient()).build())
-                .percentage(dto.getPercentage())
-                .formSection(FormSectionModel.builder().idFormSection(dto.getIdFormSection()).build())
+                .treatmentDetail(TreatmentDetailModel.builder()
+                        .idTreatmentDetail(dto.getIdTreatmentDetail())
+                        .build())
                 .build();
 
         List<ProphylaxisToothConditionAssignmentModel> toothProphylaxisAssignments = dto.getTheetProphylaxis().stream()
