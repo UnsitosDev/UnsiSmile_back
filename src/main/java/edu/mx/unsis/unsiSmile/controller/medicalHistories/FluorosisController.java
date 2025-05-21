@@ -46,7 +46,7 @@ public class FluorosisController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Obtener un registro de fluorosis por id de la sección del formulario y id de paciente")
+    @Operation(summary = "Obtener un registro de fluorosis por id del tratamiento")
     @GetMapping("/treatments/{idTreatment}")
     public ResponseEntity<FluorosisResponse> getFluorosisByTreatmentId(@PathVariable Long idTreatment) {
         FluorosisResponse fluorosisResponse = fluorosisService.getFluorosisByTreatmentId(idTreatment);

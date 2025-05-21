@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DentalProphylaxisRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DentalProphylaxisResponse;
@@ -15,7 +14,6 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisTooth
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IDentalProphylaxisRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IProphylaxisToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IProphylaxisToothfaceConditionsAssignmentRepository;
-import edu.mx.unsis.unsiSmile.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -41,7 +39,6 @@ public class DentalProphylaxisService {
     private final IProphylaxisToothfaceConditionsAssignmentRepository toothFaceConditionAssignmentRepository;
     private final IProphylaxisToothConditionAssignmentRepository toothConditionAssignmentRepository;
     private final DentalProphylaxisMapper dentalProphylaxisMapper;
-    private final AnswerService answerService;
 
     @Transactional(readOnly = true)
     public List<DentalProphylaxisResponse> getAllDentalProphylaxis() {
@@ -83,16 +80,6 @@ public class DentalProphylaxisService {
                 condition.setDentalProphylaxis(dentalProphylaxis);
                 toothFaceConditionAssignmentRepository.save(condition);
             }
-
-            answerService.saveBatch(
-                    List.of(
-                            AnswerRequest.builder()
-                                    .idQuestion(dentalProphylaxisDTO.getIdQuestion())
-                                    .idPatientClinicalHistory(
-                                            dentalProphylaxisDTO.getIdPatientClinicalHistory())
-                                    .answerText("")
-                                    .build()));
-
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ResponseMessages.DUPLICATE_ENTRY, HttpStatus.CONFLICT, e);
         } catch (Exception e) {
@@ -101,19 +88,19 @@ public class DentalProphylaxisService {
 
     }
 
-    public DentalProphylaxisResponse getDentalProphylaxisByFormSectionId(Long formSectionId, String patientId) {
-        DentalProphylaxisModel dentalProphylaxisModel = dentalProphylaxisRepository.findByFormSectionIdAndPatientId(formSectionId, patientId)
-                .orElseThrow(() -> new AppException(ResponseMessages.DENTAL_PROPHYLAXIS_NOT_FOUND_BY_SECTION + formSectionId, HttpStatus.NOT_FOUND));
+    @Transactional
+    public Page<DentalProphylaxisResponse> getDentalProphylaxisByTreatmentId(Long idTreatment, Pageable pageable) {
+        try {
+            Page<DentalProphylaxisModel> dentalProphylaxisPage =
+                    dentalProphylaxisRepository.findByTreatmentId(idTreatment, pageable);
 
-        Long dentalProphylaxisId = dentalProphylaxisModel.getIdDentalProphylaxis();
-
-        List<ProphylaxisToothConditionAssignmentModel> toothConditionAssignments = dentalProphylaxisRepository
-                .findToothConditionAssignmentsByProphylaxisId(dentalProphylaxisId);
-
-        List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions = dentalProphylaxisRepository
-                .findToothFaceConditionsAssignmentByProphylaxisId(dentalProphylaxisId);
-
-        return buildDentalProphylaxisResponse(dentalProphylaxisId, dentalProphylaxisModel.getCreatedAt(), dentalProphylaxisModel.getPercentage(), toothConditionAssignments, toothFaceConditions);
+            return mapToDentalProphylaxisResponsePage(dentalProphylaxisPage);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_TREATMENT, idTreatment),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private DentalProphylaxisResponse buildDentalProphylaxisResponse(
@@ -174,20 +161,32 @@ public class DentalProphylaxisService {
     @Transactional(readOnly = true)
     public Page<DentalProphylaxisResponse> getDentalProphylaxisByPatientId(String patientId, Pageable pageable) {
         try {
-            Page<DentalProphylaxisModel> dentalProphylaxisPage = dentalProphylaxisRepository.findByPatient_IdPatientOrderByCreatedAtDesc(patientId, pageable);
-            return dentalProphylaxisPage.map(dentalProphylaxisModel -> {
-                Long dentalProphylaxisId = dentalProphylaxisModel.getIdDentalProphylaxis();
-
-                List<ProphylaxisToothConditionAssignmentModel> toothConditionAssignments = dentalProphylaxisRepository
-                        .findToothConditionAssignmentsByProphylaxisId(dentalProphylaxisId);
-
-                List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions = dentalProphylaxisRepository
-                        .findToothFaceConditionsAssignmentByProphylaxisId(dentalProphylaxisId);
-
-                return buildDentalProphylaxisResponse(dentalProphylaxisId, dentalProphylaxisModel.getCreatedAt(), dentalProphylaxisModel.getPercentage(), toothConditionAssignments, toothFaceConditions);
-            });
+            Page<DentalProphylaxisModel> dentalProphylaxisPage = dentalProphylaxisRepository.findByPatientId(patientId, pageable);
+            return mapToDentalProphylaxisResponsePage(dentalProphylaxisPage);
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    private Page<DentalProphylaxisResponse> mapToDentalProphylaxisResponsePage(Page<DentalProphylaxisModel> page) {
+        return page.map(dentalProphylaxisModel -> {
+            Long dentalProphylaxisId = dentalProphylaxisModel.getIdDentalProphylaxis();
+
+            List<ProphylaxisToothConditionAssignmentModel> toothConditionAssignments =
+                    dentalProphylaxisRepository.findToothConditionAssignmentsByProphylaxisId(dentalProphylaxisId);
+
+            List<ProphylaxisToothfaceConditionsAssignmentModel> toothFaceConditions =
+                    dentalProphylaxisRepository.findToothFaceConditionsAssignmentByProphylaxisId(dentalProphylaxisId);
+
+            return buildDentalProphylaxisResponse(
+                    dentalProphylaxisId,
+                    dentalProphylaxisModel.getCreatedAt(),
+                    dentalProphylaxisModel.getPercentage(),
+                    toothConditionAssignments,
+                    toothFaceConditions
+            );
+        });
+    }
+
+
 }

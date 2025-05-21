@@ -47,12 +47,21 @@ public class DentalProphylaxisController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/form-section/{formSectionId}/patient/{patientId}")
-    public ResponseEntity<DentalProphylaxisResponse> getDentalProphylaxisByFormSectionIdAndPatientId(@PathVariable Long formSectionId,
-                                                                                                     @PathVariable String patientId) {
-        DentalProphylaxisResponse dentalProphylaxisResponse = dentalProphylaxisService.getDentalProphylaxisByFormSectionId(formSectionId,
-                patientId);
-        return ResponseEntity.ok(dentalProphylaxisResponse);
+    @Operation(summary = "Obtener una lista paginada de profilaxis dental por tratamiento")
+    @GetMapping("/treatments/{idTreatment}")
+    public ResponseEntity<Page<DentalProphylaxisResponse>> getAllByTreatmentId(
+            @PathVariable Long idTreatment,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "false") boolean asc) {
+
+        Sort sort = asc ? Sort.by("createdAt").ascending() : Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<DentalProphylaxisResponse> result = dentalProphylaxisService
+                .getDentalProphylaxisByTreatmentId(idTreatment, pageable);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/patients/{patientId}")
