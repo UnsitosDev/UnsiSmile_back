@@ -1,14 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
@@ -32,6 +23,14 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaReposi
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewSectionNotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,14 +111,19 @@ public class ReviewStatusService {
     @Transactional
     public void sendToReview(Long patientMedicalRecordId, Long sectionId, Long professorClinicalAreaId) {
         try {
-            validateEntitiesExist(patientMedicalRecordId, sectionId, professorClinicalAreaId);
+             PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryRepository.findById(patientMedicalRecordId)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, patientMedicalRecordId),
+                            HttpStatus.NOT_FOUND));
+
+            validateEntitiesExist(sectionId, professorClinicalAreaId);
 
             ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientMedicalRecordId, sectionId,
                     professorClinicalAreaId);
 
             reviewSectionNotificationService.broadcastReviewStatus(
-                    statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory(),
-                    statusModel.getPatientClinicalHistory().getPatient().getIdPatient(),
+                    patientClinicalHistory.getIdPatientClinicalHistory(),
+                    patientClinicalHistory.getPatient().getIdPatient(),
                     reviewStatusMapper.toDto(statusModel));
 
             reviewStatusRepository.save(statusModel);
@@ -199,12 +203,7 @@ public class ReviewStatusService {
                 .build();
     }
 
-    private void validateEntitiesExist(Long idPatientClinicalHistory, Long idSection, Long idProfessorClinicalArea) {
-        patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
-                .orElseThrow(() -> new AppException(
-                        String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientClinicalHistory),
-                        HttpStatus.NOT_FOUND));
-
+    private void validateEntitiesExist(Long idSection, Long idProfessorClinicalArea) {
         formSectionRepository.findById(idSection)
                 .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + idSection,
                         HttpStatus.NOT_FOUND));
