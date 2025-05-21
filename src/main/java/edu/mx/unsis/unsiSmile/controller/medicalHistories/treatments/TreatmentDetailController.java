@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,7 @@ import java.util.List;
 public class TreatmentDetailController {
 
     private final TreatmentDetailService treatmentDetailService;
+    private final TreatmentReportService treatmentReportService;
 
     @Operation(summary = "Crea un nuevo tratamiento para un paciente.")
     @PostMapping
@@ -146,5 +148,33 @@ public class TreatmentDetailController {
     ) {
         List<TreatmentReportResponse> report = treatmentDetailService.getReport(enrollment, semester, startDate, endDate, status);
         return ResponseEntity.ok(report);
+    }
+
+    @Operation(summary = "Genera un reporte PDF de tratamientos para un estudiante")
+    @GetMapping("/reports/students/{idStudent}")
+    public ResponseEntity<byte[]> getTreatmentReportByStudent(
+            @PathVariable String idStudent,
+            @RequestParam(required = false) Long idTreatment) {
+        return treatmentReportService.generateTreatmentReportByStudent(idStudent, idTreatment);
+    }
+
+    @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno para reportes.")
+    @GetMapping("/students/report/{idStudent}")
+    public ResponseEntity<Page<TreatmentDetailResponse>> getAllTreatmentDetailsByStudentForReport(
+            @PathVariable String idStudent,
+            @Parameter(description = "ID del tipo de tratamiento, ejemplo: 1  para las resinas")
+            @RequestParam(required = false) Long idTreatment,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Field key for ordering", example = "idTreatmentDetail")
+            @RequestParam(defaultValue = "idTreatmentDetail") String order,
+            @RequestParam(defaultValue = "false") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(pageable, idStudent, idTreatment);
+
+        return ResponseEntity.ok(treatmentDetails);
     }
 }
