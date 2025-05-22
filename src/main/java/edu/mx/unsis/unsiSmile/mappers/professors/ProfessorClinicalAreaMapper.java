@@ -36,10 +36,7 @@ public class ProfessorClinicalAreaMapper implements BaseMapper<ProfessorClinical
     public ProfessorClinicalAreaResponse toDto(ProfessorClinicalAreaModel entity) {
         return ProfessorClinicalAreaResponse.builder()
                 .idProfessorClinicalArea(entity.getIdProfessorClinicalArea())
-                .professorName(entity.getProfessor().getPerson().getFirstName() 
-                    + " " + entity.getProfessor().getPerson().getSecondName() 
-                    + " " + entity.getProfessor().getPerson().getFirstLastName() 
-                    + " " + entity.getProfessor().getPerson().getSecondLastName())
+                .professorName(entity.getProfessor().getPerson().getFullName())
                 .clinicalArea(ClinicalAreaMapper.toDto(entity.getClinicalArea()))
                 .build();
     }
