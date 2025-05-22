@@ -12,9 +12,11 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +44,7 @@ public class ReviewStatusService {
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final UserService userService;
     private final ReviewSectionNotificationService reviewSectionNotificationService;
+    private final ITreatmentDetailRepository treatmentDetailRepository;
 
     @Transactional
     public void updateReviewStatus(ReviewStatusRequest request) {
@@ -146,7 +150,7 @@ public class ReviewStatusService {
             } else {
                 throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
             }
-            return statusModels.map(reviewStatusMapper::toDto);
+            return statusModels.map(this::buildStatusResponse);
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + status, HttpStatus.BAD_REQUEST);
         } catch (AppException e) {
@@ -218,5 +222,19 @@ public class ReviewStatusService {
                 : ReviewSectionResponse.builder()
                         .status("NO_STATUS")
                         .build();
+    }
+
+    private ReviewStatusResponse buildStatusResponse(ReviewStatusModel statusModel) {
+        Optional<TreatmentDetailModel> treatmentDetailOpt = treatmentDetailRepository
+                .findByPatientClinicalHistory_IdPatientClinicalHistory(
+                        statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory());
+
+        ReviewStatusResponse response = reviewStatusMapper.toDto(statusModel);
+
+        treatmentDetailOpt.ifPresent(treatmentDetail ->
+                response.setIdTreatmentDetail(treatmentDetail.getIdTreatmentDetail())
+        );
+
+        return response;
     }
 }

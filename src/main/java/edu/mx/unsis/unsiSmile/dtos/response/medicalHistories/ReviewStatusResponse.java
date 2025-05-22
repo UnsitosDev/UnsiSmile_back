@@ -10,6 +10,7 @@ public class ReviewStatusResponse extends ReviewSectionResponse{
     private Long idPatientMedicalRecord;
     private Long idSection;
     private Long idProfessorClinicalArea;
+    private Long idTreatmentDetail;
     private PatientResp patient;
 
     @Data
@@ -17,6 +18,7 @@ public class ReviewStatusResponse extends ReviewSectionResponse{
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PatientResp {
+        private String id;
         private String name;
         private String curp;
         private Long medicalRecordNumber;

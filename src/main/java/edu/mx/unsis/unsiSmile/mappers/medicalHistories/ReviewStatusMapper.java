@@ -34,6 +34,7 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
                 .idProfessorClinicalArea(entity.getProfessorClinicalArea().getIdProfessorClinicalArea())
                 .idSection(entity.getFormSection().getIdFormSection())
                 .patient(ReviewStatusResponse.PatientResp.builder()
+                        .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                         .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
                         .curp(entity.getPatientClinicalHistory().getPatient().getPerson().getCurp())
                         .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
