@@ -45,8 +45,8 @@ public class ReviewStatusController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Obtener un listado de revisiones asignados a un profesor.")
-    @GetMapping("/list")
+    @Operation(summary = "Obtener un listado de secciones en revisión asignados a un profesor.")
+    @GetMapping("/review/assigned-sections")
     public ResponseEntity<Page<ReviewStatusResponse>> getReviewStatusByStatus(
             @RequestParam(defaultValue = "IN_REVIEW") String status,
             @RequestParam(defaultValue = "0") int page,
