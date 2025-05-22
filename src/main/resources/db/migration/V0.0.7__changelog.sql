@@ -14,7 +14,7 @@ VALUES
     ("Odontograma prótesis bucal", false),
     ("Plan de tratamiento", false),
     ("Recibo", false),
-    ("Autorización de tratamiento", false),
+    ("Autorización de tratamiento", true),
     ("Evaluación de prótesis parcial fija", false),
     ("Carta de consentimiento informado para prótesis bucal", false);
 
