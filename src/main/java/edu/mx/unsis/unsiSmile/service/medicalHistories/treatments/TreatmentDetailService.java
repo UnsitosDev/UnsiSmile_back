@@ -1,5 +1,19 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
@@ -13,10 +27,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
@@ -30,19 +42,10 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
+import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewTreatmentService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +64,7 @@ public class TreatmentDetailService {
     private final UserService userService;
     private final TreatmentDetailToothService treatmentDetailToothService;
     private final ISemesterRepository semesterRepository;
+    private final ReviewTreatmentService reviewTreatmentService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -71,8 +75,7 @@ public class TreatmentDetailService {
 
             boolean existsInReview = treatmentDetailRepository
                     .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
-                            patientId, ReviewStatus.IN_PROGRESS.toString()
-                    );
+                            patientId, ReviewStatus.IN_PROGRESS.toString());
 
             if (existsInReview) {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_ALREADY_IN_PROGRESS, HttpStatus.CONFLICT);
@@ -82,7 +85,8 @@ public class TreatmentDetailService {
             String scope = treatmentResponse.getTreatmentScope().getName();
 
             if (scope.equals(Constants.TOOTH) && request.getTreatmentDetailToothRequest() == null) {
-                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
+                        HttpStatus.BAD_REQUEST);
             }
 
             TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse);
@@ -97,23 +101,25 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_CREATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_CREATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
     private void validateRequestDependencies(TreatmentDetailRequest request) {
-        if(request.getStartDate().isAfter(request.getEndDate())){
-            throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE, HttpStatus.BAD_REQUEST);
+        if (request.getStartDate().isAfter(request.getEndDate())) {
+            throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE,
+                    HttpStatus.BAD_REQUEST);
         }
         patientService.getPatientById(request.getPatientId());
         treatmentService.getTreatmentById(request.getTreatmentId());
     }
 
-    private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request, TreatmentResponse treatmentResponse) {
+    private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request,
+            TreatmentResponse treatmentResponse) {
         PatientClinicalHistoryModel clinicalHistory = patientClinicalHistoryService.save(
                 request.getPatientId(),
-                treatmentResponse.getClinicalHistoryCatalogId()
-        );
+                treatmentResponse.getClinicalHistoryCatalogId());
 
         UserResponse currentUser = userService.getCurrentUser();
         StudentGroupModel studentGroup = studentGroupService.getStudentGroupByStudent(currentUser.getUsername());
@@ -131,8 +137,7 @@ public class TreatmentDetailService {
         if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
             treatmentDetail.setTeeth(
                     treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
-                            treatmentDetailModel.getIdTreatmentDetail()
-                    ));
+                            treatmentDetailModel.getIdTreatmentDetail()));
         }
         return treatmentDetail;
     }
@@ -162,7 +167,8 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
@@ -187,11 +193,13 @@ public class TreatmentDetailService {
                 TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
 
                 if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
-                    throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
+                    throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
+                            HttpStatus.BAD_REQUEST);
                 }
 
                 Long treatmentDetailId = saved.getIdTreatmentDetail();
-                List<String> currentTeeth = treatmentDetailToothService.getAllTeethByTreatmentDetailId(treatmentDetailId);
+                List<String> currentTeeth = treatmentDetailToothService
+                        .getAllTeethByTreatmentDetailId(treatmentDetailId);
                 List<String> updatedTeeth = toothRequest.getIdTeeth();
 
                 List<String> toDelete = currentTeeth.stream()
@@ -215,10 +223,10 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
-
 
     @Transactional
     public void deleteTreatmentDetail(Long id) {
@@ -237,7 +245,8 @@ public class TreatmentDetailService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudent(Pageable pageable, String idStudent, Long idTreatment) {
+    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudent(Pageable pageable, String idStudent,
+            Long idTreatment) {
         try {
             StudentModel studentModel = getStudentModel(idStudent);
 
@@ -266,13 +275,14 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
-
     @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(Pageable pageable, String idStudent, Long idTreatment) {
+    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(Pageable pageable, String idStudent,
+            Long idTreatment) {
         try {
             StudentModel studentModel = getStudentModel(idStudent);
 
@@ -297,7 +307,8 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
@@ -308,14 +319,12 @@ public class TreatmentDetailService {
             return studentRepository.findById(currentUser.getUsername())
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.STUDENT_NOT_FOUND,
-                            HttpStatus.NOT_FOUND
-                    ));
+                            HttpStatus.NOT_FOUND));
         } else {
             return studentRepository.findById(idStudent)
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.STUDENT_NOT_FOUND,
-                            HttpStatus.NOT_FOUND
-                    ));
+                            HttpStatus.NOT_FOUND));
         }
     }
 
@@ -330,29 +339,36 @@ public class TreatmentDetailService {
                         HttpStatus.BAD_REQUEST);
             }
 
-            boolean isSectionInReview = reviewStatusRepository.existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
-                    treatment.getPatientClinicalHistory().getIdPatientClinicalHistory(),
-                    ReviewStatus.IN_REVIEW
-            );
+            boolean isSectionInReview = reviewStatusRepository
+                    .existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
+                            treatment.getPatientClinicalHistory().getIdPatientClinicalHistory(),
+                            ReviewStatus.IN_REVIEW);
 
             if (isSectionInReview) {
                 throw new AppException(ResponseMessages.ERROR_SECTIONS_IN_REVIEW,
                         HttpStatus.BAD_REQUEST);
             }
 
-            ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository.findById(professorClinicalAreaId)
+            ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository
+                    .findById(professorClinicalAreaId)
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + professorClinicalAreaId,
                             HttpStatus.NOT_FOUND));
 
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
+            TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
+            treatmentDetailMapper.toDto(treatmentDetail);
 
-            return toDto(treatmentDetailRepository.save(treatment));
+            // send notification
+            this.sendNotifications(treatmentDetail);
+
+            return toDto(treatmentDetail);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -361,13 +377,14 @@ public class TreatmentDetailService {
         try {
             if (status != ReviewStatus.FINISHED && status != ReviewStatus.REJECTED) {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS,
-                        HttpStatus.BAD_REQUEST
-                );
+                        HttpStatus.BAD_REQUEST);
             }
 
             TreatmentDetailModel treatment = getValidTreatment(id, ReviewStatus.IN_REVIEW);
 
             treatment.setStatus(status.toString());
+
+            this.sendNotifications(treatment);
 
             return toDto(treatmentDetailRepository.save(treatment));
         } catch (AppException e) {
@@ -375,9 +392,18 @@ public class TreatmentDetailService {
         } catch (Exception ex) {
             throw new AppException(
                     ResponseMessages.FAILED_FINALIZE_TREATMENT_DETAIL,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void sendNotifications(TreatmentDetailModel treatment) {
+        this.reviewTreatmentService.broadcastReviewTreatmentToStudent(
+                treatment.getIdTreatmentDetail(),
+                treatment.getPatientClinicalHistory().getPatient().getIdPatient(),
+                treatmentDetailMapper.toDto(treatment));
+
+        this.reviewTreatmentService.broadcastReviewTreatmentToProfessor(treatment.getProfessor().getIdProfessor(),
+        treatmentDetailMapper.toDto(treatment));
     }
 
     private TreatmentDetailModel getValidTreatment(Long id, ReviewStatus requiredCurrentStatus) {
@@ -410,13 +436,14 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
     @Transactional(readOnly = true)
     public List<TreatmentReportResponse> getReport(String enrollment, Long semesterId,
-                                                   LocalDate startDate, LocalDate endDate, ReviewStatus status) {
+            LocalDate startDate, LocalDate endDate, ReviewStatus status) {
         try {
             StudentModel student = studentRepository.findById(enrollment)
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
@@ -444,13 +471,15 @@ public class TreatmentDetailService {
                     String scope = t.getTreatment().getTreatmentScope().getName();
 
                     if (Constants.TOOTH.equals(scope)) {
-                        List<String> teeth = treatmentDetailToothService.getAllTeethByTreatmentDetailId(t.getIdTreatmentDetail());
+                        List<String> teeth = treatmentDetailToothService
+                                .getAllTeethByTreatmentDetailId(t.getIdTreatmentDetail());
                         for (String toothId : teeth) {
                             detailResponses.add(TreatmentReportResponse.TreatmentReportDetailResponse.builder()
                                     .treatmentDate(t.getEndDate().toLocalDate())
                                     .toothId(toothId)
                                     .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
-                                    .medicalRecordNumber(String.valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                    .medicalRecordNumber(String.valueOf(
+                                            t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
                                     .professorName(t.getProfessor().getPerson().getFullName())
                                     .build());
                         }
@@ -459,7 +488,8 @@ public class TreatmentDetailService {
                                 .treatmentDate(t.getEndDate().toLocalDate())
                                 .toothId(null)
                                 .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
-                                .medicalRecordNumber(String.valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                .medicalRecordNumber(String
+                                        .valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
                                 .professorName(t.getProfessor().getPerson().getFullName())
                                 .build());
                     }
@@ -475,13 +505,13 @@ public class TreatmentDetailService {
                     TreatmentReportResponse.builder()
                             .studentName(studentName)
                             .treatments(groupedTreatments)
-                            .build()
-            );
+                            .build());
 
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_REPORT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_REPORT, HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex);
         }
     }
 
@@ -497,18 +527,22 @@ public class TreatmentDetailService {
         return endDate;
     }
 
-    private List<TreatmentDetailModel> getTreatments(String enrollment, StudentModel student, Long semesterId, ReviewStatus status) {
+    private List<TreatmentDetailModel> getTreatments(String enrollment, StudentModel student, Long semesterId,
+            ReviewStatus status) {
         if (semesterId != null) {
             semesterRepository.findById(semesterId)
                     .orElseThrow(() -> new AppException(ResponseMessages.SEMESTER_NOT_FOUND, HttpStatus.NOT_FOUND));
             return treatmentDetailRepository.findByStudentAndSemester(enrollment, semesterId, status.toString());
         } else {
-            return treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(student, status.toString(), Constants.ACTIVE);
+            return treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(student, status.toString(),
+                    Constants.ACTIVE);
         }
     }
 
-    private List<TreatmentDetailModel> filterByDateRange(List<TreatmentDetailModel> treatments, LocalDate startDate, LocalDate endDate) {
-        if (startDate == null || endDate == null) return treatments;
+    private List<TreatmentDetailModel> filterByDateRange(List<TreatmentDetailModel> treatments, LocalDate startDate,
+            LocalDate endDate) {
+        if (startDate == null || endDate == null)
+            return treatments;
 
         return treatments.stream()
                 .filter(t -> {
@@ -521,9 +555,9 @@ public class TreatmentDetailService {
 
     private List<TreatmentDetailResponse> toDtoList(TreatmentDetailModel treatmentDetailModel) {
         if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
-            List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
-                    treatmentDetailModel.getIdTreatmentDetail()
-            );
+            List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService
+                    .getTreatmentDetailTeethByTreatmentDetail(
+                            treatmentDetailModel.getIdTreatmentDetail());
 
             return teeth.stream()
                     .map(tooth -> {
