@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetailModel, Long> {
@@ -63,4 +64,6 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "AND t.status = ?3 AND t.statusKey = 'A' " +
             "ORDER BY t.treatment.name")
     List<TreatmentDetailModel> findByStudentAndSemester(String enrollment, Long semesterId, String status);
+
+    Optional<TreatmentDetailModel> findByPatientClinicalHistory_IdPatientClinicalHistory(Long idPatientMedicalRecord);
 }

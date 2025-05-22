@@ -7,17 +7,16 @@ import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,12 +39,12 @@ public class ReviewStatusService {
     private final IReviewStatusRepository reviewStatusRepository;
     private final ReviewStatusMapper reviewStatusMapper;
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
-    private final PatientMapper patientMapper;
     private final IPatientRepository patientRepository;
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final UserService userService;
     private final ReviewSectionNotificationService reviewSectionNotificationService;
+    private final ITreatmentDetailRepository treatmentDetailRepository;
 
     @Transactional
     public void updateReviewStatus(ReviewStatusRequest request) {
@@ -135,7 +135,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PatientResponse> getPatientsByReviewStatus(String status, Pageable pageable) {
+    public Page<ReviewStatusResponse> getReviewStatusByStatus(String status, Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
             ReviewStatus clinicalHistoryStatus = ReviewStatus.valueOf(status.toUpperCase());
@@ -150,11 +150,7 @@ public class ReviewStatusService {
             } else {
                 throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
             }
-
-            return statusModels.map(statusModel -> {
-                PatientModel patient = statusModel.getPatientClinicalHistory().getPatient();
-                return patientMapper.toDto(patient);
-            });
+            return statusModels.map(this::buildStatusResponse);
         } catch (IllegalArgumentException e) {
             throw new AppException(ResponseMessages.INVALID_STATUS + status, HttpStatus.BAD_REQUEST);
         } catch (AppException e) {
@@ -226,5 +222,21 @@ public class ReviewStatusService {
                 : ReviewSectionResponse.builder()
                         .status("NO_STATUS")
                         .build();
+    }
+
+    private ReviewStatusResponse buildStatusResponse(ReviewStatusModel statusModel) {
+        Optional<TreatmentDetailModel> treatmentDetailOpt = treatmentDetailRepository
+                .findByPatientClinicalHistory_IdPatientClinicalHistory(
+                        statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory());
+
+        ReviewStatusResponse response = reviewStatusMapper.toDto(statusModel);
+
+        treatmentDetailOpt.ifPresent(treatmentDetail -> {
+                    response.setIdTreatmentDetail(treatmentDetail.getIdTreatmentDetail());
+                    response.setStudentName(treatmentDetail.getStudentGroup().getStudent().getPerson().getFullName());
+                }
+        );
+
+        return response;
     }
 }
