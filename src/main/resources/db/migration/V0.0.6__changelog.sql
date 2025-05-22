@@ -16,7 +16,7 @@ VALUES
 INSERT INTO form_sections
 (form_name, requires_review)
 VALUES
-    ("Signos vitales", true),
+    ("Signos vitales", false),
     ("Exámen facial", false),
     ("Antecedentes heredofamiliares", false),
     ("Antecedentes personales no patológicos", false),
