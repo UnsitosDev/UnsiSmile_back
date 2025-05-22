@@ -11,6 +11,7 @@ public class ReviewStatusResponse extends ReviewSectionResponse{
     private Long idSection;
     private Long idProfessorClinicalArea;
     private Long idTreatmentDetail;
+    private String studentName;
     private PatientResp patient;
 
     @Data

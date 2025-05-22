@@ -231,8 +231,10 @@ public class ReviewStatusService {
 
         ReviewStatusResponse response = reviewStatusMapper.toDto(statusModel);
 
-        treatmentDetailOpt.ifPresent(treatmentDetail ->
-                response.setIdTreatmentDetail(treatmentDetail.getIdTreatmentDetail())
+        treatmentDetailOpt.ifPresent(treatmentDetail -> {
+                    response.setIdTreatmentDetail(treatmentDetail.getIdTreatmentDetail());
+                    response.setStudentName(treatmentDetail.getStudentGroup().getStudent().getPerson().getFullName());
+                }
         );
 
         return response;
