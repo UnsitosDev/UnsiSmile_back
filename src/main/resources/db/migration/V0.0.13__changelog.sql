@@ -6,8 +6,8 @@ VALUES
     ("Profilaxis Dental", false), -- tiene hijos
     ("Profilaxis Dental - Sesiones", false),
     ("Fluorosis", false),
-    ("Barniz o selladores de fosetas y fisuras", false),
-    ("Observaciones", false),-- tiene hijos
+    ("Barniz o selladores de fosetas y fisuras", true),
+    ("Observaciones", true),-- tiene hijos
     ("Formatos Legales y Consentimientos", false); 
 
 
@@ -15,7 +15,7 @@ INSERT INTO
     form_sections (form_name, fk_parent_section, requires_review)
 VALUES  
     ("Indice de Higiene Oral Simplificado (IHOS)", 48, false),
-    ("Profilaxis / Detartraje", 52, false);
+    ("Profilaxis / Detartraje", 52, true);
 
 INSERT INTO clinical_history_sections
 (fk_clinical_history_catalog,
