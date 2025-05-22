@@ -56,13 +56,11 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
         entity.setMessage(request.getMessage());
     }
 
-    public ReviewStatusModel toEntity(Long idPatientClinicalHistory, Long idSection, Long idProfessorClinicalArea) {
+    public ReviewStatusModel toEntity(PatientClinicalHistoryModel patientClinicalHistory, Long idSection, Long idProfessorClinicalArea) {
         return ReviewStatusModel.builder()
                 .status(ReviewStatus.IN_REVIEW)
                 .message(null)
-                .patientClinicalHistory(PatientClinicalHistoryModel.builder()
-                        .idPatientClinicalHistory(idPatientClinicalHistory)
-                        .build())
+                .patientClinicalHistory(patientClinicalHistory)
                 .formSection(FormSectionModel.builder()
                         .idFormSection(idSection)
                         .build())

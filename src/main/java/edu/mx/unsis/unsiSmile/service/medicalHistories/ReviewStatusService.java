@@ -118,7 +118,7 @@ public class ReviewStatusService {
 
             validateEntitiesExist(sectionId, professorClinicalAreaId);
 
-            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientMedicalRecordId, sectionId,
+            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientClinicalHistory, sectionId,
                     professorClinicalAreaId);
 
             reviewSectionNotificationService.broadcastReviewStatus(
