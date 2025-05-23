@@ -1,11 +1,3 @@
-INSERT INTO
-    form_sections (form_name, requires_review)
-VALUES ("Fluorosis", false);
-
-INSERT INTO
-    questions (question_text, fk_form_section, fk_answer_type, question_order, required)
-values("Sección contestada", 57, 3, 1, true);
-
 -- Fluorosis
 CREATE TABLE fluorosis (
     id_fluorosis BIGINT AUTO_INCREMENT PRIMARY KEY,

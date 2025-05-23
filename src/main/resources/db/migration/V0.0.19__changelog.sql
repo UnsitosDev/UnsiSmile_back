@@ -1,12 +1,4 @@
 INSERT INTO
-    form_sections (form_name, requires_review)
-VALUES ("Profilaxis dental", false);
-
-INSERT INTO
-    questions (question_text, fk_form_section, fk_answer_type, question_order, required)
-values("Sección contestada", 56, 3, 1, true);
-
-INSERT INTO
     tooth_conditions (description)
 values ("Diente no presente"), -- profilaxis
        ("Resto radicular"); -- odontograma

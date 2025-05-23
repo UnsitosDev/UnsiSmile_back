@@ -4,7 +4,6 @@ INSERT INTO
     form_sections (form_name, requires_review)
 VALUES
     ("Profilaxis Dental", false), -- tiene hijos
-    ("Profilaxis Dental - Sesiones", false),
     ("Fluorosis", false),
     ("Barniz o selladores de fosetas y fisuras", true),
     ("Observaciones", true),-- tiene hijos
@@ -15,7 +14,7 @@ INSERT INTO
     form_sections (form_name, fk_parent_section, requires_review)
 VALUES  
     ("Indice de Higiene Oral Simplificado (IHOS)", 48, false),
-    ("Profilaxis / Detartraje", 52, true);
+    ("Profilaxis / Detartraje", 51, true);
 
 INSERT INTO clinical_history_sections
 (fk_clinical_history_catalog,
@@ -23,10 +22,9 @@ INSERT INTO clinical_history_sections
  section_order)
 VALUES
     (6, 48, 1),
-    (6, 49, 2),
+    (6, 49, 3),
     (6, 50, 3),
-    (6, 51, 3),
-    (6, 52, 4);
+    (6, 51, 4);
 
 -- catalogo estado civil
 
@@ -57,24 +55,12 @@ INSERT INTO
     placeholder 
 )
 VALUES
-    ("Diente 16", 53, 3, 1, false, "Código"),
-    ("Diente 11", 53, 3, 2, false, "Código"),
-    ("Diente 26", 53, 3, 3, false, "Código"),
-    ("Diente 46", 53, 3, 4, false, "Código"),
-    ("Diente 31", 53, 3, 5, false, "Código"),
-    ("Diente 36", 53, 3, 6, false, "Código");
-
--- profilaxis dental sesiones 
-INSERT INTO 
-    questions (
-    question_text,
-    fk_form_section,
-    fk_answer_type,
-    question_order,
-    required
-)
-VALUES
-    ("Fotografias Sesiones", 49, 6, 1, false);
+    ("Diente 16", 52, 3, 1, false, "Código"),
+    ("Diente 11", 52, 3, 2, false, "Código"),
+    ("Diente 26", 52, 3, 3, false, "Código"),
+    ("Diente 46", 52, 3, 4, false, "Código"),
+    ("Diente 31", 52, 3, 5, false, "Código"),
+    ("Diente 36", 52, 3, 6, false, "Código");
 
 -- Fluorosis
 INSERT INTO 
@@ -87,12 +73,12 @@ INSERT INTO
     placeholder 
 )
 VALUES
-    ("Diente 13", 50, 3, 1, false, "Código"),
-    ("Diente 12", 50, 3, 2, false, "Código"),
-    ("Diente 11", 50, 3, 3, false, "Código"),
-    ("Diente 21", 50, 3, 4, false, "Código"),
-    ("Diente 22", 50, 3, 5, false, "Código"),
-    ("Diente 23", 50, 3, 6, false, "Código");
+    ("Diente 13", 49, 3, 1, false, "Código"),
+    ("Diente 12", 49, 3, 2, false, "Código"),
+    ("Diente 11", 49, 3, 3, false, "Código"),
+    ("Diente 21", 49, 3, 4, false, "Código"),
+    ("Diente 22", 49, 3, 5, false, "Código"),
+    ("Diente 23", 49, 3, 6, false, "Código");
 
 -- BARNIZ O SELLADORES DE FOSETAS Y FISURAS
 INSERT INTO 
@@ -105,14 +91,14 @@ INSERT INTO
     placeholder 
 )
 VALUES
-    ("Autorización", 51, 3, 1, false, "Descripción"),
-    ("Aislamiento relativo", 51, 3, 2, false, "Descripción"),
-    ("Limpieza de superficie", 51, 3, 3, false, "Descripción"),
-    ("Grabado", 51, 3, 4, false, "Descripción"),
-    ("Lavado y secado", 51, 3, 5, false, "Descripción"),
-    ("Sellador de foseta y fisura", 51, 3, 6, false, "Descripción"),
-    ("Terminado", 51, 3, 7, false, "Descripción"),
-    ("Fotografias Barniz o selladores de fosetas y fisuras", 51, 6, 8, false, "Descripción");
+    ("Autorización", 50, 3, 1, false, "Descripción"),
+    ("Aislamiento relativo", 50, 3, 2, false, "Descripción"),
+    ("Limpieza de superficie", 50, 3, 3, false, "Descripción"),
+    ("Grabado", 50, 3, 4, false, "Descripción"),
+    ("Lavado y secado", 50, 3, 5, false, "Descripción"),
+    ("Sellador de foseta y fisura", 50, 3, 6, false, "Descripción"),
+    ("Terminado", 50, 3, 7, false, "Descripción"),
+    ("Fotografias Barniz o selladores de fosetas y fisuras", 50, 6, 8, false, "Descripción");
 
 -- Observaciones
 
@@ -126,10 +112,9 @@ INSERT INTO
     fk_catalog
 )
 VALUES
-    ("Fecha Aplicación Tópica de Flúor ", 52, 9, 1, false, null),
-    ("Nombre del operador", 52, 3, 2, false, null),
-    ("Nombre del asistente", 52, 3, 3, false, null),
-    ("Docente que autoriza", 52, 4, 4, true, 13);
+    ("Fecha Aplicación Tópica de Flúor ", 51, 9, 1, false, null),
+    ("Nombre del operador", 51, 3, 2, false, null),
+    ("Nombre del asistente", 51, 3, 3, false, null);
 
 -- PROFILAXIS / DETARTRAJE
 INSERT INTO questions
@@ -141,9 +126,8 @@ INSERT INTO questions
  placeholder,
  fk_catalog)
 VALUES
-    ("Enseñó al paciente las caras teñidas por la pastilla reveladora", 54, 1, 1, false, null, null),
-    ("Explicó al paciente uso de la pastilla reveladora", 54, 1, 2, false, null, null),
-    ("Eliminó la placa dentobacteriana o cálculo de los dientes", 54, 1, 3, false, null, null),
-    ("Explicó al paciente técnica de cepillado", 54, 1, 4, false, null, null),
-    ("Archivos requeridos para autorización", 55, 7, 1, false, null, null);
+    ("Enseñó al paciente las caras teñidas por la pastilla reveladora", 53, 1, 1, false, null, null),
+    ("Explicó al paciente uso de la pastilla reveladora", 53, 1, 2, false, null, null),
+    ("Eliminó la placa dentobacteriana o cálculo de los dientes", 53, 1, 3, false, null, null),
+    ("Explicó al paciente técnica de cepillado", 53, 1, 4, false, null, null);
 
