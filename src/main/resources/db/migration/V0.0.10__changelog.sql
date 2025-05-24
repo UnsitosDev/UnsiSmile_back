@@ -1,12 +1,12 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE PRÓTESIS BUCAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (form_name, requires_review)
+    form_sections (id_form_section, form_name, requires_review)
 VALUES
-    ("Interrogatorio por aparatos y sistemas", false),
-    ("Padecimiento actual", false),
-    ("Recomendaciones previas a la intervensión quirúrgica", false),
-    ("Recomendaciones para despues de intervenciones quirúrgicas", false),
-    ("Carta de consentimiento informado para cirugía oral", false)
+    ("IAS-01", "Interrogatorio por aparatos y sistemas", false),
+    ("PA-01", "Padecimiento actual", false),
+    ("RPIQ-01", "Recomendaciones previas a la intervensión quirúrgica", false),
+    ("RDIQ-01", "Recomendaciones para despues de intervenciones quirúrgicas", false),
+    ("CCICO-01", "Carta de consentimiento informado para cirugía oral", false)
 ;
 
 INSERT INTO
@@ -28,13 +28,13 @@ INSERT INTO
     section_order
 )
 VALUES
-    (5, 1, 1), 
-    (5, 3, 2), 
-    (5, 43, 3), 
-    (5, 44, 4), 
-    (5, 29, 5), 
-    (5, 45, 6), 
-    (5, 47, 8)
+    (5, "SV-01", 1),
+    (5, "AH-01", 2),
+    (5, "IAS-01", 3),
+    (5, "PA-01", 4),
+    (5, "R-01", 5),
+    (5, "RPIQ-01", 6),
+    (5, "CCICO-01", 8)
 ;
 
 -- interrogatorio por aparatos y sistemas
@@ -47,11 +47,11 @@ INSERT INTO
     required
 )
 values
-    ("Aparato cardiovascular", 43, 3, 1, true),
-    ("Aparato Digestivo", 43, 3, 2, true),
-    ("Aparato Renal", 43, 3, 3, true),
-    ("Sistema Nervioso", 43, 3, 4, true),
-    ("Sistema Genital", 43, 3, 5, true)
+    ("Aparato cardiovascular", "IAS-01", 3, 1, true),
+    ("Aparato Digestivo", "IAS-01", 3, 2, true),
+    ("Aparato Renal", "IAS-01", 3, 3, true),
+    ("Sistema Nervioso", "IAS-01", 3, 4, true),
+    ("Sistema Genital", "IAS-01", 3, 5, true)
 ;
 
 -- padecimiento actual
@@ -64,17 +64,17 @@ INSERT INTO
     required
 )
 values
-    ("Fecha de última consulta médica", 44, 9, 1, true),
-    ("Motivo de última consulta médica", 44, 8, 2, true),
-    ("Fecha de ultima consulta dental", 44, 9, 3, true),
-    ("Motivo de última consulta dental", 44, 8, 4, true),
-    ("Si es mujer, ¿Está embarazada?", 44, 1, 5, false),
-    ("Si es mujer, ¿Está lactando?", 44, 1, 7, false),
-    ("Examen Radiológico", 44, 3, 8, true),
-    ("Técnicas de Anestesia", 44, 3, 9, true),
-    ("Instrumental", 44, 3, 10, true),
-    ("Dientes Extraídos", 44, 2, 11, true),
-    ("Estado del Paciente", 44, 3, 12, true)
+    ("Fecha de última consulta médica", "PA-01", 9, 1, true),
+    ("Motivo de última consulta médica", "PA-01", 8, 2, true),
+    ("Fecha de ultima consulta dental", "PA-01", 9, 3, true),
+    ("Motivo de última consulta dental", "PA-01", 8, 4, true),
+    ("Si es mujer, ¿Está embarazada?", "PA-01", 1, 5, false),
+    ("Si es mujer, ¿Está lactando?", "PA-01", 1, 7, false),
+    ("Examen Radiológico", "PA-01", 3, 8, true),
+    ("Técnicas de Anestesia", "PA-01", 3, 9, true),
+    ("Instrumental", "PA-01", 3, 10, true),
+    ("Dientes Extraídos", "PA-01", 2, 11, true),
+    ("Estado del Paciente", "PA-01", 3, 12, true)
 ;
 
 INSERT INTO
@@ -87,7 +87,7 @@ INSERT INTO
     required
 )
 VALUES
-    ("Tipo de Sangrado", 44, 4,11, 6, false); -- catalog
+    ("Tipo de Sangrado", "PA-01", 4,11, 6, false); -- catalog
 
 INSERT INTO
     questions (
@@ -98,7 +98,7 @@ INSERT INTO
     required
 )
 values
-    ("Recomendaciones previas a la intervensión quirúrgica", 45, 6, 1, true),
-    ("Recomendaciones para despues de intervenciones quirúrgicas", 46, 6, 1, true),
-    ("Carta de consentimiento informado para cirugía oral", 47, 6, 1, true)
+    ("Recomendaciones previas a la intervensión quirúrgica", "RPIQ-01", 6, 1, true),
+    ("Recomendaciones para despues de intervenciones quirúrgicas", "RDIQ-01", 6, 1, true),
+    ("Carta de consentimiento informado para cirugía oral", "CCICO-01", 6, 1, true)
 ;

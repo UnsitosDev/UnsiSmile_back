@@ -67,7 +67,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        fk_form_section BIGINT NOT NULL,
+        fk_form_section VARCHAR(100) NOT NULL,
         FOREIGN KEY (fk_patient) REFERENCES patients (id_patient),
         CONSTRAINT FK_periodontograms_form_sections FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
         UNIQUE (fk_patient, fk_form_section)

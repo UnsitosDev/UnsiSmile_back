@@ -1,9 +1,8 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (form_name, requires_review)
+    form_sections (id_form_section, form_name, requires_review)
 VALUES
-    ("Exploración de la cavidad bucal y anexos", false),
-    ("Carta de concentimiento informado para periodoncia", false);
+    ("ECBA-01", "Exploración de la cavidad bucal y anexos", false);
 
 INSERT INTO
     clinical_history_sections (
@@ -12,13 +11,13 @@ INSERT INTO
     section_order
 )
 VALUES
-    (4, 1, 1), 
-    (4, 21, 2), 
-    (4, 5, 3), 
-    (4, 23, 4), 
-    (4, 28, 5), 
-    (4, 29, 6), 
-    (4, 32, 7) -- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
+    (4, "SV-01", 1),
+    (4, "I-01", 2),
+    (4, "APP-02", 3),
+    (4, "ECB-01", 4),
+    (4, "PT-01", 5),
+    (4, "R-01", 6),
+    (4, "CCIPB-01", 7) -- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
 ;
 
 INSERT INTO
@@ -30,26 +29,8 @@ INSERT INTO
     required
 )
 values
-    ("Tejidos blandos", 41, 8, 1, true),
-    ("Articulación temporomandibular", 41,8, 2, true),
-    ("Diagnóstico", 41,8, 3, true),
-    ("Estudio de laboratorio y gabinete", 41,8, 4, true),
-    ("Indicaciones de interconsulta médica u odontológica", 41,8, 5, true);
-
-INSERT INTO
-    questions (
-    question_text,
-    fk_form_section,
-    fk_answer_type,
-    question_order,
-    required
-)
-values
-    (
-        "Carta de concentimiento informado para operatoria dental",
-        42,
-        6,
-        1,
-        true
-    )
-;
+    ("Tejidos blandos", "ECBA-01", 8, 1, true),
+    ("Articulación temporomandibular", "ECBA-01",8, 2, true),
+    ("Diagnóstico", "ECBA-01",8, 3, true),
+    ("Estudio de laboratorio y gabinete", "ECBA-01",8, 4, true),
+    ("Indicaciones de interconsulta médica u odontológica", "ECBA-01",8, 5, true);
