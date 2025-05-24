@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel, Long> {
 
     Optional<ReviewStatusModel> findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(
-            Long idPatientClinicalHistory, Long idSection);
+            Long idPatientClinicalHistory, String idSection);
 
     @Query("SELECT s FROM ReviewStatusModel s " +
             "WHERE s.patientClinicalHistory.patient.idPatient = :idPatient " +
@@ -24,7 +24,7 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
             "ORDER BY s.createdAt DESC")
     List<ReviewStatusModel> findAllByPatientIdAndSectionOrdered(
             @Param("idPatient") String idPatient,
-            @Param("idSection") Long idSection);
+            @Param("idSection") String idSection);
 
     @Query("SELECT DISTINCT s FROM ReviewStatusModel s " +
             "WHERE s.status = :status " +

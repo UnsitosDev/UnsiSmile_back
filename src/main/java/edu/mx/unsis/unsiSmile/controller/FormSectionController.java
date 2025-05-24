@@ -31,7 +31,7 @@ public class FormSectionController {
 
     @Operation(summary = "Obtiene una sección y la configuración con el id de la historia clínica del paciente.")
     @GetMapping("/{id}")
-    public ResponseEntity<FormSectionResponse> findById(@PathVariable Long id, @Nullable @RequestParam Long idPatientClinicalHistory) {
+    public ResponseEntity<FormSectionResponse> findById(@PathVariable String id, @RequestParam Long idPatientClinicalHistory) {
         FormSectionResponse response = formSectionService.findById(id, idPatientClinicalHistory);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class FormSectionController {
 
     @Operation(summary = "Elimina una sección por su id.")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable String id) {
         formSectionService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

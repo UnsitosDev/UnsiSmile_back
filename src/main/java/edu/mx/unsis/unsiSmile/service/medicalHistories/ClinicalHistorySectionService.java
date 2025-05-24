@@ -22,7 +22,7 @@ public class ClinicalHistorySectionService {
     private final IClinicalHistorySectionRepository clinicalHistorySectionRepository;
 
     @Transactional
-    public ClinicalHistorySectionModel save(Long idClinicalHistory, Long idSection) {
+    public ClinicalHistorySectionModel save(Long idClinicalHistory, String idSection) {
         try {
             return clinicalHistorySectionRepository.save(toEntity(idClinicalHistory, idSection));
         } catch (Exception ex) {
@@ -80,7 +80,7 @@ public class ClinicalHistorySectionService {
         }
     }
 
-    private ClinicalHistorySectionModel toEntity(Long idClinicalHistory, Long idSection) {
+    private ClinicalHistorySectionModel toEntity(Long idClinicalHistory, String idSection) {
         return ClinicalHistorySectionModel.builder()
                 .clinicalHistoryCatalogModel(ClinicalHistoryCatalogModel.builder()
                         .idClinicalHistoryCatalog(idClinicalHistory)

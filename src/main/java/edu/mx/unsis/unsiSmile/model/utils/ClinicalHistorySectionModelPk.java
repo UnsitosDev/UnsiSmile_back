@@ -19,5 +19,5 @@ public class ClinicalHistorySectionModelPk implements Serializable {
     private Long idClinicalHistoryCatalog;
 
     @Column(name = "fk_form_section")
-    private Long idFormSectionModel;
+    private String idFormSectionModel;
 }

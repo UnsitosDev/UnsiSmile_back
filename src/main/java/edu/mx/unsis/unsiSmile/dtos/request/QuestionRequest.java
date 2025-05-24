@@ -23,7 +23,7 @@ public class QuestionRequest {
     private Long order;
 
     @NotNull(message = "The Id Form Section cannot be null.")
-    private Long idFormSection;
+    private String idFormSection;
 
     @NotNull(message = "The Id Answer Type cannot be null.")
     private Long idAnswerType;

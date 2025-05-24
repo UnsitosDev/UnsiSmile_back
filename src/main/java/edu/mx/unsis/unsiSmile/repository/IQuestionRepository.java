@@ -12,5 +12,5 @@ import java.util.List;
 public interface IQuestionRepository extends JpaRepository<QuestionModel, Long> {
 
     @Query("SELECT q FROM QuestionModel q WHERE q.formSectionModel.idFormSection = :sectionId ORDER BY q.order")
-    List<QuestionModel> findAllByFormSectionId(@Param("sectionId") Long sectionId);
+    List<QuestionModel> findAllByFormSectionId(@Param("sectionId") String sectionId);
 }
