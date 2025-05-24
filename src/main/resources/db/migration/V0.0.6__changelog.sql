@@ -21,8 +21,6 @@ VALUES
     ("AH-01", "Antecedentes heredofamiliares", false),
     ("APP-01", "Antecedentes personales no patológicos", false),
     ("APP-02", "Antecedentes personales patológicos", false),
-    ("OI-01", "Odontograma inicial", false),
-    ("OF-01", "Odontograma final", false),
     ("MBI-01", "Medición de bolsas inicial", false),
     ("EC-01", "Exámen clínico", false),
     ("AF-01", "Análisis funcional", false),
@@ -54,8 +52,6 @@ VALUES
     (1,"AH-01", 3),
     (1,"APP-01", 4),
     (1,"APP-02", 5),
-    (1,"OI-01", 6),
-    (1,"OF-01", 7),
     (1,"MBI-01", 8),
     (1,"EC-01", 9),
     (1,"AF-01", 10),
@@ -380,8 +376,6 @@ INSERT INTO questions
  required,
  placeholder)
 VALUES
-("odontograma", "OI-01", 1, 1, false, ""), -- pregunta que funciona como bandera para saber si en odontograma ha sido llenado
-("odontograma", "OF-01", 1, 1, false, ""), -- pregunta que funciona como bandera para saber si en odontograma ha sido llenado
 ("periodontograma", "MBI-01", 1, 1, false, "") -- pregunta que funciona como bandera para saber si en periodontograma ha sido llenado
 ;
 
