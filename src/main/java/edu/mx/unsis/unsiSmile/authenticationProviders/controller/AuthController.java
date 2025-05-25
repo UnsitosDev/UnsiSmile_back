@@ -1,11 +1,9 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.controller;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.PasswordUpdateRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.TokenRefreshResponse;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.*;
 import edu.mx.unsis.unsiSmile.authenticationProviders.jwt.service.RefreshTokenService;
 import edu.mx.unsis.unsiSmile.authenticationProviders.service.AuthService;
+import edu.mx.unsis.unsiSmile.authenticationProviders.service.OtpTokenService;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +25,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final RefreshTokenService refreshTokenService;
+    private final OtpTokenService otpTokenService;
 
     /**
      * Inicia sesión en la aplicación.
@@ -46,7 +45,8 @@ public class AuthController {
      * @param passwordUpdateRequest Objeto que contiene la nueva contraseña.
      * @return ResponseEntity con el estado de la operación.
      */
-    @PatchMapping("/update-password")
+    @Operation(summary = "Actualiza la contraseña del usuario desde su perfil.")
+    @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid PasswordUpdateRequest passwordUpdateRequest) {
         authService.updatePassword(passwordUpdateRequest);
@@ -65,10 +65,34 @@ public class AuthController {
     }
 
     @Operation(summary = "Restablece la contraseña de un usuario a la predeterminada (solo ADMIN)")
-    @PatchMapping("/reset-password-to-default")
-    @PreAuthorize("hasRole('ROLE_ADMIN')") // Solo los administradores pueden restablecer contraseñas
+    @PatchMapping("/password/default")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> resetPasswordToDefault(@RequestParam String username) {
         authService.resetPasswordToDefault(username);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(summary = "Solicita un código OTP para recuperación de contraseña")
+    @PostMapping("/password/recovery-request")
+    public ResponseEntity<Void> requestPasswordRecovery(
+            @RequestBody @Valid PasswordRecoveryRequest request) {
+        authService.sendRecoveryCode(request.getEmail());
+        return ResponseEntity.accepted().build();
+    }
+
+    @Operation(summary = "Valida el código OTP para recuperación de contraseña")
+    @PostMapping("/password/validate-otp")
+    public ResponseEntity<OtpValidationResponse> validateOtp(
+            @RequestBody @Valid OtpValidationRequest request) {
+        OtpValidationResponse response = otpTokenService.validateCode(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Establece una nueva contraseña después de validar el código OTP")
+    @PatchMapping("/password/recovery")
+    public ResponseEntity<Void> setNewPassword(
+            @RequestBody @Valid NewPasswordRequest request) {
+        authService.updatePasswordWithRecovery(request);
+        return ResponseEntity.ok().build();
     }
 }

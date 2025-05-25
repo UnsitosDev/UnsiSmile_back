@@ -22,4 +22,12 @@ public class Constants {
     public static final String TOOTH = "Diente";
 
     public static final String GENERAL_MEDICAL_RECORD = "General";
+
+    // Email
+    public static final String RECOVERY_PASSWORD = "RECOVERY PASSWORD";
+    public static final String RECOVERY_PASSWORD_SUBJECT = "Recuperación de contraseña";
+
+    // Recovery password
+    public static final String RECOVERY_PASSWORD_TEXT_BODY = "Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en UnsiSmile";
+    public static final String RECOVERY_PASSWORD_FOOTER = "© Recuperación de contraseña - UnsiSmile. Todos los derechos reservados. %s";
 }

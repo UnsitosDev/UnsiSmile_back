@@ -519,4 +519,27 @@ public class ResponseMessages {
     public static final String EMAIL_BODY_CANNOT_BE_NULL = "El cuerpo del correo no puede ser nulo";
     public static final String EMAIL_RECIPIENTS_CANNOT_BE_NULL = "La lista de destinatarios no puede ser nula";
     public static final String INVALID_EMAIL_ADDRESS = "Dirección de correo inválida";
+    public static final String EMAIL_NOT_FOUND = "No hay registro del correo electrónico, verifique que haya ingresado el correcto";
+    public static final String EMAIL_NOT_MATCH = "El correo electrónico no coincide con el registrado para el usuario proporcionado";
+    public static final String ERROR_LOADING_EMAIL_TEMPLATE = "Error al cargar la plantilla del correo electrónico";
+
+    //otp
+    public static final String NOT_BLANK_OTP = "El campo del código de verificación no puede estar vacío";
+    public static final String INVALID_OTP_SIZE = "El código de verificación debe tener exactamente 6 dígitos";
+    public static final String INVALID_OTP_CODE = "El código de verificación no es válido";
+    public static final String OTP_CODE_EXPIRED = "El código de verificación ha expirado";
+    public static final String OTP_NOT_FOUND = "No se encontró un código asociado a este correo";
+    public static final String OTP_CODE_VALID = "El código de verificación es válido.";
+    public static final String OTP_ALREADY_USED = "El código ya fue usado";
+    public static final String OTP_TOO_MANY_ATTEMPTS = "Demasiados intentos de verificación. Solicite un nuevo código.";
+    public static final String OTP_CODE_VALIDATION_ERROR = "Error al validar el código de verificación";
+    public static final String OTP_CODE_NOT_VALIDATED = "El código de verificación no ha sido validado previamente";
+    public static final String OTP_CODE_NOT_MATCH = "El código de verificación no coincide";
+    public static final String OTP_CODE_VALIDATION_EXPIRED = "La validación del código ha expirado";
+
+    // New Password Request
+    public static final String ERROR_RECOVERING_PASSWORD = "Error al recuperar la contraseña";
+    public static final String NOT_BLANK_PASSWORD = "El campo de contraseña no puede estar vacío";
+    public static final String NOT_BLANK_CONFIRM_PASSWORD = "El campo de confirmación de contraseña no puede estar vacío";
+    public static final String NOT_BLANK_USERNAME = "El campo de nombre de usuario no puede estar vacío";
 }
