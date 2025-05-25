@@ -39,7 +39,7 @@ public class ReviewStatusController {
     @PostMapping("/{patientMedicalRecordId}/sections/{sectionId}/review/{professorClinicalAreaId}")
     public ResponseEntity<Void> sendToReview(
             @PathVariable Long patientMedicalRecordId,
-            @PathVariable Long sectionId,
+            @PathVariable String sectionId,
             @PathVariable Long professorClinicalAreaId) {
         reviewStatusService.sendToReview(patientMedicalRecordId, sectionId, professorClinicalAreaId);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -76,7 +76,7 @@ public class ReviewStatusController {
     @GetMapping("/{idPatientMedicalRecord}/{idSection}")
     public ResponseEntity<ReviewStatusResponse> getStatusByPatientMedicalRecordId(
             @PathVariable Long idPatientMedicalRecord,
-            @PathVariable Long idSection) {
+            @PathVariable String idSection) {
         ReviewStatusResponse response = reviewStatusService.getStatusByPatientMedicalRecordId(
                 idPatientMedicalRecord,
                 idSection);

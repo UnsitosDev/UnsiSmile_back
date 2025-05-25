@@ -92,7 +92,7 @@ public class ClinicalHistoryCatalogController {
     @PostMapping("/clinial-history-section")
     public ResponseEntity<ClinicalHistorySectionModel> createClinicalHistorySection(
             @RequestParam Long idClinicalHistory,
-            @RequestParam Long idSection
+            @RequestParam String idSection
     ) {
         ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

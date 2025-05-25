@@ -3,7 +3,7 @@ CREATE TABLE review_status (
     status VARCHAR(100) NOT NULL,
     message LONGTEXT DEFAULT NULL,
     fk_patient_clinical_history BIGINT(20) NOT NULL,
-    fk_form_section BIGINT(20) NOT NULL,
+    fk_form_section VARCHAR(100) NOT NULL,
     fk_professor_clinical_area BIGINT(20) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,

@@ -72,7 +72,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusModel getStatusModelByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
+    public ReviewStatusModel getStatusModelByPatientMedicalRecordId(Long idPatientMedicalRecord, String idSection) {
         try {
             PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository
                     .findById(idPatientMedicalRecord)
@@ -95,7 +95,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, Long idSection) {
+    public ReviewStatusResponse getStatusByPatientMedicalRecordId(Long idPatientMedicalRecord, String idSection) {
         try {
             ReviewStatusModel statusModel = this.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord,
                     idSection);
@@ -109,7 +109,7 @@ public class ReviewStatusService {
     }
 
     @Transactional
-    public void sendToReview(Long patientMedicalRecordId, Long sectionId, Long professorClinicalAreaId) {
+    public void sendToReview(Long patientMedicalRecordId, String sectionId, Long professorClinicalAreaId) {
         try {
              PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryRepository.findById(patientMedicalRecordId)
                     .orElseThrow(() -> new AppException(
@@ -161,7 +161,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, Long idSection) {
+    public ReviewStatusModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, String idSection) {
         return reviewStatusRepository.findAllByPatientIdAndSectionOrdered(idPatient, idSection)
                 .stream()
                 .findFirst()
@@ -199,7 +199,7 @@ public class ReviewStatusService {
                 .build();
     }
 
-    private void validateEntitiesExist(Long idSection, Long idProfessorClinicalArea) {
+    private void validateEntitiesExist(String idSection, Long idProfessorClinicalArea) {
         formSectionRepository.findById(idSection)
                 .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + idSection,
                         HttpStatus.NOT_FOUND));

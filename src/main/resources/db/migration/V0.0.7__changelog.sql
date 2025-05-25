@@ -2,30 +2,30 @@
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3, ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- Secciones padre:
 INSERT INTO
-    form_sections (form_name, requires_review)
+    form_sections (id_form_section, form_name, requires_review)
 VALUES
-    ("Signos vitales", false),
-    ("Interrogatorio", false),
-    ("Examen parodontal", false),
-    ("Exploración de la cavidad bucal", false),
-    ("Exámen de dientes pilares", false),
-    ("Exámen radiográfico de dientes pilares", false), -- tiene hijos
-    ("Exámen de organo dentario", false), -- tiene hijos
-    ("Odontograma prótesis bucal", false),
-    ("Plan de tratamiento", false),
-    ("Recibo", false),
-    ("Autorización de tratamiento", true),
-    ("Evaluación de prótesis parcial fija", false),
-    ("Carta de consentimiento informado para prótesis bucal", false);
+    ("SV-02", "Signos vitales", false),
+    ("I-01", "Interrogatorio", false),
+    ("EP-01", "Examen parodontal", false),
+    ("ECB-01", "Exploración de la cavidad bucal", false),
+    ("EDP-01", "Exámen de dientes pilares", false),
+    ("ERDP-01", "Exámen radiográfico de dientes pilares", false), -- tiene hijos
+    ("EOD-01", "Exámen de organo dentario", false), -- tiene hijos
+    ("OPB-01", "Odontograma prótesis bucal", false),
+    ("PT-01", "Plan de tratamiento", false),
+    ("R-01", "Recibo", false),
+    ("AT-01", "Autorización de tratamiento", true),
+    ("EPPF-01", "Evaluación de prótesis parcial fija", false),
+    ("CCIPB-01", "Carta de consentimiento informado para prótesis bucal", false);
 
 INSERT INTO
-    form_sections (form_name, fk_parent_section, requires_review) -- 6 y 7
+    form_sections (id_form_section, form_name, fk_parent_section, requires_review) -- 6 y 7
 VALUES
-    ("Cámara pulpar", 25, false),
-    ("Zona apical", 25, false),
-    ("Conducto radicular", 25, false),
-    ("Número de conductos", 26, false),
-    ("Proporción corona-raíz", 26, false);
+    ("CP-01", "Cámara pulpar", "ERDP-01", false),
+    ("ZA-01", "Zona apical", "ERDP-01", false),
+    ("CR-01", "Conducto radicular", "ERDP-01", false),
+    ("NC-01", "Número de conductos", "EOD-01", false),
+    ("PCR-01", "Proporción corona-raíz", "EOD-01", false);
 
 INSERT INTO
     clinical_history_sections (
@@ -34,19 +34,19 @@ INSERT INTO
     section_order
 )
 VALUES
-    (2, 1, 1),
-    (2, 21, 2),
-    (2, 22, 3),
-    (2, 23, 4),
-    (2, 24, 5),
-    (2, 25, 6),
-    (2, 26, 7),
-    (2, 27, 8),
-    (2, 28, 9),
-    (2, 29, 10),
-    (2, 30, 11),
-    (2, 31, 12),
-    (2, 32, 13);
+    (2, "SV-02", 1),
+    (2, "I-01", 2),
+    (2, "EP-01", 3),
+    (2, "ECB-01", 4),
+    (2, "EDP-01", 5),
+    (2, "ERDP-01", 6),
+    (2, "EOD-01", 7),
+    (2, "OPB-01", 8),
+    (2, "PT-01", 9),
+    (2, "R-01", 10),
+    (2, "AT-01", 11),
+    (2, "EPPF-01", 12),
+    (2, "CCIPB-01", 13);
 
 INSERT INTO
     catalogs (catalog_name)
@@ -97,11 +97,11 @@ INSERT INTO
     required
 )
 VALUES
-    ("Peso", 20, 2, 1, true),
-    ("T/A", 20, 3, 2, true),
-    ("Pulso", 20, 2, 3, true),
-    ("Temperatura", 20, 2, 4, true),
-    ("Glucosa", 20, 2, 5, true);
+    ("Peso", "SV-02", 2, 1, true),
+    ("T/A", "SV-02", 3, 2, true),
+    ("Pulso", "SV-02", 2, 3, true),
+    ("Temperatura", "SV-02", 2, 4, true),
+    ("Glucosa", "SV-02", 2, 5, true);
 
 -- INTERROGATIORIO
 INSERT INTO
@@ -113,83 +113,83 @@ INSERT INTO
     required
 )
 VALUES
-    ("Motivo de la consulta", 21, 8, 3, true),
-    ("Padecimiento Actual", 21, 8, 4, true),
-    ("¿Goza usted de buena salud?", 21, 1, 6, false),
+    ("Motivo de la consulta", "I-01", 8, 3, true),
+    ("Padecimiento Actual", "I-01", 8, 4, true),
+    ("¿Goza usted de buena salud?", "I-01", 1, 6, false),
     (
         "¿Está siendo atendido actualmente por un médico?",
-        21,
+        "I-01",
         1,
         7,
         false
     ),
     (
         "Fecha de su último examen físico",
-        21,
+        "I-01",
         9,
         1,
         true
     ),
     (
         "¿Está recibiendo en este momento cualquier tipo de medicación (prescrita o no prescrita) o droga? Si este es el caso, indique los nombres de los medicamentos y las razones por las cuales las usa.",
-        21,
+        "I-01",
         5,
         8,
         false
     ),
     (
         "¿Hay alguna medicina que usted no pueda tomar?",
-        21,
+        "I-01",
         5,
         9,
         false
     ),
     (
         "¿Alguna vez ha sufrido una reacción inusual a una droga/medicamento?",
-        21,
+        "I-01",
         5,
         10,
         false
     ),
     (
         "¿Ha tenido complicaciones con la anestesia local?",
-        21,
+        "I-01",
         5,
         11,
         false
     ),
     (
         "¿Existe alguna otra información que deba ser conocida acerca de su salud?",
-        21,
+        "I-01",
         5,
         12,
         false
     ),
     (
         "¿Padece alguna enfermedad infecciosa? (Fiebre reumática, hepatitis, paludismo, sífilis):",
-        21,
+        "I-01",
         5,
         13,
         false
     ),
-    ("¿Sufre de ataques epilépticos?", 21, 1, 5, false),
+    ("¿Sufre de ataques epilépticos?", "I-01", 1, 5, false),
     (
         "Acerca de sus consultas odontológicas previas",
-        21,
+        "I-01",
         8,
         2,
         true
     ),
     (
         "En caso de ser mujer, ¿usted está embarazada? (especificar los meses)",
-        21,
+        "I-01",
         5,
         14,
         false
     ),
     (   
         "¿Usa usted marca paso cardiaco?", 
-        21, 
+        "I-01",
         5, 
         15, 
         false
@@ -204,14 +204,14 @@ INSERT INTO
     required
 )
 VALUES
-    ("Materia alba", 22, 1, 1, false),
-    ("Placa bacteriana", 22, 1, 2, false),
-    ("Sarro", 22, 1, 3, false),
-    ("Gingivitis", 22, 1, 4, false),
-    ("Bolsas periodontales", 22, 1, 5, false),
-    ("Absceso periodontal", 22, 1, 6, false),
-    ("Reabsorción ósea", 22, 1, 7, false),
-    ("Movilidad dental", 22, 1, 8, false);
+    ("Materia alba", "EP-01", 1, 1, false),
+    ("Placa bacteriana", "EP-01", 1, 2, false),
+    ("Sarro", "EP-01", 1, 3, false),
+    ("Gingivitis", "EP-01", 1, 4, false),
+    ("Bolsas periodontales", "EP-01", 1, 5, false),
+    ("Absceso periodontal", "EP-01", 1, 6, false),
+    ("Reabsorción ósea", "EP-01", 1, 7, false),
+    ("Movilidad dental", "EP-01", 1, 8, false);
 
 INSERT INTO
     questions (
@@ -222,20 +222,20 @@ INSERT INTO
     required
 )
 values
-    ("Piso de la boca", 23, 3, 1, true),
-    ("Labios", 23, 3, 2, true),
-    ("Paladar duro y blando", 23, 3, 3, true),
-    ("Lengua", 23, 3, 4, true),
-    ("Carrillos", 23, 3, 5, true),
-    ("Proceso residual", 23, 3, 6, true),
-    ("Áreas edéntulas", 23, 3, 7, true),
-    ("Mucosa bucal:", 23, 3, 8, true),
-    ("Articulación temporomandibular", 23, 3, 9, true),
-    ("Tejidos Blandos", 23, 3, 10, true),
-    ("Tejidos Óseos", 23, 3, 11, true),
-    ("Diagnóstico", 23, 3, 12, true),
-    ("Estudio de Laboratorio y Gabinete", 23, 3, 12, false),
-    ("Indicaciones de interconsulta Médica u Odontológica", 23, 3, 13, false);
+    ("Piso de la boca", "ECB-01", 3, 1, true),
+    ("Labios", "ECB-01", 3, 2, true),
+    ("Paladar duro y blando", "ECB-01", 3, 3, true),
+    ("Lengua", "ECB-01", 3, 4, true),
+    ("Carrillos", "ECB-01", 3, 5, true),
+    ("Proceso residual", "ECB-01", 3, 6, true),
+    ("Áreas edéntulas", "ECB-01", 3, 7, true),
+    ("Mucosa bucal:", "ECB-01", 3, 8, true),
+    ("Articulación temporomandibular", "ECB-01", 3, 9, true),
+    ("Tejidos Blandos", "ECB-01", 3, 10, true),
+    ("Tejidos Óseos", "ECB-01", 3, 11, true),
+    ("Diagnóstico", "ECB-01", 3, 12, true),
+    ("Estudio de Laboratorio y Gabinete", "ECB-01", 3, 12, false),
+    ("Indicaciones de interconsulta Médica u Odontológica", "ECB-01", 3, 13, false);
 
 INSERT INTO
     questions (
@@ -246,10 +246,10 @@ INSERT INTO
     required
 )
 values
-    ("Fecha de inicio", 28, 9, 1, true),
-    ("Fecha de terminado", 28, 9, 2, true),
-    ("Observaciones", 28, 8, 3, false),
-    ("Control post-operatorio", 28, 8, 4, true);
+    ("Fecha de inicio", "PT-01", 9, 1, true),
+    ("Fecha de terminado", "PT-01", 9, 2, true),
+    ("Observaciones", "PT-01", 8, 3, false),
+    ("Control post-operatorio", "PT-01", 8, 4, true);
 
 INSERT INTO
     questions (
@@ -260,7 +260,7 @@ INSERT INTO
     required
 )
 values
-    ("Recibo", 29, 6, 1, true);
+    ("Recibo", "R-01", 6, 1, true);
 
 INSERT INTO
     questions (
@@ -273,7 +273,7 @@ INSERT INTO
 values
     (
         "Firma de autorización de tratamiento",
-        30,
+        "AT-01",
         6,
         1,
         true
@@ -288,7 +288,7 @@ INSERT INTO
     required
 )
 values
-    ("Evolución", 31, 6, 1, true);
+    ("Evolución", "EPPF-01", 6, 1, true);
 
 INSERT INTO
     questions (
@@ -301,7 +301,7 @@ INSERT INTO
 values
     (
         "Carta de consentimiento informado para prótesis bucal",
-        32,
+        "CCIPB-01",
         6,
         1,
         true
@@ -318,9 +318,9 @@ INSERT INTO
     required
 )
 VALUES
-    ("Cámara pulpar", 33, 4, 6, 1, true),
-    ("Zona apical", 34, 4, 7, 2, true),
-    ("Conducto radicular", 35, 4, 8, 3, true);
+    ("Cámara pulpar", "CP-01", 4, 6, 1, true),
+    ("Zona apical", "ZA-01", 4, 7, 2, true),
+    ("Conducto radicular", "CR-01", 4, 8, 3, true);
 
 
 INSERT INTO
@@ -333,8 +333,8 @@ INSERT INTO
     required
 )
 VALUES
-    ("Número de conductos", 36, 4, 9, 1, true),
-    ("Proporción corona-raíz", 37, 4, 10, 2, true);
+    ("Número de conductos", "NC-01", 4, 9, 1, true),
+    ("Proporción corona-raíz", "PCR-01", 4, 10, 2, true);
 
 INSERT INTO
     questions (
@@ -345,16 +345,16 @@ INSERT INTO
     required
 )
 values
-    ("Dientes cariados", 24, 3, 1, true),
-    ("Amalgamas", 24, 3, 2, true),
-    ("Dientes ausentes", 24, 3, 3, true),
-    ("Resinas", 24, 3, 4, true),
-    ("Dientes obturados", 24, 3, 5, true),
-    ("Incrustaciones", 24, 3, 6, true),
-    ("Extracciones indicadas", 24, 3, 7, true),
-    ("Prótesis fija", 24, 3, 8, true),
-    ("Raíces", 24, 3, 9, true),
-    ("Prótesis removible", 24, 3, 10, true);
+    ("Dientes cariados", "EDP-01", 3, 1, true),
+    ("Amalgamas", "EDP-01", 3, 2, true),
+    ("Dientes ausentes", "EDP-01", 3, 3, true),
+    ("Resinas", "EDP-01", 3, 4, true),
+    ("Dientes obturados", "EDP-01", 3, 5, true),
+    ("Incrustaciones", "EDP-01", 3, 6, true),
+    ("Extracciones indicadas", "EDP-01", 3, 7, true),
+    ("Prótesis fija", "EDP-01", 3, 8, true),
+    ("Raíces", "EDP-01", 3, 9, true),
+    ("Prótesis removible", "EDP-01", 3, 10, true);
 
 INSERT INTO question_validations
 (fk_question,

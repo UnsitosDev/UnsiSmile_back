@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IFormSectionRepository extends JpaRepository<FormSectionModel, Long> {
+public interface IFormSectionRepository extends JpaRepository<FormSectionModel, String> {
 
     @Query("SELECT fs FROM FormSectionModel fs WHERE fs.parentSection.idFormSection = :parentSectionId")
-    List<FormSectionModel> findByParenSectionId(@Param("parentSectionId") Long parentSectionId);
+    List<FormSectionModel> findByParenSectionId(@Param("parentSectionId") String parentSectionId);
 }

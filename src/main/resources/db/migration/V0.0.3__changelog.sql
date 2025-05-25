@@ -11,9 +11,9 @@ CREATE TABLE clinical_history_catalogs (
 
 -- FormSections Table
 CREATE TABLE form_sections (
-                               id_form_section BIGINT(20) NOT NULL AUTO_INCREMENT,
+                               id_form_section VARCHAR(100) NOT NULL,
                                form_name VARCHAR(100) NOT NULL,
-                               fk_parent_section BIGINT(20) DEFAULT NULL,
+                               fk_parent_section VARCHAR(100) DEFAULT NULL,
                                requires_review TINYINT(1) DEFAULT NULL,
                                created_at DATETIME(6) DEFAULT NULL,
                                created_by VARCHAR(255) DEFAULT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE form_sections (
 -- ClinicalHistorySections Table
 CREATE TABLE clinical_history_sections (
                                            fk_clinical_history_catalog bigint(20) NOT NULL,
-                                           fk_form_section bigint(20) NOT NULL,
+                                           fk_form_section VARCHAR(100) NOT NULL,
                                            section_order bigint(20) DEFAULT null,
                                            created_at DATETIME(6) DEFAULT NULL,
                                            created_by VARCHAR(255) DEFAULT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE questions (
                            placeholder text default null,
                            required tinyint(1) not null default false,
                            question_order bigint(20) not null,
-                           fk_form_section bigint(20) NOT NULL,
+                           fk_form_section VARCHAR(100) NOT NULL,
                            fk_answer_type bigint(20) NOT NULL,
                            fk_catalog bigint(20) default null,
                            created_at DATETIME(6) DEFAULT NULL,

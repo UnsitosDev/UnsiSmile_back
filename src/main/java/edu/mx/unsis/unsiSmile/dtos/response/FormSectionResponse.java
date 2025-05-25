@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class FormSectionResponse {
 
-    private Long idFormSection;
+    private String idFormSection;
 
     private String formName;
 
