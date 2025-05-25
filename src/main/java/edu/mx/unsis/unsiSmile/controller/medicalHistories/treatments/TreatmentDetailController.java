@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentGeneralReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,6 +31,7 @@ public class TreatmentDetailController {
 
     private final TreatmentDetailService treatmentDetailService;
     private final TreatmentReportService treatmentReportService;
+    private final TreatmentGeneralReportService treatmentGeneralReportService;
 
     @Operation(summary = "Crea un nuevo tratamiento para un paciente.")
     @PostMapping
@@ -156,6 +158,13 @@ public class TreatmentDetailController {
             @PathVariable String idStudent,
             @RequestParam(required = false) Long idTreatment) {
         return treatmentReportService.generateTreatmentReportByStudent(idStudent, idTreatment);
+    }
+
+    @Operation(summary = "Genera un reporte general PDF de todos los tratamientos realizados por un estudiante")
+    @GetMapping("/reports/students/{idStudent}/general")
+    public ResponseEntity<byte[]> getGeneralTreatmentReportByStudent(
+            @PathVariable String idStudent) {
+        return treatmentGeneralReportService.generateGeneralTreatmentReportByStudent(idStudent);
     }
 
     @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno para reportes.")
