@@ -26,5 +26,8 @@ public class Constants {
     // Email
     public static final String RECOVERY_PASSWORD = "RECOVERY PASSWORD";
     public static final String RECOVERY_PASSWORD_SUBJECT = "Recuperación de contraseña";
-    public static final String RECOVERY_PASSWORD_TEXT_BODY = "Tu código de recuperación es: {code}\nEste código expirará en 10 minutos.";
+
+    // Recovery password
+    public static final String RECOVERY_PASSWORD_TEXT_BODY = "Hemos recibido una solicitud para restablecer la contraseña de tu cuenta en UnsiSmile";
+    public static final String RECOVERY_PASSWORD_FOOTER = "© Recuperación de contraseña - UnsiSmile. Todos los derechos reservados. %s";
 }

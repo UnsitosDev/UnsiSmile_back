@@ -222,8 +222,9 @@ public class AuthService {
         try {
             String subject = Constants.RECOVERY_PASSWORD_SUBJECT;
             String textBody = Constants.RECOVERY_PASSWORD_TEXT_BODY;
+            String footer = Constants.RECOVERY_PASSWORD_FOOTER;
 
-            otpTokenService.generateAndSendOtp(email, subject, Constants.RECOVERY_PASSWORD, textBody, null);
+            otpTokenService.generateAndSendOtp(email, subject, Constants.RECOVERY_PASSWORD, textBody, footer);
         } catch (AppException e) {
             throw e;
         }

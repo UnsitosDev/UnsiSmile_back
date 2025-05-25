@@ -7,10 +7,16 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +53,21 @@ public class EmailService {
             throw new AppException(ResponseMessages.EMAIL_SEND_ERROR, HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public String buildOtpHtml(String userName, String body, String code, String footer) {
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/recovery_password_template.html");
+            String template = Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
+            String year = String.valueOf(LocalDate.now().getYear());
+            return template
+                    .replace("{{user}}", userName)
+                    .replace("{{code}}", code)
+                    .replace("{{body}}", body)
+                    .replace("{{footer}}", String.format(footer, year));
+        } catch (IOException | AppException ex) {
+            throw new AppException(ResponseMessages.ERROR_LOADING_EMAIL_TEMPLATE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

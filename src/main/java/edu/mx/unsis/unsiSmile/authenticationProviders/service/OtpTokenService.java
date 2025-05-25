@@ -8,6 +8,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.EmailRequest;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
 import edu.mx.unsis.unsiSmile.service.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,10 @@ public class OtpTokenService {
     private final IPersonRepository personRepository;
 
     @Transactional
-    public void generateAndSendOtp(String email, String subject, String purpose, String textBody, String htmlBody) {
+    public void generateAndSendOtp(String email, String subject, String purpose, String textBody, String footer) {
         try {
-            if (!personRepository.existsByEmail(email)) {
-                throw new AppException(ResponseMessages.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND);
-            }
+            PersonModel person = personRepository.findByEmail(email)
+                    .orElseThrow(() -> new AppException(ResponseMessages.EMAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             otpTokenRepository.findByEmail(email).ifPresent(otpTokenRepository::delete);
 
@@ -47,8 +47,10 @@ public class OtpTokenService {
             otp.generateId();
 
             otpTokenRepository.save(otp);
+            String htmlBody = emailService.buildOtpHtml(person.getFirstName(), textBody, code, footer);
 
-            EmailRequest request = buildEmailRequest(email, subject, textBody, htmlBody, code);
+            EmailRequest request = buildEmailRequest(email, subject, null, htmlBody, code);
+
             emailService.sendEmail(request);
 
         } catch (AppException e) {

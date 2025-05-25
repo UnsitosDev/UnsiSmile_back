@@ -485,6 +485,7 @@ public class ResponseMessages {
     public static final String INVALID_EMAIL_ADDRESS = "Dirección de correo inválida";
     public static final String EMAIL_NOT_FOUND = "No hay registro del correo electrónico, verifique que haya ingresado el correcto";
     public static final String EMAIL_NOT_MATCH = "El correo electrónico no coincide con el registrado para el usuario proporcionado";
+    public static final String ERROR_LOADING_EMAIL_TEMPLATE = "Error al cargar la plantilla del correo electrónico";
 
     //otp
     public static final String NOT_BLANK_OTP = "El campo del código de verificación no puede estar vacío";
