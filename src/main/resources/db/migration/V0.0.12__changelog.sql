@@ -13,4 +13,4 @@ CREATE TABLE review_status (
     FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
     FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section),
     FOREIGN KEY (fk_professor_clinical_area) REFERENCES professor_clinical_areas(id_professor_clinical_area)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
