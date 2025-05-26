@@ -1,19 +1,13 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.TreatmentCountResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.students.StudentModel;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.DashboardService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,21 +24,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TreatmentGeneralReportService {
 
-    private final IStudentRepository studentRepository;
     private final DashboardService dashboardService;
     private final JasperReportService jasperReportService;
-    private final TreatmentDetailService treatmentDetailService;
-
 
     @Transactional(readOnly = true)
-    public ResponseEntity<byte[]> generateGeneralTreatmentReportByStudent(String idStudent) {
+    public ResponseEntity<byte[]> generateGeneralTreatmentReport() {
         try {
-            // Obtenemos el estudiante
-            StudentModel student = studentRepository.findById(idStudent)
-                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-
-            // Obtenemos el dashboard del estudiante que contiene los datos de tratamientos
-            StudentDashboardResponse dashboard = dashboardService.getStudentDashboardMetrics(idStudent);
+            // Obtenemos los datos del dashboard de administrador que contiene datos generales
+            AdminDashboardResponse dashboard = dashboardService.getAdminDashboardMetrics();
 
             // Preparamos los datos para el informe
             List<Map<String, Object>> reportDataList = prepareDataForGeneralReport(dashboard.getTreatments());
@@ -62,7 +49,7 @@ public class TreatmentGeneralReportService {
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
                     .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"treatment_general_report_" + idStudent + ".pdf\"")
+                            "attachment; filename=\"treatment_general_report.pdf\"")
                     .body(pdfBytes);
         } catch (AppException e) {
             throw e;

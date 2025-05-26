@@ -160,11 +160,10 @@ public class TreatmentDetailController {
         return treatmentReportService.generateTreatmentReportByStudent(idStudent, idTreatment);
     }
 
-    @Operation(summary = "Genera un reporte general PDF de todos los tratamientos realizados por un estudiante")
-    @GetMapping("/reports/students/{idStudent}/general")
-    public ResponseEntity<byte[]> getGeneralTreatmentReportByStudent(
-            @PathVariable String idStudent) {
-        return treatmentGeneralReportService.generateGeneralTreatmentReportByStudent(idStudent);
+    @Operation(summary = "Genera un reporte general PDF de todos los tratamientos realizados")
+    @GetMapping("/reports/general")
+    public ResponseEntity<byte[]> getGeneralTreatmentReport() {
+        return treatmentGeneralReportService.generateGeneralTreatmentReport();
     }
 
     @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno para reportes.")
