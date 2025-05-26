@@ -45,23 +45,12 @@ public class TreatmentGeneralReportService {
 
             // Obtenemos el dashboard del estudiante que contiene los datos de tratamientos
             StudentDashboardResponse dashboard = dashboardService.getStudentDashboardMetrics(idStudent);
-            
-            // Obtenemos el grupo del estudiante
-            String groupName = "";
-            Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(
-                    Pageable.unpaged(), idStudent, null);
-            List<TreatmentDetailResponse> treatments = new ArrayList<>(treatmentsPage.getContent());
-            if (!treatments.isEmpty() && treatments.get(0).getStudent() != null && treatments.get(0).getStudent().getGroup() != null) {
-                groupName = treatments.get(0).getStudent().getGroup();
-            }
 
             // Preparamos los datos para el informe
             List<Map<String, Object>> reportDataList = prepareDataForGeneralReport(dashboard.getTreatments());
 
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
-            parameters.put("nameStudent", student.getPerson().getFullName());
-            parameters.put("group", groupName);
 
             // Generamos el PDF utilizando JasperReportService
             byte[] pdfBytes = jasperReportService.generatePdfReportWithDataSource(

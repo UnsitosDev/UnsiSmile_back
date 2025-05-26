@@ -130,8 +130,6 @@
 		<field name="count" class="java.lang.Long"/>
 	</subDataset>
 	<parameter name="logo" class="java.io.InputStream"/>
-	<parameter name="nameStudent" class="java.lang.String"/>
-	<parameter name="group" class="java.lang.String"/>
 	<parameter name="treatment" class="java.lang.String"/>
 	<parameter name="showTeethColumn" class="java.lang.Boolean"/>
 	<field name="treatmentName" class="java.lang.String"/>
@@ -175,42 +173,6 @@
 				</textElement>
 				<text><![CDATA[CONTROL DE TRATAMIENTOS OPERATORIA]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="25" y="90" width="139" height="20" uuid="b59d2d5a-c1f0-4bdf-a1e3-7d65253210d3"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<text><![CDATA[Nombre del alumno:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="400" y="91" width="120" height="20" uuid="3440a1e1-2067-4953-a3db-1fd85f08f39e"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<text><![CDATA[Grupo:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="148" y="92" width="252" height="18" uuid="01e07754-8b93-4e29-b10e-d56f2f6325f6"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[_______________________________________________________________]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="440" y="92" width="112" height="18" uuid="5d46b924-868d-42c0-acaa-abb89cd0dc0e"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[_______________________________________________________________]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="152" y="91" width="248" height="20" uuid="d4511013-4ae0-4862-a2ce-33fc105c886b"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$P{nameStudent}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="448" y="92" width="100" height="18" uuid="994d045c-b51b-4339-975f-94a0c98e3692"/>
-				<textElement verticalAlignment="Middle">
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{group}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement x="190" y="52" width="185" height="30" uuid="85cdd326-f1b9-4d27-a6e7-8a9eb3ec07be"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
