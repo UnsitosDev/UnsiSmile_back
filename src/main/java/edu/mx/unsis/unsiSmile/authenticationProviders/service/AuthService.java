@@ -1,5 +1,18 @@
 package edu.mx.unsis.unsiSmile.authenticationProviders.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.AuthResponse;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.LoginRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.NewPasswordRequest;
@@ -19,18 +32,6 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +55,8 @@ public class AuthService {
             log.info("User found - ID: " + user.getId());
 
             if (!user.isEnabled()) {
-                throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.UNAUTHORIZED);
+                log.info("AUDIT: Disabled user attempted login: {}", request.getUsername());
+                throw new AppException(ResponseMessages.LOGIN_ERROR, HttpStatus.FORBIDDEN);
             }
 
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -211,7 +213,7 @@ public class AuthService {
             case StudentResponse studentResponse -> studentResponse.getPerson();
 
             case AdministratorResponse administratorResponse ->
-                    administratorResponse.getPerson();
+                administratorResponse.getPerson();
 
             default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
         };
@@ -233,7 +235,8 @@ public class AuthService {
     @Transactional
     public void updatePasswordWithRecovery(NewPasswordRequest request) {
         try {
-            otpTokenService.verifyPreviouslyValidatedOtp(request.getEmail(), request.getOtp(), Constants.RECOVERY_PASSWORD);
+            otpTokenService.verifyPreviouslyValidatedOtp(request.getEmail(), request.getOtp(),
+                    Constants.RECOVERY_PASSWORD);
 
             UserModel user = userRepository.findByUsername(request.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException(ResponseMessages.USER_NOT_FOUND));
