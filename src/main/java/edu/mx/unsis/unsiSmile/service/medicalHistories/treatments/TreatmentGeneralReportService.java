@@ -38,6 +38,7 @@ public class TreatmentGeneralReportService {
 
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
+            // Ya no se pasa el parámetro de treatment pues lo eliminamos del template
 
             // Generamos el PDF utilizando JasperReportService
             byte[] pdfBytes = jasperReportService.generatePdfReportWithDataSource(

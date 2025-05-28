@@ -130,7 +130,6 @@
 		<field name="count" class="java.lang.Long"/>
 	</subDataset>
 	<parameter name="logo" class="java.io.InputStream"/>
-	<parameter name="treatment" class="java.lang.String"/>
 	<parameter name="showTeethColumn" class="java.lang.Boolean"/>
 	<field name="treatmentName" class="java.lang.String"/>
 	<field name="count" class="java.lang.Long"/>
@@ -165,21 +164,14 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="122" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement x="134" y="3" width="290" height="59" uuid="e932e730-3e1e-4d74-b340-4902d36a2d2b"/>
+				<reportElement x="134" y="3" width="290" height="50" uuid="e932e730-3e1e-4d74-b340-4902d36a2d2b"/>
 				<textElement textAlignment="Center">
 					<font size="16"/>
 				</textElement>
 				<text><![CDATA[CONTROL DE TRATAMIENTOS OPERATORIA]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="190" y="52" width="185" height="30" uuid="85cdd326-f1b9-4d27-a6e7-8a9eb3ec07be"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="13"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{treatment}]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -227,13 +219,6 @@
 		<band height="71">
 			<staticText>
 				<reportElement x="29" y="0" width="134" height="19" uuid="d2d60626-4c3b-443d-9aad-2243c4b18d74"/>
-				<textElement>
-					<font size="13"/>
-				</textElement>
-				<text><![CDATA[Firma del alumno ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="200" y="-1" width="182" height="19" uuid="0381d811-19cc-42c1-a052-89f5868b03ba"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
