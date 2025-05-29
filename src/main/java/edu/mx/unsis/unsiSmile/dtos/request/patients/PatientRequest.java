@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,4 +47,7 @@ public class PatientRequest {
     private ReligionRequest religion;
 
     private GuardianRequest guardian;
+
+    @Size(min = 10, max = 10, message = ResponseMessages.ENROLLMENT_INVALID)
+    private String studentEnrollment;
 }

@@ -89,7 +89,18 @@ public class PatientService {
             AddressModel addressModel = addressService.findOrCreateAddress(patientRequest.getAddress());
             patientModel.setAddress(addressModel);
             PatientModel savedPatient = patientRepository.save(patientModel);
-            relateStudentPatient(savedPatient);
+
+            String enrollment = patientRequest.getStudentEnrollment();
+            if (enrollment != null && !enrollment.isBlank()) {
+                StudentPatientRequest studentPatientRequest = StudentPatientRequest.builder()
+                        .patientId(savedPatient.getIdPatient())
+                        .studentEnrollment(patientRequest.getStudentEnrollment())
+                        .build();
+
+                studentPatientService.createStudentPatient(studentPatientRequest);
+            } else {
+                relateStudentPatient(savedPatient);
+            }
         } catch (AppException e) {
             throw e;
         } catch (DataAccessException ex) {
@@ -112,6 +123,10 @@ public class PatientService {
 
         if (!religionRepository.existsById(patientRequest.getReligion().getIdReligion())) {
             throw new AppException(ResponseMessages.RELIGION_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if (patientRequest.getStudentEnrollment() != null && !patientRequest.getStudentEnrollment().isBlank()) {
+             studentService.getStudentByEnrollment(patientRequest.getStudentEnrollment());
         }
 
         OccupationModel createdOccupation = occupationService.findOrCreateOccupation(patientRequest.getOccupation());

@@ -91,7 +91,7 @@ public class StudentService {
     public StudentResponse getStudentByEnrollment(@NonNull String enrollment) {
         try {
             StudentModel studentModel = studentRepository.findById(enrollment)
-                    .orElseThrow(() -> new AppException("Student not found with enrollment: " + enrollment,
+                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND + enrollment,
                             HttpStatus.NOT_FOUND));
 
             StudentResponse studentResponse = studentMapper.toDto(studentModel);
@@ -101,6 +101,8 @@ public class StudentService {
                 studentResponse.setGroup(groupMapper.toDto(studentGroup.getGroup()));
             }
             return studentResponse;
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch student", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
