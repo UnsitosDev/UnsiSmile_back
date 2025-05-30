@@ -1,19 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
@@ -46,6 +32,19 @@ import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewTreatmentService
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -180,12 +179,14 @@ public class TreatmentDetailService {
                             String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
 
-            validateRequestDependencies(request);
+            if (request.getStartDate().isAfter(request.getEndDate())) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE,
+                        HttpStatus.BAD_REQUEST);
+            }
 
             treatmentDetailMapper.updateEntity(request, existing);
 
-            TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
-            String scope = treatmentResponse.getTreatmentScope().getName();
+            String scope = existing.getTreatment().getTreatmentScope().getName();
 
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
