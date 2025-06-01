@@ -39,4 +39,6 @@ public interface IProfessorClinicalAreaRepository extends JpaRepository<Professo
     List<ProfessorClinicalAreaModel> findByClinicalAreaAndStatusKey(
             @Param("clinicalArea") ClinicalAreaModel clinicalArea,
             @Param("statusKey") String statusKey);
+
+    Page<ProfessorClinicalAreaModel> findAllByStatusKey(String statusKey, Pageable pageable);
 }
