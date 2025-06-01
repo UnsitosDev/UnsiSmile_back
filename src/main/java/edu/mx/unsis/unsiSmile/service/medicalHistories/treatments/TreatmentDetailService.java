@@ -422,7 +422,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getTreatmentsInReviewByProfessor(String professorId, Pageable pageable) {
+    public Page<TreatmentDetailResponse> getTreatmentsInReviewByProfessor(String professorId, ReviewStatus status, Pageable pageable) {
         try {
             ProfessorModel professorModel = professorRepository.findById(professorId)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
@@ -430,7 +430,7 @@ public class TreatmentDetailService {
             Page<TreatmentDetailModel> treatments = treatmentDetailRepository
                     .findAllByProfessorAndStatus(
                             professorModel,
-                            ReviewStatus.IN_REVIEW.toString(),
+                            status.toString(),
                             pageable);
 
             return treatments.map(this::toDto);
