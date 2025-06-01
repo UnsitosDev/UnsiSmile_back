@@ -74,7 +74,7 @@ public class ProfessorClinicalAreaService {
         try {
             Page<ProfessorClinicalAreaModel> professorClinicalAreas;
             if (keyword == null || keyword.isEmpty()) {
-                professorClinicalAreas = professorClinicalAreaRepository.findAll(pageable);
+                professorClinicalAreas = professorClinicalAreaRepository.findAllByStatusKey(Constants.ACTIVE, pageable);
             } else {
                 professorClinicalAreas = professorClinicalAreaRepository.findAllBySearchInput(keyword, pageable);
             }
