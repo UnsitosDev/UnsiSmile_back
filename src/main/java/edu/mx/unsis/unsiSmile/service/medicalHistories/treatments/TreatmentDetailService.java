@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentReviewRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
@@ -330,7 +331,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
+    public TreatmentDetailResponse sendToReview(Long id, TreatmentReviewRequest request) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -351,13 +352,14 @@ public class TreatmentDetailService {
             }
 
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository
-                    .findById(professorClinicalAreaId)
+                    .findById(request.getProfessorClinicalAreaId())
                     .orElseThrow(() -> new AppException(
-                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + professorClinicalAreaId,
+                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + "con ID: " + request.getProfessorClinicalAreaId(),
                             HttpStatus.NOT_FOUND));
 
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
+            treatment.setObservations(request.getComment());
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
             treatmentDetailMapper.toDto(treatmentDetail);
 

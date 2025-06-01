@@ -34,6 +34,7 @@ CREATE TABLE treatment_details (
     fk_student_group BIGINT(20) NOT NULL, -- 'Para saber el nombre del alumno y el grupo donde se encontraba durante el tratamiento'
     fk_professor VARCHAR(15) DEFAULT NULL, -- 'Firma y nombre del profesor a cargo',
     status VARCHAR(50) DEFAULT NULL,
+    observations VARCHAR(255) DEFAULT NULL,
 
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
