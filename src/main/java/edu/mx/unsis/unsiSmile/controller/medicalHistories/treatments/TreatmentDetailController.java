@@ -123,6 +123,8 @@ public class TreatmentDetailController {
     @GetMapping("/professors/{professorId}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getPatientsWithTreatmentsInReview(
             @PathVariable String professorId,
+            @Parameter(description = "Status de revisión", example = "FINISHED")
+            @RequestParam(defaultValue = "IN_REVIEW") ReviewStatus reviewStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "Campo para ordenar", example = "createdAt")
@@ -133,7 +135,7 @@ public class TreatmentDetailController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<TreatmentDetailResponse> response = treatmentDetailService.getTreatmentsInReviewByProfessor(
-                professorId, pageable);
+                professorId, reviewStatus, pageable);
 
         return ResponseEntity.ok(response);
     }
