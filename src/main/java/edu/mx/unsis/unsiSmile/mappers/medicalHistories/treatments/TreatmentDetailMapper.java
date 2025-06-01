@@ -40,6 +40,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .endDate(entity.getEndDate())
                 .status(entity.getStatus())
                 .treatment(treatmentMapper.toDto(entity.getTreatment()))
+                .comments(entity.getObservations())
                 .patient(TreatmentDetailResponse.PatientResponse.builder()
                         .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                         .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
