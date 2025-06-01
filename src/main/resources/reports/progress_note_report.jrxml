@@ -169,7 +169,7 @@ ___]]></text>
 				<textFieldExpression><![CDATA[$P{heartRate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="73" y="108" width="126" height="19" uuid="082a9880-a4f5-425b-b0d6-f5fcaeb8c945"/>
+				<reportElement x="73" y="105" width="126" height="19" uuid="082a9880-a4f5-425b-b0d6-f5fcaeb8c945"/>
 				<textElement verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
@@ -276,7 +276,7 @@ ________________________________________________________________________________
 				<textFieldExpression><![CDATA[$P{indications}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="24" y="110" width="100" height="20" uuid="ff63effa-b443-44d9-9b3d-8e158ac634f6"/>
+				<reportElement x="24" y="107" width="100" height="20" uuid="ff63effa-b443-44d9-9b3d-8e158ac634f6"/>
 				<textElement>
 					<font size="13"/>
 				</textElement>
