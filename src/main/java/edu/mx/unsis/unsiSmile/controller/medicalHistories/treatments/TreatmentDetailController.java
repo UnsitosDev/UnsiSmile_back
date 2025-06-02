@@ -121,7 +121,7 @@ public class TreatmentDetailController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtener los tratamientos asignados a un profesor, por estado del tratamiento.")
+    @Operation(summary = "Obtener los tratamientos asignados a un profesor, por estatus de tratamiento.")
     @GetMapping("/professors/{professorId}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getPatientsWithTreatmentsInReview(
             @PathVariable String professorId,
