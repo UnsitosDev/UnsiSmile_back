@@ -360,7 +360,7 @@ public class TreatmentDetailService {
 
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
-            treatment.setObservations(request.getComment());
+            treatment.setComments(request.getComments());
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
             treatmentDetailMapper.toDto(treatmentDetail);
 
@@ -388,7 +388,7 @@ public class TreatmentDetailService {
             TreatmentDetailModel treatment = getValidTreatment(id, ReviewStatus.IN_REVIEW);
 
             treatment.setStatus(request.getStatus().toString());
-            treatment.setObservations(request.getComment());
+            treatment.setComments(request.getComments());
 
             this.sendNotifications(treatment);
 

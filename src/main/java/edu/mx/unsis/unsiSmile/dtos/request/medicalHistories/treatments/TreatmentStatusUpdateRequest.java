@@ -18,5 +18,5 @@ public class TreatmentStatusUpdateRequest {
     private ReviewStatus status;
 
     @Max(value = 255, message = ResponseMessages.COMMENT_MAX_LENGTH)
-    private String comment;
+    private String comments;
 }

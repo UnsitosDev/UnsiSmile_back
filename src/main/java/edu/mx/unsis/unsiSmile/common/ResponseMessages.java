@@ -460,7 +460,7 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
     public static final String ERROR_TREATMENT_DETAIL_STATUS = "Solo los tratamientos en curso, o rechazados pueden enviarse a revisión";
     public static final String ERROR_TREATMENT_DETAIL_STATUS_REVIEW = "El tratamiento no se encuentra en revisión.";
-    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
+    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al actualizar el estatus del tratamiento";
     public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
     public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED, REJECTED, o CANCELLED";
     public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
