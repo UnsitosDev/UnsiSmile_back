@@ -78,6 +78,7 @@ public class ResponseMessages {
     public static final String FAILED_TO_UPDATE_STUDENT = "Error al actualizar el estudiante";
     public static final String FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA = "Error al obtener los profesores por área clínica";
     public static final String FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREAS = "Error al eliminar las asignacion del área clínica con los profesores";
+    public static final String PROFESSOR_CLINICAL_AREA_ID_CANNOT_BE_NULL = "El ID del área clínica del profesor no puede ser nulo";
 
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
     public static final String FAILED_TO_FETCH_FILES = "Error al obtener los archivos.";
@@ -447,6 +448,8 @@ public class ResponseMessages {
     public static final String TREATMENT_END_DATE_CANNOT_BE_NULL = "La fecha de finalización del tratamiento no puede ser nula";
     public static final String SIZE_TREATMENT_STATUS = "El estado del tratamiento debe tener como máximo 50 caracteres";
 
+    public static final String COMMENT_MAX_LENGTH = "El comentario debe tener como máximo 255 caracteres";
+
     // TreatmentDetail
     public static final String TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL = "El request de organos dentarios del tratamiento no puede ser nulo";
     public static final String FAILED_CREATE_TREATMENT_DETAIL = "Error al crear el detalle del tratamiento";
@@ -457,9 +460,9 @@ public class ResponseMessages {
     public static final String FAILED_DELETE_TREATMENT_DETAIL = "Error al eliminar el detalle del tratamiento";
     public static final String ERROR_TREATMENT_DETAIL_STATUS = "Solo los tratamientos en curso, o rechazados pueden enviarse a revisión";
     public static final String ERROR_TREATMENT_DETAIL_STATUS_REVIEW = "El tratamiento no se encuentra en revisión.";
-    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al marcar como finalizdo el estaus del tratamiento";
+    public static final String FAILED_FINALIZE_TREATMENT_DETAIL = "Error al actualizar el estatus del tratamiento";
     public static final String FAILED_SEND_TREATMENT_DETAIL_TO_REVIEW = "Error al enviar el tratamiento a revisión";
-    public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED o REJECTED";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS = "El estado del tratamiento no es válido. Solo se permiten los estados: FINISHED, REJECTED, o CANCELLED";
     public static final String FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW = "Error al obtener los pacientes con tratamientos en revisión";
     public static final String FAILED_FETCH_TREATMENT_IN_REVIEW = "Error al obtener el tratamiento en revisión del paciente.";
     public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";

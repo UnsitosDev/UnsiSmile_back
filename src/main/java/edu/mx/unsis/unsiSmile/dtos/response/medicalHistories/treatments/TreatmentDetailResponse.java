@@ -18,6 +18,7 @@ public class TreatmentDetailResponse {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String status;
+    private String comments;
 
     private PatientResponse patient;
     private ProfessorResponse professor;

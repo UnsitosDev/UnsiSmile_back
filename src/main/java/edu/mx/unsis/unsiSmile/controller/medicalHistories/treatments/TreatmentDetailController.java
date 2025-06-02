@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentReviewRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -103,23 +105,23 @@ public class TreatmentDetailController {
     @PatchMapping("/{id}/revision")
     public ResponseEntity<TreatmentDetailResponse> sendToReview(
             @PathVariable Long id,
-            @RequestParam Long professorClinicalAreaId) {
+            @RequestBody TreatmentReviewRequest request) {
 
-        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, professorClinicalAreaId);
+        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Actualiza el estado de un tratamiento (Finalizado/Rechazado)")
+    @Operation(summary = "Actualiza el estado de un tratamiento (Finalizado/Rechazado/Cancelado)")
     @PatchMapping("/{id}/status")
     public ResponseEntity<TreatmentDetailResponse> statusTreatment(
             @PathVariable Long id,
-            @RequestParam ReviewStatus status) {
+            @RequestBody TreatmentStatusUpdateRequest request) {
 
-        TreatmentDetailResponse response = treatmentDetailService.statusTreatment(id, status);
+        TreatmentDetailResponse response = treatmentDetailService.statusTreatment(id, request);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Obtener los tratamientos en revisión asignados a un profesor")
+    @Operation(summary = "Obtener los tratamientos asignados a un profesor, por estado del tratamiento.")
     @GetMapping("/professors/{professorId}")
     public ResponseEntity<Page<TreatmentDetailResponse>> getPatientsWithTreatmentsInReview(
             @PathVariable String professorId,

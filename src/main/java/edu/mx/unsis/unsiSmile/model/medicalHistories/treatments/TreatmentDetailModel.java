@@ -47,4 +47,7 @@ public class TreatmentDetailModel extends AuditModel {
 
     @Column(name = "status", length = 50)
     private String status;
+
+    @Column(name = "comments")
+    private String comments;
 }

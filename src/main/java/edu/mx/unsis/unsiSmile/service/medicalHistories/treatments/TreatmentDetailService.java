@@ -5,6 +5,8 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentReviewRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
@@ -330,7 +332,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
+    public TreatmentDetailResponse sendToReview(Long id, TreatmentReviewRequest request) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -351,13 +353,14 @@ public class TreatmentDetailService {
             }
 
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository
-                    .findById(professorClinicalAreaId)
+                    .findById(request.getProfessorClinicalAreaId())
                     .orElseThrow(() -> new AppException(
-                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + professorClinicalAreaId,
+                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + "con ID: " + request.getProfessorClinicalAreaId(),
                             HttpStatus.NOT_FOUND));
 
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
+            treatment.setComments(request.getComments());
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
             treatmentDetailMapper.toDto(treatmentDetail);
 
@@ -374,16 +377,18 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse statusTreatment(Long id, ReviewStatus status) {
+    public TreatmentDetailResponse statusTreatment(Long id, TreatmentStatusUpdateRequest request) {
         try {
-            if (status != ReviewStatus.FINISHED && status != ReviewStatus.REJECTED) {
+            if (request.getStatus() != ReviewStatus.FINISHED && request.getStatus() != ReviewStatus.REJECTED
+                    && request.getStatus() != ReviewStatus.CANCELLED) {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS,
                         HttpStatus.BAD_REQUEST);
             }
 
             TreatmentDetailModel treatment = getValidTreatment(id, ReviewStatus.IN_REVIEW);
 
-            treatment.setStatus(status.toString());
+            treatment.setStatus(request.getStatus().toString());
+            treatment.setComments(request.getComments());
 
             this.sendNotifications(treatment);
 
