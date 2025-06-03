@@ -1,7 +1,8 @@
 INSERT INTO
     tooth_conditions (description)
 values ("Diente no presente"), -- profilaxis
-       ("Resto radicular"); -- odontograma
+       ("Resto radicular"),
+       ("Endodoncia");
 
 INSERT INTO
     toothface_conditions (description)
@@ -76,8 +77,8 @@ VALUES
 
 INSERT INTO form_component_tooth_conditions (fk_form_component, fk_tooth_condition)
 VALUES
-    (1, 14); -- Nueva condición para el odontograma
-
+    (1, 14), -- Resto radicular 
+    (1, 15);
 
 CREATE TABLE sohi (
                       id_sohi BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
