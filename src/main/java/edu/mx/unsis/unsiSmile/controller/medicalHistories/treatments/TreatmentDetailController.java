@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentReviewRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
@@ -105,9 +104,9 @@ public class TreatmentDetailController {
     @PatchMapping("/{id}/revision")
     public ResponseEntity<TreatmentDetailResponse> sendToReview(
             @PathVariable Long id,
-            @RequestBody TreatmentReviewRequest request) {
+            @RequestParam Long professorClinicalAreaId) {
 
-        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, request);
+        TreatmentDetailResponse response = treatmentDetailService.sendToReview(id, professorClinicalAreaId);
         return ResponseEntity.ok(response);
     }
 

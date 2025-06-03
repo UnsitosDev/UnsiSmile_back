@@ -5,7 +5,6 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentReviewRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
@@ -332,7 +331,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, TreatmentReviewRequest request) {
+    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -353,14 +352,13 @@ public class TreatmentDetailService {
             }
 
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaRepository
-                    .findById(request.getProfessorClinicalAreaId())
+                    .findById(professorClinicalAreaId)
                     .orElseThrow(() -> new AppException(
-                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + "con ID: " + request.getProfessorClinicalAreaId(),
+                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + "con ID: " + professorClinicalAreaId,
                             HttpStatus.NOT_FOUND));
 
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW.toString());
-            treatment.setComments(request.getComments());
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
             treatmentDetailMapper.toDto(treatmentDetail);
 
