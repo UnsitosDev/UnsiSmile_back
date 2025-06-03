@@ -47,6 +47,15 @@ public class DashboardService {
     public StudentDashboardResponse getStudentDashboardMetrics() {
         try {
             String enrollment = getUserName();
+            return getStudentDashboardMetrics(enrollment);
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
+        try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
             StudentDashboardResponse.StudentDashboardResponseBuilder builder = StudentDashboardResponse.builder()
