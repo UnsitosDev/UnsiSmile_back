@@ -21,6 +21,7 @@
 	<parameter name="creationDate" class="java.lang.String"/>
 	<parameter name="student" class="java.lang.String"/>
 	<parameter name="professor" class="java.lang.String"/>
+	<parameter name="clinicalStatus" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -307,6 +308,13 @@ Nombre y firma del profesor responsable:______________________________]]></text>
 				</textElement>
 				<text><![CDATA[Tratamiento/terapéutica empleada: ]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="190" y="30" width="361" height="89" uuid="49fa6fc7-a92e-4eda-ade7-548a9f110207"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{clinicalStatus}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<pageFooter>

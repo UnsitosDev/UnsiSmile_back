@@ -34,6 +34,7 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
                 .prognosis(dto.getPrognosis())
                 .treatment(dto.getTreatment())
                 .indications(dto.getIndications())
+                .clinicalStatus(dto.getClinicalStatus())
                 .build();
     }
 
@@ -52,6 +53,7 @@ public class ProgressNoteMapper implements BaseMapper<ProgressNoteResponse, Prog
                 .treatment(entity.getTreatment())
                 .indications(entity.getIndications())
                 .creationDate(formatTimestamp(entity.getCreatedAt()))
+                .clinicalStatus(entity.getClinicalStatus())
                 .build();
     }
 

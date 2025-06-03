@@ -191,6 +191,7 @@ public class ProgressNoteService {
             parameters.setCreationDate(progressNote.getCreatedAt().toString().substring(0, 10)); // Cortar hasta "yyyy-MM-dd"
             parameters.setStudent(getStudent(progressNote.getCreatedBy()));
             parameters.setProfessor(progressNote.getProfessor().getPerson().getFullName());
+            parameters.setClinicalStatus(progressNote.getClinicalStatus());
 
             byte[] pdfBytes = jasperReportService.generatePdfReport("reports/progress_note_report.jrxml", parameters.toMap());
 
