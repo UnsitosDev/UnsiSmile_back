@@ -10,6 +10,7 @@ CREATE TABLE progress_notes (
                                 prognosis TEXT NOT NULL,
                                 treatment LONGTEXT NOT NULL,
                                 indications LONGTEXT DEFAULT NULL,
+                                clinical_status TEXT DEFAULT NULL,
                                 fk_professor VARCHAR(15) NOT NULL,
                                 created_at DATETIME(6),
                                 created_by VARCHAR(255) DEFAULT NULL,

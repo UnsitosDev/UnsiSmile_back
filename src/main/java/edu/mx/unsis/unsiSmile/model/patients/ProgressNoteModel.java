@@ -50,6 +50,9 @@ public class ProgressNoteModel extends AuditModel {
 
     @Column(name = "indications", columnDefinition = "LONGTEXT")
     private String indications;
+    
+    @Column(name = "clinical_status", columnDefinition = "LONGTEXT")
+    private String clinicalStatus;
 
     @ManyToOne
     @JoinColumn(name = "fk_professor", nullable = false)

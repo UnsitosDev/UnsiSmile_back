@@ -19,6 +19,7 @@ public class ProgressNoteResponse {
     private Integer heartRate;
     private Integer respirationRate;
     private BigDecimal oxygenSaturation;
+    private String clinicalStatus;
     private String diagnosis;
     private String prognosis;
     private String treatment;

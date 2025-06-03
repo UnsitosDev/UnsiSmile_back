@@ -46,6 +46,8 @@ public class ProgressNoteRequest {
     @NotBlank(message = "El tratamiento es obligatorio")
     private String treatment;
 
+    private String clinicalStatus;
+
     private String indications;
 
     @NotBlank(message = "El ID del profesor del área clínica es obligatorio")
