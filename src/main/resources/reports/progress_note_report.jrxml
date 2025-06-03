@@ -205,7 +205,7 @@ ___]]></text>
 				<textFieldExpression><![CDATA[$P{respirationRate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="188" y="0" width="185" height="30" uuid="a7f4da31-84b4-4f74-96e0-e592a3616de0"/>
+				<reportElement x="237" y="0" width="252" height="30" uuid="a7f4da31-84b4-4f74-96e0-e592a3616de0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="13"/>
 				</textElement>
