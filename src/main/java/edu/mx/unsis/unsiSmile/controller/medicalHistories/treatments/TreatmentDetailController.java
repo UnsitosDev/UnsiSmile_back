@@ -6,8 +6,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentGeneralReportService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -187,5 +187,26 @@ public class TreatmentDetailController {
         Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(pageable, idStudent, idTreatment);
 
         return ResponseEntity.ok(treatmentDetails);
+    }
+
+    @Operation(summary = "Obtener tratamientos que requieren aprobación del profesor para poder ser realizados por el estudiante.")
+    @GetMapping("/professors/{professorId}/treatments-to-approve")
+    public ResponseEntity<Page<TreatmentDetailResponse>> getTreatmentsToApprove(
+            @PathVariable String professorId,
+            @Parameter(description = "Indica si el tratamiento ya fue aprobado por el profesor", example = "false")
+            @RequestParam(defaultValue = "false") Boolean approved,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Campo por el cual ordenar los resultados", example = "createdAt")
+            @RequestParam(defaultValue = "createdAt") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<TreatmentDetailResponse> response = treatmentDetailService.getTreatmentsToApproveByProfessor(
+                professorId, approved, pageable);
+
+        return ResponseEntity.ok(response);
     }
 }

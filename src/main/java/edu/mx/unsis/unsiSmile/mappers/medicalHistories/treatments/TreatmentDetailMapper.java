@@ -28,7 +28,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         dto.getStartDate() : null)
                 .endDate(dto.getEndDate() != null ?
                         dto.getEndDate() : null)
-                .status(ReviewStatus.IN_PROGRESS.toString())
+                .status(ReviewStatus.AWAITING_APPROVAL.toString())
                 .build();
     }
 
