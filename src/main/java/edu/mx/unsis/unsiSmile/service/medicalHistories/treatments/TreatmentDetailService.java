@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.AuthorizedTreatmentRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
@@ -29,6 +30,8 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
+import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
+import edu.mx.unsis.unsiSmile.service.professors.ProfessorService;
 import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewTreatmentService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import lombok.NonNull;
@@ -65,6 +68,9 @@ public class TreatmentDetailService {
     private final TreatmentDetailToothService treatmentDetailToothService;
     private final ISemesterRepository semesterRepository;
     private final ReviewTreatmentService reviewTreatmentService;
+    private final AuthorizedTreatmentService authorizedTreatmentService;
+    private final ProfessorService professorService;
+    private final ProfessorClinicalAreaService professorClinicalAreaService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -96,6 +102,8 @@ public class TreatmentDetailService {
                 toothRequest.setIdTreatmentDetail(savedModel.getIdTreatmentDetail());
                 treatmentDetailToothService.createTreatmentDetailTeeth(toothRequest);
             }
+
+            createAuthorizationTreatment(savedModel.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
 
             return this.toDto(savedModel);
         } catch (AppException e) {
@@ -574,6 +582,20 @@ public class TreatmentDetailService {
             TreatmentDetailResponse response = treatmentDetailMapper.toDto(treatmentDetailModel);
             response.setTeeth(null);
             return Collections.singletonList(response);
+        }
+    }
+
+    @Transactional
+    public void createAuthorizationTreatment(@NonNull Long treatmentDetailModelId, @NonNull Long professorClinicalAreaId) {
+        try {
+            professorClinicalAreaService.getProfessorClinicalAreaById(professorClinicalAreaId);
+            AuthorizedTreatmentRequest request = AuthorizedTreatmentRequest.builder()
+                    .treatmentDetailId(treatmentDetailModelId)
+                    .professorClinicalAreaId(professorClinicalAreaId).build();
+
+            authorizedTreatmentService.createAuthorizedTreatment(request);
+        } catch (AppException e) {
+            throw e;
         }
     }
 }

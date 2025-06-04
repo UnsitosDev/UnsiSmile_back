@@ -545,4 +545,14 @@ public class ResponseMessages {
     public static final String NOT_BLANK_PASSWORD = "El campo de contraseña no puede estar vacío";
     public static final String NOT_BLANK_CONFIRM_PASSWORD = "El campo de confirmación de contraseña no puede estar vacío";
     public static final String NOT_BLANK_USERNAME = "El campo de nombre de usuario no puede estar vacío";
+
+    // Authorized treatment request
+    public static final String TREATMENT_DETAIL_ID_CANNOT_BE_NULL = "El id del detalle de tratameinto no puede ser nulo.";
+    public static final String PROFESSOR_ID_CANNOT_BE_EMPTY = "El id del profesor que debe  autorizzzar no puede estar vacío.";
+
+    public static final String AUTHORIZED_TREATMENT_NOT_FOUND = "Registro de autorización con ID %s no encontrado para el tratamiento especificado.";
+    public static final String ERROR_CREATING_AUTHORIZED_TREATMENT = "Error al crear la autorización del tratamiento.";
+    public static final String ERROR_UPDATING_AUTHORIZED_TREATMENT = "Error al actualizar la autorización del tratamiento con ID: %s.";
+    public static final String FAILED_FETCH_AUTHORIZED_TREATMENT = "Error al obtener la autorización del tratamiento con ID: %s.";
+
 }
