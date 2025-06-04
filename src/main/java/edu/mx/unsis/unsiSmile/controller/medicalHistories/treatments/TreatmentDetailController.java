@@ -194,7 +194,7 @@ public class TreatmentDetailController {
     public ResponseEntity<Page<TreatmentDetailResponse>> getTreatmentsToApprove(
             @PathVariable String professorId,
             @Parameter(description = "Indica si el tratamiento ya fue aprobado por el profesor", example = "false")
-            @RequestParam(defaultValue = "false") Boolean approved,
+            @RequestParam(required = false) ReviewStatus status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "Campo por el cual ordenar los resultados", example = "createdAt")
@@ -205,7 +205,20 @@ public class TreatmentDetailController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<TreatmentDetailResponse> response = treatmentDetailService.getTreatmentsToApproveByProfessor(
-                professorId, approved, pageable);
+                professorId, status, pageable);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Autorizar o rechazar un tratamiento para que el alumno pueda o no iniciarlo.")
+    @PatchMapping("/{id}/authorization")
+    public ResponseEntity<TreatmentDetailResponse> authorizeOrRejectTreatment(
+            @PathVariable Long id,
+            @RequestParam boolean authorized,
+            @RequestParam(required = false) String comment) {
+
+        TreatmentDetailResponse response = treatmentDetailService
+                .authorizeOrRejectTreatmentByTreatmentDetailId(id, authorized, comment);
 
         return ResponseEntity.ok(response);
     }

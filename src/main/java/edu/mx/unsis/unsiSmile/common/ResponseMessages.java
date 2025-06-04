@@ -554,5 +554,9 @@ public class ResponseMessages {
     public static final String ERROR_CREATING_AUTHORIZED_TREATMENT = "Error al crear la autorización del tratamiento.";
     public static final String ERROR_UPDATING_AUTHORIZED_TREATMENT = "Error al actualizar la autorización del tratamiento con ID: %s.";
     public static final String FAILED_FETCH_AUTHORIZED_TREATMENT = "Error al obtener la autorización del tratamiento con ID: %s.";
+    public static final String AUTHORIZATION_REQUEST_NOT_FOUND = "No existe una solicitud de autorización para este tratamiento con ID: %s";
+    public static final String TREATMENT_ALREADY_AUTHORIZED = "Este tratamiento ya fue autorizado.";
+    public static final String TREATMENT_ALREADY_REJECTED = "Este tratamiento ya fue rechazado.";
+    public static final String FAILED_PROCESS_TREATMENT_AUTHORIZATION = "No se pudo procesar la autorización o rechazo del tratamiento.";
 
 }

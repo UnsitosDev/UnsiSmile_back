@@ -53,7 +53,7 @@ CREATE TABLE authorized_treatments (
                                        fk_professor_clinical_area BIGINT(20) NOT NULL,
                                        comment VARCHAR(255) DEFAULT NULL,
 
-                                       is_authorized BOOLEAN DEFAULT FALSE,
+                                       status VARCHAR(50) NOT NULL,
                                        authorized_at DATETIME(6) DEFAULT NULL,
 
                                        created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),

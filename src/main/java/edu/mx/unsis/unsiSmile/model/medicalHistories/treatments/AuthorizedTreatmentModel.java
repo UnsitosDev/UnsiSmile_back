@@ -32,8 +32,8 @@ public class AuthorizedTreatmentModel extends AuditModel {
     @Column(name = "comment", length = 255)
     private String comment;
 
-    @Column(name = "is_authorized", nullable = false)
-    private Boolean isAuthorized = false;
+    @Column(name = "status", nullable = false)
+    private String status;
 
     @Column(name = "authorized_at")
     private LocalDateTime authorizedAt;

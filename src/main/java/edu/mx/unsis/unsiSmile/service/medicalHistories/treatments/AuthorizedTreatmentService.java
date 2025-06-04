@@ -30,6 +30,7 @@ public class AuthorizedTreatmentService {
                     .treatmentDetail(TreatmentDetailModel.builder()
                             .idTreatmentDetail(request.getTreatmentDetailId())
                             .build())
+                    .status(request.getStatus().toString())
                     .professorClinicalArea(ProfessorClinicalAreaModel.builder()
                             .idProfessorClinicalArea(request.getProfessorClinicalAreaId())
                             .build())
@@ -51,7 +52,7 @@ public class AuthorizedTreatmentService {
                             HttpStatus.NOT_FOUND));
 
             existing.setComment(request.getComment());
-            existing.setIsAuthorized(request.getIsAuthorized());
+            existing.setStatus(request.getStatus().toString());
             existing.setAuthorizedAt(LocalDateTime.now());
 
             return authorizedTreatmentRepository.save(existing);

@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -592,7 +593,7 @@ public class TreatmentDetailService {
             professorClinicalAreaService.getProfessorClinicalAreaById(professorClinicalAreaId);
             AuthorizedTreatmentRequest request = AuthorizedTreatmentRequest.builder()
                     .treatmentDetailId(treatmentDetailModelId)
-                    .isAuthorized(false)
+                    .status(ReviewStatus.AWAITING_APPROVAL)
                     .professorClinicalAreaId(professorClinicalAreaId).build();
 
             authorizedTreatmentService.createAuthorizedTreatment(request);
@@ -602,13 +603,20 @@ public class TreatmentDetailService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getTreatmentsToApproveByProfessor(String professorId, boolean approved, Pageable pageable) {
+    public Page<TreatmentDetailResponse> getTreatmentsToApproveByProfessor(String professorId, ReviewStatus status, Pageable pageable) {
         try {
             professorRepository.findById(professorId)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            Page<AuthorizedTreatmentModel> authorizedTreatments = authorizedTreatmentRepository
-                    .findByProfessorClinicalArea_Professor_idProfessorAndIsAuthorized(professorId, approved, pageable);
+            Page<AuthorizedTreatmentModel> authorizedTreatments;
+
+            if (status == null) {
+                authorizedTreatments = authorizedTreatmentRepository
+                        .findByProfessorClinicalArea_Professor_idProfessor(professorId, pageable);
+            } else {
+                authorizedTreatments = authorizedTreatmentRepository
+                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(professorId, status.toString(), pageable);
+            }
 
             return authorizedTreatments.map(this::toDtoWithAuthorizingProfessor);
         } catch (AppException e) {
@@ -629,4 +637,52 @@ public class TreatmentDetailService {
 
         return response;
     }
+
+    @Transactional
+    public TreatmentDetailResponse authorizeOrRejectTreatmentByTreatmentDetailId(
+            Long treatmentDetailId, boolean authorized, String comment) {
+        try {
+            TreatmentDetailModel treatment = treatmentDetailRepository.findById(treatmentDetailId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            AuthorizedTreatmentModel auth = authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(treatmentDetailId)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, treatmentDetailId), HttpStatus.NOT_FOUND));
+
+            if (ReviewStatus.APPROVED.toString().equals(auth.getStatus())) {
+                throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
+            }
+
+            if (ReviewStatus.REJECTED.toString().equals(auth.getStatus())) {
+                throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
+            }
+
+            auth.setStatus(ReviewStatus.APPROVED.toString());
+            auth.setAuthorizedAt(LocalDateTime.now());
+
+            if (comment != null && !comment.isBlank()) {
+                auth.setComment(comment);
+            }
+
+            if (authorized) {
+                treatment.setStatus(ReviewStatus.IN_PROGRESS.toString());
+            } else {
+                treatment.setStatus(ReviewStatus.REJECTED.toString());
+            }
+
+            authorizedTreatmentRepository.save(auth);
+            treatmentDetailRepository.save(treatment);
+
+            return toDtoWithAuthorizingProfessor(auth);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(
+                    ResponseMessages.FAILED_PROCESS_TREATMENT_AUTHORIZATION,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
 }
