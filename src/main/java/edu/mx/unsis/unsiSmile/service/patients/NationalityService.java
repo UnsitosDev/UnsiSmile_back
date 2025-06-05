@@ -65,9 +65,14 @@ public class NationalityService {
     }
 
     @Transactional(readOnly = true)
-    public Page<NationalityResponse> getAllNationalities(Pageable pageable) {
+    public Page<NationalityResponse> getAllNationalities(Pageable pageable, String keyword) {
         try {
-            Page<NationalityModel> allNationalities = nationalityRepository.findAll(pageable);
+            Page<NationalityModel> allNationalities;
+            if (keyword != null && !keyword.isEmpty()) {
+                allNationalities = nationalityRepository.findByKeyword(keyword, pageable);
+            } else {
+                allNationalities = nationalityRepository.findAll(pageable);
+            }
             return allNationalities.map(nationalityMapper::toDto);
         } catch (Exception ex) {
             throw new AppException("Failed to fetch all nationalities", HttpStatus.INTERNAL_SERVER_ERROR, ex);
