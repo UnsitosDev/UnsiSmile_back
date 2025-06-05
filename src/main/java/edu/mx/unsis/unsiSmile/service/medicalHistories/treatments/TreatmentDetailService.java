@@ -159,6 +159,17 @@ public class TreatmentDetailService {
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
+
+            AuthorizedTreatmentModel authorizedTreatment = authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(id)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
+
+            if(ReviewStatus.AWAITING_APPROVAL.toString().equals(authorizedTreatment.getStatus())){
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_AWAITING_APPROVAL, HttpStatus.BAD_REQUEST);
+            }
+            
             return toDto(model);
         } catch (AppException e) {
             throw e;
@@ -230,6 +241,8 @@ public class TreatmentDetailService {
                     treatmentDetailToothService.createTreatmentDetailTeeth(toAddRequest);
                 }
             }
+
+            createAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
 
             return toDto(saved);
         } catch (AppException e) {

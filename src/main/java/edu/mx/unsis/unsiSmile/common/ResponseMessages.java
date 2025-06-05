@@ -558,5 +558,5 @@ public class ResponseMessages {
     public static final String TREATMENT_ALREADY_AUTHORIZED = "Este tratamiento ya fue autorizado.";
     public static final String TREATMENT_ALREADY_REJECTED = "Este tratamiento ya fue rechazado.";
     public static final String FAILED_PROCESS_TREATMENT_AUTHORIZATION = "No se pudo procesar la autorización o rechazo del tratamiento.";
-
+    public static final String TREATMENT_DETAIL_AWAITING_APPROVAL = "El detalle del tratamiento está pendiente de aprobación por parte del profesor, no puede verlo aún.";
 }
