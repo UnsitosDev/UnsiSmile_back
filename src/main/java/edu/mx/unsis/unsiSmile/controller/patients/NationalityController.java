@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.NationalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.NationalityResponse;
 import edu.mx.unsis.unsiSmile.service.patients.NationalityService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,13 +45,15 @@ public class NationalityController {
     @Operation(summary = "Obtener una lista paginada de nacionalidades")
     @GetMapping
     public ResponseEntity<Page<NationalityResponse>> getAllStudents(
+            @Parameter(description = "Optional parameter to specify a search criterion.")
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "nationality") String order,
             @RequestParam(defaultValue = "true") boolean asc) {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<NationalityResponse> nationalityResponses = nationalityService.getAllNationalities(pageable);
+        Page<NationalityResponse> nationalityResponses = nationalityService.getAllNationalities(pageable, keyword);
 
         return ResponseEntity.ok(nationalityResponses);
     }
