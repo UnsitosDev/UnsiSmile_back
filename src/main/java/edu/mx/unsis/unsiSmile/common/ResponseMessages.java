@@ -468,8 +468,12 @@ public class ResponseMessages {
     public static final String PATIENT_NOT_FOUND_WITH_TREATMENTS_IN_REVIEW = "El paciente no tiene tratamientos en revisión";
     public static final String TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE = "La fecha de inicio del tratamiento debe ser menor a la fecha de finalización";
     public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
-    public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha final debe ser mayor a la fecha inicial";
+    public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha de inicio no puede ser mayor a la fecha de fin.";
     public static final String TREATMENT_DETAIL_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD = "No se encontró el detalle del tratamiento para la historia clinica del paciente con ID: %s";
+
+    public static final String START_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de inicio no puede ser posterior a la fecha de hoy.";
+    public static final String END_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de fin no puede ser posterior a la fecha de hoy.";
+
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";

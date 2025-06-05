@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.TreatmentCountResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -8,6 +9,7 @@ import edu.mx.unsis.unsiSmile.service.DashboardService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,10 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +27,24 @@ public class TreatmentGeneralReportService {
 
     private final DashboardService dashboardService;
     private final JasperReportService jasperReportService;
+    private final ValidationUtils validationUtils;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<byte[]> generateGeneralTreatmentReport() {
+    public ResponseEntity<byte[]> generateGeneralTreatmentReport(LocalDate startDate, LocalDate endDate) {
         try {
-            // Obtenemos los datos del dashboard de administrador que contiene datos generales
-            AdminDashboardResponse dashboard = dashboardService.getAdminDashboardMetrics();
+            Optional<Pair<Timestamp, Timestamp>> dateRange = validationUtils.resolveDateRange(startDate, endDate);
+            TreatmentCountResponse treatmentCount;
+
+            if (dateRange.isPresent()) {
+                Timestamp start = dateRange.get().getLeft();
+                Timestamp end = dateRange.get().getRight();
+                treatmentCount = dashboardService.getTreatmentCountResponse(start, end);
+            } else {
+                treatmentCount = dashboardService.getTreatmentCountResponse(null, null);
+            }
 
             // Preparamos los datos para el informe
-            List<Map<String, Object>> reportDataList = prepareDataForGeneralReport(dashboard.getTreatments());
+            List<Map<String, Object>> reportDataList = prepareDataForGeneralReport(treatmentCount);
 
             // Configuramos los parámetros principales del reporte
             Map<String, Object> parameters = new HashMap<>();
