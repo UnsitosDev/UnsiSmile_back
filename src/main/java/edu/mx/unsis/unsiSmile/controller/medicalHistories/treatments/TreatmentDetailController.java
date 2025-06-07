@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -165,8 +166,15 @@ public class TreatmentDetailController {
 
     @Operation(summary = "Genera un reporte general PDF de todos los tratamientos realizados")
     @GetMapping("/reports/general")
-    public ResponseEntity<byte[]> getGeneralTreatmentReport() {
-        return treatmentGeneralReportService.generateGeneralTreatmentReport();
+    public ResponseEntity<byte[]> getGeneralTreatmentReport(
+            @RequestParam(required = false)
+            @Parameter(description = "Format dd-mm-yyyy")
+            @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
+            @RequestParam(required = false)
+            @Parameter(description = "Format dd-mm-yyyy")
+            @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate
+    ) {
+        return treatmentGeneralReportService.generateGeneralTreatmentReport(startDate, endDate);
     }
 
     @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno para reportes.")

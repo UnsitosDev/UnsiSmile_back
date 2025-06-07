@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,4 +67,19 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
     List<TreatmentDetailModel> findByStudentAndSemester(String enrollment, Long semesterId, String status);
 
     Optional<TreatmentDetailModel> findByPatientClinicalHistory_IdPatientClinicalHistory(Long idPatientMedicalRecord);
+
+    @Query("SELECT t.treatment.name, COUNT(tt.idDetailTooth) " +
+            "FROM TreatmentDetailModel t " +
+            "LEFT JOIN TreatmentDetailToothModel tt ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "WHERE t.status = ?1 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name = 'Diente' " +
+            "AND t.createdAt BETWEEN ?2 AND ?3 " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countToothScopeTreatmentsBetweenDates(String status, Timestamp startDate, Timestamp endDate);
+
+    @Query("SELECT t.treatment.name, COUNT(DISTINCT t.idTreatmentDetail) " +
+            "FROM TreatmentDetailModel t " +
+            "WHERE t.status = ?1 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name <> 'Diente' " +
+            "AND t.createdAt BETWEEN ?2 AND ?3 " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countGeneralScopeTreatmentsBetweenDates(String status, Timestamp startDate, Timestamp endDate);
 }

@@ -70,18 +70,32 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
 
-            List<Object[]> toothScope = treatmentDetailRepository.countToothScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
-            List<Object[]> generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED.toString());
-
-            Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
-
-            TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
+            TreatmentCountResponse treatments = getTreatmentCountResponse(null, null);
             builder.treatments(treatments);
 
             return builder.build();
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public TreatmentCountResponse getTreatmentCountResponse(Timestamp startDate, Timestamp endDate) {
+        List<Object[]> toothScope;
+        List<Object[]> generalScope;
+
+        if (startDate != null && endDate != null) {
+            toothScope = treatmentDetailRepository.countToothScopeTreatmentsBetweenDates(
+                    ReviewStatus.FINISHED.toString(), startDate, endDate
+            );
+            generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsBetweenDates(
+                    ReviewStatus.FINISHED.toString(), startDate, endDate
+            );
+        } else {
+            toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED.toString());
+            generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED.toString());
+        }
+        Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+        return mapToTreatmentCountResponse(treatmentCounts);
     }
 
     @Transactional(readOnly = true)
