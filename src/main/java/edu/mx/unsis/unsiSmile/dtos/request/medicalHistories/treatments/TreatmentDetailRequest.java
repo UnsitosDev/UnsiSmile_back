@@ -33,5 +33,8 @@ public class TreatmentDetailRequest {
     @NotNull(message = ResponseMessages.TREATMENT_END_DATE_CANNOT_BE_NULL)
     private LocalDateTime endDate;
 
+    @NotNull(message = ResponseMessages.PROFESSOR_CLINICAL_AREA_ID_CANNOT_BE_NULL)
+    private Long professorClinicalAreaId;
+
     TreatmentDetailToothRequest treatmentDetailToothRequest;
 }
