@@ -210,6 +210,10 @@ public class TreatmentDetailService {
 
             String scope = existing.getTreatment().getTreatmentScope().getName();
 
+            if(!ReviewStatus.AWAITING_APPROVAL.toString().equals(existing.getStatus())){
+                createAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
+            }
+
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
             if (scope.equals(Constants.TOOTH)) {
@@ -241,8 +245,6 @@ public class TreatmentDetailService {
                     treatmentDetailToothService.createTreatmentDetailTeeth(toAddRequest);
                 }
             }
-
-            createAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
 
             return toDto(saved);
         } catch (AppException e) {
