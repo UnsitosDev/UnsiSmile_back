@@ -156,7 +156,7 @@ public class TreatmentDetailService {
                             String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
 
-            if(ReviewStatus.AWAITING_APPROVAL.toString().equals(authorizedTreatment.getStatus())){
+            if(!ReviewStatus.APPROVED.toString().equals(authorizedTreatment.getStatus())){
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_AWAITING_APPROVAL, HttpStatus.BAD_REQUEST);
             }
             
@@ -660,23 +660,23 @@ public class TreatmentDetailService {
                 throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
             }
 
-            if (ReviewStatus.REJECTED.toString().equals(auth.getStatus())) {
+            if (ReviewStatus.NOT_APPROVED.toString().equals(auth.getStatus())) {
                 throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
             }
-
-            auth.setStatus(ReviewStatus.APPROVED.toString());
-            auth.setAuthorizedAt(LocalDateTime.now());
 
             if (comment != null && !comment.isBlank()) {
                 auth.setComment(comment);
             }
 
             if (authorized) {
+                auth.setStatus(ReviewStatus.APPROVED.toString());
                 treatment.setStatus(ReviewStatus.IN_PROGRESS.toString());
             } else {
-                treatment.setStatus(ReviewStatus.REJECTED.toString());
+                auth.setStatus(ReviewStatus.NOT_APPROVED.toString());
+                treatment.setStatus(ReviewStatus.NOT_APPROVED.toString());
             }
 
+            auth.setAuthorizedAt(LocalDateTime.now());
             authorizedTreatmentRepository.save(auth);
             treatmentDetailRepository.save(treatment);
 
