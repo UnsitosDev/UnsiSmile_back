@@ -79,16 +79,6 @@ public class TreatmentDetailService {
         try {
             validateRequestDependencies(request);
 
-            String patientId = request.getPatientId();
-
-            boolean existsInReview = treatmentDetailRepository
-                    .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
-                            patientId, ReviewStatus.IN_PROGRESS.toString());
-
-            if (existsInReview) {
-                throw new AppException(ResponseMessages.TREATMENT_DETAIL_ALREADY_IN_PROGRESS, HttpStatus.CONFLICT);
-            }
-
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
             String scope = treatmentResponse.getTreatmentScope().getName();
 
