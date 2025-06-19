@@ -242,7 +242,7 @@ public class TreatmentDetailService {
             toothRequest.setIdTreatmentDetail(treatmentDetailId);
             treatmentDetailToothService.createTreatmentDetailTeeth(toothRequest);
 
-        } else if (wasTooth && isTooth) {
+        } else if (wasTooth) {
             // CASO 3: actualizar dientes
             TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
 
