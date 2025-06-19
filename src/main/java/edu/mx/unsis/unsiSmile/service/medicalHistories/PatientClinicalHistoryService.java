@@ -195,4 +195,25 @@ public class PatientClinicalHistoryService {
                 .appointmentDate(entity.getAppointmentDate().toLocalDate())
                 .build();
     }
+
+    @Transactional
+    public PatientClinicalHistoryModel updatePatientMedicalRecord(Long id, Long idClinicalHistory) {
+        try {
+            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(id)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, id)
+                            , HttpStatus.NOT_FOUND));
+            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(idClinicalHistory)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idClinicalHistory),
+                            HttpStatus.NOT_FOUND
+                    ));
+            patientClinicalHistoryModel.setClinicalHistoryCatalog(clinicalHistoryCatalogModel);
+            return patientClinicalHistoryRepository.save(patientClinicalHistoryModel);
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException("Failed to save patient clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

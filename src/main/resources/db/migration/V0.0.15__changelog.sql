@@ -66,6 +66,24 @@ CREATE TABLE authorized_treatments (
                                        FOREIGN KEY (fk_professor_clinical_area) REFERENCES professor_clinical_areas(id_professor_clinical_area)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+CREATE TABLE execution_reviews (
+                                   id_execution_review BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+
+                                   fk_treatment_detail BIGINT(20) NOT NULL,
+                                   fk_professor_clinical_area BIGINT(20) NOT NULL,
+
+                                   status VARCHAR(50) NOT NULL,
+                                   comment VARCHAR(255) DEFAULT NULL,
+
+                                   created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
+                                   created_by VARCHAR(255) DEFAULT NULL,
+                                   updated_at DATETIME(6) DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+                                   updated_by VARCHAR(255) DEFAULT NULL,
+
+                                   FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details(id_treatment_detail),
+                                   FOREIGN KEY (fk_professor_clinical_area) REFERENCES professor_clinical_areas(id_professor_clinical_area)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
 CREATE TABLE treatment_detail_teeth (
     id_detail_tooth BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_treatment_detail BIGINT(20) NOT NULL,

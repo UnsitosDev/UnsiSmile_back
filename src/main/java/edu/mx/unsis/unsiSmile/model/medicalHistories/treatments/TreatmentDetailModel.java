@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
@@ -45,8 +46,9 @@ public class TreatmentDetailModel extends AuditModel {
     @JoinColumn(name = "fk_professor", referencedColumnName = "id_professor")
     private ProfessorModel professor;
 
-    @Column(name = "status", length = 50)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ReviewStatus status;
 
     @Column(name = "comments")
     private String comments;
