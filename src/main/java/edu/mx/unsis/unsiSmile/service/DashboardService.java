@@ -66,9 +66,9 @@ public class DashboardService {
                     .patientsUnder18(studentPatientRepository.countPatientsUnder18ByStudent(enrollment, Constants.ACTIVE))
                     .patientsBetween18And60(studentPatientRepository.countPatientsBetween18And60ByStudent(enrollment, Constants.ACTIVE))
                     .patientsOver60(studentPatientRepository.countPatientsOver60ByStudent(enrollment, Constants.ACTIVE))
-                    .rejectedTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.REJECTED.toString()))
-                    .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW.toString()))
-                    .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS.toString()));
+                    .rejectedTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.REJECTED))
+                    .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW))
+                    .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS));
 
             TreatmentCountResponse treatments = getTreatmentCountResponse(null, null);
             builder.treatments(treatments);
@@ -85,14 +85,14 @@ public class DashboardService {
 
         if (startDate != null && endDate != null) {
             toothScope = treatmentDetailRepository.countToothScopeTreatmentsBetweenDates(
-                    ReviewStatus.FINISHED.toString(), startDate, endDate
+                    ReviewStatus.FINISHED, startDate, endDate
             );
             generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsBetweenDates(
-                    ReviewStatus.FINISHED.toString(), startDate, endDate
+                    ReviewStatus.FINISHED, startDate, endDate
             );
         } else {
-            toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED.toString());
-            generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED.toString());
+            toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED);
+            generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED);
         }
         Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
         return mapToTreatmentCountResponse(treatmentCounts);
@@ -128,12 +128,12 @@ public class DashboardService {
                     .totalStudents(studentRepository.countTotalStudents(Constants.ACTIVE))
                     .studentsRegisteredLastMonth(studentRepository.countStudentsRegisteredSince(lastMonthTimestamp, Constants.ACTIVE))
                     .totalProfessors(professorRepository.countTotalProfessors(Constants.ACTIVE))
-                    .rejectedTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.REJECTED.toString(), Constants.ACTIVE))
-                    .progressingTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_PROGRESS.toString(), Constants.ACTIVE))
-                    .inReviewTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_REVIEW.toString(), Constants.ACTIVE));
+                    .rejectedTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.REJECTED, Constants.ACTIVE))
+                    .progressingTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_PROGRESS, Constants.ACTIVE))
+                    .inReviewTreatments(treatmentDetailRepository.countByStatusAndStatusKey(ReviewStatus.IN_REVIEW, Constants.ACTIVE));
 
-            List<Object[]> toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED.toString());
-            List<Object[]> generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED.toString());
+            List<Object[]> toothScope = treatmentDetailRepository.countAllToothScopeTreatments(ReviewStatus.FINISHED);
+            List<Object[]> generalScope = treatmentDetailRepository.countAllGeneralScopeTreatments(ReviewStatus.FINISHED);
 
             Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
             TreatmentCountResponse treatments = mapToTreatmentCountResponse(treatmentCounts);
@@ -184,7 +184,7 @@ public class DashboardService {
                     )
                     .treatmentsCompleted(
                             treatmentDetailRepository.countActiveTreatmentsByProfessorId(
-                                    employeeNumber, ReviewStatus.APPROVED.name()
+                                    employeeNumber, ReviewStatus.APPROVED
                             )
                     )
                     .build();

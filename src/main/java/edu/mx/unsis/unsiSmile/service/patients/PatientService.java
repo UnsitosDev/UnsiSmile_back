@@ -301,7 +301,7 @@ public class PatientService {
             boolean hasInProgress = treatmentDetailRepository
                     .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
                             idPatient,
-                            ReviewStatus.IN_PROGRESS.toString()
+                            ReviewStatus.IN_PROGRESS
                     );
             response.setHasTreatmentInProgress(hasInProgress);
 

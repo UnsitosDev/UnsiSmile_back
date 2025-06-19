@@ -644,9 +644,9 @@ public class TreatmentDetailService {
         if (semesterId != null) {
             semesterRepository.findById(semesterId)
                     .orElseThrow(() -> new AppException(ResponseMessages.SEMESTER_NOT_FOUND, HttpStatus.NOT_FOUND));
-            return treatmentDetailRepository.findByStudentAndSemester(enrollment, semesterId, status.toString());
+            return treatmentDetailRepository.findByStudentAndSemester(enrollment, semesterId, status);
         } else {
-            return treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(student, status.toString(),
+            return treatmentDetailRepository.findByStudentGroup_StudentAndStatusAndStatusKey(student, status,
                     Constants.ACTIVE);
         }
     }
