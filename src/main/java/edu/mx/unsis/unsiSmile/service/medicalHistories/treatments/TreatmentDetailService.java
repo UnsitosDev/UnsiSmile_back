@@ -19,6 +19,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
@@ -27,6 +28,7 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepositor
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
@@ -66,6 +68,7 @@ public class TreatmentDetailService {
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
+    private final ITreatmentRepository treatmentRepository;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
     private final UserService userService;
@@ -195,11 +198,13 @@ public class TreatmentDetailService {
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
-
-            TreatmentResponse newTreatment = treatmentService.getTreatmentById(request.getTreatmentId());
+            String scope = existing.getTreatment().getTreatmentScope().getName();
+            TreatmentModel newTreatment = treatmentRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_NOT_FOUND + id, HttpStatus.NOT_FOUND));
 
             validateRequestDependencies(request);
             treatmentDetailMapper.updateEntity(request, existing);
+            existing.setTreatment(newTreatment);
 
             if (!ReviewStatus.AWAITING_APPROVAL.equals(existing.getStatus())) {
                 createAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
@@ -210,7 +215,7 @@ public class TreatmentDetailService {
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
             // Lógica para el manejo de dientes
-            handleTeethByScope(existing.getTreatment().getTreatmentScope().getName(),
+            handleTeethByScope(scope,
                     newTreatment.getTreatmentScope().getName(), saved.getIdTreatmentDetail(), request);
 
             return toDto(saved);
