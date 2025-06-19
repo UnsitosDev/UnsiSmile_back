@@ -17,6 +17,7 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetai
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -24,6 +25,7 @@ import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -74,6 +76,7 @@ public class TreatmentDetailService {
     private final ProfessorClinicalAreaService professorClinicalAreaService;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final ExecutionReviewService executionReviewService;
+    private final IExecutionReviewRepository executionReviewRepository;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -533,13 +536,33 @@ public class TreatmentDetailService {
             ProfessorModel professorModel = professorRepository.findById(professorId)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            Page<TreatmentDetailModel> treatments = treatmentDetailRepository
-                    .findAllByProfessorAndStatus(
-                            professorModel,
-                            status.toString(),
-                            pageable);
+            List<ReviewStatus> authorizationStatuses = List.of(
+                    ReviewStatus.AWAITING_APPROVAL,
+                    ReviewStatus.NOT_APPROVED,
+                    ReviewStatus.APPROVED
+            );
 
-            return treatments.map(this::toDto);
+            if (authorizationStatuses.contains(status)) {
+                // Buscar en tabla de autorizaciones
+                Page<AuthorizedTreatmentModel> auths = authorizedTreatmentRepository
+                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
+                                professorModel.getIdProfessor(),
+                                status,
+                                pageable
+                        );
+
+                return auths.map(this::toDtoWithAuthorizingProfessor);
+            } else {
+                // Buscar en tabla de revisiones de ejecución
+                Page<ExecutionReviewModel> reviews = executionReviewRepository
+                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
+                                professorModel.getIdProfessor(),
+                                status,
+                                pageable
+                        );
+
+                return reviews.map(this::toDtoWithReviewerProfessor);
+            }
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -717,4 +740,16 @@ public class TreatmentDetailService {
 
         return response;
     }
+
+    private TreatmentDetailResponse toDtoWithReviewerProfessor(ExecutionReviewModel model) {
+        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
+
+        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
+                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .build());
+
+        return response;
+    }
+
 }
