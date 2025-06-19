@@ -295,24 +295,7 @@ public class TreatmentDetailService {
     public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudent(Pageable pageable, String idStudent,
                                                                          Long idTreatment) {
         try {
-            StudentModel studentModel = getStudentModel(idStudent);
-
-            List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
-
-            if (studentGroups.isEmpty()) {
-                return Page.empty();
-            }
-
-            Page<TreatmentDetailModel> page;
-
-            if (idTreatment != null) {
-                treatmentService.getTreatmentById(idTreatment);
-                page = treatmentDetailRepository
-                        .findAllByStudentGroupInAndTreatment_IdTreatment(studentGroups, idTreatment, pageable);
-            } else {
-                page = treatmentDetailRepository
-                        .findAllByStudentGroupIn(studentGroups, pageable);
-            }
+            Page<TreatmentDetailModel> page = getTreatmentDetailsByStudentGroups(pageable, idStudent, idTreatment);
 
             List<TreatmentDetailResponse> allResponses = page.getContent().stream()
                     .flatMap(model -> toDtoList(model).stream())
@@ -322,8 +305,7 @@ public class TreatmentDetailService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -331,32 +313,32 @@ public class TreatmentDetailService {
     public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(Pageable pageable, String idStudent,
                                                                                   Long idTreatment) {
         try {
-            StudentModel studentModel = getStudentModel(idStudent);
-
-            List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
-
-            if (studentGroups.isEmpty()) {
-                return Page.empty();
-            }
-
-            Page<TreatmentDetailModel> page;
-
-            if (idTreatment != null) {
-                treatmentService.getTreatmentById(idTreatment);
-                page = treatmentDetailRepository
-                        .findAllByStudentGroupInAndTreatment_IdTreatment(studentGroups, idTreatment, pageable);
-            } else {
-                page = treatmentDetailRepository
-                        .findAllByStudentGroupIn(studentGroups, pageable);
-            }
-
+            Page<TreatmentDetailModel> page = getTreatmentDetailsByStudentGroups(pageable, idStudent, idTreatment);
             return page.map(this::toDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR,
-                    ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
+    }
+
+    private Page<TreatmentDetailModel> getTreatmentDetailsByStudentGroups(Pageable pageable, String idStudent, Long idTreatment) {
+        StudentModel studentModel = getStudentModel(idStudent);
+
+        List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
+
+        if (studentGroups.isEmpty()) {
+            return Page.empty();
+        }
+
+        if (idTreatment != null) {
+            treatmentService.getTreatmentById(idTreatment);
+            return treatmentDetailRepository
+                    .findAllByStudentGroupInAndTreatment_IdTreatment(studentGroups, idTreatment, pageable);
+        }
+
+        return treatmentDetailRepository
+                .findAllByStudentGroupIn(studentGroups, pageable);
     }
 
     private StudentModel getStudentModel(String idStudent) {
