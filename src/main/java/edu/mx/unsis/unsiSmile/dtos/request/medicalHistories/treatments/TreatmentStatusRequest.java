@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class AuthorizedTreatmentRequest {
+public class TreatmentStatusRequest {
 
     @NotNull(message = ResponseMessages.TREATMENT_DETAIL_ID_CANNOT_BE_NULL)
     private Long treatmentDetailId;

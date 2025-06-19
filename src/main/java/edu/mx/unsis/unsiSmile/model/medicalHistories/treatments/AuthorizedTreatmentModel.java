@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.treatments;
 
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
@@ -32,8 +33,9 @@ public class AuthorizedTreatmentModel extends AuditModel {
     @Column(name = "comment", length = 255)
     private String comment;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private ReviewStatus status;
 
     @Column(name = "authorized_at")
     private LocalDateTime authorizedAt;

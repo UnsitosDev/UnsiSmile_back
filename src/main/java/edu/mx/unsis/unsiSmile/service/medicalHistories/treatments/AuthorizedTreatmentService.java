@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.AuthorizedTreatmentRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusRequest;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
@@ -24,13 +24,13 @@ public class AuthorizedTreatmentService {
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
 
     @Transactional
-    public void createAuthorizedTreatment(AuthorizedTreatmentRequest request) {
+    public void createAuthorizedTreatment(TreatmentStatusRequest request) {
         try {
             AuthorizedTreatmentModel model = AuthorizedTreatmentModel.builder()
                     .treatmentDetail(TreatmentDetailModel.builder()
                             .idTreatmentDetail(request.getTreatmentDetailId())
                             .build())
-                    .status(request.getStatus().toString())
+                    .status(request.getStatus())
                     .professorClinicalArea(ProfessorClinicalAreaModel.builder()
                             .idProfessorClinicalArea(request.getProfessorClinicalAreaId())
                             .build())
@@ -44,19 +44,19 @@ public class AuthorizedTreatmentService {
     }
 
     @Transactional
-    public AuthorizedTreatmentModel updateAuthorizedTreatment(Long id, AuthorizedTreatmentRequest request) {
+    public void updateAuthorizedTreatmentByTreatmentId(TreatmentStatusRequest request) {
         try {
-            AuthorizedTreatmentModel existing = authorizedTreatmentRepository.findById(id)
+            AuthorizedTreatmentModel authorizedTreatment = authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(request.getTreatmentDetailId())
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.AUTHORIZED_TREATMENT_NOT_FOUND, id),
+                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, request.getTreatmentDetailId()),
                             HttpStatus.NOT_FOUND));
 
-            existing.setComment(request.getComment());
-            existing.setStatus(request.getStatus().toString());
-            existing.setAuthorizedAt(LocalDateTime.now());
+            authorizedTreatment.setProfessorClinicalArea(ProfessorClinicalAreaModel.builder()
+                    .idProfessorClinicalArea(request.getProfessorClinicalAreaId())
+                    .build());
 
-            return authorizedTreatmentRepository.save(existing);
-
+            authorizedTreatmentRepository.save(authorizedTreatment);
         } catch (AppException e) {
             log.warn(String.format(ResponseMessages.AUTHORIZED_TREATMENT_NOT_FOUND, id));
             throw e;
