@@ -208,6 +208,7 @@ public class TreatmentDetailService {
 
             if (!ReviewStatus.AWAITING_APPROVAL.equals(existing.getStatus())) {
                 createAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
+                existing.setStatus(ReviewStatus.AWAITING_APPROVAL);
             } else {
                 updateAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
             }
