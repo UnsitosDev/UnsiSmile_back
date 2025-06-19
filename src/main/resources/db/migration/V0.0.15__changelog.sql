@@ -55,10 +55,10 @@ CREATE TABLE authorized_treatments (
                                        status VARCHAR(50) NOT NULL,
                                        authorized_at DATETIME(6) DEFAULT NULL,
 
-                                       created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
+                                       created_at DATETIME(6) DEFAULT NULL,
                                        created_by VARCHAR(255) DEFAULT NULL,
                                        status_key VARCHAR(255) DEFAULT NULL,
-                                       updated_at DATETIME(6) DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+                                       updated_at DATETIME(6) DEFAULT NULL,
                                        updated_by VARCHAR(255) DEFAULT NULL,
 
                                        FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details(id_treatment_detail),
@@ -76,6 +76,7 @@ CREATE TABLE execution_reviews (
 
                                    created_at DATETIME(6) DEFAULT CURRENT_TIMESTAMP(6),
                                    created_by VARCHAR(255) DEFAULT NULL,
+                                   status_key VARCHAR(255) DEFAULT NULL,
                                    updated_at DATETIME(6) DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(6),
                                    updated_by VARCHAR(255) DEFAULT NULL,
 
