@@ -568,4 +568,5 @@ public class ResponseMessages {
     public static final String ERROR_CREATING_TREATMENT_EXECUTION_STATUS = "Error al crear un registro de status de tratamiento.";
     public static final String ERROR_UPDATING_TREATMENT_EXECUTION_STATUS = "Error al actualizar un registro de status del tratamiento con ID: %s.";
     public static final String FAILED_FETCH_TREATMENT_EXECUTION_STATUS = "Error al obtener un registro de status del tratamiento con ID: %s.";
+    public static final String INVALID_TREATMENT_STATE_TRANSITION = "No es posible cambiar el estado del tratamiento desde su estado actual.";
 }

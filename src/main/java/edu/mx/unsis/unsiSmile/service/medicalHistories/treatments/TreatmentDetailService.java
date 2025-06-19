@@ -73,6 +73,7 @@ public class TreatmentDetailService {
     private final AuthorizedTreatmentService authorizedTreatmentService;
     private final ProfessorClinicalAreaService professorClinicalAreaService;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
+    private final ExecutionReviewService executionReviewService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -416,28 +417,89 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse statusTreatment(Long id, TreatmentStatusUpdateRequest request) {
+    public TreatmentDetailResponse updateTreatmentStatus(Long treatmentDetailId, TreatmentStatusUpdateRequest request) {
         try {
-            if (request.getStatus() != ReviewStatus.FINISHED && request.getStatus() != ReviewStatus.REJECTED
-                    && request.getStatus() != ReviewStatus.CANCELLED) {
-                throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS,
-                        HttpStatus.BAD_REQUEST);
+            TreatmentDetailModel treatment = treatmentDetailRepository.findById(treatmentDetailId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            ReviewStatus currentStatus = treatment.getStatus();
+
+            // CASO 1: Tratamiento en etapa de autorización
+            if (currentStatus == ReviewStatus.AWAITING_APPROVAL) {
+                if (request.getStatus() != ReviewStatus.APPROVED && request.getStatus() != ReviewStatus.NOT_APPROVED) {
+                    throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+                }
+
+                AuthorizedTreatmentModel auth = authorizedTreatmentRepository
+                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(treatmentDetailId)
+                        .orElseThrow(() -> new AppException(
+                                String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, treatmentDetailId),
+                                HttpStatus.NOT_FOUND));
+
+                if (ReviewStatus.APPROVED.equals(auth.getStatus())) {
+                    throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
+                }
+
+                if (ReviewStatus.NOT_APPROVED.equals(auth.getStatus())) {
+                    throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
+                }
+
+                if (request.getComments() != null && !request.getComments().isBlank()) {
+                    auth.setComment(request.getComments());
+                }
+
+                auth.setStatus(request.getStatus());
+                auth.setAuthorizedAt(LocalDateTime.now());
+                authorizedTreatmentRepository.save(auth);
+
+                // Si fue aprobado, pasa a IN_PROGRESS y se crea el primer executionReview
+                if (request.getStatus() == ReviewStatus.APPROVED) {
+                    treatment.setStatus(ReviewStatus.IN_PROGRESS);
+
+                    TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
+                            .treatmentDetailId(treatmentDetailId)
+                            .comment(request.getComments())
+                            .status(ReviewStatus.IN_PROGRESS)
+                            .build();
+
+                    executionReviewService.createExecutionReview(executionRequest);
+                } else {
+                    treatment.setStatus(ReviewStatus.NOT_APPROVED);
+                }
+            }
+            // CASO 2: Tratamiento en ejecución
+            else if (currentStatus == ReviewStatus.IN_REVIEW) {
+                if (request.getStatus() != ReviewStatus.FINISHED && request.getStatus() != ReviewStatus.REJECTED
+                        && request.getStatus() != ReviewStatus.CANCELLED) {
+                    throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+                }
+
+                treatment = getValidTreatment(treatmentDetailId, currentStatus);
+                treatment.setStatus(request.getStatus());
+
+                TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
+                        .treatmentDetailId(treatmentDetailId)
+                        .comment(request.getComments())
+                        .status(request.getStatus())
+                        .build();
+
+                executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
+                sendNotifications(treatment);
+            }
+            // Si el estado actual no entra en ningún flujo válido
+            else {
+                throw new AppException(ResponseMessages.INVALID_TREATMENT_STATE_TRANSITION, HttpStatus.BAD_REQUEST);
             }
 
-            TreatmentDetailModel treatment = getValidTreatment(id, ReviewStatus.IN_REVIEW);
+            TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
+            return toDto(saved);
 
-            treatment.setStatus(request.getStatus());
-            treatment.setComments(request.getComments());
-
-            this.sendNotifications(treatment);
-
-            return toDto(treatmentDetailRepository.save(treatment));
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(
-                    ResponseMessages.FAILED_FINALIZE_TREATMENT_DETAIL,
-                    HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.FAILED_PROCESS_TREATMENT_AUTHORIZATION,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -645,31 +707,6 @@ public class TreatmentDetailService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getTreatmentsToApproveByProfessor(String professorId, ReviewStatus status, Pageable pageable) {
-        try {
-            professorRepository.findById(professorId)
-                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
-
-            Page<AuthorizedTreatmentModel> authorizedTreatments;
-
-            if (status == null) {
-                authorizedTreatments = authorizedTreatmentRepository
-                        .findByProfessorClinicalArea_Professor_idProfessor(professorId, pageable);
-            } else {
-                authorizedTreatments = authorizedTreatmentRepository
-                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(professorId, status, pageable);
-            }
-
-            return authorizedTreatments.map(this::toDtoWithAuthorizingProfessor);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW,
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
     private TreatmentDetailResponse toDtoWithAuthorizingProfessor(AuthorizedTreatmentModel model) {
         TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
 
@@ -680,52 +717,4 @@ public class TreatmentDetailService {
 
         return response;
     }
-
-    @Transactional
-    public TreatmentDetailResponse authorizeOrRejectTreatmentByTreatmentDetailId(
-            Long treatmentDetailId, boolean authorized, String comment) {
-        try {
-            TreatmentDetailModel treatment = treatmentDetailRepository.findById(treatmentDetailId)
-                    .orElseThrow(() -> new AppException(
-                            ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
-
-            AuthorizedTreatmentModel auth = authorizedTreatmentRepository
-                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(treatmentDetailId)
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, treatmentDetailId), HttpStatus.NOT_FOUND));
-
-            if (ReviewStatus.APPROVED.equals(auth.getStatus())) {
-                throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
-            }
-
-            if (ReviewStatus.NOT_APPROVED.equals(auth.getStatus())) {
-                throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
-            }
-
-            if (comment != null && !comment.isBlank()) {
-                auth.setComment(comment);
-            }
-
-            if (authorized) {
-                auth.setStatus(ReviewStatus.APPROVED);
-                treatment.setStatus(ReviewStatus.IN_PROGRESS);
-            } else {
-                auth.setStatus(ReviewStatus.NOT_APPROVED);
-                treatment.setStatus(ReviewStatus.NOT_APPROVED);
-            }
-
-            auth.setAuthorizedAt(LocalDateTime.now());
-            authorizedTreatmentRepository.save(auth);
-            treatmentDetailRepository.save(treatment);
-
-            return toDtoWithAuthorizingProfessor(auth);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new AppException(
-                    ResponseMessages.FAILED_PROCESS_TREATMENT_AUTHORIZATION,
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
 }

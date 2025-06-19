@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 
 @Service
 @AllArgsConstructor
@@ -58,11 +56,11 @@ public class AuthorizedTreatmentService {
 
             authorizedTreatmentRepository.save(authorizedTreatment);
         } catch (AppException e) {
-            log.warn(String.format(ResponseMessages.AUTHORIZED_TREATMENT_NOT_FOUND, id));
+            log.warn(String.format(ResponseMessages.AUTHORIZED_TREATMENT_NOT_FOUND, request.getTreatmentDetailId()));
             throw e;
         } catch (Exception ex) {
-            log.warn(String.format(ResponseMessages.ERROR_UPDATING_AUTHORIZED_TREATMENT, id));
-            throw new AppException(String.format(ResponseMessages.ERROR_UPDATING_AUTHORIZED_TREATMENT, id),
+            log.warn(String.format(ResponseMessages.ERROR_UPDATING_AUTHORIZED_TREATMENT, request.getTreatmentDetailId()));
+            throw new AppException(String.format(ResponseMessages.ERROR_UPDATING_AUTHORIZED_TREATMENT, request.getTreatmentDetailId()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

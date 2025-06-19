@@ -34,7 +34,6 @@ CREATE TABLE treatment_details (
     fk_student_group BIGINT(20) NOT NULL, -- 'Para saber el nombre del alumno y el grupo donde se encontraba durante el tratamiento'
     fk_professor VARCHAR(15) DEFAULT NULL, -- 'Firma y nombre del profesor a cargo',
     status VARCHAR(50) DEFAULT NULL,
-    comments VARCHAR(255) DEFAULT NULL,
 
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
@@ -96,8 +95,6 @@ CREATE TABLE treatment_detail_teeth (
     FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details(id_treatment_detail),
     FOREIGN KEY (fk_tooth) REFERENCES teeth(id_tooth)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-
-
 
 -- Poblado de treatment_scopes
 INSERT INTO treatment_scopes (name) VALUES

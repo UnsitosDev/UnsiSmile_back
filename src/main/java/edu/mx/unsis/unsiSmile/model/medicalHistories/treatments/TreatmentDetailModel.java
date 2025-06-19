@@ -49,7 +49,4 @@ public class TreatmentDetailModel extends AuditModel {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ReviewStatus status;
-
-    @Column(name = "comments")
-    private String comments;
 }
