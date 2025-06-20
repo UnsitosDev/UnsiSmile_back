@@ -450,6 +450,7 @@ public class TreatmentDetailService {
 
                     TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
                             .treatmentDetailId(treatmentDetailId)
+                            .professorClinicalAreaId(auth.getProfessorClinicalArea().getIdProfessorClinicalArea())
                             .comment(request.getComments())
                             .status(ReviewStatus.IN_PROGRESS)
                             .build();

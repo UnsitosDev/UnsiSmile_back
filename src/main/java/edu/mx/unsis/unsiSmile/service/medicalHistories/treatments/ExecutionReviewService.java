@@ -20,7 +20,7 @@ public class ExecutionReviewService {
     private final IExecutionReviewRepository executionReviewRepository;
 
     @Transactional
-    public void createExecutionReview(TreatmentStatusRequest request) {
+    public ExecutionReviewModel createExecutionReview(TreatmentStatusRequest request) {
         try {
             ExecutionReviewModel model = ExecutionReviewModel.builder()
                     .treatmentDetail(TreatmentDetailModel.builder()
@@ -30,9 +30,10 @@ public class ExecutionReviewService {
                     .professorClinicalArea(ProfessorClinicalAreaModel.builder()
                             .idProfessorClinicalArea(request.getProfessorClinicalAreaId())
                             .build())
+                    .comment(request.getComment())
                     .build();
 
-            executionReviewRepository.save(model);
+            return executionReviewRepository.save(model);
         } catch (Exception ex) {
             log.error(ResponseMessages.ERROR_CREATING_TREATMENT_EXECUTION_STATUS, ex);
             throw new AppException(ResponseMessages.ERROR_CREATING_TREATMENT_EXECUTION_STATUS, HttpStatus.INTERNAL_SERVER_ERROR);
