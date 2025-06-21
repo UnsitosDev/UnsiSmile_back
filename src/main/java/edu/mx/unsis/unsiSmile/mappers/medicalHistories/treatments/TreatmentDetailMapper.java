@@ -28,7 +28,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         dto.getStartDate() : null)
                 .endDate(dto.getEndDate() != null ?
                         dto.getEndDate() : null)
-                .status(ReviewStatus.AWAITING_APPROVAL.toString())
+                .status(ReviewStatus.AWAITING_APPROVAL)
                 .build();
     }
 
@@ -38,9 +38,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                 .idTreatmentDetail(entity.getIdTreatmentDetail())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
-                .status(entity.getStatus())
+                .status(String.valueOf(entity.getStatus()))
                 .treatment(treatmentMapper.toDto(entity.getTreatment()))
-                .comments(entity.getComments())
                 .patient(TreatmentDetailResponse.PatientResponse.builder()
                         .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
                         .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())

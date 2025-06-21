@@ -119,7 +119,7 @@ public class TreatmentDetailController {
             @PathVariable Long id,
             @RequestBody TreatmentStatusUpdateRequest request) {
 
-        TreatmentDetailResponse response = treatmentDetailService.statusTreatment(id, request);
+        TreatmentDetailResponse response = treatmentDetailService.updateTreatmentStatus(id, request);
         return ResponseEntity.ok(response);
     }
 
@@ -195,39 +195,5 @@ public class TreatmentDetailController {
         Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(pageable, idStudent, idTreatment);
 
         return ResponseEntity.ok(treatmentDetails);
-    }
-
-    @Operation(summary = "Obtener tratamientos que requieren aprobación del profesor para poder ser realizados por el estudiante.")
-    @GetMapping("/professors/{professorId}/treatments-to-approve")
-    public ResponseEntity<Page<TreatmentDetailResponse>> getTreatmentsToApprove(
-            @PathVariable String professorId,
-            @Parameter(description = "Indica si el tratamiento ya fue aprobado por el profesor", example = "false")
-            @RequestParam(required = false) ReviewStatus status,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Campo por el cual ordenar los resultados", example = "createdAt")
-            @RequestParam(defaultValue = "createdAt") String order,
-            @RequestParam(defaultValue = "true") boolean asc) {
-
-        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-        Page<TreatmentDetailResponse> response = treatmentDetailService.getTreatmentsToApproveByProfessor(
-                professorId, status, pageable);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @Operation(summary = "Autorizar o rechazar un tratamiento para que el alumno pueda o no iniciarlo.")
-    @PatchMapping("/{id}/authorization")
-    public ResponseEntity<TreatmentDetailResponse> authorizeOrRejectTreatment(
-            @PathVariable Long id,
-            @RequestParam boolean authorized,
-            @RequestParam(required = false) String comment) {
-
-        TreatmentDetailResponse response = treatmentDetailService
-                .authorizeOrRejectTreatmentByTreatmentDetailId(id, authorized, comment);
-
-        return ResponseEntity.ok(response);
     }
 }

@@ -6,21 +6,19 @@ import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "authorized_treatments")
-public class AuthorizedTreatmentModel extends AuditModel {
+@Table(name = "execution_reviews")
+public class ExecutionReviewModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_authorized_treatment")
-    private Long idAuthorizedTreatment;
+    @Column(name = "id_execution_review")
+    private Long idExecutionReview;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_treatment_detail", referencedColumnName = "id_treatment_detail", nullable = false)
@@ -30,13 +28,10 @@ public class AuthorizedTreatmentModel extends AuditModel {
     @JoinColumn(name = "fk_professor_clinical_area", referencedColumnName = "id_professor_clinical_area", nullable = false)
     private ProfessorClinicalAreaModel professorClinicalArea;
 
-    @Column(name = "comment", length = 255)
-    private String comment;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ReviewStatus status;
+    private ReviewStatus status; // IN_REVIEW, REJECTED, FINISHED
 
-    @Column(name = "authorized_at")
-    private LocalDateTime authorizedAt;
+    @Column(name = "comment", length = 255)
+    private String comment;
 }

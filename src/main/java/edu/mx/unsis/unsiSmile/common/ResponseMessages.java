@@ -562,5 +562,11 @@ public class ResponseMessages {
     public static final String TREATMENT_ALREADY_AUTHORIZED = "Este tratamiento ya fue autorizado.";
     public static final String TREATMENT_ALREADY_REJECTED = "Este tratamiento ya fue rechazado.";
     public static final String FAILED_PROCESS_TREATMENT_AUTHORIZATION = "No se pudo procesar la autorización o rechazo del tratamiento.";
-    public static final String TREATMENT_DETAIL_AWAITING_APPROVAL = "El detalle del tratamiento está pendiente de aprobación por parte del profesor, no puede verlo aún.";
+    public static final String TREATMENT_DETAIL_AWAITING_APPROVAL = "El tratamiento no ha sido aprobado por el profesor, no puede verlo aún.";
+
+    public static final String TREATMENT_EXECUTION_STATUS_NOT_FOUND = "Registro de status con ID %s no encontrado para el tratamiento especificado.";
+    public static final String ERROR_CREATING_TREATMENT_EXECUTION_STATUS = "Error al crear un registro de status de tratamiento.";
+    public static final String ERROR_UPDATING_TREATMENT_EXECUTION_STATUS = "Error al actualizar un registro de status del tratamiento con ID: %s.";
+    public static final String FAILED_FETCH_TREATMENT_EXECUTION_STATUS = "Error al obtener un registro de status del tratamiento con ID: %s.";
+    public static final String INVALID_TREATMENT_STATE_TRANSITION = "No es posible cambiar el estado del tratamiento desde su estado actual.";
 }

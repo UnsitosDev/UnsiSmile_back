@@ -159,4 +159,17 @@ public class TreatmentDetailToothService {
             throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT_DETAIL_TEETH, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public void deleteAllByTreatmentDetailId(Long treatmentDetailId) {
+        try {
+            verifyTreatmentDetailExists(treatmentDetailId);
+            treatmentDetailToothRepository.deleteByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT_DETAIL_TEETH,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }
