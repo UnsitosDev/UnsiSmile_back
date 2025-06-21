@@ -393,6 +393,13 @@ public class TreatmentDetailService {
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW);
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
+
+            TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
+                    .treatmentDetailId(treatmentDetail.getIdTreatmentDetail())
+                    .status(ReviewStatus.IN_REVIEW)
+                    .build();
+
+            executionReviewService.updateAuthorizedTreatment(treatmentDetail.getIdTreatmentDetail(), executionRequest);
             treatmentDetailMapper.toDto(treatmentDetail);
 
             // send notification
