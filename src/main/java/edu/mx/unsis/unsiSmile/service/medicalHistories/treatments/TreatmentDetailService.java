@@ -495,15 +495,13 @@ public class TreatmentDetailService {
 
                 executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
 
-                // Actualizar el estado de los dientes(en revision) si el alcance es TOOTH
+                // Actualizar el estado de los dientes(en revision)
                 if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
                     treatmentDetailToothService.applyToothReviewAction(treatmentDetailId, request.getStatus());
                 }
 
                 sendNotifications(treatment);
-            }
-            // Si el estado actual no entra en ningún flujo válido
-            else {
+            } else {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_STATE_TRANSITION, HttpStatus.BAD_REQUEST);
             }
 
