@@ -429,74 +429,23 @@ public class TreatmentDetailService {
 
             ReviewStatus currentStatus = treatment.getStatus();
 
-            // CASO 1: Tratamiento en etapa de autorización
-            if (currentStatus == ReviewStatus.AWAITING_APPROVAL) {
-                if (request.getStatus() != ReviewStatus.APPROVED && request.getStatus() != ReviewStatus.NOT_APPROVED) {
-                    throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
-                }
-
-                AuthorizedTreatmentModel auth = authorizedTreatmentService.getAuthorizedTreatmentByTreatmentDetailId(treatmentDetailId);
-
-                if (ReviewStatus.APPROVED.equals(auth.getStatus())) {
-                    throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
-                }
-
-                if (ReviewStatus.NOT_APPROVED.equals(auth.getStatus())) {
-                    throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
-                }
-
-                if (request.getComments() != null && !request.getComments().isBlank()) {
-                    auth.setComment(request.getComments());
-                }
-
-                auth.setStatus(request.getStatus());
-                auth.setAuthorizedAt(LocalDateTime.now());
-                authorizedTreatmentRepository.save(auth);
-
-                // Si fue aprobado, pasa a IN_PROGRESS y se crea el primer executionReview
-                if (request.getStatus() == ReviewStatus.APPROVED) {
-                    treatment.setStatus(ReviewStatus.IN_PROGRESS);
-
-                    TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
-                            .treatmentDetailId(treatmentDetailId)
-                            .professorClinicalAreaId(auth.getProfessorClinicalArea().getIdProfessorClinicalArea())
-                            .comment(request.getComments())
-                            .status(ReviewStatus.IN_PROGRESS)
-                            .build();
-
-                    executionReviewService.createExecutionReview(executionRequest);
-                } else {
-                    treatment.setStatus(ReviewStatus.NOT_APPROVED);
-                }
-            }
-            // CASO 2: Tratamiento en ejecución
-            else if (currentStatus == ReviewStatus.IN_REVIEW) {
-                if (request.getStatus() != ReviewStatus.FINISHED && request.getStatus() != ReviewStatus.REJECTED
-                        && request.getStatus() != ReviewStatus.CANCELLED) {
-                    throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
-                }
-
-                treatment = getValidTreatment(treatmentDetailId, currentStatus);
-                treatment.setStatus(request.getStatus());
-
-                TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
-                        .treatmentDetailId(treatmentDetailId)
-                        .comment(request.getComments())
-                        .status(request.getStatus())
-                        .build();
-
-                executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
-
-                // Actualizar el estado de los dientes(en revision)
-                if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
-                    treatmentDetailToothService.applyToothReviewAction(treatmentDetailId, request.getStatus());
-                }
-
-                sendNotifications(treatment);
-            } else {
+            if (currentStatus != ReviewStatus.IN_REVIEW) {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_STATE_TRANSITION, HttpStatus.BAD_REQUEST);
             }
 
+            validateExecutionStatus(request.getStatus());
+
+            treatment = getValidTreatment(treatmentDetailId, currentStatus);
+            treatment.setStatus(request.getStatus());
+
+            TreatmentStatusRequest executionRequest = buildExecutionStatusRequest(treatmentDetailId, request);
+            executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
+
+            if (isToothTreatment(treatment)) {
+                treatmentDetailToothService.applyToothReviewAction(treatmentDetailId, request.getStatus());
+            }
+
+            sendNotifications(treatment);
             TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
             return mapTreatmentDetailToDto(saved);
 
@@ -538,33 +487,14 @@ public class TreatmentDetailService {
             ProfessorModel professorModel = professorRepository.findById(professorId)
                     .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            List<ReviewStatus> authorizationStatuses = List.of(
-                    ReviewStatus.AWAITING_APPROVAL,
-                    ReviewStatus.NOT_APPROVED,
-                    ReviewStatus.APPROVED
-            );
+            Page<ExecutionReviewModel> reviews = executionReviewRepository
+                    .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
+                            professorModel.getIdProfessor(),
+                            status,
+                            pageable
+                    );
 
-            if (authorizationStatuses.contains(status)) {
-                // Buscar en tabla de autorizaciones
-                Page<AuthorizedTreatmentModel> auths = authorizedTreatmentRepository
-                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
-                                professorModel.getIdProfessor(),
-                                status,
-                                pageable
-                        );
-
-                return auths.map(this::toDtoWithAuthorizingProfessor);
-            } else {
-                // Buscar en tabla de revisiones de ejecución
-                Page<ExecutionReviewModel> reviews = executionReviewRepository
-                        .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
-                                professorModel.getIdProfessor(),
-                                status,
-                                pageable
-                        );
-
-                return reviews.map(this::toDtoWithReviewerProfessor);
-            }
+            return reviews.map(this::toDtoWithReviewerProfessor);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -788,5 +718,105 @@ public class TreatmentDetailService {
                     .map(this::toDtoWithReviewerProfessor)
                     .orElseGet(() -> toDto(treatmentDetailModel));
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TreatmentDetailResponse> getTreatmentsByProfessorAndStatus(String professorId, ReviewStatus status, Pageable pageable) {
+        try {
+            ProfessorModel professorModel = professorRepository.findById(professorId)
+                    .orElseThrow(() -> new AppException(ResponseMessages.PROFESSOR_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            Page<AuthorizedTreatmentModel> auths = authorizedTreatmentRepository
+                    .findByProfessorClinicalArea_Professor_idProfessorAndStatus(
+                            professorModel.getIdProfessor(),
+                            status,
+                            pageable
+                    );
+
+            return auths.map(this::toDtoWithAuthorizingProfessor);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_PATIENTS_WITH_TREATMENTS_IN_REVIEW,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public TreatmentDetailResponse approveOrRejectTreatment(Long treatmentDetailId, TreatmentStatusUpdateRequest request) {
+        try {
+            TreatmentDetailModel treatment = treatmentDetailRepository.findById(treatmentDetailId)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            ReviewStatus currentStatus = treatment.getStatus();
+
+            if (currentStatus != ReviewStatus.AWAITING_APPROVAL &&
+                    currentStatus != ReviewStatus.NOT_APPROVED) {
+                throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+            }
+
+            AuthorizedTreatmentModel auth = authorizedTreatmentService
+                    .getAuthorizedTreatmentByTreatmentDetailId(treatmentDetailId);
+
+            if (ReviewStatus.APPROVED.equals(auth.getStatus())) {
+                throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
+            }
+
+            if (ReviewStatus.NOT_APPROVED.equals(auth.getStatus())) {
+                throw new AppException(ResponseMessages.TREATMENT_ALREADY_REJECTED, HttpStatus.BAD_REQUEST);
+            }
+
+            if (request.getComments() != null && !request.getComments().isBlank()) {
+                auth.setComment(request.getComments());
+            }
+
+            auth.setStatus(request.getStatus());
+            auth.setAuthorizedAt(LocalDateTime.now());
+            authorizedTreatmentRepository.save(auth);
+
+            if (request.getStatus() == ReviewStatus.APPROVED) {
+                treatment.setStatus(ReviewStatus.IN_PROGRESS);
+
+                TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
+                        .treatmentDetailId(treatmentDetailId)
+                        .professorClinicalAreaId(auth.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                        .comment(request.getComments())
+                        .status(ReviewStatus.IN_PROGRESS)
+                        .build();
+
+                executionReviewService.createExecutionReview(executionRequest);
+            } else {
+                treatment.setStatus(ReviewStatus.NOT_APPROVED);
+            }
+
+            TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
+            return mapTreatmentDetailToDto(saved);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_PROCESS_TREATMENT_AUTHORIZATION,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private void validateExecutionStatus(ReviewStatus status) {
+        if (status != ReviewStatus.FINISHED &&
+                status != ReviewStatus.REJECTED &&
+                status != ReviewStatus.CANCELLED) {
+            throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private TreatmentStatusRequest buildExecutionStatusRequest(Long treatmentDetailId, TreatmentStatusUpdateRequest request) {
+        return TreatmentStatusRequest.builder()
+                .treatmentDetailId(treatmentDetailId)
+                .comment(request.getComments())
+                .status(request.getStatus())
+                .build();
+    }
+
+    private boolean isToothTreatment(TreatmentDetailModel treatment) {
+        return Constants.TOOTH.equals(treatment.getTreatment().getTreatmentScope().getName());
     }
 }
