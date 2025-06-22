@@ -160,11 +160,7 @@ public class TreatmentDetailService {
                             String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
 
-            AuthorizedTreatmentModel authorizedTreatment = authorizedTreatmentRepository
-                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(id)
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, id),
-                            HttpStatus.NOT_FOUND));
+            AuthorizedTreatmentModel authorizedTreatment = authorizedTreatmentService.getAuthorizedTreatmentByTreatmentDetailId(id);
 
             if(!ReviewStatus.APPROVED.equals(authorizedTreatment.getStatus())){
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_AWAITING_APPROVAL, HttpStatus.BAD_REQUEST);
@@ -439,11 +435,7 @@ public class TreatmentDetailService {
                     throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
                 }
 
-                AuthorizedTreatmentModel auth = authorizedTreatmentRepository
-                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(treatmentDetailId)
-                        .orElseThrow(() -> new AppException(
-                                String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, treatmentDetailId),
-                                HttpStatus.NOT_FOUND));
+                AuthorizedTreatmentModel auth = authorizedTreatmentService.getAuthorizedTreatmentByTreatmentDetailId(treatmentDetailId);
 
                 if (ReviewStatus.APPROVED.equals(auth.getStatus())) {
                     throw new AppException(ResponseMessages.TREATMENT_ALREADY_AUTHORIZED, HttpStatus.BAD_REQUEST);
