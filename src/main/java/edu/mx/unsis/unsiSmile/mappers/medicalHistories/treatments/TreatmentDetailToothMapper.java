@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailM
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,9 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
                 .treatmentDetail(TreatmentDetailModel.builder()
                         .idTreatmentDetail(dto.getIdTreatmentDetail())
                         .build())
+                .startDate(LocalDateTime.now())
+                .inReview(false)
+                .reviewed(false)
                 .build();
     }
 
@@ -27,6 +31,9 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
         return TreatmentDetailToothResponse.builder()
                 .idDetailTooth(entity.getIdDetailTooth())
                 .idTooth(entity.getTooth().getIdTooth())
+                .endDate(entity.getEndDate() != null ? entity.getEndDate().toLocalDate() : null)
+                .inReview(entity.getInReview())
+                .reviewed(entity.getReviewed())
                 .build();
     }
 
@@ -43,4 +50,19 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
                 .idTreatmentDetail(request.getIdTreatmentDetail())
                 .build());
     }
+
+    public void applySendToReview(TreatmentDetailToothModel model) {
+        model.setInReview(true);
+        model.setEndDate(LocalDateTime.now());
+    }
+
+    public void applyApprove(TreatmentDetailToothModel model) {
+        model.setInReview(false);
+        model.setReviewed(true);
+    }
+
+    public void applyReject(TreatmentDetailToothModel model) {
+        model.setInReview(false);
+    }
+
 }

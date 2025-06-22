@@ -366,7 +366,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
+    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId, TreatmentDetailToothRequest toothRequest) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -402,8 +402,15 @@ public class TreatmentDetailService {
                     .build();
 
             executionReviewService.updateAuthorizedTreatment(treatmentDetail.getIdTreatmentDetail(), executionRequest);
-            treatmentDetailMapper.toDto(treatmentDetail);
 
+            // Validación específica para alcance tipo TOOTH
+            if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
+                if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
+                    throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUIRED, HttpStatus.BAD_REQUEST);
+                }
+
+                treatmentDetailToothService.updateToothReviewStatus(id, toothRequest, ReviewStatus.IN_REVIEW);
+            }
             // send notification
             this.sendNotifications(treatmentDetail);
 

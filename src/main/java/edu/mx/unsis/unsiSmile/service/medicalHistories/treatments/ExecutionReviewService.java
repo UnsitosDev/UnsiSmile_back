@@ -43,7 +43,7 @@ public class ExecutionReviewService {
     @Transactional
     public ExecutionReviewModel updateAuthorizedTreatment(Long id, TreatmentStatusRequest request) {
         try {
-            ExecutionReviewModel existing = executionReviewRepository.findById(id)
+            ExecutionReviewModel existing = executionReviewRepository.findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(id)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));

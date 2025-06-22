@@ -5,6 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothRepository;
@@ -169,6 +170,52 @@ public class TreatmentDetailToothService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT_DETAIL_TEETH,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public void updateToothReviewStatus(Long treatmentDetailId, TreatmentDetailToothRequest request, ReviewStatus action) {
+        try {
+            if (!treatmentDetailId.equals(request.getIdTreatmentDetail())) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_ID_MISMATCH, HttpStatus.BAD_REQUEST);
+            }
+
+            verifyTreatmentDetailExists(treatmentDetailId);
+
+            request.getIdTeeth().forEach(toothId -> {
+                if (!toothRepository.existsById(toothId)) {
+                    throw new AppException(String.format(ResponseMessages.TOOTH_NOT_FOUND, toothId), HttpStatus.NOT_FOUND);
+                }
+            });
+
+            for (String toothId : request.getIdTeeth()) {
+                TreatmentDetailToothModel model = treatmentDetailToothRepository
+                        .findByTreatmentDetail_IdTreatmentDetailAndTooth_IdTooth(treatmentDetailId, toothId)
+                        .orElseThrow(() -> new AppException(
+                                String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_NOT_FOUND, toothId),
+                                HttpStatus.NOT_FOUND));
+
+                switch (action) {
+                    case ReviewStatus.IN_REVIEW:
+                        treatmentDetailToothMapper.applySendToReview(model);
+                        break;
+                    case ReviewStatus.FINISHED:
+                        treatmentDetailToothMapper.applyApprove(model);
+                        break;
+                    case ReviewStatus.REJECTED:
+                        treatmentDetailToothMapper.applyReject(model);
+                        break;
+                    default:
+                        throw new AppException(ResponseMessages.INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS, HttpStatus.BAD_REQUEST);
+                }
+                treatmentDetailToothRepository.save(model);
+            }
+
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL_TEETH,
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }

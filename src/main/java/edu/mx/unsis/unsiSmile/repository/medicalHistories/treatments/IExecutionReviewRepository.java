@@ -14,5 +14,5 @@ public interface IExecutionReviewRepository extends JpaRepository<ExecutionRevie
     Page<ExecutionReviewModel> findByProfessorClinicalArea_Professor_idProfessorAndStatus(
             String professorId, ReviewStatus status, Pageable pageable);
 
-    Optional<ExecutionReviewModel> findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(Long executionReviewId);
+    Optional<ExecutionReviewModel> findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(Long treatmentDetailId);
 }

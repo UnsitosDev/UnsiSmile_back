@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailToothRepository extends JpaRepository<TreatmentDetailToothModel, Long> {
@@ -13,5 +14,9 @@ public interface ITreatmentDetailToothRepository extends JpaRepository<Treatment
 
     List<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetailAndTooth_IdToothIn(
             Long treatmentDetailId, List<String> toothCodes
+    );
+
+    Optional<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetailAndTooth_IdTooth(
+            Long treatmentDetailId, String toothCode
     );
 }
