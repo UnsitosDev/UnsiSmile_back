@@ -198,8 +198,8 @@ public class TreatmentDetailService {
                             String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
             String scope = existing.getTreatment().getTreatmentScope().getName();
-            TreatmentModel newTreatment = treatmentRepository.findById(request.getTreatmentId())
-                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_NOT_FOUND + id, HttpStatus.NOT_FOUND));
+
+            TreatmentModel newTreatment = treatmentService.getTreatmentModelById(request.getTreatmentId());
 
             validateRequestDependencies(request);
             treatmentDetailMapper.updateEntity(request, existing);
