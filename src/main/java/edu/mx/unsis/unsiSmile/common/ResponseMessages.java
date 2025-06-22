@@ -473,7 +473,9 @@ public class ResponseMessages {
 
     public static final String START_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de inicio no puede ser posterior a la fecha de hoy.";
     public static final String END_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de fin no puede ser posterior a la fecha de hoy.";
-
+    public static final String TREATMENT_DETAIL_TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s en del tratamiento";
+    public static final String INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS = "Acción inválida para actualizar el estado del diente..";
+    public static final String TREATMENT_DETAIL_TOOTH_REQUIRED = "Para tratamientos de alcance tipo diente, debes enviar los dientes.";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
@@ -483,7 +485,7 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_ID_MISMATCH = "El ID del detalle de tratamiento en la ruta no coincide con el ID en el cuerpo de la solicitud";
     public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
     public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
-    public static final String TEETH_NOT_FOUND = "No se encontraron dientes";
+    public static final String NO_TEETH_IN_REVIEW = "No se encontraron dientes en revisión para el tratamiento con ID: %s";
 
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";

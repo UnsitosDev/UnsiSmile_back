@@ -170,7 +170,7 @@ public class TreatmentDetailService {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_AWAITING_APPROVAL, HttpStatus.BAD_REQUEST);
             }
             
-            return toDto(model);
+            return mapTreatmentDetailToDto(model);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -182,9 +182,10 @@ public class TreatmentDetailService {
     public Page<TreatmentDetailResponse> getAllTreatmentDetailsByPatient(Pageable pageable, @NonNull String patientId) {
         try {
             patientService.getPatientById(patientId);
+
             Page<TreatmentDetailModel> page = treatmentDetailRepository
                     .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);
-            return page.map(this::toDto);
+            return page.map(this::mapTreatmentDetailToDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -366,7 +367,7 @@ public class TreatmentDetailService {
     }
 
     @Transactional
-    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId) {
+    public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId, TreatmentDetailToothRequest toothRequest) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
 
@@ -402,12 +403,19 @@ public class TreatmentDetailService {
                     .build();
 
             executionReviewService.updateAuthorizedTreatment(treatmentDetail.getIdTreatmentDetail(), executionRequest);
-            treatmentDetailMapper.toDto(treatmentDetail);
 
+            // Validación específica para alcance tipo TOOTH
+            if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
+                if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
+                    throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUIRED, HttpStatus.BAD_REQUEST);
+                }
+
+                treatmentDetailToothService.updateToothReviewStatus(id, toothRequest);
+            }
             // send notification
             this.sendNotifications(treatmentDetail);
 
-            return toDto(treatmentDetail);
+            return mapTreatmentDetailToDto(treatmentDetail);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -486,15 +494,19 @@ public class TreatmentDetailService {
                         .build();
 
                 executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
+
+                // Actualizar el estado de los dientes(en revision)
+                if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
+                    treatmentDetailToothService.applyToothReviewAction(treatmentDetailId, request.getStatus());
+                }
+
                 sendNotifications(treatment);
-            }
-            // Si el estado actual no entra en ningún flujo válido
-            else {
+            } else {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_STATE_TRANSITION, HttpStatus.BAD_REQUEST);
             }
 
             TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
-            return toDto(saved);
+            return mapTreatmentDetailToDto(saved);
 
         } catch (AppException e) {
             throw e;
@@ -682,42 +694,14 @@ public class TreatmentDetailService {
     }
 
     private List<TreatmentDetailResponse> toDtoList(TreatmentDetailModel treatmentDetailModel) {
-        // 1. Obtener el estado actual (ej. autorizado, en espera, revisión, etc.)
-        ReviewStatus status = treatmentDetailModel.getStatus(); // Asegúrate de tener este campo
-
-        // 2. Definir las listas de estados posibles
-        List<ReviewStatus> authorizationStatuses = List.of(
-                ReviewStatus.AWAITING_APPROVAL,
-                ReviewStatus.NOT_APPROVED,
-                ReviewStatus.APPROVED
-        );
+        ReviewStatus status = treatmentDetailModel.getStatus();
 
         TreatmentDetailResponse response;
 
         try {
-            if (authorizationStatuses.contains(status)) {
-                // Buscar en la tabla de autorizaciones
-                AuthorizedTreatmentModel authModel = authorizedTreatmentRepository
-                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
-                                treatmentDetailModel.getIdTreatmentDetail())
-                        .orElse(null);
+            response = mapTreatmentDetailToDto(treatmentDetailModel);
 
-                response = (authModel != null)
-                        ? toDtoWithAuthorizingProfessor(authModel)
-                        : toDto(treatmentDetailModel);
-
-            } else{
-                ExecutionReviewModel reviewModel = executionReviewRepository
-                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(
-                                treatmentDetailModel.getIdTreatmentDetail())
-                        .orElse(null);
-
-                response = (reviewModel != null)
-                        ? toDtoWithReviewerProfessor(reviewModel)
-                        : toDto(treatmentDetailModel);
-            }
-
-            // 3. Si es tratamiento dental, crear lista por diente
+            // Si es tratamiento dental, crear lista por diente
             if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
                 List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService
                         .getTreatmentDetailTeethByTreatmentDetail(
@@ -740,7 +724,6 @@ public class TreatmentDetailService {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
-
 
     @Transactional
     public AuthorizedTreatmentModel createAuthorizationTreatment(@NonNull Long treatmentDetailModelId, @NonNull Long professorClinicalAreaId) {
@@ -776,6 +759,7 @@ public class TreatmentDetailService {
                 .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
                 .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
                 .build());
+        response.setComments(model.getComment());
 
         return response;
     }
@@ -787,8 +771,30 @@ public class TreatmentDetailService {
                 .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
                 .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
                 .build());
+        response.setComments(model.getComment());
 
         return response;
     }
 
+    private TreatmentDetailResponse mapTreatmentDetailToDto(TreatmentDetailModel treatmentDetailModel) {
+        List<ReviewStatus> authorizationStatuses = List.of(
+                ReviewStatus.AWAITING_APPROVAL,
+                ReviewStatus.NOT_APPROVED,
+                ReviewStatus.APPROVED
+        );
+
+        if (authorizationStatuses.contains(treatmentDetailModel.getStatus())) {
+            return authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
+                            treatmentDetailModel.getIdTreatmentDetail())
+                    .map(this::toDtoWithAuthorizingProfessor)
+                    .orElseGet(() -> toDto(treatmentDetailModel));
+        } else {
+            return executionReviewRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(
+                            treatmentDetailModel.getIdTreatmentDetail())
+                    .map(this::toDtoWithReviewerProfessor)
+                    .orElseGet(() -> toDto(treatmentDetailModel));
+        }
+    }
 }

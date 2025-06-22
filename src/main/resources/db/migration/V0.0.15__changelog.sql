@@ -88,6 +88,12 @@ CREATE TABLE treatment_detail_teeth (
     id_detail_tooth BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_treatment_detail BIGINT(20) NOT NULL,
     fk_tooth VARCHAR(3) NOT NULL,
+
+    start_date DATETIME(6) NOT NULL,
+    end_date DATETIME(6) DEFAULT NULL,
+    in_review BOOLEAN DEFAULT FALSE,
+    reviewed BOOLEAN DEFAULT FALSE,
+
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,
