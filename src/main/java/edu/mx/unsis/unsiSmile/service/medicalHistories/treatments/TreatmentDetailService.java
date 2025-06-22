@@ -409,7 +409,7 @@ public class TreatmentDetailService {
                     throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUIRED, HttpStatus.BAD_REQUEST);
                 }
 
-                treatmentDetailToothService.updateToothReviewStatus(id, toothRequest, ReviewStatus.IN_REVIEW);
+                treatmentDetailToothService.updateToothReviewStatus(id, toothRequest);
             }
             // send notification
             this.sendNotifications(treatmentDetail);
@@ -493,6 +493,12 @@ public class TreatmentDetailService {
                         .build();
 
                 executionReviewService.updateAuthorizedTreatment(treatmentDetailId, executionRequest);
+
+                // Actualizar el estado de los dientes(en revision) si el alcance es TOOTH
+                if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
+                    treatmentDetailToothService.applyToothReviewAction(treatmentDetailId, request.getStatus());
+                }
+
                 sendNotifications(treatment);
             }
             // Si el estado actual no entra en ningún flujo válido

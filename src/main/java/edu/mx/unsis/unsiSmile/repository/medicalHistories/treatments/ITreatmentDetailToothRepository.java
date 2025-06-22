@@ -19,4 +19,8 @@ public interface ITreatmentDetailToothRepository extends JpaRepository<Treatment
     Optional<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetailAndTooth_IdTooth(
             Long treatmentDetailId, String toothCode
     );
+
+    List<TreatmentDetailToothModel> findByTreatmentDetail_IdTreatmentDetailAndInReviewTrue(
+            Long treatmentDetailId
+    );
 }

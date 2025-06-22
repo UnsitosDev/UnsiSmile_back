@@ -175,7 +175,7 @@ public class TreatmentDetailToothService {
     }
 
     @Transactional
-    public void updateToothReviewStatus(Long treatmentDetailId, TreatmentDetailToothRequest request, ReviewStatus action) {
+    public void updateToothReviewStatus(Long treatmentDetailId, TreatmentDetailToothRequest request) {
         try {
             if (!treatmentDetailId.equals(request.getIdTreatmentDetail())) {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_ID_MISMATCH, HttpStatus.BAD_REQUEST);
@@ -195,20 +195,39 @@ public class TreatmentDetailToothService {
                         .orElseThrow(() -> new AppException(
                                 String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_NOT_FOUND, toothId),
                                 HttpStatus.NOT_FOUND));
+                treatmentDetailToothMapper.applySendToReview(model);
 
+                treatmentDetailToothRepository.save(model);
+            }
+
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL_TEETH,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public void applyToothReviewAction(Long treatmentDetailId, ReviewStatus action) {
+        try {
+            verifyTreatmentDetailExists(treatmentDetailId);
+
+            List<TreatmentDetailToothModel> teethInReview = treatmentDetailToothRepository
+                    .findByTreatmentDetail_IdTreatmentDetailAndInReviewTrue(treatmentDetailId);
+
+            if (teethInReview.isEmpty()) {
+                throw new AppException(
+                        String.format(ResponseMessages.NO_TEETH_IN_REVIEW, treatmentDetailId), HttpStatus.BAD_REQUEST);
+            }
+
+            for (TreatmentDetailToothModel model : teethInReview) {
                 switch (action) {
-                    case ReviewStatus.IN_REVIEW:
-                        treatmentDetailToothMapper.applySendToReview(model);
-                        break;
-                    case ReviewStatus.FINISHED:
-                        treatmentDetailToothMapper.applyApprove(model);
-                        break;
-                    case ReviewStatus.REJECTED:
-                        treatmentDetailToothMapper.applyReject(model);
-                        break;
-                    default:
-                        throw new AppException(ResponseMessages.INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS, HttpStatus.BAD_REQUEST);
+                    case FINISHED -> treatmentDetailToothMapper.applyApprove(model);
+                    case REJECTED -> treatmentDetailToothMapper.applyReject(model);
+                    default -> throw new AppException(ResponseMessages.INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS, HttpStatus.BAD_REQUEST);
                 }
+
                 treatmentDetailToothRepository.save(model);
             }
 
