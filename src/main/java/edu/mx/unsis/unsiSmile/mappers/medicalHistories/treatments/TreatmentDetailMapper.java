@@ -48,12 +48,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
                         .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                         .build())
-                .professor(entity.getProfessor() != null ?
-                        TreatmentDetailResponse.ProfessorResponse.builder()
-                                .id(entity.getProfessor().getIdProfessor())
-                                .name(entity.getProfessor().getPerson().getFullName())
-                                .build() :
-                        null)
                 .student(entity.getStudentGroup() != null ?
                         TreatmentDetailResponse.StudentResponse.builder()
                                 .id(entity.getStudentGroup().getStudent().getEnrollment())
@@ -81,8 +75,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
         TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
 
         response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
-                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
-                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
                 .build());
         response.setComments(model.getComment());
 
@@ -93,8 +87,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
         TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
 
         response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
-                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
-                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
                 .build());
         response.setComments(model.getComment());
 
