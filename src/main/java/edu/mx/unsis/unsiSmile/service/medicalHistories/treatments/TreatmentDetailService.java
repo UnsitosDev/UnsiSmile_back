@@ -771,7 +771,7 @@ public class TreatmentDetailService {
             }
 
             TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
-            return mapTreatmentDetailToDto(saved);
+            return treatmentDetailMapper.toDtoWithAuthorizingProfessor(auth);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
