@@ -4,6 +4,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import lombok.AllArgsConstructor;
@@ -73,5 +75,29 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     @Override
     public void updateEntity(TreatmentDetailRequest request, TreatmentDetailModel entity) {
         entity.setEndDate(request.getEndDate());
+    }
+
+    public TreatmentDetailResponse toDtoWithAuthorizingProfessor(AuthorizedTreatmentModel model) {
+        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
+
+        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
+                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .build());
+        response.setComments(model.getComment());
+
+        return response;
+    }
+
+    public TreatmentDetailResponse toDtoWithReviewerProfessor(ExecutionReviewModel model) {
+        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
+
+        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
+                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .build());
+        response.setComments(model.getComment());
+
+        return response;
     }
 }

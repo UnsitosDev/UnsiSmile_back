@@ -107,7 +107,13 @@ public class TreatmentDetailService {
             AuthorizedTreatmentModel authorizedTreatment =
                     createAuthorizationTreatment(savedModel.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
 
-            return this.toDtoWithAuthorizingProfessor(authorizedTreatment);
+            TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithAuthorizingProfessor(authorizedTreatment);
+
+            if(isToothTreatment(savedModel)) {
+                addTeethList(response);
+            }
+
+            return response;
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -139,17 +145,6 @@ public class TreatmentDetailService {
         model.setStudentGroup(studentGroup);
 
         return treatmentDetailRepository.save(model);
-    }
-
-    private TreatmentDetailResponse toDto(TreatmentDetailModel treatmentDetailModel) {
-        TreatmentDetailResponse treatmentDetail = treatmentDetailMapper.toDto(treatmentDetailModel);
-
-        if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
-            treatmentDetail.setTeeth(
-                    treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
-                            treatmentDetailModel.getIdTreatmentDetail()));
-        }
-        return treatmentDetail;
     }
 
     @Transactional(readOnly = true)
@@ -218,7 +213,13 @@ public class TreatmentDetailService {
             handleTeethByScope(scope,
                     newTreatment.getTreatmentScope().getName(), saved.getIdTreatmentDetail(), request);
 
-            return this.toDtoWithAuthorizingProfessor(authorizedTreatmentModel);
+            TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithAuthorizingProfessor(authorizedTreatmentModel);
+
+            if(isToothTreatment(saved)) {
+                addTeethList(response);
+            }
+
+            return response;
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -319,7 +320,7 @@ public class TreatmentDetailService {
                                                                                   Long idTreatment) {
         try {
             Page<TreatmentDetailModel> page = getTreatmentDetailsByStudentGroups(pageable, idStudent, idTreatment);
-            return page.map(this::toDto);
+            return page.map(this::mapTreatmentDetailToDto);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -401,7 +402,7 @@ public class TreatmentDetailService {
             executionReviewService.updateAuthorizedTreatment(treatmentDetail.getIdTreatmentDetail(), executionRequest);
 
             // Validación específica para alcance tipo TOOTH
-            if (treatment.getTreatment().getTreatmentScope().getName().equals(Constants.TOOTH)) {
+            if (isToothTreatment(treatment)) {
                 if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
                     throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUIRED, HttpStatus.BAD_REQUEST);
                 }
@@ -494,7 +495,15 @@ public class TreatmentDetailService {
                             pageable
                     );
 
-            return reviews.map(this::toDtoWithReviewerProfessor);
+            return reviews.map(executionReviewModel -> {
+                TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithReviewerProfessor(executionReviewModel);
+
+                if(isToothTreatment(executionReviewModel.getTreatmentDetail())) {
+                    addTeethList(response);
+                }
+
+                return response;
+            });
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -514,7 +523,7 @@ public class TreatmentDetailService {
 
             List<TreatmentDetailModel> treatments = getTreatments(enrollment, student, semesterId, status);
 
-            treatments = filterByDateRange(treatments, startDate, endDateNormalized);
+            treatments = filterTreatmentsByDateRange(treatments, startDate, endDateNormalized);
 
             String studentName = student.getPerson().getFullName();
 
@@ -601,7 +610,7 @@ public class TreatmentDetailService {
         }
     }
 
-    private List<TreatmentDetailModel> filterByDateRange(List<TreatmentDetailModel> treatments, LocalDate startDate,
+    private List<TreatmentDetailModel> filterTreatmentsByDateRange(List<TreatmentDetailModel> treatments, LocalDate startDate,
                                                          LocalDate endDate) {
         if (startDate == null || endDate == null)
             return treatments;
@@ -624,7 +633,7 @@ public class TreatmentDetailService {
             response = mapTreatmentDetailToDto(treatmentDetailModel);
 
             // Si es tratamiento dental, crear lista por diente
-            if (Constants.TOOTH.equals(treatmentDetailModel.getTreatment().getTreatmentScope().getName())) {
+            if (isToothTreatment(treatmentDetailModel)) {
                 List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService
                         .getTreatmentDetailTeethByTreatmentDetail(
                                 treatmentDetailModel.getIdTreatmentDetail());
@@ -674,50 +683,30 @@ public class TreatmentDetailService {
         }
     }
 
-    private TreatmentDetailResponse toDtoWithAuthorizingProfessor(AuthorizedTreatmentModel model) {
-        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
-
-        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
-                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
-                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
-                .build());
-        response.setComments(model.getComment());
-
-        return response;
-    }
-
-    private TreatmentDetailResponse toDtoWithReviewerProfessor(ExecutionReviewModel model) {
-        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
-
-        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
-                .id(model.getProfessorClinicalArea().getProfessor().getIdProfessor())
-                .name(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
-                .build());
-        response.setComments(model.getComment());
-
-        return response;
-    }
-
     private TreatmentDetailResponse mapTreatmentDetailToDto(TreatmentDetailModel treatmentDetailModel) {
         List<ReviewStatus> authorizationStatuses = List.of(
                 ReviewStatus.AWAITING_APPROVAL,
                 ReviewStatus.NOT_APPROVED,
                 ReviewStatus.APPROVED
         );
-
+        TreatmentDetailResponse response;
         if (authorizationStatuses.contains(treatmentDetailModel.getStatus())) {
-            return authorizedTreatmentRepository
+            response = authorizedTreatmentRepository
                     .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
                             treatmentDetailModel.getIdTreatmentDetail())
-                    .map(this::toDtoWithAuthorizingProfessor)
-                    .orElseGet(() -> toDto(treatmentDetailModel));
+                    .map(treatmentDetailMapper::toDtoWithAuthorizingProfessor)
+                    .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
         } else {
-            return executionReviewRepository
+            response = executionReviewRepository
                     .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(
                             treatmentDetailModel.getIdTreatmentDetail())
-                    .map(this::toDtoWithReviewerProfessor)
-                    .orElseGet(() -> toDto(treatmentDetailModel));
+                    .map(treatmentDetailMapper::toDtoWithReviewerProfessor)
+                    .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
         }
+        if(isToothTreatment(treatmentDetailModel)) {
+            addTeethList(response);
+        }
+        return response;
     }
 
     @Transactional(readOnly = true)
@@ -733,7 +722,15 @@ public class TreatmentDetailService {
                             pageable
                     );
 
-            return auths.map(this::toDtoWithAuthorizingProfessor);
+            return auths.map(authorizedTreatmentModel -> {
+                TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithAuthorizingProfessor(authorizedTreatmentModel);
+
+                if(isToothTreatment(authorizedTreatmentModel.getTreatmentDetail())) {
+                    addTeethList(response);
+                }
+
+                return response;
+            });
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -818,5 +815,12 @@ public class TreatmentDetailService {
 
     private boolean isToothTreatment(TreatmentDetailModel treatment) {
         return Constants.TOOTH.equals(treatment.getTreatment().getTreatmentScope().getName());
+    }
+
+    private void addTeethList (TreatmentDetailResponse response) {
+        response.setTeeth(
+                treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
+                        response.getIdTreatmentDetail()));
+
     }
 }
