@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
@@ -28,7 +27,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepositor
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
@@ -39,6 +37,7 @@ import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
 import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewTreatmentService;
 import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -69,7 +68,6 @@ public class TreatmentDetailService {
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final TreatmentService treatmentService;
-    private final ITreatmentRepository treatmentRepository;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
     private final UserService userService;
@@ -81,6 +79,7 @@ public class TreatmentDetailService {
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final ExecutionReviewService executionReviewService;
     private final IExecutionReviewRepository executionReviewRepository;
+    private final StudentService studentService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -329,7 +328,7 @@ public class TreatmentDetailService {
     }
 
     private Page<TreatmentDetailModel> getTreatmentDetailsByStudentGroups(Pageable pageable, String idStudent, Long idTreatment) {
-        StudentModel studentModel = getStudentModel(idStudent);
+        StudentModel studentModel = studentService.getStudentModel(idStudent);
 
         List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
 
@@ -345,22 +344,6 @@ public class TreatmentDetailService {
 
         return treatmentDetailRepository
                 .findAllByStudentGroupIn(studentGroups, pageable);
-    }
-
-    private StudentModel getStudentModel(String idStudent) {
-        UserResponse currentUser = userService.getCurrentUser();
-
-        if (currentUser.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
-            return studentRepository.findById(currentUser.getUsername())
-                    .orElseThrow(() -> new AppException(
-                            ResponseMessages.STUDENT_NOT_FOUND,
-                            HttpStatus.NOT_FOUND));
-        } else {
-            return studentRepository.findById(idStudent)
-                    .orElseThrow(() -> new AppException(
-                            ResponseMessages.STUDENT_NOT_FOUND,
-                            HttpStatus.NOT_FOUND));
-        }
     }
 
     @Transactional
