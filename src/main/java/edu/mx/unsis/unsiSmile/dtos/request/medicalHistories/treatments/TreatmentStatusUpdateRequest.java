@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,6 @@ public class TreatmentStatusUpdateRequest {
     @NotNull(message = ResponseMessages.STATUS_NULL)
     private ReviewStatus status;
 
-    @Max(value = 255, message = ResponseMessages.COMMENT_MAX_LENGTH)
+    @Size(max = 255, message = ResponseMessages.COMMENT_MAX_LENGTH)
     private String comments;
 }
