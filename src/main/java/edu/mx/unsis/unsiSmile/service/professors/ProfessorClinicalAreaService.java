@@ -192,4 +192,17 @@ public class ProfessorClinicalAreaService {
             throw new AppException(ResponseMessages.FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREAS, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Transactional
+    public ProfessorClinicalAreaModel getProfessorClinicalAreaModel(@NotNull Long id) {
+        try {
+            return professorClinicalAreaRepository
+                    .findById(id)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PROFESSOR_CLINICAL_AREA_NOT_FOUND + "con ID: " + id,
+                            HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        }
+    }
 }

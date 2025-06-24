@@ -17,6 +17,5 @@ public class TreatmentDetailToothResponse {
     private Long idDetailTooth;
     private String idTooth;
     private LocalDate endDate;
-    private Boolean inReview;
-    private Boolean reviewed;
+    private String status;
 }

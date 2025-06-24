@@ -5,8 +5,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,7 +176,7 @@ public class TreatmentDetailToothService {
     }
 
     @Transactional
-    public void updateToothReviewStatus(Long treatmentDetailId, TreatmentDetailToothRequest request) {
+    public void updateToothReviewStatus(Long treatmentDetailId, TreatmentDetailToothRequest request, ExecutionReviewModel executionReview) {
         try {
             if (!treatmentDetailId.equals(request.getIdTreatmentDetail())) {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_ID_MISMATCH, HttpStatus.BAD_REQUEST);
@@ -195,39 +196,8 @@ public class TreatmentDetailToothService {
                         .orElseThrow(() -> new AppException(
                                 String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_NOT_FOUND, toothId),
                                 HttpStatus.NOT_FOUND));
-                treatmentDetailToothMapper.applySendToReview(model);
-
-                treatmentDetailToothRepository.save(model);
-            }
-
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL_TEETH,
-                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional
-    public void applyToothReviewAction(Long treatmentDetailId, ReviewStatus action) {
-        try {
-            verifyTreatmentDetailExists(treatmentDetailId);
-
-            List<TreatmentDetailToothModel> teethInReview = treatmentDetailToothRepository
-                    .findByTreatmentDetail_IdTreatmentDetailAndInReviewTrue(treatmentDetailId);
-
-            if (teethInReview.isEmpty()) {
-                throw new AppException(
-                        String.format(ResponseMessages.NO_TEETH_IN_REVIEW, treatmentDetailId), HttpStatus.BAD_REQUEST);
-            }
-
-            for (TreatmentDetailToothModel model : teethInReview) {
-                switch (action) {
-                    case FINISHED -> treatmentDetailToothMapper.applyApprove(model);
-                    case REJECTED -> treatmentDetailToothMapper.applyReject(model);
-                    default -> throw new AppException(ResponseMessages.INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS, HttpStatus.BAD_REQUEST);
-                }
-
+                model.setStatus(executionReview);
+                model.setEndDate(LocalDateTime.now());
                 treatmentDetailToothRepository.save(model);
             }
 

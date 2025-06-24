@@ -41,7 +41,7 @@ public class ExecutionReviewService {
     }
 
     @Transactional
-    public ExecutionReviewModel updateAuthorizedTreatment(Long id, TreatmentStatusRequest request) {
+    public ExecutionReviewModel updateExecutionReview(Long id, TreatmentStatusRequest request) {
         try {
             ExecutionReviewModel existing = executionReviewRepository.findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(id)
                     .orElseThrow(() -> new AppException(

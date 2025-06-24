@@ -29,15 +29,14 @@ public class TreatmentDetailToothModel extends AuditModel {
     @JoinColumn(name = "fk_tooth", referencedColumnName = "id_tooth", nullable = false)
     private ToothModel tooth;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_execution_review", referencedColumnName = "id_execution_review")
+    private ExecutionReviewModel status;
+
+    @Builder.Default
     @Column(name = "start_date")
     private LocalDateTime startDate = LocalDateTime.now();
 
     @Column(name = "end_date")
     private LocalDateTime endDate;
-
-    @Column(name = "in_review")
-    private Boolean inReview = false;
-
-    @Column(name = "reviewed")
-    private Boolean reviewed = false;
 }
