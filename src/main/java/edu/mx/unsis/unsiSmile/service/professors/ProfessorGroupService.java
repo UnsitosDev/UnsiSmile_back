@@ -86,4 +86,14 @@ public class ProfessorGroupService {
             throw new RuntimeException("Fail to delete professor group", e);
         }
     }
+
+    @Transactional(readOnly = true)
+    public Page<ProfessorGroupResponse> getAllProfessorGroupByProfessorId(Pageable pageable, String id) {
+        try {
+            Page<ProfessorGroupModel> professorGroups = professorGroupRepository.findAllByProfessor_IdProfessor(id, pageable);
+            return professorGroups.map(professorGroupMapper::toDto);
+        } catch (Exception e) {
+            throw new RuntimeException("Fail to get all professor groups", e);
+        }
+    }
 }

@@ -60,4 +60,18 @@ public class ProfessorGroupController {
         professorGroupService.deleteProfessorGroup(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/professors/{professorId}")
+    public ResponseEntity<Page<ProfessorGroupResponse>> getAllProfessorGroupsByProfessorId(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "professor.person.firstName") String order,
+            @RequestParam(defaultValue = "true") boolean asc,
+            @PathVariable String professorId) {
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<ProfessorGroupResponse> responses = professorGroupService.getAllProfessorGroupByProfessorId(pageable, professorId);
+
+        return ResponseEntity.ok(responses);
+    }
 }
