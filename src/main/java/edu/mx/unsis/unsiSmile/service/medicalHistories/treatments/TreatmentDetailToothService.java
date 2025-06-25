@@ -7,8 +7,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
@@ -64,10 +66,20 @@ public class TreatmentDetailToothService {
     @Transactional(readOnly = true)
     public List<TreatmentDetailToothResponse> getTreatmentDetailTeethByTreatmentDetail(Long treatmentDetailId) {
         try {
-            verifyTreatmentDetailExists(treatmentDetailId);
+            TreatmentDetailModel treatmentDetail = verifyTreatmentDetailExists(treatmentDetailId);
+            ReviewStatus status = treatmentDetail.getStatus();
 
-            ExecutionReviewModel executionReviewModel = executionReviewService.getExecutionReviewModelByTreatmentDetailId(treatmentDetailId);
-            Long latestReviewId = executionReviewModel != null ? executionReviewModel.getIdExecutionReview() : null;
+            if (isAuthorizationStatus(status)) {
+                List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
+                        .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
+                return treatmentDetailToothMapper.toDtos(models);
+            }
+
+            ExecutionReviewModel executionReviewModel = executionReviewService
+                    .getExecutionReviewModelByTreatmentDetailId(treatmentDetailId);
+            Long latestReviewId = executionReviewModel != null
+                    ? executionReviewModel.getIdExecutionReview()
+                    : null;
 
             List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
                     .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
@@ -81,10 +93,12 @@ public class TreatmentDetailToothService {
                         return dto;
                     })
                     .toList();
+
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAIL_TEETH, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAIL_TEETH,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -133,8 +147,8 @@ public class TreatmentDetailToothService {
         return list.size() != list.stream().distinct().count();
     }
 
-    private void verifyTreatmentDetailExists(@NonNull Long id) {
-        treatmentDetailRepository.findById(id)
+    private TreatmentDetailModel verifyTreatmentDetailExists(@NonNull Long id) {
+        return treatmentDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id), HttpStatus.NOT_FOUND));
     }
 
@@ -276,5 +290,11 @@ public class TreatmentDetailToothService {
                 createTreatmentDetailTeeth(toAddRequest);
             }
         }
+    }
+
+    private boolean isAuthorizationStatus(ReviewStatus status) {
+        return status == ReviewStatus.AWAITING_APPROVAL ||
+                status == ReviewStatus.NOT_APPROVED ||
+                status == ReviewStatus.APPROVED;
     }
 }
