@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -29,6 +31,7 @@ public class TreatmentDetailToothService {
     private final TreatmentDetailToothMapper treatmentDetailToothMapper;
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IToothRepository toothRepository;
+    private final ExecutionReviewService executionReviewService;
 
     @Transactional
     public void createTreatmentDetailTeeth(TreatmentDetailToothRequest request) {
@@ -63,10 +66,21 @@ public class TreatmentDetailToothService {
         try {
             verifyTreatmentDetailExists(treatmentDetailId);
 
+            ExecutionReviewModel executionReviewModel = executionReviewService.getExecutionReviewModelByTreatmentDetailId(treatmentDetailId);
+            Long latestReviewId = executionReviewModel != null ? executionReviewModel.getIdExecutionReview() : null;
+
             List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
                     .findByTreatmentDetail_IdTreatmentDetail(treatmentDetailId);
 
-            return treatmentDetailToothMapper.toDtos(models);
+            return models.stream()
+                    .map(model -> {
+                        TreatmentDetailToothResponse dto = treatmentDetailToothMapper.toDto(model);
+                        boolean isRecent = model.getStatus() != null &&
+                                model.getStatus().getIdExecutionReview().equals(latestReviewId);
+                        dto.setIsRecent(isRecent);
+                        return dto;
+                    })
+                    .toList();
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -206,6 +220,61 @@ public class TreatmentDetailToothService {
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL_TEETH,
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional
+    public void handleTeethByScope(String existingScope, String newScope, Long treatmentDetailId,
+                                    TreatmentDetailRequest request) {
+
+        boolean wasTooth = Constants.TOOTH.equals(existingScope);
+        boolean isTooth = Constants.TOOTH.equals(newScope);
+
+        if (wasTooth && !isTooth) {
+            // CASO 1: eliminar todos los dientes
+            deleteAllByTreatmentDetailId(treatmentDetailId);
+        } else if (!wasTooth && isTooth) {
+            // CASO 2: guardar nuevos dientes
+            TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
+
+            if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            toothRequest.setIdTreatmentDetail(treatmentDetailId);
+            createTreatmentDetailTeeth(toothRequest);
+
+        } else if (wasTooth) {
+            // CASO 3: actualizar dientes
+            TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
+
+            if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            List<String> currentTeeth = getAllTeethByTreatmentDetailId(treatmentDetailId);
+            List<String> updatedTeeth = toothRequest.getIdTeeth();
+
+            List<String> toDelete = currentTeeth.stream()
+                    .filter(d -> !updatedTeeth.contains(d))
+                    .toList();
+
+            List<String> toAdd = updatedTeeth.stream()
+                    .filter(d -> !currentTeeth.contains(d))
+                    .toList();
+
+            if (!toDelete.isEmpty()) {
+                deleteTeethByCodes(treatmentDetailId, toDelete);
+            }
+
+            if (!toAdd.isEmpty()) {
+                TreatmentDetailToothRequest toAddRequest = new TreatmentDetailToothRequest();
+                toAddRequest.setIdTreatmentDetail(treatmentDetailId);
+                toAddRequest.setIdTeeth(toAdd);
+                createTreatmentDetailTeeth(toAddRequest);
+            }
         }
     }
 }

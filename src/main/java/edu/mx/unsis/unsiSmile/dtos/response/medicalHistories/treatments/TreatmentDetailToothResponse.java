@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -18,4 +17,5 @@ public class TreatmentDetailToothResponse {
     private String idTooth;
     private LocalDate endDate;
     private String status;
+    private Boolean isRecent;
 }

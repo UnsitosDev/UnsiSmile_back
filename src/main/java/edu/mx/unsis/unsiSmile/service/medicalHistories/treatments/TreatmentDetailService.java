@@ -27,7 +27,6 @@ import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepositor
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
-import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
@@ -63,7 +62,6 @@ public class TreatmentDetailService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
-    private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final IReviewStatusRepository reviewStatusRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
@@ -209,7 +207,7 @@ public class TreatmentDetailService {
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
             // Lógica para el manejo de dientes
-            handleTeethByScope(scope,
+            treatmentDetailToothService.handleTeethByScope(scope,
                     newTreatment.getTreatmentScope().getName(), saved.getIdTreatmentDetail(), request);
 
             TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithAuthorizingProfessor(authorizedTreatmentModel);
@@ -223,60 +221,6 @@ public class TreatmentDetailService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_UPDATE_TREATMENT_DETAIL, HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    private void handleTeethByScope(String existingScope, String newScope, Long treatmentDetailId,
-                                    TreatmentDetailRequest request) {
-
-        boolean wasTooth = Constants.TOOTH.equals(existingScope);
-        boolean isTooth = Constants.TOOTH.equals(newScope);
-
-        if (wasTooth && !isTooth) {
-            // CASO 1: eliminar todos los dientes
-            treatmentDetailToothService.deleteAllByTreatmentDetailId(treatmentDetailId);
-        } else if (!wasTooth && isTooth) {
-            // CASO 2: guardar nuevos dientes
-            TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
-
-            if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
-                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
-                        HttpStatus.BAD_REQUEST);
-            }
-
-            toothRequest.setIdTreatmentDetail(treatmentDetailId);
-            treatmentDetailToothService.createTreatmentDetailTeeth(toothRequest);
-
-        } else if (wasTooth) {
-            // CASO 3: actualizar dientes
-            TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
-
-            if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
-                throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
-                        HttpStatus.BAD_REQUEST);
-            }
-
-            List<String> currentTeeth = treatmentDetailToothService.getAllTeethByTreatmentDetailId(treatmentDetailId);
-            List<String> updatedTeeth = toothRequest.getIdTeeth();
-
-            List<String> toDelete = currentTeeth.stream()
-                    .filter(d -> !updatedTeeth.contains(d))
-                    .toList();
-
-            List<String> toAdd = updatedTeeth.stream()
-                    .filter(d -> !currentTeeth.contains(d))
-                    .toList();
-
-            if (!toDelete.isEmpty()) {
-                treatmentDetailToothService.deleteTeethByCodes(treatmentDetailId, toDelete);
-            }
-
-            if (!toAdd.isEmpty()) {
-                TreatmentDetailToothRequest toAddRequest = new TreatmentDetailToothRequest();
-                toAddRequest.setIdTreatmentDetail(treatmentDetailId);
-                toAddRequest.setIdTeeth(toAdd);
-                treatmentDetailToothService.createTreatmentDetailTeeth(toAddRequest);
-            }
         }
     }
 
