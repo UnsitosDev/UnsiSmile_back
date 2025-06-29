@@ -4,6 +4,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
 import lombok.AllArgsConstructor;
@@ -46,12 +48,6 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
                         .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
                         .build())
-                .professor(entity.getProfessor() != null ?
-                        TreatmentDetailResponse.ProfessorResponse.builder()
-                                .id(entity.getProfessor().getIdProfessor())
-                                .name(entity.getProfessor().getPerson().getFullName())
-                                .build() :
-                        null)
                 .student(entity.getStudentGroup() != null ?
                         TreatmentDetailResponse.StudentResponse.builder()
                                 .id(entity.getStudentGroup().getStudent().getEnrollment())
@@ -73,5 +69,29 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     @Override
     public void updateEntity(TreatmentDetailRequest request, TreatmentDetailModel entity) {
         entity.setEndDate(request.getEndDate());
+    }
+
+    public TreatmentDetailResponse toDtoWithAuthorizingProfessor(AuthorizedTreatmentModel model) {
+        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
+
+        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .build());
+        response.setComments(model.getComment());
+
+        return response;
+    }
+
+    public TreatmentDetailResponse toDtoWithReviewerProfessor(ExecutionReviewModel model) {
+        TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
+
+        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .build());
+        response.setComments(model.getComment());
+
+        return response;
     }
 }

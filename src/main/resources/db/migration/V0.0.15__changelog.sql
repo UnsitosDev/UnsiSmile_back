@@ -88,11 +88,10 @@ CREATE TABLE treatment_detail_teeth (
     id_detail_tooth BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
     fk_treatment_detail BIGINT(20) NOT NULL,
     fk_tooth VARCHAR(3) NOT NULL,
+    fk_execution_review BIGINT(20) DEFAULT NULL,
 
     start_date DATETIME(6) NOT NULL,
     end_date DATETIME(6) DEFAULT NULL,
-    in_review BOOLEAN DEFAULT FALSE,
-    reviewed BOOLEAN DEFAULT FALSE,
 
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
@@ -100,7 +99,8 @@ CREATE TABLE treatment_detail_teeth (
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
     FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details(id_treatment_detail),
-    FOREIGN KEY (fk_tooth) REFERENCES teeth(id_tooth)
+    FOREIGN KEY (fk_tooth) REFERENCES teeth(id_tooth),
+    FOREIGN KEY (fk_execution_review) REFERENCES execution_reviews(id_execution_review)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- Poblado de treatment_scopes

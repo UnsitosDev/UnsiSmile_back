@@ -11,6 +11,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
@@ -402,5 +403,22 @@ public class StudentService {
                 .enrollment(enrollment)
                 .groupId(groupId)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public StudentModel getStudentModel(String enrollment){
+        UserResponse currentUser = userService.getCurrentUser();
+
+        if (currentUser.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
+            return studentRepository.findById(currentUser.getUsername())
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.STUDENT_NOT_FOUND,
+                            HttpStatus.NOT_FOUND));
+        } else {
+            return studentRepository.findById(enrollment)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.STUDENT_NOT_FOUND,
+                            HttpStatus.NOT_FOUND));
+        }
     }
 }

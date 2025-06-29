@@ -43,8 +43,8 @@ public class TreatmentDetailResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProfessorResponse {
-        private String id;
-        private String name;
+        private Long idProfessorClinicalArea;
+        private String professorName;
     }
 
     @Data

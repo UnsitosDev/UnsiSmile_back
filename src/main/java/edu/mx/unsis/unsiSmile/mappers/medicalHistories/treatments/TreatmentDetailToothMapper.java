@@ -21,8 +21,6 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
                         .idTreatmentDetail(dto.getIdTreatmentDetail())
                         .build())
                 .startDate(LocalDateTime.now())
-                .inReview(false)
-                .reviewed(false)
                 .build();
     }
 
@@ -32,8 +30,7 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
                 .idDetailTooth(entity.getIdDetailTooth())
                 .idTooth(entity.getTooth().getIdTooth())
                 .endDate(entity.getEndDate() != null ? entity.getEndDate().toLocalDate() : null)
-                .inReview(entity.getInReview())
-                .reviewed(entity.getReviewed())
+                .status(entity.getStatus() != null ? entity.getStatus().getStatus().toString() : null)
                 .build();
     }
 
@@ -50,19 +47,4 @@ public class TreatmentDetailToothMapper implements BaseMapper<TreatmentDetailToo
                 .idTreatmentDetail(request.getIdTreatmentDetail())
                 .build());
     }
-
-    public void applySendToReview(TreatmentDetailToothModel model) {
-        model.setInReview(true);
-        model.setEndDate(LocalDateTime.now());
-    }
-
-    public void applyApprove(TreatmentDetailToothModel model) {
-        model.setInReview(false);
-        model.setReviewed(true);
-    }
-
-    public void applyReject(TreatmentDetailToothModel model) {
-        model.setInReview(false);
-    }
-
 }

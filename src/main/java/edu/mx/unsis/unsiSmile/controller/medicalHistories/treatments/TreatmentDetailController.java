@@ -197,4 +197,34 @@ public class TreatmentDetailController {
 
         return ResponseEntity.ok(treatmentDetails);
     }
+
+    @Operation(summary = "Obtiene los tratamientos relacionados con aprobación por parte de un profesor (pendientes, aprobados o rechazados).")
+    @GetMapping("/professors/{professorId}/to-approve")
+    public ResponseEntity<Page<TreatmentDetailResponse>> getTreatmentsToApprove(
+            @PathVariable String professorId,
+            @RequestParam(defaultValue = "AWAITING_APPROVAL") ReviewStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String order,
+            @RequestParam(defaultValue = "true") boolean asc) {
+
+        Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<TreatmentDetailResponse> response = treatmentDetailService
+                .getTreatmentsByProfessorAndStatus(professorId, status, pageable);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Aprueba o rechaza el inicio un tratamiento")
+    @PatchMapping("/{id}/approval")
+    public ResponseEntity<TreatmentDetailResponse> approveOrRejectTreatment(
+            @PathVariable Long id,
+            @RequestBody @Valid TreatmentStatusUpdateRequest request) {
+
+        TreatmentDetailResponse response = treatmentDetailService.approveOrRejectTreatment(id, request);
+        return ResponseEntity.ok(response);
+    }
+
 }

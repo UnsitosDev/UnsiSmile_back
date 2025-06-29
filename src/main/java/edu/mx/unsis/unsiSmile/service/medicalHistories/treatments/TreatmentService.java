@@ -133,4 +133,16 @@ public class TreatmentService {
             throw new AppException(ResponseMessages.FAILED_DELETE_TREATMENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional(readOnly = true)
+    public TreatmentModel getTreatmentModelById(Long id) {
+        try {
+            return treatmentRepository.findById(id)
+                    .orElseThrow(() -> new AppException(ResponseMessages.TREATMENT_NOT_FOUND + id, HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

@@ -41,7 +41,7 @@ public class ExecutionReviewService {
     }
 
     @Transactional
-    public ExecutionReviewModel updateAuthorizedTreatment(Long id, TreatmentStatusRequest request) {
+    public ExecutionReviewModel updateExecutionReview(Long id, TreatmentStatusRequest request) {
         try {
             ExecutionReviewModel existing = executionReviewRepository.findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(id)
                     .orElseThrow(() -> new AppException(
@@ -64,7 +64,7 @@ public class ExecutionReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ExecutionReviewModel getAuthorizedTreatmentById(Long id) {
+    public ExecutionReviewModel getExecutionReviewModelById(Long id) {
         try {
             return executionReviewRepository.findById(id)
                     .orElseThrow(() -> new AppException(
@@ -77,6 +77,24 @@ public class ExecutionReviewService {
             log.error(String.format(ResponseMessages.FAILED_FETCH_TREATMENT_EXECUTION_STATUS, id),
                     ex);
             throw new AppException(String.format(ResponseMessages.FAILED_FETCH_TREATMENT_EXECUTION_STATUS, id),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ExecutionReviewModel getExecutionReviewModelByTreatmentDetailId(Long treatmentDetailId) {
+        try {
+            return executionReviewRepository.findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(treatmentDetailId)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, treatmentDetailId),
+                            HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            log.warn(String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, treatmentDetailId));
+            throw e;
+        } catch (Exception ex) {
+            log.error(String.format(ResponseMessages.FAILED_FETCH_TREATMENT_EXECUTION_STATUS, treatmentDetailId),
+                    ex);
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_TREATMENT_EXECUTION_STATUS, treatmentDetailId),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

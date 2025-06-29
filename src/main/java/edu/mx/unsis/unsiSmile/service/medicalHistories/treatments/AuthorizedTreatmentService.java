@@ -93,4 +93,23 @@ public class AuthorizedTreatmentService {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Transactional(readOnly = true)
+    public AuthorizedTreatmentModel getAuthorizedTreatmentByTreatmentDetailId(Long id) {
+        try {
+            return authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(id)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.AUTHORIZATION_REQUEST_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            log.warn(String.format(ResponseMessages.AUTHORIZED_TREATMENT_NOT_FOUND, id));
+            throw e;
+        } catch (Exception ex) {
+            log.error(String.format(ResponseMessages.FAILED_FETCH_AUTHORIZED_TREATMENT, id),
+                    ex);
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_AUTHORIZED_TREATMENT, id),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
