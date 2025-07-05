@@ -1,9 +1,9 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailCapturingRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailCaptureRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailCapturingService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailCaptureService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,25 +17,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Treatment Details Capturing", description = "Endpoints for capturing treatment details of patients")
+@Tag(name = "Treatment Details Capture", description = "Endpoints for capturing treatment details of patients")
 @RestController
-@RequestMapping("/unsismile/api/v1/treatment-details/capturing")
+@RequestMapping("/unsismile/api/v1/treatment-details/capture")
 @RequiredArgsConstructor
-public class TreatmentDetailCapturingController {
+public class TreatmentDetailCaptureController {
 
-    private final TreatmentDetailCapturingService treatmentDetailCapturingService;
+    private final TreatmentDetailCaptureService treatmentDetailCaptureService;
 
     @Operation(summary = "Crea un nuevo tratamiento para un paciente.")
     @PostMapping
-    public ResponseEntity<TreatmentDetailResponse> createTreatmentDetail(@Valid @RequestBody TreatmentDetailCapturingRequest request) {
-        TreatmentDetailResponse response = treatmentDetailCapturingService.createTreatmentDetail(request);
+    public ResponseEntity<TreatmentDetailResponse> createTreatmentDetail(@Valid @RequestBody TreatmentDetailCaptureRequest request) {
+        TreatmentDetailResponse response = treatmentDetailCaptureService.createTreatmentDetail(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene el tratamiento de un paciente por el ID.")
     @GetMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> getTreatmentDetailById(@PathVariable Long id) {
-        TreatmentDetailResponse response = treatmentDetailCapturingService.getTreatmentDetailById(id);
+        TreatmentDetailResponse response = treatmentDetailCaptureService.getTreatmentDetailById(id);
         return ResponseEntity.ok(response);
     }
 
@@ -52,7 +52,7 @@ public class TreatmentDetailCapturingController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailCapturingService.getAllTreatmentDetailsByPatient(pageable, patientId);
+        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailCaptureService.getAllTreatmentDetailsByPatient(pageable, patientId);
 
         return ResponseEntity.ok(treatmentDetails);
     }
@@ -61,8 +61,8 @@ public class TreatmentDetailCapturingController {
     @PatchMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> updateTreatmentDetail(
             @PathVariable Long id,
-            @RequestBody TreatmentDetailCapturingRequest request) {
-        TreatmentDetailResponse response = treatmentDetailCapturingService.updateTreatmentDetail(id, request);
+            @RequestBody TreatmentDetailCaptureRequest request) {
+        TreatmentDetailResponse response = treatmentDetailCaptureService.updateTreatmentDetail(id, request);
         return ResponseEntity.ok(response);
     }
 
@@ -72,7 +72,7 @@ public class TreatmentDetailCapturingController {
             @PathVariable Long id,
             @RequestBody TreatmentStatusUpdateRequest request) {
 
-        TreatmentDetailResponse response = treatmentDetailCapturingService.updateTreatmentStatus(id, request);
+        TreatmentDetailResponse response = treatmentDetailCaptureService.updateTreatmentStatus(id, request);
         return ResponseEntity.ok(response);
     }
 }

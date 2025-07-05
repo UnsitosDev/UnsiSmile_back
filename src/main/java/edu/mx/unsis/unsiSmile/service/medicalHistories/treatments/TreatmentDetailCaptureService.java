@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class TreatmentDetailCapturingService {
+public class TreatmentDetailCaptureService {
 
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
@@ -44,7 +44,7 @@ public class TreatmentDetailCapturingService {
     private final IExecutionReviewRepository executionReviewRepository;
 
     @Transactional
-    public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailCapturingRequest request) {
+    public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailCaptureRequest request) {
         try {
             validateRequestDependencies(request);
 
@@ -94,7 +94,7 @@ public class TreatmentDetailCapturingService {
         patientService.getPatientById(request.getPatientId());
     }
 
-    private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailCapturingRequest request,
+    private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailCaptureRequest request,
                                                      TreatmentResponse treatmentResponse) {
         PatientClinicalHistoryModel clinicalHistory = patientClinicalHistoryService.save(
                 request.getPatientId(),
@@ -143,7 +143,7 @@ public class TreatmentDetailCapturingService {
     }
 
     @Transactional
-    public TreatmentDetailResponse updateTreatmentDetail(@NonNull Long id, @NonNull TreatmentDetailCapturingRequest request) {
+    public TreatmentDetailResponse updateTreatmentDetail(@NonNull Long id, @NonNull TreatmentDetailCaptureRequest request) {
         try {
             TreatmentDetailModel existing = treatmentDetailRepository.findById(id)
                     .orElseThrow(() -> new AppException(
