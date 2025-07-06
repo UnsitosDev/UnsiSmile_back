@@ -77,8 +77,13 @@ public class ResponseMessages {
     public static final String PROFESSOR_CLINICAL_AREA_NOT_FOUND = "Profesor del área clínica no encontrado";
     public static final String FAILED_TO_UPDATE_STUDENT = "Error al actualizar el estudiante";
     public static final String FAILED_TO_FETCH_PROFESSORS_BY_CLINICAL_AREA = "Error al obtener los profesores por área clínica";
-    public static final String FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREAS = "Error al eliminar las asignacion del área clínica con los profesores";
+    public static final String FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREAS = "Error al eliminar la asignación del área clínica con los profesores";
     public static final String PROFESSOR_CLINICAL_AREA_ID_CANNOT_BE_NULL = "El ID del área clínica del profesor no puede ser nulo";
+    public static final String ERROR_CREATING_PROFESSOR_CLINICAL_AREA = "Error al asignar un profesor al área clínica.";
+    public static final String FAILED_TO_FETCH_PROFESSOR_CLINICAL_AREA = "Error al obtener el profesor del área clínica.";
+    public static final String FAILED_TO_FETCH_PROFESSOR_CLINICAL_AREAS = "Error al obtener los profesores de las áreas clínicas.";
+    public static final String FAILED_TO_UPDATE_PROFESSOR_CLINICAL_AREA = "Error al actualizar el profesor del área clínica.";
+    public static final String FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREA = "Error al eliminar la asignación del profesor al área clínica.";
 
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
     public static final String FAILED_TO_FETCH_FILES = "Error al obtener los archivos.";
@@ -92,7 +97,7 @@ public class ResponseMessages {
     public static final String PROFESSOR_NOT_FOUND = "Profesor no encontrado";
     public static final String INVALID_ROLE = "Rol no válido";
     public static final String ROLE_NOT_FOUND = "Rol no encontrado";
-    public static final String FAILED_CHANGE_ROLE = "Error al cambiar el rol del profesor";
+    public static final String FAILED_CHANGE_ROLE = "Error al cambiar el rol del usuario.";
 
     public static final String PERSON_NOT_FOUND = "Persona no encontrada";
     public static final String PERSON_REQUEST_NULL = "PersonRequest no puede ser nulo";
