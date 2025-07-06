@@ -576,4 +576,15 @@ public class ResponseMessages {
     public static final String ERROR_UPDATING_TREATMENT_EXECUTION_STATUS = "Error al actualizar un registro de status del tratamiento con ID: %s.";
     public static final String FAILED_FETCH_TREATMENT_EXECUTION_STATUS = "Error al obtener un registro de status del tratamiento con ID: %s.";
     public static final String INVALID_TREATMENT_STATE_TRANSITION = "No es posible cambiar el estado del tratamiento desde su estado actual.";
+
+    // Medical record digitizer
+    public static final String ERROR_CREATING_MEDICAL_RECORD_DIGITIZER = "Error al asignar al estudiante el rol capturador de expedientes clínicos.";
+    public static final String FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZER = "Error al obtener al capturador de expedientes clínicos.";
+    public static final String FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZERS = "Error al obtener la lista de capturadores de expedientes clínicos.";
+    public static final String FAILED_TO_UPDATE_MEDICAL_RECORD_DIGITIZER = "Error al actualizar al capturador de expedientes clínicos.";
+    public static final String FAILED_TO_DELETE_MEDICAL_RECORD_DIGITIZER = "Error al eliminar la asignación del capturador de expedientes clínicos.";
+    public static final String MEDICAL_RECORD_DIGITIZER_NOT_FOUND = "No se encontró al capturador de expedientes clínicos con ID: %s.";
+    public static final String MEDICAL_RECORD_DIGITIZER_ALREADY_DELETED = "El registro ya fue eliminado anteriormente.";
+    public static final String STUDENT_ALREADY_IS_DIGITIZER = "El estudiante ya tiene asigando el rol capturador.";
+
 }

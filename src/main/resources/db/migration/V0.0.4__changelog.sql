@@ -134,4 +134,5 @@ INSERT INTO roles (id, role) VALUES
                                  (1, 'ROLE_ADMIN'),
                                  (2, 'ROLE_STUDENT'),
                                  (3, 'ROLE_PROFESSOR'),
-                                 (4, 'ROLE_CLINICAL_AREA_SUPERVISOR');
+                                 (4, 'ROLE_CLINICAL_AREA_SUPERVISOR'),
+                                 (5, 'ROLE_MEDICAL_RECORD_DIGITIZER');
