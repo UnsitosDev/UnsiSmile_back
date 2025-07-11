@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class MedicalRecordDigitizerService {
     private final MedicalRecordDigitizerMapper medicalRecordDigitizerMapper;
     private final StudentService studentService;
     private final UserService userService;
+    private final DigitizerPatientService digitizerPatientService;
 
     @Transactional
     public void createDigitizer(@NotNull MedicalRecordDigitizerRequest request) {
@@ -38,6 +40,8 @@ public class MedicalRecordDigitizerService {
             if (ERole.ROLE_MEDICAL_RECORD_DIGITIZER.equals(student.getUser().getRole().getRole())) {
                 throw new AppException(ResponseMessages.STUDENT_ALREADY_IS_DIGITIZER, HttpStatus.BAD_REQUEST);
             }
+
+            validatePreviousDigitizerCanBeCreated(student);
 
             MedicalRecordDigitizerModel entity = medicalRecordDigitizerMapper.toEntity(request);
             medicalRecordDigitizerRepository.save(entity);
@@ -97,6 +101,7 @@ public class MedicalRecordDigitizerService {
             model.setEndDate(LocalDate.now());
             medicalRecordDigitizerRepository.save(model);
 
+            digitizerPatientService.deleteAllRelationsByDigitizerId(id);
             userService.changeRole(model.getStudent().getEnrollment(), ERole.ROLE_STUDENT.toString());
         } catch (AppException e) {
             throw e;
@@ -116,6 +121,49 @@ public class MedicalRecordDigitizerService {
             return models.map(medicalRecordDigitizerMapper::toDto);
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZERS, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional
+    public void changeDigitizerStatus(Long id) {
+        try {
+            MedicalRecordDigitizerModel model = medicalRecordDigitizerRepository.findById(id)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
+
+            if (model.getEndDate() != null) {
+                throw new AppException(ResponseMessages.MEDICAL_RECORD_DIGITIZER_ALREADY_DELETED, HttpStatus.BAD_REQUEST);
+            }
+
+            model.setStatusKey(
+                    Constants.ACTIVE.equals(model.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
+            medicalRecordDigitizerRepository.save(model);
+
+            String role = Constants.ACTIVE.equals(model.getStatusKey())
+                    ? ERole.ROLE_MEDICAL_RECORD_DIGITIZER.toString()
+                    : ERole.ROLE_STUDENT.toString();
+            userService.changeRole(model.getStudent().getEnrollment(), role);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_TO_CHANGE_MEDICAL_RECORD_DIGITIZER_STATUS, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void validatePreviousDigitizerCanBeCreated(StudentModel student) {
+        Optional<MedicalRecordDigitizerModel> lastDigitizerOpt =
+                medicalRecordDigitizerRepository.findTopByStudent_EnrollmentOrderByCreatedAtDesc(student.getEnrollment());
+
+        if (lastDigitizerOpt.isPresent()) {
+            MedicalRecordDigitizerModel lastDigitizer = lastDigitizerOpt.get();
+
+            if (lastDigitizer.getEndDate() == null) {
+                throw new AppException(
+                        ResponseMessages.DIGITIZER_ALREADY_EXISTS_NEEDS_REACTIVATION,
+                        HttpStatus.BAD_REQUEST
+                );
+            }
         }
     }
 }

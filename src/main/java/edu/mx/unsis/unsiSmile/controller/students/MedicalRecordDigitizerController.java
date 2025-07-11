@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.controller.students;
 import edu.mx.unsis.unsiSmile.dtos.request.students.MedicalRecordDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.service.students.MedicalRecordDigitizerService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,5 +55,12 @@ public class MedicalRecordDigitizerController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         return ResponseEntity.ok(digitizerService.getAllDigitizers(pageable, keyword));
+    }
+
+    @Operation(summary = "Cambia el estado de activo/inactivo de un capturador.")
+    @PatchMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changeStatus(@PathVariable Long id) {
+        digitizerService.changeDigitizerStatus(id);
     }
 }

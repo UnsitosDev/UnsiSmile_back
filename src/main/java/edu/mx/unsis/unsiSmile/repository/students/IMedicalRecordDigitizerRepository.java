@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
 import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
-import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +19,7 @@ public interface IMedicalRecordDigitizerRepository extends JpaRepository<Medical
             "m.student.person.firstLastName LIKE %:keyword%) AND m.statusKey = 'A'")
     Page<MedicalRecordDigitizerModel> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    boolean existsByStudentAndStatusKey(StudentModel student, String statusKey);
+    Optional<MedicalRecordDigitizerModel> findTopByStudent_EnrollmentOrderByCreatedAtDesc(String enrollment);
 
     Page<MedicalRecordDigitizerModel> findAllByStatusKey(String statusKey, Pageable pageable);
 }

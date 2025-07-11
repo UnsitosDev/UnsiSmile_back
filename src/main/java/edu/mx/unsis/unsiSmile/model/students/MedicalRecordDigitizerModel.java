@@ -20,7 +20,7 @@ public class MedicalRecordDigitizerModel extends AuditModel {
     @Column(name = "id_medical_record_digitizer", nullable = false)
     private Long idMedicalRecordDigitizer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_student", nullable = false)
     private StudentModel student;
 
