@@ -2,7 +2,9 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.*;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailDigitizerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -38,10 +40,11 @@ public class TreatmentDetailDigitizerService {
     private final TreatmentService treatmentService;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
-    private final TreatmentDetailToothService treatmentDetailToothService;
+    private final TreatmentDetailToothDigitizerService treatmentDetailToothDigitizerService;
     private final ProfessorClinicalAreaService professorClinicalAreaService;
     private final ExecutionReviewService executionReviewService;
     private final IExecutionReviewRepository executionReviewRepository;
+    private final TreatmentDetailToothService treatmentDetailToothService;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailDigitizerRequest request) {
@@ -52,7 +55,7 @@ public class TreatmentDetailDigitizerService {
 
             String scope = treatmentResponse.getTreatmentScope().getName();
 
-            if (scope.equals(Constants.TOOTH) && request.getTreatmentDetailToothRequest() == null) {
+            if (scope.equals(Constants.TOOTH) && request.getTeeth() == null) {
                 throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUEST_CANNOT_BE_NULL,
                         HttpStatus.BAD_REQUEST);
             }
@@ -60,9 +63,8 @@ public class TreatmentDetailDigitizerService {
             TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse);
 
             if (scope.equals(Constants.TOOTH)) {
-                TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
-                toothRequest.setIdTreatmentDetail(savedModel.getIdTreatmentDetail());
-                treatmentDetailToothService.createTreatmentDetailTeeth(toothRequest);
+                request.setIdTreatmentDetail(savedModel.getIdTreatmentDetail());
+                treatmentDetailToothDigitizerService.createTreatmentDetailTeeth(request);
             }
 
             ExecutionReviewModel executionReview = createExecutionReviewWithContext(
@@ -86,7 +88,7 @@ public class TreatmentDetailDigitizerService {
         }
     }
 
-    private void validateRequestDependencies(TreatmentDetailRequest request) {
+    private void validateRequestDependencies(TreatmentDetailDigitizerRequest request) {
         if (request.getStartDate().isAfter(request.getEndDate())) {
             throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE,
                     HttpStatus.BAD_REQUEST);
@@ -103,7 +105,6 @@ public class TreatmentDetailDigitizerService {
         StudentGroupModel studentGroup = studentGroupService.getStudentGroupByStudent(request.getStudentEnrollment());
 
         TreatmentDetailModel model = treatmentDetailMapper.toEntity(request);
-        model.setStatus(ReviewStatus.IN_PROGRESS);
         model.setPatientClinicalHistory(clinicalHistory);
         model.setStudentGroup(studentGroup);
 
@@ -152,10 +153,14 @@ public class TreatmentDetailDigitizerService {
 
             String currentScope = existing.getTreatment().getTreatmentScope().getName();
 
+            if (ReviewStatus.FINISHED.equals(existing.getStatus())) {
+                throw new AppException(ResponseMessages.TREATMENT_DETAIL_FINISHED, HttpStatus.BAD_REQUEST);
+            }
+
             TreatmentModel newTreatment = treatmentService.getTreatmentModelById(request.getTreatmentId());
 
             validateRequestDependencies(request);
-            treatmentDetailMapper.updateEntity(request, existing);
+            existing.setEndDate(request.getEndDate());
             existing.setTreatment(newTreatment);
 
             // Asignar nuevo alumno si cambió
@@ -166,7 +171,7 @@ public class TreatmentDetailDigitizerService {
 
             TreatmentDetailModel savedModel = treatmentDetailRepository.save(existing);
 
-            treatmentDetailToothService.handleTeethByScope(
+            treatmentDetailToothDigitizerService.handleTeethByScope(
                     currentScope,
                     newTreatment.getTreatmentScope().getName(),
                     savedModel.getIdTreatmentDetail(),
