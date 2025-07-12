@@ -1,9 +1,9 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailCaptureRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailCaptureService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailDigitizerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,23 +19,23 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Treatment Details Capture", description = "Endpoints for capturing treatment details of patients")
 @RestController
-@RequestMapping("/unsismile/api/v1/treatment-details/capture")
+@RequestMapping("/unsismile/api/v1/treatment-details/digitizers")
 @RequiredArgsConstructor
-public class TreatmentDetailCaptureController {
+public class TreatmentDetailDigitizeController {
 
-    private final TreatmentDetailCaptureService treatmentDetailCaptureService;
+    private final TreatmentDetailDigitizerService treatmentDetailDigitizerService;
 
     @Operation(summary = "Crea un nuevo tratamiento para un paciente.")
     @PostMapping
-    public ResponseEntity<TreatmentDetailResponse> createTreatmentDetail(@Valid @RequestBody TreatmentDetailCaptureRequest request) {
-        TreatmentDetailResponse response = treatmentDetailCaptureService.createTreatmentDetail(request);
+    public ResponseEntity<TreatmentDetailResponse> createTreatmentDetail(@Valid @RequestBody TreatmentDetailDigitizerRequest request) {
+        TreatmentDetailResponse response = treatmentDetailDigitizerService.createTreatmentDetail(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Obtiene el tratamiento de un paciente por el ID.")
     @GetMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> getTreatmentDetailById(@PathVariable Long id) {
-        TreatmentDetailResponse response = treatmentDetailCaptureService.getTreatmentDetailById(id);
+        TreatmentDetailResponse response = treatmentDetailDigitizerService.getTreatmentDetailById(id);
         return ResponseEntity.ok(response);
     }
 
@@ -52,7 +52,7 @@ public class TreatmentDetailCaptureController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailCaptureService.getAllTreatmentDetailsByPatient(pageable, patientId);
+        Page<TreatmentDetailResponse> treatmentDetails = treatmentDetailDigitizerService.getAllTreatmentDetailsByPatient(pageable, patientId);
 
         return ResponseEntity.ok(treatmentDetails);
     }
@@ -61,8 +61,8 @@ public class TreatmentDetailCaptureController {
     @PatchMapping("/{id}")
     public ResponseEntity<TreatmentDetailResponse> updateTreatmentDetail(
             @PathVariable Long id,
-            @RequestBody TreatmentDetailCaptureRequest request) {
-        TreatmentDetailResponse response = treatmentDetailCaptureService.updateTreatmentDetail(id, request);
+            @RequestBody TreatmentDetailDigitizerRequest request) {
+        TreatmentDetailResponse response = treatmentDetailDigitizerService.updateTreatmentDetail(id, request);
         return ResponseEntity.ok(response);
     }
 
@@ -72,7 +72,7 @@ public class TreatmentDetailCaptureController {
             @PathVariable Long id,
             @RequestBody TreatmentStatusUpdateRequest request) {
 
-        TreatmentDetailResponse response = treatmentDetailCaptureService.updateTreatmentStatus(id, request);
+        TreatmentDetailResponse response = treatmentDetailDigitizerService.updateTreatmentStatus(id, request);
         return ResponseEntity.ok(response);
     }
 }

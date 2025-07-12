@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TreatmentDetailCaptureRequest extends TreatmentDetailRequest {
+public class TreatmentDetailDigitizerRequest extends TreatmentDetailRequest {
 
     @NotNull(message = ResponseMessages.NOT_NULL_ENROLLMENT)
     @NotBlank(message = ResponseMessages.NOT_NULL_ENROLLMENT)
