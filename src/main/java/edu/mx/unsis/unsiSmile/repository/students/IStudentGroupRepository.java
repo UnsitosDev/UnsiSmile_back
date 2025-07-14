@@ -29,7 +29,8 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "WHERE s2.student.enrollment = :enrollment)")
     void disableLatestStudentGroup(@Param("enrollment") String enrollment);
 
-    @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.statusKey = 'A'")
+    @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.student.user.role.role = 'ROLE_STUDENT' " +
+            "AND sg.statusKey = 'A'")
     Page<StudentGroupModel> findAllActive(Pageable pageable);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -45,6 +46,7 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
             "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
             "OR DAY(sg.student.person.birthDate) = :keywordInt)) " +
+            "AND sg.student.user.role.role = 'ROLE_STUDENT' " +
             "AND sg.statusKey = 'A'")
     Page<StudentGroupModel> findAllBySearchInput(
             @Param("keyword") String keyword,
