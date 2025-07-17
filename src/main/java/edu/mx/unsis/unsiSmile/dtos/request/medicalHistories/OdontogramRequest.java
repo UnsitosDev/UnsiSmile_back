@@ -19,8 +19,8 @@ public class OdontogramRequest {
     private List<ToothRequest> teeth;
     @NotBlank(message = "The patient id can't be blank")
     private String idPatient;
-    @NotNull(message = "The id treatment cannot be null")
-    private Long idTreatmentDetail;
+    @NotNull(message = "The id patient clinical history cannot be null")
+    private Long idPatientClinicalHistory;
     private String observations;
 
 }
