@@ -54,14 +54,14 @@ public class OdontogramController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/latest/{treatmentId}")
-    public OdontogramResponse getOdontogramDetails(@PathVariable Long treatmentId) {
-        return odontogramService.getOdontogramDetails(treatmentId);
+    @GetMapping("/latest/{patientClinicalHistoryId}")
+    public OdontogramResponse getOdontogramDetails(@PathVariable Long patientClinicalHistoryId) {
+        return odontogramService.getOdontogramDetails(patientClinicalHistoryId);
     }       
 
-    @GetMapping("/treatment/{treatmentId}")
-    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByTreatmentId(@PathVariable Long treatmentId) {
-        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByTreatmentId(treatmentId);
+    @GetMapping("/patient-clinical-history/{patientClinicalHistoryId}")
+    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByPatientClinicalHistoryId(@PathVariable Long patientClinicalHistoryId) {
+        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByPatientClinicalHistoryId(patientClinicalHistoryId);
         return ResponseEntity.ok(odontograms);
     }
 
