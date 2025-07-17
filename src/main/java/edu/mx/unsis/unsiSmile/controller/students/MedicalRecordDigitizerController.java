@@ -52,7 +52,7 @@ public class MedicalRecordDigitizerController {
 
     @Operation(summary = "Obtiene una lista paginada de capturadores con filtros opcionales.")
     @GetMapping
-    public ResponseEntity<Page<MedicalRecordDigitizerResponse>> getAll(
+    public ResponseEntity<Page<MedicalRecordDigitizerResponse>> getAllMedicalRecordDigitizer(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "student.person.firstName") String order,
