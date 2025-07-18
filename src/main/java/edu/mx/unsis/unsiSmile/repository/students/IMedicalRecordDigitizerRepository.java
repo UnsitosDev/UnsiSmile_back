@@ -14,9 +14,10 @@ import java.util.Optional;
 public interface IMedicalRecordDigitizerRepository extends JpaRepository<MedicalRecordDigitizerModel, Long> {
 
     @Query("SELECT m FROM MedicalRecordDigitizerModel m " +
-            "WHERE (m.student.person.firstName LIKE %:keyword% OR " +
+            "WHERE m.student.person.firstName LIKE %:keyword% OR " +
             "m.student.person.secondName LIKE %:keyword% OR " +
-            "m.student.person.firstLastName LIKE %:keyword%) AND m.statusKey = 'A'")
+            "m.student.person.firstLastName LIKE %:keyword% OR " +
+            "m.student.person.secondLastName LIKE %:keyword%")
     Page<MedicalRecordDigitizerModel> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     Optional<MedicalRecordDigitizerModel> findTopByStudent_EnrollmentOrderByCreatedAtDesc(String enrollment);
