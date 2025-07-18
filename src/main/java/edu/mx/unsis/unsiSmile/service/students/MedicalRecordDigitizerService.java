@@ -115,7 +115,7 @@ public class MedicalRecordDigitizerService {
         try {
             Page<MedicalRecordDigitizerModel> models =
                     (keyword == null || keyword.isBlank())
-                            ? medicalRecordDigitizerRepository.findAll(pageable)
+                            ? medicalRecordDigitizerRepository.findAllMedicalRecordDigitizer(pageable)
                             : medicalRecordDigitizerRepository.searchByKeyword(keyword, pageable);
 
             return models.map(medicalRecordDigitizerMapper::toDto);

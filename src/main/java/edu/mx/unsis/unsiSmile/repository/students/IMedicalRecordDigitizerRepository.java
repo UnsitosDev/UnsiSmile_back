@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface IMedicalRecordDigitizerRepository extends JpaRepository<MedicalRecordDigitizerModel, Long> {
 
     @Query("SELECT m FROM MedicalRecordDigitizerModel m " +
-            "WHERE m.student.person.firstName LIKE %:keyword% OR " +
+            "WHERE m.endDate IS NULL AND m.student.person.firstName LIKE %:keyword% OR " +
             "m.student.person.secondName LIKE %:keyword% OR " +
             "m.student.person.firstLastName LIKE %:keyword% OR " +
             "m.student.person.secondLastName LIKE %:keyword% OR " +
@@ -23,5 +23,8 @@ public interface IMedicalRecordDigitizerRepository extends JpaRepository<Medical
 
     Optional<MedicalRecordDigitizerModel> findTopByStudent_EnrollmentOrderByCreatedAtDesc(String enrollment);
 
-    Page<MedicalRecordDigitizerModel> findAllByStatusKey(String statusKey, Pageable pageable);
+    @Query("SELECT m FROM MedicalRecordDigitizerModel m " +
+            "WHERE m.endDate IS NULL")
+    Page<MedicalRecordDigitizerModel> findAllMedicalRecordDigitizer(Pageable pageable);
+
 }

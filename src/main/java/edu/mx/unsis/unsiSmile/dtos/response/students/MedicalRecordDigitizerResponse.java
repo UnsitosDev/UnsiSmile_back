@@ -15,5 +15,5 @@ public class MedicalRecordDigitizerResponse {
     private String idStudent;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String status;
+    private Boolean status;
 }
