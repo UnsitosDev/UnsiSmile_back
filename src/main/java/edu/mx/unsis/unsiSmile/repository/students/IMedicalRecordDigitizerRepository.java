@@ -17,7 +17,8 @@ public interface IMedicalRecordDigitizerRepository extends JpaRepository<Medical
             "WHERE m.student.person.firstName LIKE %:keyword% OR " +
             "m.student.person.secondName LIKE %:keyword% OR " +
             "m.student.person.firstLastName LIKE %:keyword% OR " +
-            "m.student.person.secondLastName LIKE %:keyword%")
+            "m.student.person.secondLastName LIKE %:keyword% OR " +
+            "m.student.enrollment LIKE %:keyword% ")
     Page<MedicalRecordDigitizerModel> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     Optional<MedicalRecordDigitizerModel> findTopByStudent_EnrollmentOrderByCreatedAtDesc(String enrollment);
