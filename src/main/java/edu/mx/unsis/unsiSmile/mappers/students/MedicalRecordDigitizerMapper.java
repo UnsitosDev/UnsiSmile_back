@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.students;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.students.MedicalRecordDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
@@ -34,6 +35,7 @@ public class MedicalRecordDigitizerMapper implements BaseMapper<MedicalRecordDig
                 .idStudent(entity.getStudent().getEnrollment())
                 .startDate(entity.getStartDate())
                 .endDate(entity.getEndDate())
+                .status(Constants.ACTIVE.equals(entity.getStatusKey()))
                 .build();
     }
 
