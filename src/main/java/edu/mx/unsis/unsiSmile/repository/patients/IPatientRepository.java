@@ -48,7 +48,7 @@ public interface IPatientRepository extends JpaRepository<PatientModel, String> 
             "AND p.statusKey = 'A'")
     Page<PatientModel> findAllBySearchInput(String keyword, Pageable pageable);
 
-    Optional<PatientModel> findByMedicalRecordNumber(Long fileNumber);
+    Optional<PatientModel> findByMedicalRecordNumber(Long medicalRecordNumber);
 
     @Query("SELECT MAX(medicalRecordNumber) FROM PatientModel")
     Long findMaxFileNumber();

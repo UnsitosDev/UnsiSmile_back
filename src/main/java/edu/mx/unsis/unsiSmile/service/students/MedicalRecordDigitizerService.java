@@ -166,4 +166,24 @@ public class MedicalRecordDigitizerService {
             }
         }
     }
+
+    @Transactional(readOnly = true)
+    public MedicalRecordDigitizerModel getMedicalRecordDigitizerModelByStudent(@NotNull String studentEnrollment) {
+        try {
+            MedicalRecordDigitizerModel model = medicalRecordDigitizerRepository.findTopByStudent_EnrollmentOrderByCreatedAtDesc(studentEnrollment)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND_FOR_STUDENT, studentEnrollment),
+                            HttpStatus.NOT_FOUND));
+            if (Constants.INACTIVE.equals(model.getStatusKey())) {
+                throw new AppException(
+                        ResponseMessages.DIGITIZER_NOT_ACTIVE,
+                        HttpStatus.BAD_REQUEST);
+            }
+            return model;
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZER, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

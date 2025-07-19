@@ -590,6 +590,7 @@ public class ResponseMessages {
     public static final String FAILED_TO_CHANGE_MEDICAL_RECORD_DIGITIZER_STATUS = "Error al cambiar el estado del capturador de expedientes clínicos.";
     public static final String DIGITIZER_NOT_FOUND_FOR_STUDENT = "No se encontró un registro capturador para el estudiante con matrícula: %s";
     public static final String DIGITIZER_NOT_ACTIVE = "El capturador de expedientes clínicos no está activo. Por favor, reactívelo.";
+    public static final String MEDICAL_RECORD_DIGITIZER_NOT_FOUND_FOR_STUDENT = "No se encontró un registro capturador para el estudiante con ID: %s";
 
     public static final String DIGITIZER_PATIENT_ID_CANNOT_BE_NULL = "El ID del estudiante capturador no puede ser nulo";
     public static final String FAILED_CREATE_DIGITIZER_PATIENT_RELATIONSHIP = "Error al crear el registro capturador-paciente.";
@@ -598,4 +599,8 @@ public class ResponseMessages {
     public static final String FAILED_TO_DELETE_DIGITIZER_PATIENT = "Error al eliminar el registro capturador-paciente.";
     public static final String FAILED_TO_DEACTIVATE_DIGITIZER_PATIENT_RELATIONS = "Error al desactivar las relaciones capturador-paciente.";
     public static final String DIGITIZER_PATIENT_ALREADY_EXISTS = "El paciente ya está asignado a este capturador.";
+
+    public static final String NOT_NULL_MEDICAL_RECORD_NUMBER = "El número de expediente no puede ser nulo.";
+    public static final String MEDICAL_RECORD_NUMBER_MUST_BE_POSITIVE = "El número de expediente debe ser mayor a cero.";
+    public static final String MEDICAL_RECORD_NUMBER_ALREADY_EXISTS = "Ya existe un paciente con número de expediente: %s.";
 }
