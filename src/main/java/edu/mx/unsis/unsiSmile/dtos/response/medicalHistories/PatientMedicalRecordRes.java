@@ -9,6 +9,6 @@ import java.time.LocalDate;
 @Builder
 public class PatientMedicalRecordRes {
     private Long idPatientClinicalHistory;
-    private ClinicalHistoryCatalogResponse clinicalHistoryCatalog;
+    private MedicalRecordCatalogResponse medicalRecordCatalog;
     private LocalDate appointmentDate;
 }

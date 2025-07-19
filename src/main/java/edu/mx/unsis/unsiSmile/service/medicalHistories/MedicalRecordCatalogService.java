@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
@@ -52,7 +52,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findById(Long idPatientMedicalRecord, String idPatient) {
+    public MedicalRecordCatalogResponse findById(Long idPatientMedicalRecord, String idPatient) {
         try {
             Assert.notNull(idPatientMedicalRecord, ResponseMessages.MEDICAL_RECORD_ID_CANNOT_BE_NULL);
             if (idPatientMedicalRecord == 0) {
@@ -77,7 +77,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClinicalHistoryCatalogResponse> findAll() {
+    public List<MedicalRecordCatalogResponse> findAll() {
         try {
             List<MedicalRecordCatalogModel> medicalRecordCatalogList = medicalRecordCatalogRepository.findAll();
 
@@ -112,22 +112,22 @@ public class MedicalRecordCatalogService {
         }
     }
 
-    private ClinicalHistoryCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
+    private MedicalRecordCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
 
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
                 .findByMedicalRecordId(patientClinicalHistory.getMedicalRecordCatalog().getIdMedicalRecordCatalog());
 
         List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
 
-        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = medicalRecordCatalogMapper.toDto(patientClinicalHistory.getMedicalRecordCatalog());
+        MedicalRecordCatalogResponse medicalRecordCatalogResponse = medicalRecordCatalogMapper.toDto(patientClinicalHistory.getMedicalRecordCatalog());
 
-        clinicalHistoryCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
-        clinicalHistoryCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
+        medicalRecordCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
+        medicalRecordCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
 
-        clinicalHistoryCatalogResponse.setFormSections(sections);
-        clinicalHistoryCatalogResponse.setIdPatientMedicalRecord(patientClinicalHistory.getIdPatientClinicalHistory());
+        medicalRecordCatalogResponse.setFormSections(sections);
+        medicalRecordCatalogResponse.setIdPatientMedicalRecord(patientClinicalHistory.getIdPatientClinicalHistory());
 
-        return clinicalHistoryCatalogResponse;
+        return medicalRecordCatalogResponse;
     }
 
     @Transactional(readOnly = true)
@@ -147,7 +147,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse searchGeneralMedicalRecord(@NonNull String idPatient) {
+    public MedicalRecordCatalogResponse searchGeneralMedicalRecord(@NonNull String idPatient) {
         try {
             patientService.getPatientById(idPatient);
             PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findGeneralMedicalRecordByPatientId(idPatient);
@@ -160,7 +160,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse createNewGeneralMedicalRecord(@NonNull String idPatient) {
+    public MedicalRecordCatalogResponse createNewGeneralMedicalRecord(@NonNull String idPatient) {
         try {
             patientService.getPatientById(idPatient);
             PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.createNewGeneralMedicalRecord(idPatient);
@@ -182,7 +182,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public ClinicalHistoryCatalogResponse findByMedicalRecordAndPatient(EMedicalRecords medicalRecord, String idPatient) {
+    public MedicalRecordCatalogResponse findByMedicalRecordAndPatient(EMedicalRecords medicalRecord, String idPatient) {
         try {
             Assert.notNull(idPatient, ResponseMessages.PATIENT_ID_CANNOT_BE_NULL);
 

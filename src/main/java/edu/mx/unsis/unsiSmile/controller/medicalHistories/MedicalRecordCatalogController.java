@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
@@ -37,17 +37,17 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Obtiene una historia clínica con la configuración.")
     @GetMapping("/{idPatientMedicalRecord}/patients/{idPatient}")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> findById(
+    public ResponseEntity<MedicalRecordCatalogResponse> findById(
             @PathVariable Long idPatientMedicalRecord,
             @PathVariable String idPatient) {
-        ClinicalHistoryCatalogResponse response = medicalRecordCatalogService.findById(idPatientMedicalRecord, idPatient);
+        MedicalRecordCatalogResponse response = medicalRecordCatalogService.findById(idPatientMedicalRecord, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Obtiene una lista de historias clinicas sin configuración.")
     @GetMapping
-    public ResponseEntity<List<ClinicalHistoryCatalogResponse>> findAll() {
-        List<ClinicalHistoryCatalogResponse> response = medicalRecordCatalogService.findAll();
+    public ResponseEntity<List<MedicalRecordCatalogResponse>> findAll() {
+        List<MedicalRecordCatalogResponse> response = medicalRecordCatalogService.findAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -67,15 +67,15 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Obtiene la historia clínica general del paciente.")
     @GetMapping("/general")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> searchGeneralMedicalRecord(@RequestParam String idPatient) {
-        ClinicalHistoryCatalogResponse response = medicalRecordCatalogService.searchGeneralMedicalRecord(idPatient);
+    public ResponseEntity<MedicalRecordCatalogResponse> searchGeneralMedicalRecord(@RequestParam String idPatient) {
+        MedicalRecordCatalogResponse response = medicalRecordCatalogService.searchGeneralMedicalRecord(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Operation(summary = "Crear la historia clínica general del paciente.")
     @PostMapping("/general")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> createNewGeneralMedicalRecord(@RequestParam String idPatient) {
-        ClinicalHistoryCatalogResponse response = medicalRecordCatalogService.createNewGeneralMedicalRecord(idPatient);
+    public ResponseEntity<MedicalRecordCatalogResponse> createNewGeneralMedicalRecord(@RequestParam String idPatient) {
+        MedicalRecordCatalogResponse response = medicalRecordCatalogService.createNewGeneralMedicalRecord(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -83,8 +83,8 @@ public class MedicalRecordCatalogController {
     @PostMapping("/patient-clinical-history")
     public ResponseEntity<PatientMedicalRecordRes> createPatientClinicalHistory(
             @RequestParam String idPatient,
-            @RequestParam Long idClinicalHistory) {
-        PatientMedicalRecordRes response = patientClinicalHistoryService.createPatientMedicalRecord(idPatient, idClinicalHistory);
+            @RequestParam Long idMedicalRecordCatalog) {
+        PatientMedicalRecordRes response = patientClinicalHistoryService.createPatientMedicalRecord(idPatient, idMedicalRecordCatalog);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -100,10 +100,10 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Obtiene una historia clínica por tipo de HC y paciente.")
     @GetMapping("/catalog/{medicalRecord}/patients/{idPatient}")
-    public ResponseEntity<ClinicalHistoryCatalogResponse> findByMedicalRecordAndPatient(
+    public ResponseEntity<MedicalRecordCatalogResponse> findByMedicalRecordAndPatient(
             @PathVariable EMedicalRecords medicalRecord,
             @PathVariable String idPatient) {
-        ClinicalHistoryCatalogResponse response = medicalRecordCatalogService.findByMedicalRecordAndPatient(medicalRecord, idPatient);
+        MedicalRecordCatalogResponse response = medicalRecordCatalogService.findByMedicalRecordAndPatient(medicalRecord, idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

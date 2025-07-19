@@ -30,13 +30,13 @@ public class PatientClinicalHistoryService {
     private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
 
     @Transactional
-    public PatientClinicalHistoryModel save(String idPatient, Long idMedicalRecord) {
+    public PatientClinicalHistoryModel save(String idPatient, Long idMedicalRecordCatalog) {
         try {
             PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-            MedicalRecordCatalogModel medicalRecordCatalogModel = medicalRecordCatalogRepository.findById(idMedicalRecord)
+            MedicalRecordCatalogModel medicalRecordCatalogModel = medicalRecordCatalogRepository.findById(idMedicalRecordCatalog)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idMedicalRecord),
+                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idMedicalRecordCatalog),
                             HttpStatus.NOT_FOUND
                     ));
             return patientClinicalHistoryRepository.save(toEntity(patientModel, medicalRecordCatalogModel));
@@ -48,9 +48,9 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional
-    public PatientMedicalRecordRes createPatientMedicalRecord(String idPatient, Long idMedicalRecord) {
+    public PatientMedicalRecordRes createPatientMedicalRecord(String idPatient, Long idMedicalRecordCatalog) {
         try {
-            PatientClinicalHistoryModel model = this.save(idPatient, idMedicalRecord);
+            PatientClinicalHistoryModel model = this.save(idPatient, idMedicalRecordCatalog);
             return toResponse(model);
         } catch (AppException ex) {
             throw ex;
@@ -191,7 +191,7 @@ public class PatientClinicalHistoryService {
     private PatientMedicalRecordRes toResponse(PatientClinicalHistoryModel entity) {
         return PatientMedicalRecordRes.builder()
                 .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
-                .clinicalHistoryCatalog(medicalRecordCatalogMapper.toDto(entity.getMedicalRecordCatalog()))
+                .medicalRecordCatalog(medicalRecordCatalogMapper.toDto(entity.getMedicalRecordCatalog()))
                 .appointmentDate(entity.getAppointmentDate().toLocalDate())
                 .build();
     }
