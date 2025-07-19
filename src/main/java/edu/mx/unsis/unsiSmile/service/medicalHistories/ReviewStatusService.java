@@ -192,8 +192,8 @@ public class ReviewStatusService {
     private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(
             PatientClinicalHistoryModel patientClinicalHistoryModel) {
         return PatientClinicalHistoryResponse.builder()
-                .id(patientClinicalHistoryModel.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog())
-                .clinicalHistoryName(patientClinicalHistoryModel.getClinicalHistoryCatalog().getClinicalHistoryName())
+                .id(patientClinicalHistoryModel.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
+                .clinicalHistoryName(patientClinicalHistoryModel.getMedicalRecordCatalog().getMedicalRecordName())
                 .patientClinicalHistoryId(patientClinicalHistoryModel.getIdPatientClinicalHistory())
                 .patientId(patientClinicalHistoryModel.getPatient().getIdPatient())
                 .build();

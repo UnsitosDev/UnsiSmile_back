@@ -27,8 +27,8 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                         .idTreatmentScope(dto.getTreatmentScopeId())
                         .build())
                 .cost(dto.getCost() != null ? dto.getCost() : BigDecimal.ZERO)
-                .clinicalHistoryCatalog(ClinicalHistoryCatalogModel.builder()
-                                .idClinicalHistoryCatalog(dto.getClinicalHistoryCatalogId())
+                .medicalRecordCatalog(MedicalRecordCatalogModel.builder()
+                                .idMedicalRecordCatalog(dto.getClinicalHistoryCatalogId())
                                 .build())
                 .build();
     }
@@ -40,10 +40,10 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                 .name(entity.getName())
                 .treatmentScope(treatmentScopeMapper.toDto(entity.getTreatmentScope()))
                 .cost(entity.getCost() != null ? entity.getCost() : BigDecimal.ZERO)
-                .clinicalHistoryCatalogId(entity.getClinicalHistoryCatalog() != null ?
-                        entity.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog() : null)
-                .clinicalHistoryCatalogName(entity.getClinicalHistoryCatalog() != null ?
-                        entity.getClinicalHistoryCatalog().getClinicalHistoryName() : null)
+                .clinicalHistoryCatalogId(entity.getMedicalRecordCatalog() != null ?
+                        entity.getMedicalRecordCatalog().getIdMedicalRecordCatalog() : null)
+                .clinicalHistoryCatalogName(entity.getMedicalRecordCatalog() != null ?
+                        entity.getMedicalRecordCatalog().getMedicalRecordName() : null)
                 .build();
     }
 
@@ -61,9 +61,9 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                 .idTreatmentScope(request.getTreatmentScopeId())
                 .build());
         entity.setCost(request.getCost() != null ? request.getCost() : entity.getCost());
-        entity.setClinicalHistoryCatalog(
-                ClinicalHistoryCatalogModel.builder()
-                        .idClinicalHistoryCatalog(request.getClinicalHistoryCatalogId())
+        entity.setMedicalRecordCatalog(
+                MedicalRecordCatalogModel.builder()
+                        .idMedicalRecordCatalog(request.getClinicalHistoryCatalogId())
                         .build());
     }
 }

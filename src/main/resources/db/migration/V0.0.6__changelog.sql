@@ -1,6 +1,6 @@
 
-INSERT INTO clinical_history_catalogs
-(clinical_history_name)
+INSERT INTO medical_record_catalogs
+(medical_record_name)
 VALUES
     ("General"),
     ("Prótesis bucal"),
@@ -43,7 +43,7 @@ VALUES
 
 -- insert para las secciones de historia clínica general
 INSERT INTO clinical_history_sections
-(fk_clinical_history_catalog,
+(fk_medical_record_catalog,
  fk_form_section,
  section_order)
 VALUES

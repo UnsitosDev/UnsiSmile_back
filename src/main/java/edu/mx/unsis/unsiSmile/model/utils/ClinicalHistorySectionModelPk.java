@@ -15,8 +15,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ClinicalHistorySectionModelPk implements Serializable {
 
-    @Column(name = "fk_clinical_history_catalog")
-    private Long idClinicalHistoryCatalog;
+    @Column(name = "fk_medical_record_catalog")
+    private Long idMedicalRecordCatalog;
 
     @Column(name = "fk_form_section")
     private String idFormSectionModel;

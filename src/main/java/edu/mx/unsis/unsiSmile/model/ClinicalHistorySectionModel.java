@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude = {"clinicalHistoryCatalogModel", "formSectionModel"})
+@ToString(exclude = {"medicalRecordCatalogModel", "formSectionModel"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -19,8 +19,8 @@ public class ClinicalHistorySectionModel extends AuditModel {
     private ClinicalHistorySectionModelPk idClinicalHistorySectionModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_clinical_history_catalog", nullable = false, insertable = false, updatable = false)
-    private ClinicalHistoryCatalogModel clinicalHistoryCatalogModel;
+    @JoinColumn(name = "fk_medical_record_catalog", nullable = false, insertable = false, updatable = false)
+    private MedicalRecordCatalogModel medicalRecordCatalogModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_form_section",  nullable = false, insertable = false, updatable = false)

@@ -1,12 +1,12 @@
-CREATE TABLE clinical_history_catalogs (
-                                           id_clinical_history_catalog bigint(20) NOT NULL AUTO_INCREMENT,
-                                           clinical_history_name varchar(100) NOT NULL,
+CREATE TABLE medical_record_catalogs (
+                                           id_medical_record_catalog bigint(20) NOT NULL AUTO_INCREMENT,
+                                           medical_record_name varchar(100) NOT NULL,
                                            created_at DATETIME(6) DEFAULT NULL,
                                            created_by VARCHAR(255) DEFAULT NULL,
                                            status_key VARCHAR(255) DEFAULT NULL,
                                            updated_at DATETIME(6) DEFAULT NULL,
                                            updated_by VARCHAR(255) DEFAULT NULL,
-                                           PRIMARY KEY (id_clinical_history_catalog)
+                                           PRIMARY KEY (id_medical_record_catalog)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- FormSections Table
@@ -26,7 +26,7 @@ CREATE TABLE form_sections (
 
 -- ClinicalHistorySections Table
 CREATE TABLE clinical_history_sections (
-                                           fk_clinical_history_catalog bigint(20) NOT NULL,
+                                           fk_medical_record_catalog bigint(20) NOT NULL,
                                            fk_form_section VARCHAR(100) NOT NULL,
                                            section_order bigint(20) DEFAULT null,
                                            created_at DATETIME(6) DEFAULT NULL,
@@ -34,9 +34,9 @@ CREATE TABLE clinical_history_sections (
                                            status_key VARCHAR(255) DEFAULT NULL,
                                            updated_at DATETIME(6) DEFAULT NULL,
                                            updated_by VARCHAR(255) DEFAULT NULL,
-                                           PRIMARY KEY (fk_clinical_history_catalog, fk_form_section),
+                                           PRIMARY KEY (fk_medical_record_catalog, fk_form_section),
                                            KEY fk_form_section (fk_form_section),
-                                           CONSTRAINT clinical_history_sections_ibfk_1 FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs (id_clinical_history_catalog),
+                                           CONSTRAINT clinical_history_sections_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
                                            CONSTRAINT clinical_history_sections_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -147,7 +147,7 @@ CREATE TABLE question_validations (
 -- Treatments Table
 CREATE TABLE patient_clinical_histories (
                                             id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
-                                            fk_clinical_history_catalog bigint(20) DEFAULT NULL,
+                                            fk_medical_record_catalog bigint(20) DEFAULT NULL,
                                             fk_patient CHAR(36) NOT NULL,
                                             appointment_date DATETIME(6) DEFAULT NULL,
                                             created_at DATETIME(6) DEFAULT NULL,
@@ -156,9 +156,9 @@ CREATE TABLE patient_clinical_histories (
                                             updated_at DATETIME(6) DEFAULT NULL,
                                             updated_by VARCHAR(255) DEFAULT NULL,
                                             PRIMARY KEY (id_patient_clinical_history),
-                                            KEY fk_clinical_history_catalog (fk_clinical_history_catalog),
+                                            KEY fk_medical_record_catalog (fk_medical_record_catalog),
                                             KEY fk_patient (fk_patient),
-                                            CONSTRAINT patient_clinical_histories_ibfk_1 FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs (id_clinical_history_catalog),
+                                            CONSTRAINT patient_clinical_histories_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
                                             CONSTRAINT patient_clinical_histories_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

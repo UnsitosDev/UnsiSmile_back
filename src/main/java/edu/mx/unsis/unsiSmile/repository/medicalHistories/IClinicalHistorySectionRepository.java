@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface IClinicalHistorySectionRepository extends JpaRepository<ClinicalHistorySectionModel, ClinicalHistorySectionModelPk> {
-    @Query("SELECT chs FROM ClinicalHistorySectionModel chs WHERE chs.clinicalHistoryCatalogModel.idClinicalHistoryCatalog = :clinicalHistoryId")
-    List<ClinicalHistorySectionModel> findAllByClinicalHistoryId(@Param("clinicalHistoryId") Long clinicalHistoryId);
+    @Query("SELECT chs FROM ClinicalHistorySectionModel chs WHERE chs.medicalRecordCatalogModel.idMedicalRecordCatalog = :medicalRecordId")
+    List<ClinicalHistorySectionModel> findAllByMedicalRecordId(@Param("medicalRecordId") Long medicalRecordId);
 }

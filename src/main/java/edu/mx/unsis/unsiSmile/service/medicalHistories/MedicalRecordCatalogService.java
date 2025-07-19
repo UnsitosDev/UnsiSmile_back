@@ -7,12 +7,12 @@ import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import io.jsonwebtoken.lang.Assert;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ClinicalHistoryCatalogService {
-    private final IClinicalHistoryCatalogRepository clinicalHistoryCatalogRepository;
-    private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
+public class MedicalRecordCatalogService {
+    private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
+    private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;
     private final ClinicalHistorySectionService clinicalHistorySectionService;
     private final FormSectionService formSectionService;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
@@ -42,9 +42,9 @@ public class ClinicalHistoryCatalogService {
         try {
             Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
-            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogMapper.toEntity(request);
+            MedicalRecordCatalogModel medicalRecordCatalogModel = medicalRecordCatalogMapper.toEntity(request);
 
-            ClinicalHistoryCatalogModel savedCatalog = clinicalHistoryCatalogRepository.save(clinicalHistoryCatalogModel);
+            MedicalRecordCatalogModel savedCatalog = medicalRecordCatalogRepository.save(medicalRecordCatalogModel);
 
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_CREATE_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -79,10 +79,10 @@ public class ClinicalHistoryCatalogService {
     @Transactional(readOnly = true)
     public List<ClinicalHistoryCatalogResponse> findAll() {
         try {
-            List<ClinicalHistoryCatalogModel> clinicalHistoryCatalogList = clinicalHistoryCatalogRepository.findAll();
+            List<MedicalRecordCatalogModel> medicalRecordCatalogList = medicalRecordCatalogRepository.findAll();
 
-            return clinicalHistoryCatalogList.stream()
-                    .map(clinicalHistoryCatalogMapper::toDto)
+            return medicalRecordCatalogList.stream()
+                    .map(medicalRecordCatalogMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_CATALOG, HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -92,12 +92,12 @@ public class ClinicalHistoryCatalogService {
     @Transactional
     public void deleteById(Long id) {
         try {
-            Optional<ClinicalHistoryCatalogModel> catalogOptional = clinicalHistoryCatalogRepository.findById(id);
+            Optional<MedicalRecordCatalogModel> catalogOptional = medicalRecordCatalogRepository.findById(id);
 
             catalogOptional.ifPresentOrElse(
                     catalog -> {
                       catalog.setStatusKey(Constants.INACTIVE);
-                      clinicalHistoryCatalogRepository.save(catalog);
+                      medicalRecordCatalogRepository.save(catalog);
                     },
                     () -> {
                         throw new AppException(String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, id),
@@ -115,11 +115,11 @@ public class ClinicalHistoryCatalogService {
     private ClinicalHistoryCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
 
         List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
-                .findByClinicalHistoryId(patientClinicalHistory.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog());
+                .findByMedicalRecordId(patientClinicalHistory.getMedicalRecordCatalog().getIdMedicalRecordCatalog());
 
         List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
 
-        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = clinicalHistoryCatalogMapper.toDto(patientClinicalHistory.getClinicalHistoryCatalog());
+        ClinicalHistoryCatalogResponse clinicalHistoryCatalogResponse = medicalRecordCatalogMapper.toDto(patientClinicalHistory.getMedicalRecordCatalog());
 
         clinicalHistoryCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
         clinicalHistoryCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
@@ -135,7 +135,7 @@ public class ClinicalHistoryCatalogService {
         try {
             patientService.getPatientById(idPatient);
 
-            List<Object[]> results = clinicalHistoryCatalogRepository.findAllClinicalHistoryByPatientId(idPatient);
+            List<Object[]> results = medicalRecordCatalogRepository.findAllMedicalRecordByPatientId(idPatient);
             return results.stream()
                     .map(this::mapToClinicalHistoryResponse)
                     .collect(Collectors.toList());
@@ -193,7 +193,7 @@ public class ClinicalHistoryCatalogService {
             patientService.getPatientById(idPatient);
 
             PatientClinicalHistoryModel patientClinicalHistory =
-                    patientClinicalHistoryRepository.findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(
+                    patientClinicalHistoryRepository.findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(
                             idPatient, medicalRecord.getDescription());
 
             if (patientClinicalHistory == null) {

@@ -19,9 +19,9 @@ CREATE TABLE treatments (
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    fk_clinical_history_catalog BIGINT(20) NOT NULL,
+    fk_medical_record_catalog BIGINT(20) NOT NULL,
     FOREIGN KEY (fk_treatment_scope) REFERENCES treatment_scopes(id_treatment_scope),
-    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog)
+    FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs(id_medical_record_catalog)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE treatment_details (
@@ -111,7 +111,7 @@ INSERT INTO treatment_scopes (name) VALUES
     ('General');
 
 -- Poblado de treatments
-INSERT INTO treatments (name, fk_treatment_scope, fk_clinical_history_catalog) VALUES
+INSERT INTO treatments (name, fk_treatment_scope, fk_medical_record_catalog) VALUES
 -- Operatoria dental
 ('Resinas', 1, 4),  -- Órgano dentario, HC Operatoria dental
 

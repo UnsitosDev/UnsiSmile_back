@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +32,6 @@ public class TreatmentModel extends AuditModel {
     private BigDecimal cost;
 
     @ManyToOne
-    @JoinColumn(name = "fk_clinical_history_catalog", referencedColumnName = "id_clinical_history_catalog")
-    private ClinicalHistoryCatalogModel clinicalHistoryCatalog;
+    @JoinColumn(name = "fk_medical_record_catalog", referencedColumnName = "id_medical_record_catalog")
+    private MedicalRecordCatalogModel medicalRecordCatalog;
 }

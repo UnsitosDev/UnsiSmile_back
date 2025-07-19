@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface IPatientClinicalHistoryRepository extends JpaRepository<PatientClinicalHistoryModel, Long> {
-    PatientClinicalHistoryModel findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(
+    PatientClinicalHistoryModel findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(
             String patientId, String medicalRecordName);
 
     Optional<PatientClinicalHistoryModel> findByPatient_IdPatientAndIdPatientClinicalHistory(

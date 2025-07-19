@@ -2,9 +2,9 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
 import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.utils.ClinicalHistorySectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistorySectionRepository;
 import lombok.RequiredArgsConstructor;
@@ -72,9 +72,9 @@ public class ClinicalHistorySectionService {
     }
 
     @Transactional
-    public List<ClinicalHistorySectionModel> findByClinicalHistoryId(Long clinicalHistoryId) {
+    public List<ClinicalHistorySectionModel> findByMedicalRecordId(Long medicalRecordId) {
         try {
-            return clinicalHistorySectionRepository.findAllByClinicalHistoryId(clinicalHistoryId);
+            return clinicalHistorySectionRepository.findAllByMedicalRecordId(medicalRecordId);
         } catch (Exception ex){
             throw new AppException("Failed to fetch clinical history sections", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -82,8 +82,8 @@ public class ClinicalHistorySectionService {
 
     private ClinicalHistorySectionModel toEntity(Long idClinicalHistory, String idSection) {
         return ClinicalHistorySectionModel.builder()
-                .clinicalHistoryCatalogModel(ClinicalHistoryCatalogModel.builder()
-                        .idClinicalHistoryCatalog(idClinicalHistory)
+                .medicalRecordCatalogModel(MedicalRecordCatalogModel.builder()
+                        .idMedicalRecordCatalog(idClinicalHistory)
                         .build())
                 .formSectionModel(FormSectionModel.builder()
                         .idFormSection(idSection)

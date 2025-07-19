@@ -22,8 +22,8 @@ public class PatientClinicalHistoryModel extends AuditModel {
     private Long idPatientClinicalHistory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_clinical_history_catalog")
-    private ClinicalHistoryCatalogModel clinicalHistoryCatalog;
+    @JoinColumn(name = "fk_medical_record_catalog")
+    private MedicalRecordCatalogModel medicalRecordCatalog;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_patient")

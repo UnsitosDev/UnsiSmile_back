@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class TreatmentService {
     private final ITreatmentRepository treatmentRepository;
     private final TreatmentMapper treatmentMapper;
     private final TreatmentScopeService treatmentScopeService;
-    private final IClinicalHistoryCatalogRepository clinicalHistoryCatalogRepository;
+    private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
 
     @Transactional
     public TreatmentResponse createTreatment(TreatmentRequest request) {
@@ -32,7 +32,7 @@ public class TreatmentService {
             }
 
             treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
-            clinicalHistoryCatalogRepository.findById(request.getClinicalHistoryCatalogId())
+            medicalRecordCatalogRepository.findById(request.getClinicalHistoryCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,
                                     request.getClinicalHistoryCatalogId()), HttpStatus.NOT_FOUND));
@@ -86,7 +86,7 @@ public class TreatmentService {
     @Transactional(readOnly = true)
     public List<TreatmentResponse> getTreatmentsByClinicalHistory(Long catalogId) {
         try {
-            List<TreatmentModel> models = treatmentRepository.findByClinicalHistoryCatalog_IdClinicalHistoryCatalog(catalogId);
+            List<TreatmentModel> models = treatmentRepository.findByMedicalRecordCatalog_IdMedicalRecordCatalog(catalogId);
             return treatmentMapper.toDtos(models);
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENTS_BY_HISTORY, HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -105,7 +105,7 @@ public class TreatmentService {
             }
 
             treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
-            clinicalHistoryCatalogRepository.findById(request.getClinicalHistoryCatalogId())
+            medicalRecordCatalogRepository.findById(request.getClinicalHistoryCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,
                                     request.getClinicalHistoryCatalogId()), HttpStatus.NOT_FOUND));
