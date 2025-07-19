@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "CLINICAL HISTORY CATALOG")
+@Tag(name = "CATÁLOGO DE HISTORIAS CLÍNICAS")
 @RestController
-@RequestMapping("/unsismile/api/v1/clinical-histories")
+@RequestMapping("/unsismile/api/v1/medical-records")
 @RequiredArgsConstructor
 public class MedicalRecordCatalogController {
 
@@ -30,7 +30,7 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Crea una historia clínica.")
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody ClinicalHistoryCatalogRequest request) {
+    public ResponseEntity<Void> save(@RequestBody MedicalRecordCatalogRequest request) {
         medicalRecordCatalogService.save(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

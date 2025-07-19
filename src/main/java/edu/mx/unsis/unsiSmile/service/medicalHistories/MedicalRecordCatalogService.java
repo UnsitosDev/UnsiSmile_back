@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
@@ -38,7 +38,7 @@ public class MedicalRecordCatalogService {
     private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
 
     @Transactional
-    public void save(ClinicalHistoryCatalogRequest request) {
+    public void save(MedicalRecordCatalogRequest request) {
         try {
             Assert.notNull(request, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 

@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ClinicalHistoryCatalogRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ClinicalHistoryCatalogResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
@@ -11,12 +11,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class MedicalRecordCatalogMapper implements BaseMapper<ClinicalHistoryCatalogResponse, ClinicalHistoryCatalogRequest, MedicalRecordCatalogModel> {
+public class MedicalRecordCatalogMapper implements BaseMapper<ClinicalHistoryCatalogResponse, MedicalRecordCatalogRequest, MedicalRecordCatalogModel> {
 
     @Override
-    public MedicalRecordCatalogModel toEntity(ClinicalHistoryCatalogRequest dto) {
+    public MedicalRecordCatalogModel toEntity(MedicalRecordCatalogRequest dto) {
         return MedicalRecordCatalogModel.builder()
-                .medicalRecordName(dto.getClinicalHistoryName())
+                .medicalRecordName(dto.getMedicalRecordName())
                 .build();
     }
 
@@ -39,5 +39,5 @@ public class MedicalRecordCatalogMapper implements BaseMapper<ClinicalHistoryCat
     }
 
     @Override
-    public void updateEntity(ClinicalHistoryCatalogRequest request, MedicalRecordCatalogModel entity) {}
+    public void updateEntity(MedicalRecordCatalogRequest request, MedicalRecordCatalogModel entity) {}
 }
