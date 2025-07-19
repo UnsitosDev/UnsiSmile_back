@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "patient_clinical_histories")
-public class PatientClinicalHistoryModel extends AuditModel {
+@Table(name = "patient_medical_records")
+public class PatientMedicalRecordModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_patient_clinical_history")
-    private Long idPatientClinicalHistory;
+    @Column(name = "id_patient_medical_record")
+    private Long idPatientMedicalRecord;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_medical_record_catalog")
