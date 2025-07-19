@@ -9,7 +9,7 @@ CREATE TABLE
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        CONSTRAINT FK_odontograms_patient_medical_records FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_clinical_histories(id_patient_clinical_history)
+        CONSTRAINT FK_odontograms_patient_medical_records FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records (id_patient_medical_record)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 

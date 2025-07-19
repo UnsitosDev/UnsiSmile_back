@@ -145,8 +145,8 @@ CREATE TABLE question_validations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Treatments Table
-CREATE TABLE patient_clinical_histories (
-                                            id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
+CREATE TABLE patient_medical_records (
+                                            id_patient_medical_record bigint(20) NOT NULL AUTO_INCREMENT,
                                             fk_medical_record_catalog bigint(20) DEFAULT NULL,
                                             fk_patient CHAR(36) NOT NULL,
                                             appointment_date DATETIME(6) DEFAULT NULL,
@@ -155,7 +155,7 @@ CREATE TABLE patient_clinical_histories (
                                             status_key VARCHAR(255) DEFAULT NULL,
                                             updated_at DATETIME(6) DEFAULT NULL,
                                             updated_by VARCHAR(255) DEFAULT NULL,
-                                            PRIMARY KEY (id_patient_clinical_history),
+                                            PRIMARY KEY (id_patient_medical_record),
                                             KEY fk_medical_record_catalog (fk_medical_record_catalog),
                                             KEY fk_patient (fk_patient),
                                             CONSTRAINT patient_clinical_histories_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
@@ -165,7 +165,7 @@ CREATE TABLE patient_clinical_histories (
 -- Answers Table
 CREATE TABLE answers (
                          id_answer BIGINT(20) NOT NULL AUTO_INCREMENT,
-                         fk_patient_clinical_history BIGINT(20) DEFAULT NULL,
+                         fk_patient_medical_record BIGINT(20) DEFAULT NULL,
                          fk_question BIGINT(20) NOT NULL,
                          fk_patient CHAR(36) NULL,
                          answer_boolean TINYINT(1) DEFAULT NULL,
@@ -180,10 +180,10 @@ CREATE TABLE answers (
                          updated_at DATETIME(6) DEFAULT NULL,
                          updated_by VARCHAR(255) DEFAULT NULL,
                          PRIMARY KEY (id_answer),
-                         KEY fk_patient_clinical_history (fk_patient_clinical_history),
+                         KEY fk_patient_medical_record (fk_patient_medical_record),
                          KEY fk_question (fk_question),
                          KEY fk_option (fk_option),
-                         CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories (id_patient_clinical_history),
+                         CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records (id_patient_medical_record),
                          CONSTRAINT answers_ibfk_2 FOREIGN KEY (fk_question) REFERENCES questions (id_question),
                          CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option),
                          CONSTRAINT answers_ibfk_4 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)

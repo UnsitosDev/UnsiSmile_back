@@ -26,7 +26,7 @@ CREATE TABLE treatments (
 
 CREATE TABLE treatment_details (
     id_treatment_detail BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    fk_patient_clinical_history BIGINT(20) NOT NULL,
+    fk_patient_medical_record BIGINT(20) NOT NULL,
     fk_treatment BIGINT(20) NOT NULL,
     start_date DATETIME(6) NOT NULL,
     end_date DATETIME(6) DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE treatment_details (
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
+    FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records (id_patient_medical_record),
     FOREIGN KEY (fk_treatment) REFERENCES treatments(id_treatment),
     FOREIGN KEY (fk_professor) REFERENCES professors(id_professor)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
