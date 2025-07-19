@@ -6,7 +6,7 @@ VALUES
     ("E-01", "Evidencias", false);
 
 INSERT INTO
-    clinical_history_sections (
+    medical_record_sections (
     fk_medical_record_catalog,
     fk_form_section,
     section_order

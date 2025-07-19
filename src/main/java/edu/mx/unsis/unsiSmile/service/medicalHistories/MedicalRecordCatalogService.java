@@ -8,8 +8,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalo
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class MedicalRecordCatalogService {
     private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
     private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;
-    private final ClinicalHistorySectionService clinicalHistorySectionService;
+    private final MedicalRecordSectionService medicalRecordSectionService;
     private final FormSectionService formSectionService;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
     private final PatientService patientService;
@@ -114,10 +114,10 @@ public class MedicalRecordCatalogService {
 
     private MedicalRecordCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
 
-        List<ClinicalHistorySectionModel> clinicalHistorySectionList = clinicalHistorySectionService
+        List<MedicalRecordSectionModel> medicalRecordSectionList = medicalRecordSectionService
                 .findByMedicalRecordId(patientClinicalHistory.getMedicalRecordCatalog().getIdMedicalRecordCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(clinicalHistorySectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
+        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(medicalRecordSectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
 
         MedicalRecordCatalogResponse medicalRecordCatalogResponse = medicalRecordCatalogMapper.toDto(patientClinicalHistory.getMedicalRecordCatalog());
 

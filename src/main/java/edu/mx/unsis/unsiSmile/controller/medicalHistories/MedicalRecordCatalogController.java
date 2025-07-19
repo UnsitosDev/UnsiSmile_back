@@ -4,10 +4,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalog
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.ClinicalHistorySectionService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordSectionService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +26,7 @@ public class MedicalRecordCatalogController {
 
     private final MedicalRecordCatalogService medicalRecordCatalogService;
     private final PatientClinicalHistoryService patientClinicalHistoryService;
-    private final ClinicalHistorySectionService clinicalHistorySectionService;
+    private final MedicalRecordSectionService medicalRecordSectionService;
 
     @Operation(summary = "Crea una historia clínica.")
     @PostMapping
@@ -90,11 +90,11 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Crea la relación entre una sección (formulario) y la historia clínica.")
     @PostMapping("/clinial-history-section")
-    public ResponseEntity<ClinicalHistorySectionModel> createClinicalHistorySection(
-            @RequestParam Long idClinicalHistory,
+    public ResponseEntity<MedicalRecordSectionModel> createMedicalRecordSection(
+            @RequestParam Long idMedicalRecordCatalog,
             @RequestParam String idSection
     ) {
-        ClinicalHistorySectionModel response = clinicalHistorySectionService.save(idClinicalHistory, idSection);
+        MedicalRecordSectionModel response = medicalRecordSectionService.save(idMedicalRecordCatalog, idSection);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

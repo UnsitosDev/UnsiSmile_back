@@ -8,8 +8,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
@@ -139,10 +139,10 @@ public class FormSectionService {
 
     @Transactional(readOnly = true)
     public List<FormSectionResponse> findAllByClinicalHistory(
-            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, String patientId, Long patientClinicalHistoryId) {
+            List<MedicalRecordSectionModel> medicalRecordSectionModels, String patientId, Long patientClinicalHistoryId) {
         try {
-            Set<String> sectionIds = clinicalHistorySectionModels.stream()
-                    .map(chsm -> chsm.getFormSectionModel().getIdFormSection())
+            Set<String> sectionIds = medicalRecordSectionModels.stream()
+                    .map(mrsm -> mrsm.getFormSectionModel().getIdFormSection())
                     .collect(Collectors.toSet());
 
             List<FormSectionModel> formSectionModels = formSectionRepository.findAllById(sectionIds);

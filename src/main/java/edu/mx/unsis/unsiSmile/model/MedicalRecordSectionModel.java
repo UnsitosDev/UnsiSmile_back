@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import edu.mx.unsis.unsiSmile.model.utils.ClinicalHistorySectionModelPk;
+import edu.mx.unsis.unsiSmile.model.utils.MedicalRecordSectionModelPk;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,11 +12,11 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "clinical_history_sections")
-public class ClinicalHistorySectionModel extends AuditModel {
+@Table(name = "medical_record_sections")
+public class MedicalRecordSectionModel extends AuditModel {
 
     @EmbeddedId
-    private ClinicalHistorySectionModelPk idClinicalHistorySectionModel;
+    private MedicalRecordSectionModelPk idMedicalRecordSectionModel;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_medical_record_catalog", nullable = false, insertable = false, updatable = false)

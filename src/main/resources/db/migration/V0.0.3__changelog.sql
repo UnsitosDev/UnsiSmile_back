@@ -25,7 +25,7 @@ CREATE TABLE form_sections (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ClinicalHistorySections Table
-CREATE TABLE clinical_history_sections (
+CREATE TABLE medical_record_sections (
                                            fk_medical_record_catalog bigint(20) NOT NULL,
                                            fk_form_section VARCHAR(100) NOT NULL,
                                            section_order bigint(20) DEFAULT null,
@@ -36,8 +36,8 @@ CREATE TABLE clinical_history_sections (
                                            updated_by VARCHAR(255) DEFAULT NULL,
                                            PRIMARY KEY (fk_medical_record_catalog, fk_form_section),
                                            KEY fk_form_section (fk_form_section),
-                                           CONSTRAINT clinical_history_sections_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
-                                           CONSTRAINT clinical_history_sections_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+                                           CONSTRAINT medical_record_sections_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
+                                           CONSTRAINT medical_record_sections_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Type answer Table

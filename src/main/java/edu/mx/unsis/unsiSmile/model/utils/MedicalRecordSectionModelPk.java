@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @EqualsAndHashCode
 @AllArgsConstructor
-public class ClinicalHistorySectionModelPk implements Serializable {
+public class MedicalRecordSectionModelPk implements Serializable {
 
     @Column(name = "fk_medical_record_catalog")
     private Long idMedicalRecordCatalog;
