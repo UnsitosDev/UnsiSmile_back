@@ -60,8 +60,8 @@ public class OdontogramController {
     }       
 
     @GetMapping("/patient-clinical-history/{patientClinicalHistoryId}")
-    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByPatientClinicalHistoryId(@PathVariable Long patientClinicalHistoryId) {
-        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByPatientClinicalHistoryId(patientClinicalHistoryId);
+    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByPatientMedicalRecordId(@PathVariable Long patientClinicalHistoryId) {
+        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByPatientMedicalRecordId(patientClinicalHistoryId);
         return ResponseEntity.ok(odontograms);
     }
 

@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
@@ -25,8 +25,8 @@ public class TreatmentDetailModel extends AuditModel {
     private Long idTreatmentDetail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_patient_clinical_history", referencedColumnName = "id_patient_clinical_history", nullable = false)
-    private PatientClinicalHistoryModel patientClinicalHistory;
+    @JoinColumn(name = "fk_patient_medical_record", referencedColumnName = "id_patient_medical_record", nullable = false)
+    private PatientMedicalRecordModel patientMedicalRecord;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_treatment", referencedColumnName = "id_treatment", nullable = false)

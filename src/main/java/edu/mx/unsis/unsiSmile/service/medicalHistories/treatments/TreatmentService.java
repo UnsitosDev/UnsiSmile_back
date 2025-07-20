@@ -84,7 +84,7 @@ public class TreatmentService {
     }
 
     @Transactional(readOnly = true)
-    public List<TreatmentResponse> getTreatmentsByClinicalHistory(Long catalogId) {
+    public List<TreatmentResponse> getTreatmentsByMedicalRecord(Long catalogId) {
         try {
             List<TreatmentModel> models = treatmentRepository.findByMedicalRecordCatalog_IdMedicalRecordCatalog(catalogId);
             return treatmentMapper.toDtos(models);

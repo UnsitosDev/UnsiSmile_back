@@ -10,10 +10,10 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.NonNull;
@@ -33,9 +33,9 @@ public class MedicalRecordCatalogService {
     private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;
     private final MedicalRecordSectionService medicalRecordSectionService;
     private final FormSectionService formSectionService;
-    private final PatientClinicalHistoryService patientClinicalHistoryService;
+    private final PatientMedicalRecordService patientMedicalRecordService;
     private final PatientService patientService;
-    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
 
     @Transactional
     public void save(MedicalRecordCatalogRequest request) {
@@ -66,9 +66,9 @@ public class MedicalRecordCatalogService {
 
             patientService.getPatientById(idPatient);
 
-            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findByPatientAndClinicalHistory(idPatient, idPatientMedicalRecord);
+            PatientMedicalRecordModel patientMedicalRecord = patientMedicalRecordService.findByPatientAndMedicalRecord(idPatient, idPatientMedicalRecord);
 
-            return this.toResponse(patientClinicalHistory);
+            return this.toResponse(patientMedicalRecord);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -112,32 +112,32 @@ public class MedicalRecordCatalogService {
         }
     }
 
-    private MedicalRecordCatalogResponse toResponse(PatientClinicalHistoryModel patientClinicalHistory) {
+    private MedicalRecordCatalogResponse toResponse(PatientMedicalRecordModel patientMedicalRecord) {
 
         List<MedicalRecordSectionModel> medicalRecordSectionList = medicalRecordSectionService
-                .findByMedicalRecordId(patientClinicalHistory.getMedicalRecordCatalog().getIdMedicalRecordCatalog());
+                .findByMedicalRecordId(patientMedicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog());
 
-        List<FormSectionResponse> sections = formSectionService.findAllByClinicalHistory(medicalRecordSectionList, patientClinicalHistory.getPatient().getIdPatient(), patientClinicalHistory.getIdPatientClinicalHistory());
+        List<FormSectionResponse> sections = formSectionService.findAllByMedicalRecord(medicalRecordSectionList, patientMedicalRecord.getPatient().getIdPatient(), patientMedicalRecord.getIdPatientMedicalRecord());
 
-        MedicalRecordCatalogResponse medicalRecordCatalogResponse = medicalRecordCatalogMapper.toDto(patientClinicalHistory.getMedicalRecordCatalog());
+        MedicalRecordCatalogResponse medicalRecordCatalogResponse = medicalRecordCatalogMapper.toDto(patientMedicalRecord.getMedicalRecordCatalog());
 
-        medicalRecordCatalogResponse.setMedicalRecordNumber(patientClinicalHistory.getPatient().getMedicalRecordNumber());
-        medicalRecordCatalogResponse.setAppointmentDate(patientClinicalHistory.getAppointmentDate());
+        medicalRecordCatalogResponse.setMedicalRecordNumber(patientMedicalRecord.getPatient().getMedicalRecordNumber());
+        medicalRecordCatalogResponse.setAppointmentDate(patientMedicalRecord.getAppointmentDate());
 
         medicalRecordCatalogResponse.setFormSections(sections);
-        medicalRecordCatalogResponse.setIdPatientMedicalRecord(patientClinicalHistory.getIdPatientClinicalHistory());
+        medicalRecordCatalogResponse.setIdPatientMedicalRecord(patientMedicalRecord.getIdPatientMedicalRecord());
 
         return medicalRecordCatalogResponse;
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchClinicalHistory(String idPatient) {
+    public List<PatientClinicalHistoryResponse> searchMedicalRecords(String idPatient) {
         try {
             patientService.getPatientById(idPatient);
 
             List<Object[]> results = medicalRecordCatalogRepository.findAllMedicalRecordByPatientId(idPatient);
             return results.stream()
-                    .map(this::mapToClinicalHistoryResponse)
+                    .map(this::mapToMedicalRecordResponse)
                     .collect(Collectors.toList());
         } catch (AppException e) {
             throw e;
@@ -150,8 +150,8 @@ public class MedicalRecordCatalogService {
     public MedicalRecordCatalogResponse searchGeneralMedicalRecord(@NonNull String idPatient) {
         try {
             patientService.getPatientById(idPatient);
-            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.findGeneralMedicalRecordByPatientId(idPatient);
-            return this.toResponse(patientClinicalHistory);
+            PatientMedicalRecordModel patientMedicalRecord = patientMedicalRecordService.findGeneralMedicalRecordByPatientId(idPatient);
+            return this.toResponse(patientMedicalRecord);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -163,16 +163,16 @@ public class MedicalRecordCatalogService {
     public MedicalRecordCatalogResponse createNewGeneralMedicalRecord(@NonNull String idPatient) {
         try {
             patientService.getPatientById(idPatient);
-            PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryService.createNewGeneralMedicalRecord(idPatient);
-            return this.toResponse(patientClinicalHistory);
+            PatientMedicalRecordModel patientMedicalRecord = patientMedicalRecordService.createNewGeneralMedicalRecord(idPatient);
+            return this.toResponse(patientMedicalRecord);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to search clinical history", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to search Medical Record", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
-    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(Object[] result) {
+    private PatientClinicalHistoryResponse mapToMedicalRecordResponse(Object[] result) {
         return PatientClinicalHistoryResponse.builder()
                 .id(((Number) result[0]).longValue())
                 .clinicalHistoryName((String) result[1])
@@ -192,17 +192,17 @@ public class MedicalRecordCatalogService {
 
             patientService.getPatientById(idPatient);
 
-            PatientClinicalHistoryModel patientClinicalHistory =
-                    patientClinicalHistoryRepository.findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(
+            PatientMedicalRecordModel patientMedicalRecord =
+                    patientMedicalRecordRepository.findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(
                             idPatient, medicalRecord.getDescription());
 
-            if (patientClinicalHistory == null) {
+            if (patientMedicalRecord == null) {
                 throw new AppException(
                         String.format(ResponseMessages.MEDICAL_RECORD_NOT_FOUND, medicalRecord.getDescription(),
                                 idPatient), HttpStatus.NOT_FOUND);
             }
 
-            return this.toResponse(patientClinicalHistory);
+            return this.toResponse(patientMedicalRecord);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {

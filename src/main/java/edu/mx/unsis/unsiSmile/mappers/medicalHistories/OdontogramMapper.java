@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
@@ -43,7 +44,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 .adultArcade(Collections.emptyList())
                                 .childArcade(Collections.emptyList())
                                 .observations(entity.getObservations())
-                                .idPatientClinicalHistory(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                                .idPatientClinicalHistory(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
                                 .build();
         }
 
@@ -63,8 +64,8 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
                 OdontogramModel odontogramModel = OdontogramModel.builder()
                                 .observations(dto.getObservations())
-                                .patientClinicalHistory(edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel.builder()
-                                                .idPatientClinicalHistory(dto.getIdPatientClinicalHistory())
+                                .patientMedicalRecord(PatientMedicalRecordModel.builder()
+                                                .idPatientMedicalRecord(dto.getIdPatientClinicalHistory())
                                                 .build())
                                 .build();
 

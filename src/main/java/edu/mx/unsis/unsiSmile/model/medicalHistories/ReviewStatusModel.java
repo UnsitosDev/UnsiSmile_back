@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
@@ -29,8 +29,8 @@ public class ReviewStatusModel extends AuditModel {
     private String message;
 
     @ManyToOne
-    @JoinColumn(name = "fk_patient_clinical_history", nullable = false)
-    private PatientClinicalHistoryModel patientClinicalHistory;
+    @JoinColumn(name = "fk_patient_medical_record", nullable = false)
+    private PatientMedicalRecordModel patientMedicalRecord;
 
     @ManyToOne
     @JoinColumn(name = "fk_form_section")

@@ -12,11 +12,11 @@ import java.util.Optional;
 @Repository
 public interface IMedicalRecordCatalogRepository extends JpaRepository<MedicalRecordCatalogModel, Long> {
     @Query(value = "SELECT mrc.id_medical_record_catalog as id, mrc.medical_record_name, " +
-            "pch.id_patient_clinical_history, pch.fk_patient as patientId " +
+            "pmr.id_patient_medical_record, pmr.fk_patient as patientId " +
             "FROM medical_record_catalogs mrc " +
-            "LEFT JOIN patient_clinical_histories pch " +
-            "ON mrc.id_medical_record_catalog = pch.fk_medical_record_catalog " +
-            "AND pch.fk_patient = :patientId", nativeQuery = true)
+            "LEFT JOIN patient_medical_records pmr " +
+            "ON mrc.id_medical_record_catalog = pmr.fk_medical_record_catalog " +
+            "AND pmr.fk_patient = :patientId", nativeQuery = true)
     List<Object[]> findAllMedicalRecordByPatientId(@Param("patientId") String patientId);
 
     Optional<MedicalRecordCatalogModel> findByMedicalRecordName(String name);

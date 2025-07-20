@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import org.springframework.stereotype.Component;
@@ -19,8 +19,8 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     @Override
     public AnswerModel toEntity(AnswerRequest dto) {
         return AnswerModel.builder()
-                .patientClinicalHistoryModel(PatientClinicalHistoryModel.builder()
-                        .idPatientClinicalHistory(dto.getIdPatientClinicalHistory())
+                .patientMedicalRecordModel(PatientMedicalRecordModel.builder()
+                        .idPatientMedicalRecord(dto.getIdPatientClinicalHistory())
                         .build())
                 .questionModel(QuestionModel.builder()
                         .idQuestion(dto.getIdQuestion())
@@ -57,13 +57,13 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     @Override
     public void updateEntity(AnswerRequest request, AnswerModel entity) {}
 
-    public AnswerModel toEntityFromFile(PatientClinicalHistoryModel patientClinicalHistory, Long idQuestion) {
+    public AnswerModel toEntityFromFile(PatientMedicalRecordModel patientMedicalRecord, Long idQuestion) {
         return AnswerModel.builder()
-                .patientModel(patientClinicalHistory != null ?
+                .patientModel(patientMedicalRecord != null ?
                         PatientModel.builder()
-                                .idPatient(patientClinicalHistory.getPatient().getIdPatient())
+                                .idPatient(patientMedicalRecord.getPatient().getIdPatient())
                                 .build() : null)
-                .patientClinicalHistoryModel(patientClinicalHistory)
+                .patientMedicalRecordModel(patientMedicalRecord)
                 .questionModel(QuestionModel.builder()
                         .idQuestion(idQuestion)
                         .build())

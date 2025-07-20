@@ -8,7 +8,7 @@ import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordSectionService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.List;
 public class MedicalRecordCatalogController {
 
     private final MedicalRecordCatalogService medicalRecordCatalogService;
-    private final PatientClinicalHistoryService patientClinicalHistoryService;
+    private final PatientMedicalRecordService patientMedicalRecordService;
     private final MedicalRecordSectionService medicalRecordSectionService;
 
     @Operation(summary = "Crea una historia clínica.")
@@ -60,8 +60,8 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
     @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchClinicalHistory(@RequestParam String idPatient) {
-        List<PatientClinicalHistoryResponse> response = medicalRecordCatalogService.searchClinicalHistory(idPatient);
+    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchMedicalRecords(@RequestParam String idPatient) {
+        List<PatientClinicalHistoryResponse> response = medicalRecordCatalogService.searchMedicalRecords(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -81,10 +81,10 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
     @PostMapping("/patient-clinical-history")
-    public ResponseEntity<PatientMedicalRecordRes> createPatientClinicalHistory(
+    public ResponseEntity<PatientMedicalRecordRes> createPatientMedicalRecord(
             @RequestParam String idPatient,
             @RequestParam Long idMedicalRecordCatalog) {
-        PatientMedicalRecordRes response = patientClinicalHistoryService.createPatientMedicalRecord(idPatient, idMedicalRecordCatalog);
+        PatientMedicalRecordRes response = patientMedicalRecordService.createPatientMedicalRecord(idPatient, idMedicalRecordCatalog);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

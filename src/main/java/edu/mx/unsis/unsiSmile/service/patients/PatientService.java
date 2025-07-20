@@ -299,7 +299,7 @@ public class PatientService {
             }
 
             boolean hasInProgress = treatmentDetailRepository
-                    .existsByPatientClinicalHistory_Patient_idPatientAndStatus(
+                    .existsByPatientMedicalRecord_Patient_idPatientAndStatus(
                             idPatient,
                             ReviewStatus.IN_PROGRESS
                     );

@@ -2,8 +2,7 @@ package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
 
 import java.util.List;
 
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,8 +41,8 @@ public class OdontogramModel extends AuditModel {
     private String observations;
 
     @ManyToOne
-    @JoinColumn(name = "fk_patient_medical_record", referencedColumnName = "id_patient_clinical_history")
-    private PatientClinicalHistoryModel patientClinicalHistory;
+    @JoinColumn(name = "fk_patient_medical_record", referencedColumnName = "id_patient_medical_record")
+    private PatientMedicalRecordModel patientMedicalRecord;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ToothConditionAssignmentModel> toothConditionAssignments;

@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionRespon
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
@@ -30,14 +30,14 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
                 .idReviewStatus(entity.getIdReviewStatus())
                 .status(entity.getStatus().toString())
                 .message(entity.getMessage())
-                .idPatientMedicalRecord(entity.getPatientClinicalHistory().getIdPatientClinicalHistory())
+                .idPatientMedicalRecord(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
                 .idProfessorClinicalArea(entity.getProfessorClinicalArea().getIdProfessorClinicalArea())
                 .idSection(entity.getFormSection().getIdFormSection())
                 .patient(ReviewStatusResponse.PatientResp.builder()
-                        .id(entity.getPatientClinicalHistory().getPatient().getIdPatient())
-                        .name(entity.getPatientClinicalHistory().getPatient().getPerson().getFullName())
-                        .curp(entity.getPatientClinicalHistory().getPatient().getPerson().getCurp())
-                        .medicalRecordNumber(entity.getPatientClinicalHistory().getPatient().getMedicalRecordNumber())
+                        .id(entity.getPatientMedicalRecord().getPatient().getIdPatient())
+                        .name(entity.getPatientMedicalRecord().getPatient().getPerson().getFullName())
+                        .curp(entity.getPatientMedicalRecord().getPatient().getPerson().getCurp())
+                        .medicalRecordNumber(entity.getPatientMedicalRecord().getPatient().getMedicalRecordNumber())
                         .build())
                 .idReviewStatus(entity.getIdReviewStatus())
                 .status(entity.getStatus().toString())
@@ -56,11 +56,11 @@ public class ReviewStatusMapper implements BaseMapper<ReviewStatusResponse, Revi
         entity.setMessage(request.getMessage());
     }
 
-    public ReviewStatusModel toEntity(PatientClinicalHistoryModel patientClinicalHistory, String idSection, Long idProfessorClinicalArea) {
+    public ReviewStatusModel toEntity(PatientMedicalRecordModel patientMedicalRecord, String idSection, Long idProfessorClinicalArea) {
         return ReviewStatusModel.builder()
                 .status(ReviewStatus.IN_REVIEW)
                 .message(null)
-                .patientClinicalHistory(patientClinicalHistory)
+                .patientMedicalRecord(patientMedicalRecord)
                 .formSection(FormSectionModel.builder()
                         .idFormSection(idSection)
                         .build())

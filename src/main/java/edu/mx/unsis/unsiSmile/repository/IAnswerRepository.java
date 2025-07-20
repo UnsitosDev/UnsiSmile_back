@@ -13,19 +13,19 @@ import java.util.Set;
 @Repository
 public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
 
-    @Query("SELECT a FROM AnswerModel a WHERE a.patientClinicalHistoryModel.idPatientClinicalHistory = :patientClinicalHistoryId")
-    List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("patientClinicalHistoryId") Long patientClinicalHistoryId);
+    @Query("SELECT a FROM AnswerModel a WHERE a.patientMedicalRecordModel.idPatientMedicalRecord = :patientMedicalRecordId")
+    List<AnswerModel> findAllByPatientMedicalRecordId(@Param("patientMedicalRecordId") Long patientMedicalRecordId);
 
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion IN :questionIds AND " +
             "a.patientModel.idPatient = :patientId")
-    List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("questionIds") Set<Long> questionIds,
+    List<AnswerModel> findAllByPatientIdAndQuestionIds(@Param("questionIds") Set<Long> questionIds,
                                                         @Param("patientId") String patientId);
 
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion  IN :questionIds AND " +
-            "a.patientModel.idPatient = :patientId AND a.patientClinicalHistoryModel.idPatientClinicalHistory = :patientClinicalHistoryId")
-    List<AnswerModel> findAllByPatientClinicalHistoryId(@Param("questionIds") Set<Long> questionIds,
+            "a.patientModel.idPatient = :patientId AND a.patientMedicalRecordModel.idPatientMedicalRecord = :patientMedicalRecordId")
+    List<AnswerModel> findAllByPatientMedicalRecordIdAndPatientIdAndQuestionIds(@Param("questionIds") Set<Long> questionIds,
                                                         @Param("patientId") String patientId,
-                                                        @Param("patientClinicalHistoryId") Long patientClinicalHistoryId);
+                                                        @Param("patientMedicalRecordId") Long patientMedicalRecordId);
 
     Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientModel_IdPatient(Long id, String idPatient);
 
