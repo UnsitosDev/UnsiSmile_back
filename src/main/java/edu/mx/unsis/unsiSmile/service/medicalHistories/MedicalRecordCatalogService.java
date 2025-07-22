@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
@@ -131,7 +131,7 @@ public class MedicalRecordCatalogService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchMedicalRecords(String idPatient) {
+    public List<PatientMedicalRecordResponse> searchMedicalRecords(String idPatient) {
         try {
             patientService.getPatientById(idPatient);
 
@@ -172,11 +172,11 @@ public class MedicalRecordCatalogService {
         }
     }
 
-    private PatientClinicalHistoryResponse mapToMedicalRecordResponse(Object[] result) {
-        return PatientClinicalHistoryResponse.builder()
+    private PatientMedicalRecordResponse mapToMedicalRecordResponse(Object[] result) {
+        return PatientMedicalRecordResponse.builder()
                 .id(((Number) result[0]).longValue())
-                .clinicalHistoryName((String) result[1])
-                .patientClinicalHistoryId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
+                .medicalRecordName((String) result[1])
+                .patientMedicalRecordId(result[2] != null ? ((Number) result[2]).longValue() : 0L)
                 .patientId(result[3] != null ? result[3].toString() : null)
                 .build();
     }

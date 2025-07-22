@@ -190,7 +190,7 @@ public class PatientMedicalRecordService {
 
     private PatientMedicalRecordRes toResponse(PatientMedicalRecordModel entity) {
         return PatientMedicalRecordRes.builder()
-                .idPatientClinicalHistory(entity.getIdPatientMedicalRecord())
+                .idPatientMedicalRecord(entity.getIdPatientMedicalRecord())
                 .medicalRecordCatalog(medicalRecordCatalogMapper.toDto(entity.getMedicalRecordCatalog()))
                 .appointmentDate(entity.getAppointmentDate().toLocalDate())
                 .build();

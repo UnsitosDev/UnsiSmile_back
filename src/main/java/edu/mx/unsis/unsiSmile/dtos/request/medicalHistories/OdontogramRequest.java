@@ -20,7 +20,7 @@ public class OdontogramRequest {
     @NotBlank(message = "The patient id can't be blank")
     private String idPatient;
     @NotNull(message = "The id patient clinical history cannot be null")
-    private Long idPatientClinicalHistory;
+    private Long idPatientMedicalRecord;
     private String observations;
 
 }

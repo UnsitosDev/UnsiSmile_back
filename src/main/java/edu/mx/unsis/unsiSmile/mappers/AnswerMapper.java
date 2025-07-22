@@ -20,7 +20,7 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
     public AnswerModel toEntity(AnswerRequest dto) {
         return AnswerModel.builder()
                 .patientMedicalRecordModel(PatientMedicalRecordModel.builder()
-                        .idPatientMedicalRecord(dto.getIdPatientClinicalHistory())
+                        .idPatientMedicalRecord(dto.getIdPatientMedicalRecord())
                         .build())
                 .questionModel(QuestionModel.builder()
                         .idQuestion(dto.getIdQuestion())

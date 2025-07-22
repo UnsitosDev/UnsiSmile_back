@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.MedicalRecordCatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogService;
@@ -59,9 +59,9 @@ public class MedicalRecordCatalogController {
     }
 
     @Operation(summary = "Obtiene una lista de historías clínicas y su relación con el paciente.")
-    @GetMapping("/patient-clinical-histories")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchMedicalRecords(@RequestParam String idPatient) {
-        List<PatientClinicalHistoryResponse> response = medicalRecordCatalogService.searchMedicalRecords(idPatient);
+    @GetMapping("/patient-medical-records")
+    public ResponseEntity<List<PatientMedicalRecordResponse>> searchMedicalRecords(@RequestParam String idPatient) {
+        List<PatientMedicalRecordResponse> response = medicalRecordCatalogService.searchMedicalRecords(idPatient);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -80,7 +80,7 @@ public class MedicalRecordCatalogController {
     }
 
     @Operation(summary = "Crea la relación entre el paciente y la historia clínica.")
-    @PostMapping("/patient-clinical-history")
+    @PostMapping("/patient-medical-record")
     public ResponseEntity<PatientMedicalRecordRes> createPatientMedicalRecord(
             @RequestParam String idPatient,
             @RequestParam Long idMedicalRecordCatalog) {
@@ -89,7 +89,7 @@ public class MedicalRecordCatalogController {
     }
 
     @Operation(summary = "Crea la relación entre una sección (formulario) y la historia clínica.")
-    @PostMapping("/clinial-history-section")
+    @PostMapping("/medical-record-section")
     public ResponseEntity<MedicalRecordSectionModel> createMedicalRecordSection(
             @RequestParam Long idMedicalRecordCatalog,
             @RequestParam String idSection

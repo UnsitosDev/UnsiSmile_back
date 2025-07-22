@@ -173,13 +173,13 @@ public class DashboardService {
             return ClinicalSupervisorDashboardResponse.builder()
                     .totalGroups(professorGroups.size())
                     .totalStudents(studentCount)
-                    .clinicalHistoriesInReview(
+                    .medicalRecordsInReview(
                             reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
                     )
-                    .clinicalHistoriesRejected(
+                    .medicalRecordsRejected(
                             reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
                     )
-                    .clinicalHistoriesAccepted(
+                    .medicalRecordsAccepted(
                             reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
                     )
                     .treatmentsCompleted(

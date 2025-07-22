@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PatientClinicalHistoryResponse {
-
+public class PatientMedicalRecordResponse {
     private Long id;
 
-    private String clinicalHistoryName;
+    private String medicalRecordName;
 
     @Builder.Default
-    private Long patientClinicalHistoryId = 0L;
+    private Long patientMedicalRecordId = 0L;
 
     private String patientId;
 }

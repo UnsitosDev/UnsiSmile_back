@@ -50,10 +50,10 @@ public class AnswerController {
     }
 
     @Operation(summary = "Recupera todas las respuestas asociadas a la historia clínica de un paciente.")
-    @GetMapping("/patient-clinical-history/{patientClinicalHistoryId}")
+    @GetMapping("/patient-medical-records/{patientMedicalRecordId}")
     public ResponseEntity<List<AnswerResponse>> getAnswersByPatientMedicalRecord(
-            @PathVariable Long patientClinicalHistoryId) {
-        List<AnswerResponse> response = answerService.getAnswersByPatientMedicalRecord(patientClinicalHistoryId);
+            @PathVariable Long patientMedicalRecordId) {
+        List<AnswerResponse> response = answerService.getAnswersByPatientMedicalRecord(patientMedicalRecordId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -169,7 +169,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchMedicalRecords(String idPatient, String status) {
+    public List<PatientMedicalRecordResponse> searchMedicalRecords(String idPatient, String status) {
         if (!patientRepository.existsById(idPatient)) {
             throw new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -189,12 +189,12 @@ public class ReviewStatusService {
                 .collect(Collectors.toList());
     }
 
-    private PatientClinicalHistoryResponse mapToMedicalRecordResponse(
+    private PatientMedicalRecordResponse mapToMedicalRecordResponse(
             PatientMedicalRecordModel patientMedicalRecordModel) {
-        return PatientClinicalHistoryResponse.builder()
+        return PatientMedicalRecordResponse.builder()
                 .id(patientMedicalRecordModel.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
-                .clinicalHistoryName(patientMedicalRecordModel.getMedicalRecordCatalog().getMedicalRecordName())
-                .patientClinicalHistoryId(patientMedicalRecordModel.getIdPatientMedicalRecord())
+                .medicalRecordName(patientMedicalRecordModel.getMedicalRecordCatalog().getMedicalRecordName())
+                .patientMedicalRecordId(patientMedicalRecordModel.getIdPatientMedicalRecord())
                 .patientId(patientMedicalRecordModel.getPatient().getIdPatient())
                 .build();
     }

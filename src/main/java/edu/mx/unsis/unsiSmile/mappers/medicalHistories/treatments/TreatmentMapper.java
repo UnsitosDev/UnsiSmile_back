@@ -28,7 +28,7 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                         .build())
                 .cost(dto.getCost() != null ? dto.getCost() : BigDecimal.ZERO)
                 .medicalRecordCatalog(MedicalRecordCatalogModel.builder()
-                                .idMedicalRecordCatalog(dto.getClinicalHistoryCatalogId())
+                                .idMedicalRecordCatalog(dto.getMedicalRecordCatalogId())
                                 .build())
                 .build();
     }
@@ -40,9 +40,9 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
                 .name(entity.getName())
                 .treatmentScope(treatmentScopeMapper.toDto(entity.getTreatmentScope()))
                 .cost(entity.getCost() != null ? entity.getCost() : BigDecimal.ZERO)
-                .clinicalHistoryCatalogId(entity.getMedicalRecordCatalog() != null ?
+                .medicalRecordCatalogId(entity.getMedicalRecordCatalog() != null ?
                         entity.getMedicalRecordCatalog().getIdMedicalRecordCatalog() : null)
-                .clinicalHistoryCatalogName(entity.getMedicalRecordCatalog() != null ?
+                .medicalRecordCatalogName(entity.getMedicalRecordCatalog() != null ?
                         entity.getMedicalRecordCatalog().getMedicalRecordName() : null)
                 .build();
     }
@@ -63,7 +63,7 @@ public class TreatmentMapper implements BaseMapper<TreatmentResponse, TreatmentR
         entity.setCost(request.getCost() != null ? request.getCost() : entity.getCost());
         entity.setMedicalRecordCatalog(
                 MedicalRecordCatalogModel.builder()
-                        .idMedicalRecordCatalog(request.getClinicalHistoryCatalogId())
+                        .idMedicalRecordCatalog(request.getMedicalRecordCatalogId())
                         .build());
     }
 }

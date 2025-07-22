@@ -32,10 +32,10 @@ public class TreatmentService {
             }
 
             treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
-            medicalRecordCatalogRepository.findById(request.getClinicalHistoryCatalogId())
+            medicalRecordCatalogRepository.findById(request.getMedicalRecordCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,
-                                    request.getClinicalHistoryCatalogId()), HttpStatus.NOT_FOUND));
+                                    request.getMedicalRecordCatalogId()), HttpStatus.NOT_FOUND));
 
             TreatmentModel model = treatmentMapper.toEntity(request);
             TreatmentModel savedModel = treatmentRepository.save(model);
@@ -105,10 +105,10 @@ public class TreatmentService {
             }
 
             treatmentScopeService.getTreatmentScopeById(request.getTreatmentScopeId());
-            medicalRecordCatalogRepository.findById(request.getClinicalHistoryCatalogId())
+            medicalRecordCatalogRepository.findById(request.getMedicalRecordCatalogId())
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND,
-                                    request.getClinicalHistoryCatalogId()), HttpStatus.NOT_FOUND));
+                                    request.getMedicalRecordCatalogId()), HttpStatus.NOT_FOUND));
 
             treatmentMapper.updateEntity(request, model);
             TreatmentModel updatedModel = treatmentRepository.save(model);

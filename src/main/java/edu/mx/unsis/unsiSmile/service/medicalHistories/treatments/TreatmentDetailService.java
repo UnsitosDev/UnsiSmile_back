@@ -132,7 +132,7 @@ public class TreatmentDetailService {
                                                      TreatmentResponse treatmentResponse) {
         PatientMedicalRecordModel medicalRecord = patientMedicalRecordService.save(
                 request.getPatientId(),
-                treatmentResponse.getClinicalHistoryCatalogId());
+                treatmentResponse.getMedicalRecordCatalogId());
 
         UserResponse currentUser = userService.getCurrentUser();
         StudentGroupModel studentGroup = studentGroupService.getStudentGroupByStudent(currentUser.getUsername());

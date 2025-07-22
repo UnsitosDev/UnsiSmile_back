@@ -158,8 +158,8 @@ CREATE TABLE patient_medical_records (
                                             PRIMARY KEY (id_patient_medical_record),
                                             KEY fk_medical_record_catalog (fk_medical_record_catalog),
                                             KEY fk_patient (fk_patient),
-                                            CONSTRAINT patient_clinical_histories_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
-                                            CONSTRAINT patient_clinical_histories_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
+                                            CONSTRAINT patient_medical_records_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
+                                            CONSTRAINT patient_medical_records_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Answers Table

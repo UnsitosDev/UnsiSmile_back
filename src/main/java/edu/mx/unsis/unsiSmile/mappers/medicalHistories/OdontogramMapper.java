@@ -44,7 +44,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 .adultArcade(Collections.emptyList())
                                 .childArcade(Collections.emptyList())
                                 .observations(entity.getObservations())
-                                .idPatientClinicalHistory(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
+                                .idPatientMedicalRecord(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
                                 .build();
         }
 
@@ -65,7 +65,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                 OdontogramModel odontogramModel = OdontogramModel.builder()
                                 .observations(dto.getObservations())
                                 .patientMedicalRecord(PatientMedicalRecordModel.builder()
-                                                .idPatientMedicalRecord(dto.getIdPatientClinicalHistory())
+                                                .idPatientMedicalRecord(dto.getIdPatientMedicalRecord())
                                                 .build())
                                 .build();
 

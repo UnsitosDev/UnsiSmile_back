@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ReviewStatusService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Review Status of Clinical Histories", description = "Gestiona el proceso de revisión y las actualizaciones del estado de las secciones de la historia clínica")
+@Tag(name = "Estado de revisión de las historias clínicas", description = "Gestiona el proceso de revisión y las actualizaciones del estado de las secciones de la historia clínica")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/unsismile/api/v1/medical-records/status")
@@ -66,9 +66,9 @@ public class ReviewStatusController {
 
     @Operation(summary = "Obtiene una lista de HC de un paciente en un determinado estado de revisión.")
     @GetMapping("/patients")
-    public ResponseEntity<List<PatientClinicalHistoryResponse>> searchMedicalRecords(@RequestParam String idPatient,
-                                                                                      @RequestParam String status) {
-        List<PatientClinicalHistoryResponse> response = reviewStatusService.searchMedicalRecords(idPatient, status);
+    public ResponseEntity<List<PatientMedicalRecordResponse>> searchMedicalRecords(@RequestParam String idPatient,
+                                                                                   @RequestParam String status) {
+        List<PatientMedicalRecordResponse> response = reviewStatusService.searchMedicalRecords(idPatient, status);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

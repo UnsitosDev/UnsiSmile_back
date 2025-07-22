@@ -40,7 +40,7 @@ public class AnswerService {
 
             AnswerModel answerModel = answerMapper.toEntity(request);
 
-            PatientMedicalRecordModel patientMedicalRecordModel = patientMedicalRecordService.findById(request.getIdPatientClinicalHistory());
+            PatientMedicalRecordModel patientMedicalRecordModel = patientMedicalRecordService.findById(request.getIdPatientMedicalRecord());
 
             answerModel.setPatientModel(patientMedicalRecordModel.getPatient());
 
@@ -168,7 +168,7 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
-            Long idPatientMedicalRecord = requests.getFirst().getIdPatientClinicalHistory();
+            Long idPatientMedicalRecord = requests.getFirst().getIdPatientMedicalRecord();
             PatientMedicalRecordModel patientMedicalRecordModel =
                     patientMedicalRecordService.findById(idPatientMedicalRecord);
 
@@ -195,7 +195,7 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
-            Long idPatientMedicalRecord = requests.getFirst().getIdPatientClinicalHistory();
+            Long idPatientMedicalRecord = requests.getFirst().getIdPatientMedicalRecord();
             PatientMedicalRecordModel patientMedicalRecordModel =
                     patientMedicalRecordService.findById(idPatientMedicalRecord);
 

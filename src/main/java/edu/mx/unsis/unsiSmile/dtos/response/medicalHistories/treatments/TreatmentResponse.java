@@ -17,6 +17,6 @@ public class TreatmentResponse {
     private String name;
     private TreatmentScopeResponse treatmentScope;
     private BigDecimal cost;
-    private Long clinicalHistoryCatalogId;
-    private String clinicalHistoryCatalogName;
+    private Long medicalRecordCatalogId;
+    private String medicalRecordCatalogName;
 }
