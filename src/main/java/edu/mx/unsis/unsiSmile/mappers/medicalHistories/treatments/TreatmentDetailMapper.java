@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
@@ -94,17 +93,5 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
         response.setComments(model.getComment());
 
         return response;
-    }
-
-    public TreatmentDetailModel toEntity(TreatmentDetailDigitizerRequest dto) {
-        return TreatmentDetailModel.builder()
-                .idTreatmentDetail(dto.getIdTreatmentDetail())
-                .treatment(TreatmentModel.builder()
-                        .idTreatment(dto.getTreatmentId())
-                        .build())
-                .startDate(dto.getStartDate())
-                .endDate(dto.getEndDate())
-                .status(ReviewStatus.IN_PROGRESS)
-                .build();
     }
 }
