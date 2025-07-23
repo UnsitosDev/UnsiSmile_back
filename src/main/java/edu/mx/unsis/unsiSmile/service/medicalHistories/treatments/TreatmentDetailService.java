@@ -294,13 +294,26 @@ public class TreatmentDetailService {
     public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId, TreatmentDetailToothRequest toothRequest) {
         try {
             TreatmentDetailModel treatment = getValidTreatment(id, null);
-            ReviewStatus currentStatus = treatment.getStatus();
-            if (!treatment.getStatus().equals(ReviewStatus.IN_PROGRESS) &&
-                    !treatment.getStatus().equals(ReviewStatus.REJECTED)) {
-                throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS,
-                        HttpStatus.BAD_REQUEST);
+            boolean isTooth = isToothTreatment(treatment);
+
+            // Validar estado general del tratamiento
+            boolean validGeneralStatus = treatment.getStatus().equals(ReviewStatus.IN_PROGRESS) ||
+                    treatment.getStatus().equals(ReviewStatus.REJECTED);
+
+            // Validar si hay al menos un diente en progreso o rechazado
+            boolean hasToothInValidStatus = false;
+            if (isTooth) {
+                hasToothInValidStatus = treatmentDetailToothService.canSendToReviewBasedOnTeeth(
+                        treatment.getIdTreatmentDetail()
+                );
             }
 
+            // Lanzar error si no cumple con ninguna de las condiciones válidas
+            if (!validGeneralStatus && !(isTooth && hasToothInValidStatus)) {
+                throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+            }
+
+            // Validar si hay otra sección en revisión
             boolean isSectionInReview = reviewStatusRepository
                     .existsByPatientMedicalRecord_IdPatientMedicalRecordAndStatus(
                             treatment.getPatientMedicalRecord().getIdPatientMedicalRecord(),
@@ -311,18 +324,21 @@ public class TreatmentDetailService {
                         HttpStatus.BAD_REQUEST);
             }
 
+            // Obtener profesor y actualizar estado del tratamiento
             ProfessorClinicalAreaModel professorClinicalArea = professorClinicalAreaService.getProfessorClinicalAreaModel(professorClinicalAreaId);
-
             treatment.setProfessor(professorClinicalArea.getProfessor());
             treatment.setStatus(ReviewStatus.IN_REVIEW);
             TreatmentDetailModel treatmentDetail = treatmentDetailRepository.save(treatment);
 
+            // Preparar request para ExecutionReview
             TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()
                     .treatmentDetailId(treatmentDetail.getIdTreatmentDetail())
                     .professorClinicalAreaId(professorClinicalAreaId)
                     .status(ReviewStatus.IN_REVIEW)
                     .build();
 
+            // Crear o actualizar revisión de ejecución
+            ReviewStatus currentStatus = treatment.getStatus();
             ExecutionReviewModel executionReview;
             if (ReviewStatus.IN_PROGRESS.equals(currentStatus)) {
                 executionReview = executionReviewService.updateExecutionReview(treatmentDetail.getIdTreatmentDetail(), executionRequest);
@@ -332,20 +348,22 @@ public class TreatmentDetailService {
                 executionReview.setTreatmentDetail(treatmentDetail);
             }
 
-            // Validación específica para alcance tipo TOOTH
-            if (isToothTreatment(treatment)) {
+            // Validación específica para tratamientos dentales
+            if (isTooth) {
                 if (toothRequest == null || toothRequest.getIdTeeth() == null || toothRequest.getIdTeeth().isEmpty()) {
                     throw new AppException(ResponseMessages.TREATMENT_DETAIL_TOOTH_REQUIRED, HttpStatus.BAD_REQUEST);
                 }
 
                 treatmentDetailToothService.updateToothReviewStatus(id, toothRequest, executionReview);
             }
-            // send notification
+
+            // Enviar notificación
             this.sendNotifications(treatmentDetail);
 
+            // Armar respuesta
             TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithReviewerProfessor(executionReview);
 
-            if(isToothTreatment(executionReview.getTreatmentDetail())) {
+            if (isToothTreatment(executionReview.getTreatmentDetail())) {
                 addTeethList(response);
             }
 
@@ -558,8 +576,6 @@ public class TreatmentDetailService {
     }
 
     private List<TreatmentDetailResponse> toDtoList(TreatmentDetailModel treatmentDetailModel) {
-        ReviewStatus status = treatmentDetailModel.getStatus();
-
         TreatmentDetailResponse response;
 
         try {
@@ -576,6 +592,7 @@ public class TreatmentDetailService {
                             TreatmentDetailResponse copy = new TreatmentDetailResponse();
                             BeanUtils.copyProperties(response, copy);
                             copy.setTeeth(List.of(tooth));
+                            copy.setStatus(tooth.getStatus() != null ? tooth.getStatus() : ReviewStatus.IN_PROGRESS.toString());
                             return copy;
                         })
                         .collect(Collectors.toList());
@@ -638,6 +655,9 @@ public class TreatmentDetailService {
         }
         if(isToothTreatment(treatmentDetailModel)) {
             addTeethList(response);
+            if (!authorizationStatuses.contains(treatmentDetailModel.getStatus())){
+                addNewStatus(response);
+            }
         }
         return response;
     }
@@ -755,5 +775,12 @@ public class TreatmentDetailService {
                 treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
                         response.getIdTreatmentDetail()));
 
+    }
+
+    private void addNewStatus(TreatmentDetailResponse response){
+        boolean isInProgress = treatmentDetailToothService.canSendToReviewBasedOnTeeth(response.getIdTreatmentDetail());
+        if (isInProgress) {
+            response.setStatus(ReviewStatus.IN_PROGRESS.toString());
+        }
     }
 }
