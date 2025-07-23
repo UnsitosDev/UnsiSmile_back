@@ -337,7 +337,6 @@ public class ResponseMessages {
     public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
     public static final String MAX_CODE_VALUE = "El valor máximo permitido es 4";
     public static final String INVALID_TREATMENT_ID = "El ID del tratamiento no es válido";
-    public static final String TOOTH_END_DATE_CANNOT_BE_EMPTY = "La fecha de tratamiento final del diente no puede estar vacía";
 
     //SOHI SERVICE
     public static final String ERROR_CREATING_SOHI = "Error al crear el índice de higiene oral simplificado";
@@ -476,7 +475,6 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
     public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha de inicio no puede ser mayor a la fecha de fin.";
     public static final String TREATMENT_DETAIL_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD = "No se encontró el detalle del tratamiento para la historia clinica del paciente con ID: %s";
-    public static final String TREATMENT_DETAIL_FINISHED = "El tratamiento ya ha sido finalizado y no permite modificaciones.";
 
     public static final String START_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de inicio no puede ser posterior a la fecha de hoy.";
     public static final String END_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de fin no puede ser posterior a la fecha de hoy.";
@@ -493,7 +491,6 @@ public class ResponseMessages {
     public static final String FAILED_UPDATE_TREATMENT_DETAIL_TEETH = "Error al actualizar los dientes del tratamiento.";
     public static final String FAILED_DELETE_TREATMENT_DETAIL_TEETH = "Error al eliminar los dientes del tratamiento.";
     public static final String NO_TEETH_IN_REVIEW = "No se encontraron dientes en revisión para el tratamiento con ID: %s";
-    public static final String TOOTH_END_DATE_CANNOT_BE_NULL = "La fecha de finalización del diente '%s' no puede estar vacía.";
 
     // ClinicalArea
     public static final String FAILED_CREATE_CLINICAL_AREA = "Error al crear el área clínica";
