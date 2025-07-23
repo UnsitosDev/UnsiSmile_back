@@ -147,7 +147,7 @@ public class TreatmentDetailToothService {
         return list.size() != list.stream().distinct().count();
     }
 
-    private TreatmentDetailModel verifyTreatmentDetailExists(@NonNull Long id) {
+    public TreatmentDetailModel verifyTreatmentDetailExists(@NonNull Long id) {
         return treatmentDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id), HttpStatus.NOT_FOUND));
     }
