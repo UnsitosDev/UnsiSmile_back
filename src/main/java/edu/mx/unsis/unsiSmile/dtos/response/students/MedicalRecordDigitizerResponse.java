@@ -11,9 +11,8 @@ import java.time.LocalDate;
 @Builder
 public class MedicalRecordDigitizerResponse {
     private Long idMedicalRecordDigitizer;
-    private String studentFullName;
-    private String idStudent;
+    private String digitizerName;
+    private String username;
     private LocalDate startDate;
-    private LocalDate endDate;
     private Boolean status;
 }

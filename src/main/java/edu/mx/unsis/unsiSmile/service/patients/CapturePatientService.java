@@ -168,7 +168,7 @@ public class CapturePatientService {
         try {
             UserResponse user = userService.getCurrentUser();
             MedicalRecordDigitizerModel digitizerModel =
-                    medicalRecordDigitizerService.getMedicalRecordDigitizerModelByStudent(user.getUsername());
+                    medicalRecordDigitizerService.getMedicalRecordDigitizerModelByUsername(user.getUsername());
 
             DigitizerPatientRequest digitizerPatientRequest = DigitizerPatientRequest.builder()
                     .patientId(savedPatient.getIdPatient())

@@ -1,10 +1,9 @@
 package edu.mx.unsis.unsiSmile.model.students;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,12 +20,9 @@ public class MedicalRecordDigitizerModel extends AuditModel {
     private Long idMedicalRecordDigitizer;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_student", nullable = false)
-    private StudentModel student;
+    @JoinColumn(name = "fk_user", nullable = false)
+    private UserModel user;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @Column(name = "end_date")
-    private LocalDate endDate;
+    @Column(name = "previous_role")
+    private String previousRole;
 }

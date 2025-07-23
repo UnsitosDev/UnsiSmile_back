@@ -34,7 +34,6 @@ public class DigitizerPatientMapper implements BaseMapper<DigitizerPatientRespon
         return DigitizerPatientResponse.builder()
                 .idDigitizerPatient(entity.getIdDigitizerPatient())
                 .patient(patientMapper.toDto(entity.getPatient()))
-                .student(studentMapper.toDto(entity.getDigitizer().getStudent()))
                 .digitizer(digitizerMapper.toDto(entity.getDigitizer()))
                 .build();
     }

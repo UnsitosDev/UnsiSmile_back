@@ -8,6 +8,7 @@ public class Constants {
     // Status active
     public static final String ACTIVE = "A";
     public static final String INACTIVE = "I";
+    public static final String DELETED = "D";
 
     // Answer Type
     public static final String CATALOG = "CATALOG";

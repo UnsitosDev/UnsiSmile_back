@@ -36,13 +36,6 @@ public class MedicalRecordDigitizerController {
         return ResponseEntity.ok(digitizerService.getDigitizerById(id));
     }
 
-    @Operation(summary = "Actualiza los datos de un capturador.")
-    @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@Valid @RequestBody MedicalRecordDigitizerRequest request) {
-        digitizerService.updateDigitizer(request);
-    }
-
     @Operation(summary = "Elimina un capturador por su ID.")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

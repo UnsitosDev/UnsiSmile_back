@@ -14,17 +14,13 @@ import java.util.Optional;
 public interface IMedicalRecordDigitizerRepository extends JpaRepository<MedicalRecordDigitizerModel, Long> {
 
     @Query("SELECT m FROM MedicalRecordDigitizerModel m " +
-            "WHERE m.endDate IS NULL AND m.student.person.firstName LIKE %:keyword% OR " +
-            "m.student.person.secondName LIKE %:keyword% OR " +
-            "m.student.person.firstLastName LIKE %:keyword% OR " +
-            "m.student.person.secondLastName LIKE %:keyword% OR " +
-            "m.student.enrollment LIKE %:keyword% ")
-    Page<MedicalRecordDigitizerModel> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+            "WHERE m.statusKey != :deleted AND m.user.username LIKE %:keyword%")
+    Page<MedicalRecordDigitizerModel> searchByKeyword(@Param("keyword") String keyword,
+                                                      @Param("deleted") String deleted,
+                                                      Pageable pageable);
 
-    Optional<MedicalRecordDigitizerModel> findTopByStudent_EnrollmentOrderByCreatedAtDesc(String enrollment);
+    Optional<MedicalRecordDigitizerModel> findTopByUser_UsernameOrderByCreatedAtDesc(String username);
 
-    @Query("SELECT m FROM MedicalRecordDigitizerModel m " +
-            "WHERE m.endDate IS NULL")
-    Page<MedicalRecordDigitizerModel> findAllMedicalRecordDigitizer(Pageable pageable);
-
+    @Query("SELECT m FROM MedicalRecordDigitizerModel m WHERE m.statusKey != :deleted")
+    Page<MedicalRecordDigitizerModel> findAllMedicalRecordDigitizer(@Param("deleted") String deleted, Pageable pageable);
 }

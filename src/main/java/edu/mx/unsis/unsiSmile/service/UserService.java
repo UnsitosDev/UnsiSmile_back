@@ -6,7 +6,11 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
@@ -30,7 +34,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -286,6 +289,39 @@ public class UserService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_CHANGE_ROLE, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public UserModel getUserByUsername(String username) {
+        try {
+            UserModel user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            }
+            return user;
+        } catch (AppException e) {
+            throw e;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public PersonResponse getPersonByUsername(String username) {
+        try {
+            ResponseEntity<?> response = getInformationByUsername(username);
+            Object body = response.getBody();
+
+            return switch (body) {
+                case StudentResponse student -> student.getPerson();
+                case ProfessorResponse professor -> professor.getPerson();
+                case AdministratorResponse admin -> admin.getPerson();
+                case null, default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            };
+
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

@@ -139,8 +139,8 @@ public class PersonService {
     @Transactional
     public PersonModel updatedPerson(String personId, PersonRequest request) {
         PersonModel personModel = personRepository.findById(personId)
-                .orElseThrow(() -> new AppException(ResponseMessages.PERSON_NOT_FOUND +
-                        " con curp: " + personId,
+                .orElseThrow(() -> new AppException(
+                        String.format(ResponseMessages.PERSON_NOT_FOUND, personId),
                         HttpStatus.NOT_FOUND));
         personMapper.updateEntity(request, personModel);
 
@@ -157,6 +157,18 @@ public class PersonService {
         try {
             return personRepository.findByCurp(curp)
                     .map(personMapper::toDto)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.PERSON_NOT_FOUND, curp),
+                            HttpStatus.NOT_FOUND));
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_PERSON, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public PersonModel getPersonModelByCurp(@NonNull String curp) {
+        try {
+            return personRepository.findByCurp(curp)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.PERSON_NOT_FOUND, curp),
                             HttpStatus.NOT_FOUND));
