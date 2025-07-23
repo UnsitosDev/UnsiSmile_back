@@ -398,6 +398,17 @@ public class TreatmentDetailService {
             executionReviewService.updateExecutionReview(treatment.getIdTreatmentDetail(), executionRequest);
 
             sendNotifications(treatment);
+
+            if (!isToothTreatment(treatment) && request.getStatus() == ReviewStatus.FINISHED) {
+                treatment.setEndDate(LocalDateTime.now().toLocalDate().atStartOfDay());
+            }
+            else if (isToothTreatment(treatment) && request.getStatus() == ReviewStatus.FINISHED) {
+                boolean canSendToReview = treatmentDetailToothService.canSendToReviewBasedOnTeeth(treatment.getIdTreatmentDetail());
+                if (!canSendToReview) {
+                    treatment.setEndDate(LocalDateTime.now().toLocalDate().atStartOfDay());
+                }
+            }
+
             TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
             return mapTreatmentDetailToDto(saved);
 
