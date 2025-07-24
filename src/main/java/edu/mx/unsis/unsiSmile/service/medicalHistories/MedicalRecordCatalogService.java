@@ -210,4 +210,19 @@ public class MedicalRecordCatalogService {
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional(readOnly = true)
+    public MedicalRecordCatalogModel findByIdMedicalRecordCatalog(Long idMedicalRecordCatalog) {
+        try {
+            Assert.notNull(idMedicalRecordCatalog, ResponseMessages.MEDICAL_RECORD_ID_CANNOT_BE_NULL);
+            return medicalRecordCatalogRepository.findById(idMedicalRecordCatalog)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idMedicalRecordCatalog),
+                            HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_MEDICAL_RECORD, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
 }

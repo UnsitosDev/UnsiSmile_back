@@ -603,4 +603,10 @@ public class ResponseMessages {
     public static final String NOT_NULL_MEDICAL_RECORD_NUMBER = "El número de expediente no puede ser nulo.";
     public static final String MEDICAL_RECORD_NUMBER_MUST_BE_POSITIVE = "El número de expediente debe ser mayor a cero.";
     public static final String MEDICAL_RECORD_NUMBER_ALREADY_EXISTS = "Ya existe un paciente con número de expediente: %s.";
+
+    public static final String MEDICAL_RECORD_ALREADY_EXISTS = "La historia clínica ya existe para este paciente con ID: %s.";
+    public static final String FAILED_TO_SAVE_PATIENT_MEDICAL_RECORD = "Error al crear la historia clínica del paciente.";
+
+    public static final String NO_MEDICAL_RECORDS_FOUND_FOR_PATIENT = "No se encontraron historias clínicas para el paciente con ID: %s.";
+    public static final String FAILED_TO_SEARCH_MEDICAL_RECORDS = "Error al buscar las historias clínicas del paciente con ID: %s.";
 }
