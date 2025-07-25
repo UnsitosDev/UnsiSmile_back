@@ -3,7 +3,8 @@ INSERT INTO
     form_sections (id_form_section, form_name, requires_review)
 VALUES
     ("ECBA-01", "Exploración de la cavidad bucal y anexos", false),
-    ("E-01", "Evidencias", false);
+    ("E-01", "Evidencias", false),
+    ("CCIOD-01", "Carta de consentimiento informado para operatoria dental", false);
 
 INSERT INTO
     medical_record_sections (
@@ -18,7 +19,7 @@ VALUES
     (4, "ECB-01", 4),
     (4, "PT-01", 5),
     (4, "R-01", 6),
-    (4, "CCIPB-01", 7), -- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
+    (4, "CCIOD-01", 7), -- CARTA DE CONSENTIMIENTO INFORMADO PARA OPERATORIA DENTAL
     (4, "E-01", 8)
 ;
 

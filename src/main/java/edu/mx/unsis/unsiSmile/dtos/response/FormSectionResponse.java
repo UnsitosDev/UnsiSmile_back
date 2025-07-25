@@ -26,4 +26,6 @@ public class FormSectionResponse {
     private List<FormSectionResponse> subSections;
 
     private List<QuestionResponse> questions;
+
+    private Long sectionOrder;
 }

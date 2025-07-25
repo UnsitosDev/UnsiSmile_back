@@ -743,6 +743,7 @@ public class TreatmentDetailService {
                 .treatmentDetailId(treatmentDetailId)
                 .comment(request.getComments())
                 .status(request.getStatus())
+                .professorClinicalAreaId(null)
                 .build();
     }
 

@@ -7,6 +7,8 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
@@ -42,6 +44,8 @@ public class DashboardService {
     private final UserService userService;
     private final IReviewStatusRepository reviewStatusRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;
+    private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
+    private final IExecutionReviewRepository executionReviewRepository;
 
     @Transactional(readOnly = true)
     public StudentDashboardResponse getStudentDashboardMetrics() {
@@ -166,13 +170,28 @@ public class DashboardService {
     public ClinicalSupervisorDashboardResponse getClinicalSupervisorDashboardMetrics() {
         try {
             String employeeNumber = getUserName();
-            Pair<List<ProfessorGroupModel>, Long> data = getProfessorGroupsAndStudentCount(employeeNumber);
-            List<ProfessorGroupModel> professorGroups = data.getLeft();
-            Long studentCount = data.getRight();
-
             return ClinicalSupervisorDashboardResponse.builder()
-                    .totalGroups(professorGroups.size())
-                    .totalStudents(studentCount)
+                    .treatmentsAwaitingApproval(
+                            authorizedTreatmentRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.AWAITING_APPROVAL, Constants.ACTIVE)
+                    )
+                    .treatmentsApproved(
+                            authorizedTreatmentRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
+                    )
+                    .treatmentsNotApproved(
+                            authorizedTreatmentRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.NOT_APPROVED, Constants.ACTIVE)
+                    )
+                    .treatmentsInProgress(
+                            executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.IN_PROGRESS, Constants.ACTIVE)
+                    )
+                    .treatmentsInReview(
+                            executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
+                    )
+                    .treatmentsRejected(
+                            executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
+                    )
+                    .treatmentsCompleted(
+                            executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.FINISHED, Constants.ACTIVE)
+                    )
                     .medicalRecordsInReview(
                             reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
                     )
@@ -181,11 +200,6 @@ public class DashboardService {
                     )
                     .medicalRecordsAccepted(
                             reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
-                    )
-                    .treatmentsCompleted(
-                            treatmentDetailRepository.countActiveTreatmentsByProfessorId(
-                                    employeeNumber, ReviewStatus.APPROVED
-                            )
                     )
                     .build();
         } catch (DataAccessException e) {

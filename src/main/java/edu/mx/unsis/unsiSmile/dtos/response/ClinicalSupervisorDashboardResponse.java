@@ -10,12 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ClinicalSupervisorDashboardResponse {
-    private Integer totalGroups;
-    private Long totalStudents;
+
+    private Long treatmentsAwaitingApproval;
+    private Long treatmentsApproved;
+    private Long treatmentsNotApproved;
+
+    private Long treatmentsInProgress;
+    private Long treatmentsInReview;
+    private Long treatmentsRejected;
+
+    private Long treatmentsCompleted;
 
     private Long medicalRecordsInReview;
     private Long medicalRecordsRejected;
     private Long medicalRecordsAccepted;
-
-    private Long treatmentsCompleted;
 }
