@@ -186,11 +186,8 @@ public class DashboardService {
                     .treatmentsInReview(
                             executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
                     )
-                    .medicalRecordsRejected(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
-                    )
-                    .medicalRecordsAccepted(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
+                    .treatmentsRejected(
+                            executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
                     )
                     .treatmentsCompleted(
                             executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.FINISHED, Constants.ACTIVE)
