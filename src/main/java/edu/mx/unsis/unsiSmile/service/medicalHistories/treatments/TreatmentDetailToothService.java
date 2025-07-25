@@ -297,4 +297,17 @@ public class TreatmentDetailToothService {
                 status == ReviewStatus.NOT_APPROVED ||
                 status == ReviewStatus.APPROVED;
     }
+
+    @Transactional(readOnly = true)
+    public boolean canSendToReviewBasedOnTeeth(Long treatmentDetailId) {
+        List<TreatmentDetailToothResponse> teeth = getTreatmentDetailTeethByTreatmentDetail(treatmentDetailId);
+
+        // Al menos uno está en estado IN_REVIEW, REJECTED o null(aún sin asignar)
+        return teeth.stream().anyMatch(tooth -> {
+            String status = tooth.getStatus();
+            return status == null
+                    || ReviewStatus.IN_PROGRESS.toString().equals(status)
+                    || ReviewStatus.REJECTED.toString().equals(status);
+        });
+    }
 }
