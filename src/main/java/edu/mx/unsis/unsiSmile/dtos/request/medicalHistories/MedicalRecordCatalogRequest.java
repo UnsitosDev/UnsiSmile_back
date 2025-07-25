@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ClinicalHistoryCatalogRequest {
+public class MedicalRecordCatalogRequest {
 
     @NotNull(message = "The Clinical History Name cannot be null")
-    private String clinicalHistoryName;
+    private String medicalRecordName;
 }

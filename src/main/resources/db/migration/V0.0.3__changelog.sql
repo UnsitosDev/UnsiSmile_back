@@ -1,12 +1,12 @@
-CREATE TABLE clinical_history_catalogs (
-                                           id_clinical_history_catalog bigint(20) NOT NULL AUTO_INCREMENT,
-                                           clinical_history_name varchar(100) NOT NULL,
+CREATE TABLE medical_record_catalogs (
+                                           id_medical_record_catalog bigint(20) NOT NULL AUTO_INCREMENT,
+                                           medical_record_name varchar(100) NOT NULL,
                                            created_at DATETIME(6) DEFAULT NULL,
                                            created_by VARCHAR(255) DEFAULT NULL,
                                            status_key VARCHAR(255) DEFAULT NULL,
                                            updated_at DATETIME(6) DEFAULT NULL,
                                            updated_by VARCHAR(255) DEFAULT NULL,
-                                           PRIMARY KEY (id_clinical_history_catalog)
+                                           PRIMARY KEY (id_medical_record_catalog)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- FormSections Table
@@ -25,8 +25,8 @@ CREATE TABLE form_sections (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ClinicalHistorySections Table
-CREATE TABLE clinical_history_sections (
-                                           fk_clinical_history_catalog bigint(20) NOT NULL,
+CREATE TABLE medical_record_sections (
+                                           fk_medical_record_catalog bigint(20) NOT NULL,
                                            fk_form_section VARCHAR(100) NOT NULL,
                                            section_order bigint(20) DEFAULT null,
                                            created_at DATETIME(6) DEFAULT NULL,
@@ -34,10 +34,10 @@ CREATE TABLE clinical_history_sections (
                                            status_key VARCHAR(255) DEFAULT NULL,
                                            updated_at DATETIME(6) DEFAULT NULL,
                                            updated_by VARCHAR(255) DEFAULT NULL,
-                                           PRIMARY KEY (fk_clinical_history_catalog, fk_form_section),
+                                           PRIMARY KEY (fk_medical_record_catalog, fk_form_section),
                                            KEY fk_form_section (fk_form_section),
-                                           CONSTRAINT clinical_history_sections_ibfk_1 FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs (id_clinical_history_catalog),
-                                           CONSTRAINT clinical_history_sections_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
+                                           CONSTRAINT medical_record_sections_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
+                                           CONSTRAINT medical_record_sections_ibfk_2 FOREIGN KEY (fk_form_section) REFERENCES form_sections (id_form_section)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Type answer Table
@@ -145,9 +145,9 @@ CREATE TABLE question_validations (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Treatments Table
-CREATE TABLE patient_clinical_histories (
-                                            id_patient_clinical_history bigint(20) NOT NULL AUTO_INCREMENT,
-                                            fk_clinical_history_catalog bigint(20) DEFAULT NULL,
+CREATE TABLE patient_medical_records (
+                                            id_patient_medical_record bigint(20) NOT NULL AUTO_INCREMENT,
+                                            fk_medical_record_catalog bigint(20) DEFAULT NULL,
                                             fk_patient CHAR(36) NOT NULL,
                                             appointment_date DATETIME(6) DEFAULT NULL,
                                             created_at DATETIME(6) DEFAULT NULL,
@@ -155,17 +155,17 @@ CREATE TABLE patient_clinical_histories (
                                             status_key VARCHAR(255) DEFAULT NULL,
                                             updated_at DATETIME(6) DEFAULT NULL,
                                             updated_by VARCHAR(255) DEFAULT NULL,
-                                            PRIMARY KEY (id_patient_clinical_history),
-                                            KEY fk_clinical_history_catalog (fk_clinical_history_catalog),
+                                            PRIMARY KEY (id_patient_medical_record),
+                                            KEY fk_medical_record_catalog (fk_medical_record_catalog),
                                             KEY fk_patient (fk_patient),
-                                            CONSTRAINT patient_clinical_histories_ibfk_1 FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs (id_clinical_history_catalog),
-                                            CONSTRAINT patient_clinical_histories_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
+                                            CONSTRAINT patient_medical_records_ibfk_1 FOREIGN KEY (fk_medical_record_catalog) REFERENCES medical_record_catalogs (id_medical_record_catalog),
+                                            CONSTRAINT patient_medical_records_ibfk_2 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Answers Table
 CREATE TABLE answers (
                          id_answer BIGINT(20) NOT NULL AUTO_INCREMENT,
-                         fk_patient_clinical_history BIGINT(20) DEFAULT NULL,
+                         fk_patient_medical_record BIGINT(20) DEFAULT NULL,
                          fk_question BIGINT(20) NOT NULL,
                          fk_patient CHAR(36) NULL,
                          answer_boolean TINYINT(1) DEFAULT NULL,
@@ -180,10 +180,10 @@ CREATE TABLE answers (
                          updated_at DATETIME(6) DEFAULT NULL,
                          updated_by VARCHAR(255) DEFAULT NULL,
                          PRIMARY KEY (id_answer),
-                         KEY fk_patient_clinical_history (fk_patient_clinical_history),
+                         KEY fk_patient_medical_record (fk_patient_medical_record),
                          KEY fk_question (fk_question),
                          KEY fk_option (fk_option),
-                         CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories (id_patient_clinical_history),
+                         CONSTRAINT answers_ibfk_1 FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records (id_patient_medical_record),
                          CONSTRAINT answers_ibfk_2 FOREIGN KEY (fk_question) REFERENCES questions (id_question),
                          CONSTRAINT answers_ibfk_3 FOREIGN KEY (fk_option) REFERENCES catalog_options (id_catalog_option),
                          CONSTRAINT answers_ibfk_4 FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)

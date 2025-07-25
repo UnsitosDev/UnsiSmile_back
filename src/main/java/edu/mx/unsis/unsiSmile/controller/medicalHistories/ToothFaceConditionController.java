@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothFaceConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ToothFaceConditionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Condiciones de cara de diente.")
 @RestController
 @AllArgsConstructor
-@RequestMapping("/unsismile/api/v1/medical-histories/tooth-face-conditions")
+@RequestMapping("/unsismile/api/v1/medical-records/tooth-face-conditions")
 public class ToothFaceConditionController {
 
     private final ToothFaceConditionService toothFaceConditionService;

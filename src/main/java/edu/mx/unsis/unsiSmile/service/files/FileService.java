@@ -7,13 +7,13 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.files.GeneralFileModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IGeneralFileRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -38,19 +38,19 @@ public class FileService {
     private final FileMapper fileMapper;
     private final IAnswerRepository answerRepository;
     private final AnswerMapper answerMapper;
-    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
     private final IGeneralFileRepository generalFileRepository;
 
-    public void upload(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
-        if (files.isEmpty() || idPatientClinicalHistory == null || idQuestion == null) {
-            throw new AppException("Empty file, idQuestion or idPatientClinicalHistory", HttpStatus.BAD_REQUEST);
+    public void upload(List<MultipartFile> files, Long idPatientMedicalRecord, Long idQuestion) {
+        if (files.isEmpty() || idPatientMedicalRecord == null || idQuestion == null) {
+            throw new AppException("Empty file, idQuestion or idPatientMedicalRecord", HttpStatus.BAD_REQUEST);
         }
 
-        this.uploadFile(files, idPatientClinicalHistory, idQuestion);
+        this.uploadFile(files, idPatientMedicalRecord, idQuestion);
     }
 
-    private void uploadFile(List<MultipartFile> files, Long idPatientClinicalHistory, Long idQuestion) {
-        Long answerId = this.createFromFile(idPatientClinicalHistory, idQuestion);
+    private void uploadFile(List<MultipartFile> files, Long idPatientMedicalRecord, Long idQuestion) {
+        Long answerId = this.createFromFile(idPatientMedicalRecord, idQuestion);
         processUpload(files, answerId, false);
     }
 
@@ -198,18 +198,18 @@ public class FileService {
         return buildFileDownloadResponse(fileModel.getFilePath(), fileModel.getFileName());
     }
 
-    private Long createFromFile(Long idPatientClinicalHistory, Long idQuestion) {
+    private Long createFromFile(Long idPatientMedicalRecord, Long idQuestion) {
         try {
             Optional<AnswerModel> existingAnswer;
-            PatientClinicalHistoryModel patientClinicalHistoryModel = null;
+            PatientMedicalRecordModel patientMedicalRecordModel = null;
 
-            if (idPatientClinicalHistory != null) {
-                patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+            if (idPatientMedicalRecord != null) {
+                patientMedicalRecordModel = patientMedicalRecordRepository.findById(idPatientMedicalRecord)
                         .orElseThrow(
                                 () -> new AppException("Patient Clinical History not found", HttpStatus.NOT_FOUND));
 
                 existingAnswer = answerRepository.findByQuestionModelIdQuestionAndPatientModel_IdPatient(
-                        idQuestion, patientClinicalHistoryModel.getPatient().getIdPatient());
+                        idQuestion, patientMedicalRecordModel.getPatient().getIdPatient());
             } else {
                 existingAnswer = answerRepository.findByQuestionModel_IdQuestion(idQuestion);
             }
@@ -218,7 +218,7 @@ public class FileService {
                 return existingAnswer.get().getIdAnswer();
             }
 
-            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(patientClinicalHistoryModel, idQuestion);
+            AnswerModel newAnswerModel = answerMapper.toEntityFromFile(patientMedicalRecordModel, idQuestion);
 
             newAnswerModel = answerRepository.save(newAnswerModel);
 

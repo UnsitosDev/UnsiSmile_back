@@ -2,6 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +20,9 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleRes
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;
 import jakarta.validation.Valid;
 
+@Tag(name = "Odontograma")
 @RestController
-@RequestMapping("/unsismile/api/v1/medical-histories/odontograms")
+@RequestMapping("/unsismile/api/v1/medical-records/odontograms")
 public class OdontogramController {
 
     private final OdontogramService odontogramService;
@@ -54,14 +56,14 @@ public class OdontogramController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/latest/{patientClinicalHistoryId}")
-    public OdontogramResponse getOdontogramDetails(@PathVariable Long patientClinicalHistoryId) {
-        return odontogramService.getOdontogramDetails(patientClinicalHistoryId);
+    @GetMapping("/latest/{patientMedicalRecordId}")
+    public OdontogramResponse getOdontogramDetails(@PathVariable Long patientMedicalRecordId) {
+        return odontogramService.getOdontogramDetails(patientMedicalRecordId);
     }       
 
-    @GetMapping("/patient-clinical-history/{patientClinicalHistoryId}")
-    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByPatientClinicalHistoryId(@PathVariable Long patientClinicalHistoryId) {
-        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByPatientClinicalHistoryId(patientClinicalHistoryId);
+    @GetMapping("/patient-medical-records/{patientMedicalRecordId}")
+    public ResponseEntity<List<OdontogramSimpleResponse>> getOdontogramsByPatientMedicalRecordId(@PathVariable Long patientMedicalRecordId) {
+        List<OdontogramSimpleResponse> odontograms = odontogramService.getOdontogramsByPatientMedicalRecordId(patientMedicalRecordId);
         return ResponseEntity.ok(odontograms);
     }
 

@@ -51,8 +51,8 @@ public class TreatmentController {
 
     @Operation(summary = "Obtiene los tratamientos asociados a una historia clínica")
     @GetMapping("/medical-records/{medicalRecordId}")
-    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByClinicalHistory(@PathVariable Long medicalRecordId) {
-        List<TreatmentResponse> responses = treatmentService.getTreatmentsByClinicalHistory(medicalRecordId);
+    public ResponseEntity<List<TreatmentResponse>> getTreatmentsByMedicalRecord(@PathVariable Long medicalRecordId) {
+        List<TreatmentResponse> responses = treatmentService.getTreatmentsByMedicalRecord(medicalRecordId);
         return ResponseEntity.ok(responses);
     }
 

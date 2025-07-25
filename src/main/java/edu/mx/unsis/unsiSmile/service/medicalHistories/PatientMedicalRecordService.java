@@ -4,12 +4,12 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ClinicalHistoryCatalogMapper;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistoryCatalogModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IClinicalHistoryCatalogRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,24 +22,24 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PatientClinicalHistoryService {
+public class PatientMedicalRecordService {
 
-    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
     private final IPatientRepository patientRepository;
-    private final ClinicalHistoryCatalogMapper clinicalHistoryCatalogMapper;
-    private final IClinicalHistoryCatalogRepository clinicalHistoryCatalogRepository;
+    private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;
+    private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
 
     @Transactional
-    public PatientClinicalHistoryModel save(String idPatient, Long idClinicalHistory) {
+    public PatientMedicalRecordModel save(String idPatient, Long idMedicalRecordCatalog) {
         try {
             PatientModel patientModel = patientRepository.findByIdPatient(idPatient)
                     .orElseThrow(() -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
-            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(idClinicalHistory)
+            MedicalRecordCatalogModel medicalRecordCatalogModel = medicalRecordCatalogRepository.findById(idMedicalRecordCatalog)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idClinicalHistory),
+                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idMedicalRecordCatalog),
                             HttpStatus.NOT_FOUND
                     ));
-            return patientClinicalHistoryRepository.save(toEntity(patientModel, clinicalHistoryCatalogModel));
+            return patientMedicalRecordRepository.save(toEntity(patientModel, medicalRecordCatalogModel));
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -48,9 +48,9 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional
-    public PatientMedicalRecordRes createPatientMedicalRecord(String idPatient, Long idClinicalHistory) {
+    public PatientMedicalRecordRes createPatientMedicalRecord(String idPatient, Long idMedicalRecordCatalog) {
         try {
-            PatientClinicalHistoryModel model = this.save(idPatient, idClinicalHistory);
+            PatientMedicalRecordModel model = this.save(idPatient, idMedicalRecordCatalog);
             return toResponse(model);
         } catch (AppException ex) {
             throw ex;
@@ -60,9 +60,9 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public PatientClinicalHistoryModel findById(Long id) {
+    public PatientMedicalRecordModel findById(Long id) {
         try {
-            return patientClinicalHistoryRepository.findById(id)
+            return patientMedicalRecordRepository.findById(id)
                     .map(this::toDto)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, id),
@@ -75,9 +75,9 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryModel> findAll() {
+    public List<PatientMedicalRecordModel> findAll() {
         try {
-            List<PatientClinicalHistoryModel> historyList = patientClinicalHistoryRepository.findAll();
+            List<PatientMedicalRecordModel> historyList = patientMedicalRecordRepository.findAll();
             if (historyList.isEmpty()) {
                 throw new AppException("No patient clinical histories found", HttpStatus.NOT_FOUND);
             }
@@ -90,11 +90,11 @@ public class PatientClinicalHistoryService {
     @Transactional
     public void deleteById(Long id) {
         try {
-            Optional<PatientClinicalHistoryModel> historyOptional = patientClinicalHistoryRepository.findById(id);
+            Optional<PatientMedicalRecordModel> historyOptional = patientMedicalRecordRepository.findById(id);
             historyOptional.ifPresentOrElse(
                     history -> {
                         history.setStatusKey(Constants.INACTIVE);
-                        patientClinicalHistoryRepository.save(history);
+                        patientMedicalRecordRepository.save(history);
                     },
                     () -> {
                         throw new AppException("Patient clinical history not found with ID: " + id, HttpStatus.NOT_FOUND);
@@ -105,18 +105,18 @@ public class PatientClinicalHistoryService {
         }
     }
 
-    private PatientClinicalHistoryModel toEntity(PatientModel patient, ClinicalHistoryCatalogModel clinicalHistoryCatalogModel) {
-        return PatientClinicalHistoryModel.builder()
+    private PatientMedicalRecordModel toEntity(PatientModel patient, MedicalRecordCatalogModel medicalRecordCatalogModel) {
+        return PatientMedicalRecordModel.builder()
                 .patient(patient)
-                .clinicalHistoryCatalog(clinicalHistoryCatalogModel)
+                .medicalRecordCatalog(medicalRecordCatalogModel)
                 .appointmentDate(LocalDateTime.now())
                 .build();
     }
 
     @Transactional
-    public PatientClinicalHistoryModel findGeneralMedicalRecordByPatientId(String idPatient) {
+    public PatientMedicalRecordModel findGeneralMedicalRecordByPatientId(String idPatient) {
         try {
-            PatientClinicalHistoryModel existingRecord = findExistingGeneralMedicalRecord(idPatient);
+            PatientMedicalRecordModel existingRecord = findExistingGeneralMedicalRecord(idPatient);
             if (existingRecord == null) {
                 throw new AppException(ResponseMessages.GENERAL_MEDICAL_RECORD_NOT_FOUND_FOR_PATIENT,
                         HttpStatus.NOT_FOUND);
@@ -130,28 +130,28 @@ public class PatientClinicalHistoryService {
         }
     }
 
-    private PatientClinicalHistoryModel findExistingGeneralMedicalRecord(String idPatient) {
-        PatientClinicalHistoryModel existing = patientClinicalHistoryRepository
-                .findFirstByPatient_IdPatientAndClinicalHistoryCatalog_ClinicalHistoryNameOrderByCreatedAtDesc(idPatient, Constants.GENERAL_MEDICAL_RECORD);
+    private PatientMedicalRecordModel findExistingGeneralMedicalRecord(String idPatient) {
+        PatientMedicalRecordModel existing = patientMedicalRecordRepository
+                .findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(idPatient, Constants.GENERAL_MEDICAL_RECORD);
 
         return existing != null ? this.toDto(existing) : null;
     }
 
     @Transactional
-    public PatientClinicalHistoryModel createNewGeneralMedicalRecord(String idPatient) {
+    public PatientMedicalRecordModel createNewGeneralMedicalRecord(String idPatient) {
         try {
-            PatientClinicalHistoryModel existingRecord = findExistingGeneralMedicalRecord(idPatient);
+            PatientMedicalRecordModel existingRecord = findExistingGeneralMedicalRecord(idPatient);
             if (existingRecord != null) {
                 throw new AppException(ResponseMessages.DUPLICATED_GENERAL_MEDICAL_RECORD,
                         HttpStatus.CONFLICT);
             }
-            ClinicalHistoryCatalogModel catalog = clinicalHistoryCatalogRepository
-                    .findByClinicalHistoryName(Constants.GENERAL_MEDICAL_RECORD)
+            MedicalRecordCatalogModel catalog = medicalRecordCatalogRepository
+                    .findByMedicalRecordName(Constants.GENERAL_MEDICAL_RECORD)
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.GENERAL_MEDICAL_RECORD_NOT_FOUND,
                             HttpStatus.NOT_FOUND));
 
-            PatientClinicalHistoryModel modelSaved = save(idPatient, catalog.getIdClinicalHistoryCatalog());
+            PatientMedicalRecordModel modelSaved = save(idPatient, catalog.getIdMedicalRecordCatalog());
             return this.toDto(modelSaved);
         } catch (AppException e) {
             throw e;
@@ -161,55 +161,55 @@ public class PatientClinicalHistoryService {
     }
 
     @Transactional(readOnly = true)
-    public PatientClinicalHistoryModel findByPatientAndClinicalHistory(String idPatient, Long idPatientClinicalHistory) {
+    public PatientMedicalRecordModel findByPatientAndMedicalRecord(String idPatient, Long idPatientMedicalRecord) {
         try {
-            Optional<PatientClinicalHistoryModel> patientClinicalHistory = patientClinicalHistoryRepository
-                    .findByPatient_IdPatientAndIdPatientClinicalHistory(
-                            idPatient, idPatientClinicalHistory);
-            if (patientClinicalHistory.isPresent()) {
-                return this.toDto(patientClinicalHistory.get());
+            Optional<PatientMedicalRecordModel> patientMedicalRecord = patientMedicalRecordRepository
+                    .findByPatient_IdPatientAndIdPatientMedicalRecord(
+                            idPatient, idPatientMedicalRecord);
+            if (patientMedicalRecord.isPresent()) {
+                return this.toDto(patientMedicalRecord.get());
             } else {
                 throw new AppException("Patient clinical history not found for idPatient: " + idPatient +
-                        " and idPatientClinicalHistory: " + idPatientClinicalHistory, HttpStatus.NOT_FOUND);
+                        " and idPatientMedicalRecord: " + idPatientMedicalRecord, HttpStatus.NOT_FOUND);
             }
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
-            throw new AppException("Failed to find patient clinical history with idPatient: " + idPatient + " and idClinicalHistory: " + idPatientClinicalHistory, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to find patient clinical history with idPatient: " + idPatient + " and idPatientMedicalRecord: " + idPatientMedicalRecord, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
-    private PatientClinicalHistoryModel toDto(PatientClinicalHistoryModel entity) {
-        return PatientClinicalHistoryModel.builder()
-                .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
+    private PatientMedicalRecordModel toDto(PatientMedicalRecordModel entity) {
+        return PatientMedicalRecordModel.builder()
+                .idPatientMedicalRecord(entity.getIdPatientMedicalRecord())
                 .patient(entity.getPatient())
-                .clinicalHistoryCatalog(entity.getClinicalHistoryCatalog())
+                .medicalRecordCatalog(entity.getMedicalRecordCatalog())
                 .appointmentDate(entity.getAppointmentDate())
                 .build();
     }
 
-    private PatientMedicalRecordRes toResponse(PatientClinicalHistoryModel entity) {
+    private PatientMedicalRecordRes toResponse(PatientMedicalRecordModel entity) {
         return PatientMedicalRecordRes.builder()
-                .idPatientClinicalHistory(entity.getIdPatientClinicalHistory())
-                .clinicalHistoryCatalog(clinicalHistoryCatalogMapper.toDto(entity.getClinicalHistoryCatalog()))
+                .idPatientMedicalRecord(entity.getIdPatientMedicalRecord())
+                .medicalRecordCatalog(medicalRecordCatalogMapper.toDto(entity.getMedicalRecordCatalog()))
                 .appointmentDate(entity.getAppointmentDate().toLocalDate())
                 .build();
     }
 
     @Transactional
-    public PatientClinicalHistoryModel updatePatientMedicalRecord(Long id, Long idClinicalHistory) {
+    public PatientMedicalRecordModel updatePatientMedicalRecord(Long id, Long idMedicalRecordCatalog) {
         try {
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository.findById(id)
+            PatientMedicalRecordModel patientMedicalRecordModel = patientMedicalRecordRepository.findById(id)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, id)
                             , HttpStatus.NOT_FOUND));
-            ClinicalHistoryCatalogModel clinicalHistoryCatalogModel = clinicalHistoryCatalogRepository.findById(idClinicalHistory)
+            MedicalRecordCatalogModel medicalRecordCatalogModel = medicalRecordCatalogRepository.findById(idMedicalRecordCatalog)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idClinicalHistory),
+                            String.format(ResponseMessages.CLINICAL_HISTORY_CATALOG_NOT_FOUND, idMedicalRecordCatalog),
                             HttpStatus.NOT_FOUND
                     ));
-            patientClinicalHistoryModel.setClinicalHistoryCatalog(clinicalHistoryCatalogModel);
-            return patientClinicalHistoryRepository.save(patientClinicalHistoryModel);
+            patientMedicalRecordModel.setMedicalRecordCatalog(medicalRecordCatalogModel);
+            return patientMedicalRecordRepository.save(patientMedicalRecordModel);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {

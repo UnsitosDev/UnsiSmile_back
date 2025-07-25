@@ -17,12 +17,12 @@ import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetailModel, Long> {
-    Page<TreatmentDetailModel> findByPatientClinicalHistory_Patient_IdPatient(String patientId, Pageable pageable);
+    Page<TreatmentDetailModel> findByPatientMedicalRecord_Patient_IdPatient(String patientId, Pageable pageable);
 
     @Query("SELECT COUNT(t) FROM TreatmentDetailModel t WHERE t.professor.idProfessor = ?1 AND t.status = ?2 AND t.statusKey = 'A'")
     Long countActiveTreatmentsByProfessorId(String professorId, ReviewStatus status);
 
-    boolean existsByPatientClinicalHistory_Patient_idPatientAndStatus(String patientId, ReviewStatus status);
+    boolean existsByPatientMedicalRecord_Patient_idPatientAndStatus(String patientId, ReviewStatus status);
 
     Page<TreatmentDetailModel> findAllByStudentGroupIn(List<StudentGroupModel> studentGroup, Pageable pageable);
 
@@ -67,7 +67,7 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "ORDER BY t.treatment.name")
     List<TreatmentDetailModel> findByStudentAndSemester(String enrollment, Long semesterId, ReviewStatus status);
 
-    Optional<TreatmentDetailModel> findByPatientClinicalHistory_IdPatientClinicalHistory(Long idPatientMedicalRecord);
+    Optional<TreatmentDetailModel> findByPatientMedicalRecord_IdPatientMedicalRecord(Long idPatientMedicalRecord);
 
     @Query("SELECT t.treatment.name, COUNT(tt.idDetailTooth) " +
             "FROM TreatmentDetailModel t " +

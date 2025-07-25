@@ -30,5 +30,5 @@ public class TreatmentRequest {
 
     @NotNull(message = ResponseMessages.NOT_NULL_CATALOG_ID)
     @Positive(message = ResponseMessages.POSITIVE_CATALOG_ID)
-    private Long clinicalHistoryCatalogId;
+    private Long medicalRecordCatalogId;
 }

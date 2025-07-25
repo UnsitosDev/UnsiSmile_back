@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
@@ -31,7 +31,7 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
 import edu.mx.unsis.unsiSmile.service.socketNotifications.ReviewTreatmentService;
@@ -64,7 +64,7 @@ public class TreatmentDetailService {
     private final IProfessorRepository professorRepository;
     private final IReviewStatusRepository reviewStatusRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
-    private final PatientClinicalHistoryService patientClinicalHistoryService;
+    private final PatientMedicalRecordService patientMedicalRecordService;
     private final TreatmentService treatmentService;
     private final StudentGroupService studentGroupService;
     private final PatientService patientService;
@@ -130,15 +130,15 @@ public class TreatmentDetailService {
 
     private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request,
                                                      TreatmentResponse treatmentResponse) {
-        PatientClinicalHistoryModel clinicalHistory = patientClinicalHistoryService.save(
+        PatientMedicalRecordModel medicalRecord = patientMedicalRecordService.save(
                 request.getPatientId(),
-                treatmentResponse.getClinicalHistoryCatalogId());
+                treatmentResponse.getMedicalRecordCatalogId());
 
         UserResponse currentUser = userService.getCurrentUser();
         StudentGroupModel studentGroup = studentGroupService.getStudentGroupByStudent(currentUser.getUsername());
 
         TreatmentDetailModel model = treatmentDetailMapper.toEntity(request);
-        model.setPatientClinicalHistory(clinicalHistory);
+        model.setPatientMedicalRecord(medicalRecord);
         model.setStudentGroup(studentGroup);
 
         return treatmentDetailRepository.save(model);
@@ -172,7 +172,7 @@ public class TreatmentDetailService {
             patientService.getPatientById(patientId);
 
             Page<TreatmentDetailModel> page = treatmentDetailRepository
-                    .findByPatientClinicalHistory_Patient_IdPatient(patientId, pageable);
+                    .findByPatientMedicalRecord_Patient_IdPatient(patientId, pageable);
             return page.map(this::mapTreatmentDetailToDto);
         } catch (AppException e) {
             throw e;
@@ -302,8 +302,8 @@ public class TreatmentDetailService {
             }
 
             boolean isSectionInReview = reviewStatusRepository
-                    .existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
-                            treatment.getPatientClinicalHistory().getIdPatientClinicalHistory(),
+                    .existsByPatientMedicalRecord_IdPatientMedicalRecordAndStatus(
+                            treatment.getPatientMedicalRecord().getIdPatientMedicalRecord(),
                             ReviewStatus.IN_REVIEW);
 
             if (isSectionInReview) {
@@ -394,7 +394,7 @@ public class TreatmentDetailService {
     private void sendNotifications(TreatmentDetailModel treatment) {
         this.reviewTreatmentService.broadcastReviewTreatmentToStudent(
                 treatment.getIdTreatmentDetail(),
-                treatment.getPatientClinicalHistory().getPatient().getIdPatient(),
+                treatment.getPatientMedicalRecord().getPatient().getIdPatient(),
                 treatmentDetailMapper.toDto(treatment));
 
         this.reviewTreatmentService.broadcastReviewTreatmentToProfessor(treatment.getProfessor().getIdProfessor(),
@@ -481,9 +481,9 @@ public class TreatmentDetailService {
                             detailResponses.add(TreatmentReportResponse.TreatmentReportDetailResponse.builder()
                                     .treatmentDate(t.getEndDate().toLocalDate())
                                     .toothId(toothId)
-                                    .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                                    .patientName(t.getPatientMedicalRecord().getPatient().getPerson().getFullName())
                                     .medicalRecordNumber(String.valueOf(
-                                            t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                            t.getPatientMedicalRecord().getPatient().getMedicalRecordNumber()))
                                     .professorName(t.getProfessor().getPerson().getFullName())
                                     .build());
                         }
@@ -491,9 +491,9 @@ public class TreatmentDetailService {
                         detailResponses.add(TreatmentReportResponse.TreatmentReportDetailResponse.builder()
                                 .treatmentDate(t.getEndDate().toLocalDate())
                                 .toothId(null)
-                                .patientName(t.getPatientClinicalHistory().getPatient().getPerson().getFullName())
+                                .patientName(t.getPatientMedicalRecord().getPatient().getPerson().getFullName())
                                 .medicalRecordNumber(String
-                                        .valueOf(t.getPatientClinicalHistory().getPatient().getMedicalRecordNumber()))
+                                        .valueOf(t.getPatientMedicalRecord().getPatient().getMedicalRecordNumber()))
                                 .professorName(t.getProfessor().getPerson().getFullName())
                                 .build());
                     }

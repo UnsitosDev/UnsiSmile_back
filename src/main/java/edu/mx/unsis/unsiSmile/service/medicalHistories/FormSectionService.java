@@ -8,12 +8,12 @@ import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.model.ClinicalHistorySectionModel;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.QuestionService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class FormSectionService {
 
     private final IFormSectionRepository formSectionRepository;
-    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
     private final ReviewStatusService reviewStatusService;
@@ -51,15 +51,15 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse findById(String id, Long idPatientClinicalHistory) {
+    public FormSectionResponse findById(String id, Long idPatientMedicalRecord) {
         try {
-            validateIds(id, idPatientClinicalHistory);
+            validateIds(id, idPatientMedicalRecord);
 
             FormSectionModel formSectionModel = findFormSectionById(id);
-            PatientClinicalHistoryModel patientClinicalHistoryModel = findPatientClinicalHistoryById(idPatientClinicalHistory);
+            PatientMedicalRecordModel patientMedicalRecordModel = findPatientMedicalRecordById(idPatientMedicalRecord);
 
-            FormSectionResponse response = buildFormSectionResponse(formSectionModel, patientClinicalHistoryModel);
-            setStatusInResponse(response, formSectionModel, idPatientClinicalHistory, id);
+            FormSectionResponse response = buildFormSectionResponse(formSectionModel, patientMedicalRecordModel);
+            setStatusInResponse(response, formSectionModel, idPatientMedicalRecord, id);
 
             return response;
         } catch (AppException ex) {
@@ -69,9 +69,9 @@ public class FormSectionService {
         }
     }
 
-    private void validateIds(String id, Long idPatientClinicalHistory) {
+    private void validateIds(String id, Long idPatientMedicalRecord) {
         Assert.notNull(id, ResponseMessages.FORM_SECTION_ID_NULL);
-        Assert.notNull(idPatientClinicalHistory, ResponseMessages.PATIENT_CLINICAL_HISTORY_ID_NULL);
+        Assert.notNull(idPatientMedicalRecord, ResponseMessages.PATIENT_CLINICAL_HISTORY_ID_NULL);
     }
 
     private FormSectionModel findFormSectionById(String id) {
@@ -79,23 +79,23 @@ public class FormSectionService {
                 .orElseThrow(() -> new AppException(ResponseMessages.FORM_SECTION_NOT_FOUND + id, HttpStatus.NOT_FOUND));
     }
 
-    private PatientClinicalHistoryModel findPatientClinicalHistoryById(Long idPatientClinicalHistory) {
-        return patientClinicalHistoryRepository.findById(idPatientClinicalHistory)
+    private PatientMedicalRecordModel findPatientMedicalRecordById(Long idPatientMedicalRecord) {
+        return patientMedicalRecordRepository.findById(idPatientMedicalRecord)
                 .orElseThrow(() -> new AppException(
-                        String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientClinicalHistory),
+                        String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientMedicalRecord),
                         HttpStatus.NOT_FOUND));
     }
 
-    private FormSectionResponse buildFormSectionResponse(FormSectionModel formSectionModel, PatientClinicalHistoryModel patientClinicalHistoryModel) {
+    private FormSectionResponse buildFormSectionResponse(FormSectionModel formSectionModel, PatientMedicalRecordModel patientMedicalRecordModel) {
         return this.toResponse(formSectionModel,
-                patientClinicalHistoryModel.getPatient().getIdPatient(),
-                patientClinicalHistoryModel.getIdPatientClinicalHistory());
+                patientMedicalRecordModel.getPatient().getIdPatient(),
+                patientMedicalRecordModel.getIdPatientMedicalRecord());
     }
 
     private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel,
-                                     Long idPatientClinicalHistory, String idFormSection) {
+                                     Long idPatientMedicalRecord, String idFormSection) {
         ReviewStatusModel status = formSectionModel.getRequiresReview()
-                ? reviewStatusService.getStatusModelByPatientMedicalRecordId(idPatientClinicalHistory, idFormSection)
+                ? reviewStatusService.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord, idFormSection)
                 : null;
 
         response.setReviewStatus(reviewStatusService.buildStatusResponse(status, formSectionModel.getRequiresReview()));
@@ -138,17 +138,17 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public List<FormSectionResponse> findAllByClinicalHistory(
-            List<ClinicalHistorySectionModel> clinicalHistorySectionModels, String patientId, Long patientClinicalHistoryId) {
+    public List<FormSectionResponse> findAllByMedicalRecord(
+            List<MedicalRecordSectionModel> medicalRecordSectionModels, String patientId, Long patientMedicalRecordId) {
         try {
-            Set<String> sectionIds = clinicalHistorySectionModels.stream()
-                    .map(chsm -> chsm.getFormSectionModel().getIdFormSection())
+            Set<String> sectionIds = medicalRecordSectionModels.stream()
+                    .map(mrsm -> mrsm.getFormSectionModel().getIdFormSection())
                     .collect(Collectors.toSet());
 
             List<FormSectionModel> formSectionModels = formSectionRepository.findAllById(sectionIds);
 
             return formSectionModels.stream()
-                    .map(sectionModel -> buildFormSectionResponseWithStatus(sectionModel, patientId, patientClinicalHistoryId))
+                    .map(sectionModel -> buildFormSectionResponseWithStatus(sectionModel, patientId, patientMedicalRecordId))
                     .collect(Collectors.toList());
         } catch (AppException e) {
             throw e;
@@ -159,11 +159,11 @@ public class FormSectionService {
 
     private FormSectionResponse buildFormSectionResponseWithStatus(FormSectionModel sectionModel,
                                                                    String patientId,
-                                                                   Long patientClinicalHistoryId) {
-        FormSectionResponse response = toResponse(sectionModel, patientId, patientClinicalHistoryId);
+                                                                   Long patientMedicalRecordId) {
+        FormSectionResponse response = toResponse(sectionModel, patientId, patientMedicalRecordId);
 
         ReviewStatusModel status = sectionModel.getRequiresReview()
-                ? reviewStatusService.getStatusByPatientClinicalHistoryIdAndSection(patientId, sectionModel.getIdFormSection())
+                ? reviewStatusService.getStatusByPatientMedicalRecordIdAndSection(patientId, sectionModel.getIdFormSection())
                 : null;
 
         response.setReviewStatus(reviewStatusService.buildStatusResponse(status, sectionModel.getRequiresReview()));
@@ -171,10 +171,10 @@ public class FormSectionService {
     }
 
     @Transactional(readOnly = true)
-    public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId, Long patientClinicalHistoryId) {
+    public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId, Long patientMedicalRecordId) {
         FormSectionResponse formSectionResponse = formSectionMapper.toDto(sectionModel);
         List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(),
-        patientId, ("SV-01".equals(sectionModel.getIdFormSection()) ? patientClinicalHistoryId : 0L));
+        patientId, ("SV-01".equals(sectionModel.getIdFormSection()) ? patientMedicalRecordId : 0L));
 
         formSectionResponse.setQuestions(questions);
 
@@ -184,7 +184,7 @@ public class FormSectionService {
         List<FormSectionModel> subSections = getSubFormSectionModel(sectionModel.getIdFormSection());
         if (subSections != null && !subSections.isEmpty()) {
             List<FormSectionResponse> subSectionResponses = subSections.stream()
-                    .map(subSection -> toResponse(subSection, patientId, patientClinicalHistoryId))
+                    .map(subSection -> toResponse(subSection, patientId, patientMedicalRecordId))
                     .collect(Collectors.toList());
             formSectionResponse.setSubSections(subSectionResponses);
         }

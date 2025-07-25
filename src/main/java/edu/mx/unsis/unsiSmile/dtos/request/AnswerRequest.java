@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class AnswerRequest {
 
     @NotNull(message = "The Id Patient Clinical History cannot be null.")
-    private Long idPatientClinicalHistory;
+    private Long idPatientMedicalRecord;
 
     @NotNull(message = "The Id Question cannot be null.")
     private Long idQuestion;

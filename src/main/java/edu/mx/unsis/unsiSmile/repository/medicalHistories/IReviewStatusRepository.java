@@ -15,11 +15,11 @@ import java.util.Optional;
 @Repository
 public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel, Long> {
 
-    Optional<ReviewStatusModel> findByPatientClinicalHistory_IdPatientClinicalHistoryAndFormSection_IdFormSection(
-            Long idPatientClinicalHistory, String idSection);
+    Optional<ReviewStatusModel> findByPatientMedicalRecord_IdPatientMedicalRecordAndFormSection_IdFormSection(
+            Long idPatientMedicalRecord, String idSection);
 
     @Query("SELECT s FROM ReviewStatusModel s " +
-            "WHERE s.patientClinicalHistory.patient.idPatient = :idPatient " +
+            "WHERE s.patientMedicalRecord.patient.idPatient = :idPatient " +
             "AND s.formSection.idFormSection = :idSection " +
             "ORDER BY s.createdAt DESC")
     List<ReviewStatusModel> findAllByPatientIdAndSectionOrdered(
@@ -28,13 +28,13 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
 
     @Query("SELECT DISTINCT s FROM ReviewStatusModel s " +
             "WHERE s.status = :status " +
-            "GROUP BY s.patientClinicalHistory.patient.idPatient")
+            "GROUP BY s.patientMedicalRecord.patient.idPatient")
     Page<ReviewStatusModel> findByStatus(@Param("status") ReviewStatus status, Pageable pageable);
 
     @Query("SELECT DISTINCT s FROM ReviewStatusModel s " +
-            "WHERE s.patientClinicalHistory.patient.idPatient = :idPatient " +
+            "WHERE s.patientMedicalRecord.patient.idPatient = :idPatient " +
             "AND s.status = :status" +
-            " GROUP BY s.patientClinicalHistory.idPatientClinicalHistory")
+            " GROUP BY s.patientMedicalRecord.idPatientMedicalRecord")
     List<ReviewStatusModel> findByIdPatientAndStatus(@Param("idPatient") String idPatient,
                                                               @Param("status") ReviewStatus status);
 
@@ -53,6 +53,6 @@ public interface IReviewStatusRepository extends JpaRepository<ReviewStatusModel
                        @Param("status") ReviewStatus status,
                        @Param("statusKey") String statusKey);
 
-    boolean existsByPatientClinicalHistory_IdPatientClinicalHistoryAndStatus(
+    boolean existsByPatientMedicalRecord_IdPatientMedicalRecordAndStatus(
             Long idPatientMedicalRecord, ReviewStatus status);
 }

@@ -9,11 +9,11 @@ import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.QuestionModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientClinicalHistoryService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordService;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -31,7 +31,7 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final CatalogOptionService optionService;
     private final FileService fileService;
-    private final PatientClinicalHistoryService patientClinicalHistoryService;
+    private final PatientMedicalRecordService patientMedicalRecordService;
 
     @Transactional
     public void save(AnswerRequest request) {
@@ -40,9 +40,9 @@ public class AnswerService {
 
             AnswerModel answerModel = answerMapper.toEntity(request);
 
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryService.findById(request.getIdPatientClinicalHistory());
+            PatientMedicalRecordModel patientMedicalRecordModel = patientMedicalRecordService.findById(request.getIdPatientMedicalRecord());
 
-            answerModel.setPatientModel(patientClinicalHistoryModel.getPatient());
+            answerModel.setPatientModel(patientMedicalRecordModel.getPatient());
 
             answerRepository.save(answerModel);
         } catch (Exception ex) {
@@ -103,16 +103,16 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public List<AnswerResponse> getAnswersByPatientClinicalHistory(Long patientClinicalHistoryId) {
+    public List<AnswerResponse> getAnswersByPatientMedicalRecord(Long patientMedicalRecordId) {
         try {
-            List<AnswerModel> answerModelList = answerRepository.findAllByPatientClinicalHistoryId(patientClinicalHistoryId);
+            List<AnswerModel> answerModelList = answerRepository.findAllByPatientMedicalRecordId(patientMedicalRecordId);
 
             return answerModelList.stream()
                     .map(this::toResponse)
                     .collect(Collectors.toList());
 
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch answers for Patient Clinical History with ID: " + patientClinicalHistoryId,
+            throw new AppException("Failed to fetch answers for Patient Medical Record with ID: " + patientMedicalRecordId,
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
@@ -130,7 +130,7 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public Map<Long, AnswerResponse> findAllBySectionAndPatientClinicalHistory(List<QuestionModel> questions, String patientId, Long patientClinicalHistoryId) {
+    public Map<Long, AnswerResponse> findAllBySectionAndPatientMedicalRecord(List<QuestionModel> questions, String patientId, Long patientMedicalRecordId) {
         try {
             Set<Long> questionIds = questions.stream()
                     .map(QuestionModel::getIdQuestion)
@@ -138,12 +138,12 @@ public class AnswerService {
 
             List<AnswerModel> answerModelList;
 
-            if (StringUtils.isBlank(patientId) && (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)) {
+            if (StringUtils.isBlank(patientId) && (patientMedicalRecordId == null || patientMedicalRecordId == 0)) {
                 answerModelList = answerRepository.findByQuestion_Ids(questionIds);
             } else {
-                answerModelList = (patientClinicalHistoryId == null || patientClinicalHistoryId == 0)
-                        ? answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId)
-                        : answerRepository.findAllByPatientClinicalHistoryId(questionIds, patientId, patientClinicalHistoryId);
+                answerModelList = (patientMedicalRecordId == null || patientMedicalRecordId == 0)
+                        ? answerRepository.findAllByPatientIdAndQuestionIds(questionIds, patientId)
+                        : answerRepository.findAllByPatientMedicalRecordIdAndPatientIdAndQuestionIds(questionIds, patientId, patientMedicalRecordId);
             }
 
             Map<Long, AnswerResponse> answerMap = new HashMap<>();
@@ -168,13 +168,13 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
-            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
-            PatientClinicalHistoryModel patientClinicalHistoryModel =
-                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+            Long idPatientMedicalRecord = requests.getFirst().getIdPatientMedicalRecord();
+            PatientMedicalRecordModel patientMedicalRecordModel =
+                    patientMedicalRecordService.findById(idPatientMedicalRecord);
 
             List<AnswerModel> savedAnswers = requests.stream()
                     .map(answerMapper::toEntity)
-                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
+                    .peek(answerModel -> answerModel.setPatientModel(patientMedicalRecordModel.getPatient()))
                     .map(answerRepository::save)
                     .toList();
 
@@ -195,13 +195,13 @@ public class AnswerService {
                 throw new AppException("AnswerRequest list cannot be empty", HttpStatus.BAD_REQUEST);
             }
 
-            Long idPatientClinicalHistory = requests.getFirst().getIdPatientClinicalHistory();
-            PatientClinicalHistoryModel patientClinicalHistoryModel =
-                    patientClinicalHistoryService.findById(idPatientClinicalHistory);
+            Long idPatientMedicalRecord = requests.getFirst().getIdPatientMedicalRecord();
+            PatientMedicalRecordModel patientMedicalRecordModel =
+                    patientMedicalRecordService.findById(idPatientMedicalRecord);
 
             List<AnswerModel> updatedAnswers = requests.stream()
                     .map(answerMapper::toEntity)
-                    .peek(answerModel -> answerModel.setPatientModel(patientClinicalHistoryModel.getPatient()))
+                    .peek(answerModel -> answerModel.setPatientModel(patientMedicalRecordModel.getPatient()))
                     .map(answerRepository::save)
                     .toList();
 

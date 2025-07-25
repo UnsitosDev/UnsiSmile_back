@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ClinicalHistoryCatalogResponse {
+public class MedicalRecordCatalogResponse {
     private Long idPatientMedicalRecord;
 
-    private Long idClinicalHistoryCatalog;
+    private Long idMedicalRecordCatalog;
 
-    private String clinicalHistoryName;
+    private String medicalRecordName;
 
     private Long medicalRecordNumber;
 

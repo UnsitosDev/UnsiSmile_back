@@ -13,9 +13,9 @@ public class ClinicalSupervisorDashboardResponse {
     private Integer totalGroups;
     private Long totalStudents;
 
-    private Long clinicalHistoriesInReview;
-    private Long clinicalHistoriesRejected;
-    private Long clinicalHistoriesAccepted;
+    private Long medicalRecordsInReview;
+    private Long medicalRecordsRejected;
+    private Long medicalRecordsAccepted;
 
     private Long treatmentsCompleted;
 }

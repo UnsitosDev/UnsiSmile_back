@@ -15,7 +15,7 @@ import java.util.List;
 
 @Tag(name = "Form Component Tooth Conditions")
 @RestController
-@RequestMapping("/unsismile/api/v1/medical-histories/teeth/form-component-tooth-conditions")
+@RequestMapping("/unsismile/api/v1/medical-records/teeth/form-component-tooth-conditions")
 @RequiredArgsConstructor
 public class FormComponentToothConditionController {
 

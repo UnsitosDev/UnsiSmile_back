@@ -4,17 +4,17 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientClinicalHistoryResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.model.PatientClinicalHistoryModel;
+import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientClinicalHistoryRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
@@ -38,7 +38,7 @@ public class ReviewStatusService {
 
     private final IReviewStatusRepository reviewStatusRepository;
     private final ReviewStatusMapper reviewStatusMapper;
-    private final IPatientClinicalHistoryRepository patientClinicalHistoryRepository;
+    private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
     private final IPatientRepository patientRepository;
     private final IFormSectionRepository formSectionRepository;
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
@@ -56,8 +56,8 @@ public class ReviewStatusService {
                             HttpStatus.NOT_FOUND));
             reviewStatusMapper.updateEntity(request, statusModel);
             reviewSectionNotificationService.broadcastReviewStatus(
-                    statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory(),
-                    statusModel.getPatientClinicalHistory().getPatient().getIdPatient(),
+                    statusModel.getPatientMedicalRecord().getIdPatientMedicalRecord(),
+                    statusModel.getPatientMedicalRecord().getPatient().getIdPatient(),
                     reviewStatusMapper.toDto(statusModel));
             reviewStatusRepository.save(statusModel);
 
@@ -74,14 +74,14 @@ public class ReviewStatusService {
     @Transactional(readOnly = true)
     public ReviewStatusModel getStatusModelByPatientMedicalRecordId(Long idPatientMedicalRecord, String idSection) {
         try {
-            PatientClinicalHistoryModel patientClinicalHistoryModel = patientClinicalHistoryRepository
+            PatientMedicalRecordModel patientMedicalRecordModel = patientMedicalRecordRepository
                     .findById(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, idPatientMedicalRecord),
                             HttpStatus.NOT_FOUND));
 
             List<ReviewStatusModel> results = reviewStatusRepository.findAllByPatientIdAndSectionOrdered(
-                    patientClinicalHistoryModel.getPatient().getIdPatient(),
+                    patientMedicalRecordModel.getPatient().getIdPatient(),
                     idSection);
 
             return results.stream()
@@ -111,19 +111,19 @@ public class ReviewStatusService {
     @Transactional
     public void sendToReview(Long patientMedicalRecordId, String sectionId, Long professorClinicalAreaId) {
         try {
-             PatientClinicalHistoryModel patientClinicalHistory = patientClinicalHistoryRepository.findById(patientMedicalRecordId)
+             PatientMedicalRecordModel patientMedicalRecord = patientMedicalRecordRepository.findById(patientMedicalRecordId)
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.PATIENT_CLINICAL_HISTORY_NOT_FOUND, patientMedicalRecordId),
                             HttpStatus.NOT_FOUND));
 
             validateEntitiesExist(sectionId, professorClinicalAreaId);
 
-            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientClinicalHistory, sectionId,
+            ReviewStatusModel statusModel = reviewStatusMapper.toEntity(patientMedicalRecord, sectionId,
                     professorClinicalAreaId);
 
             reviewSectionNotificationService.broadcastReviewStatus(
-                    patientClinicalHistory.getIdPatientClinicalHistory(),
-                    patientClinicalHistory.getPatient().getIdPatient(),
+                    patientMedicalRecord.getIdPatientMedicalRecord(),
+                    patientMedicalRecord.getPatient().getIdPatient(),
                     reviewStatusMapper.toDto(statusModel));
 
             reviewStatusRepository.save(statusModel);
@@ -138,15 +138,15 @@ public class ReviewStatusService {
     public Page<ReviewStatusResponse> getReviewStatusByStatus(String status, Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
-            ReviewStatus clinicalHistoryStatus = ReviewStatus.valueOf(status.toUpperCase());
+            ReviewStatus medicalRecordStatus = ReviewStatus.valueOf(status.toUpperCase());
 
             Page<ReviewStatusModel> statusModels;
 
             if (user.getRole().getRole() == ERole.ROLE_ADMIN) {
-                statusModels = reviewStatusRepository.findByStatus(clinicalHistoryStatus, pageable);
+                statusModels = reviewStatusRepository.findByStatus(medicalRecordStatus, pageable);
             } else if (user.getRole().getRole() == ERole.ROLE_CLINICAL_AREA_SUPERVISOR) {
                 statusModels = reviewStatusRepository.findByStatusAndProfessor(
-                        user.getUsername(), clinicalHistoryStatus, pageable);
+                        user.getUsername(), medicalRecordStatus, pageable);
             } else {
                 throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
             }
@@ -161,7 +161,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewStatusModel getStatusByPatientClinicalHistoryIdAndSection(String idPatient, String idSection) {
+    public ReviewStatusModel getStatusByPatientMedicalRecordIdAndSection(String idPatient, String idSection) {
         return reviewStatusRepository.findAllByPatientIdAndSectionOrdered(idPatient, idSection)
                 .stream()
                 .findFirst()
@@ -169,7 +169,7 @@ public class ReviewStatusService {
     }
 
     @Transactional(readOnly = true)
-    public List<PatientClinicalHistoryResponse> searchMedicalRecords(String idPatient, String status) {
+    public List<PatientMedicalRecordResponse> searchMedicalRecords(String idPatient, String status) {
         if (!patientRepository.existsById(idPatient)) {
             throw new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -185,17 +185,17 @@ public class ReviewStatusService {
                 .findByIdPatientAndStatus(idPatient, reviewStatus);
 
         return statusModels.stream()
-                .map(statusModel -> mapToClinicalHistoryResponse(statusModel.getPatientClinicalHistory()))
+                .map(statusModel -> mapToMedicalRecordResponse(statusModel.getPatientMedicalRecord()))
                 .collect(Collectors.toList());
     }
 
-    private PatientClinicalHistoryResponse mapToClinicalHistoryResponse(
-            PatientClinicalHistoryModel patientClinicalHistoryModel) {
-        return PatientClinicalHistoryResponse.builder()
-                .id(patientClinicalHistoryModel.getClinicalHistoryCatalog().getIdClinicalHistoryCatalog())
-                .clinicalHistoryName(patientClinicalHistoryModel.getClinicalHistoryCatalog().getClinicalHistoryName())
-                .patientClinicalHistoryId(patientClinicalHistoryModel.getIdPatientClinicalHistory())
-                .patientId(patientClinicalHistoryModel.getPatient().getIdPatient())
+    private PatientMedicalRecordResponse mapToMedicalRecordResponse(
+            PatientMedicalRecordModel patientMedicalRecordModel) {
+        return PatientMedicalRecordResponse.builder()
+                .id(patientMedicalRecordModel.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
+                .medicalRecordName(patientMedicalRecordModel.getMedicalRecordCatalog().getMedicalRecordName())
+                .patientMedicalRecordId(patientMedicalRecordModel.getIdPatientMedicalRecord())
+                .patientId(patientMedicalRecordModel.getPatient().getIdPatient())
                 .build();
     }
 
@@ -226,8 +226,8 @@ public class ReviewStatusService {
 
     private ReviewStatusResponse buildStatusResponse(ReviewStatusModel statusModel) {
         Optional<TreatmentDetailModel> treatmentDetailOpt = treatmentDetailRepository
-                .findByPatientClinicalHistory_IdPatientClinicalHistory(
-                        statusModel.getPatientClinicalHistory().getIdPatientClinicalHistory());
+                .findByPatientMedicalRecord_IdPatientMedicalRecord(
+                        statusModel.getPatientMedicalRecord().getIdPatientMedicalRecord());
 
         ReviewStatusResponse response = reviewStatusMapper.toDto(statusModel);
 

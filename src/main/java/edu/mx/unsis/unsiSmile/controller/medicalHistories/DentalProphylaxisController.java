@@ -23,7 +23,7 @@ import java.util.List;
 @Tag(name = "DENTAL PROPHYLAXIS")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unsismile/api/v1/medical-histories/dental-prophylaxis")
+@RequestMapping("/unsismile/api/v1/medical-records/dental-prophylaxis")
 public class DentalProphylaxisController {
 
     private final DentalProphylaxisService dentalProphylaxisService;
