@@ -6,8 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.Treatmen
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -36,16 +35,14 @@ import java.util.Map;
 public class TreatmentReportService {
 
     private final TreatmentDetailService treatmentDetailService;
-    private final IStudentRepository studentRepository;
-    private final JasperReportService jasperReportService;
+    private final StudentService studentService;
     private final TreatmentService treatmentService;
 
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> generateTreatmentReportByStudent(String idStudent, Long idTreatment) {
         try {
             // Obtenemos el estudiante
-            StudentModel student = studentRepository.findById(idStudent)
-                    .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+            StudentModel student = studentService.getStudentModel(idStudent);
 
             // Obtenemos el nombre del tratamiento si se proporciona un idTreatment
             String treatmentName = "TODOS LOS TRATAMIENTOS";
@@ -59,15 +56,15 @@ public class TreatmentReportService {
             }
 
             // Obtenemos todos los tratamientos del estudiante usando el método para reportes
-            Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudentForReport(
+            Page<TreatmentDetailResponse> treatmentsPage = treatmentDetailService.getAllTreatmentDetailsByStudent(
                     Pageable.unpaged(), idStudent, idTreatment);
 
             List<TreatmentDetailResponse> treatments = new ArrayList<>(treatmentsPage.getContent());
             
             // Obtenemos el nombre del grupo del primer tratamiento, o vacío si no hay tratamientos
             String groupName = "";
-            if (!treatments.isEmpty() && treatments.get(0).getStudent() != null && treatments.get(0).getStudent().getGroup() != null) {
-                groupName = treatments.get(0).getStudent().getGroup();
+            if (!treatments.isEmpty() && treatments.getFirst().getStudent() != null && treatments.getFirst().getStudent().getGroup() != null) {
+                groupName = treatments.getFirst().getStudent().getGroup();
             }
 
             // Calcular si hay algún tratamiento con dientes asociados

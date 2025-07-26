@@ -85,6 +85,10 @@ public class ResponseMessages {
     public static final String FAILED_TO_UPDATE_PROFESSOR_CLINICAL_AREA = "Error al actualizar el profesor del área clínica.";
     public static final String FAILED_TO_DELETE_PROFESSOR_CLINICAL_AREA = "Error al eliminar la asignación del profesor al área clínica.";
 
+    public static final String STUDENT_NOT_REGISTERED_IN_ANY_GROUP = "No se encontraron grupos al cual esté registrado el estudiante";
+    public static final String FAILED_TO_FETCH_STUDENT_GROUPS = "Error al obtener los grupos del estudiante";
+    public static final String FAILED_TO_FETCH_TREATMENTS = "Error al obtener los tratamientos realizados por el estudiante";
+
     public static final String FILE_NOT_FOUND = "Archivo no encontrado.";
     public static final String FAILED_TO_FETCH_FILES = "Error al obtener los archivos.";
     public static final String ERROR_WHILE_DOWNLOAD_FILE = "Error durante la descarga del archivo.";

@@ -259,15 +259,21 @@ public class TreatmentDetailService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(Pageable pageable, String idStudent,
-                                                                                  Long idTreatment) {
+    public Page<TreatmentDetailResponse> getAllTreatmentDetailsByStudentForReport(
+            Pageable pageable, String idStudent, Long idTreatment) {
         try {
-            Page<TreatmentDetailModel> page = getTreatmentDetailsByStudentGroups(pageable, idStudent, idTreatment);
-            return page.map(this::mapTreatmentDetailToDto);
+            List<TreatmentDetailResponse> treatments = getFinalizedTreatmentDetailsByStudent(idStudent, idTreatment);
+
+            if(treatments.isEmpty()) {
+                return new PageImpl<>(Collections.emptyList(), pageable, 0);
+            }
+
+            return new PageImpl<>(Collections.singletonList(treatments.get(0)), pageable, 1);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -793,6 +799,28 @@ public class TreatmentDetailService {
         boolean isInProgress = treatmentDetailToothService.canSendToReviewBasedOnTeeth(response.getIdTreatmentDetail());
         if (isInProgress) {
             response.setStatus(ReviewStatus.IN_PROGRESS.toString());
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<TreatmentDetailResponse> getFinalizedTreatmentDetailsByStudent(
+            String idStudent, Long idTreatment) {
+        try {
+            StudentModel studentModel = studentService.getStudentModel(idStudent);
+            List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
+
+            List<TreatmentDetailModel> treatmentModels = treatmentDetailRepository
+                    .findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
+                            studentGroups, idTreatment, ReviewStatus.FINISHED);
+
+            return treatmentModels.stream()
+                    .map(this::mapTreatmentDetailToDto)
+                    .collect(Collectors.toList());
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_TREATMENTS,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

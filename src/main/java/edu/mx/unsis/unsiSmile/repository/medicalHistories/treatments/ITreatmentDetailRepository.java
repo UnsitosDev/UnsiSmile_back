@@ -83,4 +83,9 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "AND t.createdAt BETWEEN ?2 AND ?3 " +
             "GROUP BY t.treatment.name")
     List<Object[]> countGeneralScopeTreatmentsBetweenDates(ReviewStatus status, Timestamp startDate, Timestamp endDate);
+
+    List<TreatmentDetailModel> findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
+            List<StudentGroupModel> studentGroups,
+            Long idTreatment,
+            ReviewStatus status);
 }
