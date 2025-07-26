@@ -48,7 +48,7 @@ public class MedicalRecordDigitizerController {
     public ResponseEntity<Page<MedicalRecordDigitizerResponse>> getAllMedicalRecordDigitizer(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "student.person.firstName") String order,
+            @RequestParam(defaultValue = "user.username") String order,
             @RequestParam(defaultValue = "true") boolean asc,
             @RequestParam(required = false) String keyword) {
 
