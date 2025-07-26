@@ -17,11 +17,13 @@ import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
+import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +65,7 @@ public class UserService {
 
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
     private final ProfessorMapper professorMapper;
+    private final IMedicalRecordDigitizerRepository medicalRecordDigitizerRepository;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -162,13 +165,16 @@ public class UserService {
                 throw new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username, HttpStatus.NOT_FOUND);
             }
 
+            // Verificar y manejar el caso de digitizador
+            handleDigitizerCase(user);
+
             return switch (user.getRole().getRole()) {
                 case ERole.ROLE_ADMIN -> ResponseEntity
                         .ok(administratorMapper.toDto(administratorRepository.findById(user.getUsername())
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
                                         HttpStatus.NOT_FOUND))));
-                case ERole.ROLE_STUDENT, ERole.ROLE_MEDICAL_RECORD_DIGITIZER ->
+                case ERole.ROLE_STUDENT ->
                         ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(user.getUsername())
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
@@ -322,6 +328,21 @@ public class UserService {
             throw ex;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private void handleDigitizerCase(UserModel user) {
+        if (user.getRole().getRole() == ERole.ROLE_MEDICAL_RECORD_DIGITIZER) {
+            MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
+                    .findTopByUser_UsernameOrderByCreatedAtDesc(user.getUsername())
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_USER, user.getUsername()),
+                            HttpStatus.NOT_FOUND));
+
+            // Establecer el rol anterior temporalmente
+            RoleModel previousRole = new RoleModel();
+            previousRole.setRole(ERole.valueOf(digitizer.getPreviousRole()));
+            user.setRole(previousRole);
         }
     }
 }
