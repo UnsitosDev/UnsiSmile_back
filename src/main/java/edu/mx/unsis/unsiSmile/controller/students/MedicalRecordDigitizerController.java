@@ -36,13 +36,6 @@ public class MedicalRecordDigitizerController {
         return ResponseEntity.ok(digitizerService.getDigitizerById(id));
     }
 
-    @Operation(summary = "Actualiza los datos de un capturador.")
-    @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@Valid @RequestBody MedicalRecordDigitizerRequest request) {
-        digitizerService.updateDigitizer(request);
-    }
-
     @Operation(summary = "Elimina un capturador por su ID.")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -55,7 +48,7 @@ public class MedicalRecordDigitizerController {
     public ResponseEntity<Page<MedicalRecordDigitizerResponse>> getAllMedicalRecordDigitizer(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "student.person.firstName") String order,
+            @RequestParam(defaultValue = "user.username") String order,
             @RequestParam(defaultValue = "true") boolean asc,
             @RequestParam(required = false) String keyword) {
 

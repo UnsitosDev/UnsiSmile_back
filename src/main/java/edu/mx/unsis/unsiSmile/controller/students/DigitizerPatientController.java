@@ -41,7 +41,7 @@ public class DigitizerPatientController {
     @Operation(summary = "Obtener una lista paginada de pacientes asignados a un capturador")
     @GetMapping
     public ResponseEntity<Page<DigitizerPatientResponse>> getAllDigitizerPatients(
-            @RequestParam String enrollment,
+            @RequestParam String username,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String order,
@@ -50,7 +50,7 @@ public class DigitizerPatientController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<DigitizerPatientResponse> results = digitizerPatientService.getAllDigitizerPatientsByDigitizer(enrollment, pageable);
+        Page<DigitizerPatientResponse> results = digitizerPatientService.getAllDigitizerPatientsByDigitizer(username, pageable);
         return ResponseEntity.ok(results);
     }
 

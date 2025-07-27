@@ -19,7 +19,7 @@ public interface IDigitizerPatientRepository extends JpaRepository<DigitizerPati
 
     Optional<DigitizerPatientModel> findByPatient_IdPatientAndDigitizer_IdMedicalRecordDigitizerAndStatusKey(String patientId, Long digitizerId, String statusKey);
 
-    Page<DigitizerPatientModel> findByDigitizer_Student_Enrollment(String enrollment, Pageable pageable);
+    Page<DigitizerPatientModel> findByDigitizer_User_Username(String enrollment, Pageable pageable);
 
     @Query("SELECT dp FROM DigitizerPatientModel dp " +
             "WHERE dp.digitizer = :digitizer " +

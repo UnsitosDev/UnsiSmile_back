@@ -1,16 +1,18 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.MedicalRecordDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.MedicalRecordDigitizerMapper;
+import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
-import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -28,25 +29,27 @@ public class MedicalRecordDigitizerService {
 
     private final IMedicalRecordDigitizerRepository medicalRecordDigitizerRepository;
     private final MedicalRecordDigitizerMapper medicalRecordDigitizerMapper;
-    private final StudentService studentService;
     private final UserService userService;
     private final DigitizerPatientService digitizerPatientService;
+    private final PersonService personService;
 
     @Transactional
     public void createDigitizer(@NotNull MedicalRecordDigitizerRequest request) {
         try {
-            StudentModel student = studentService.getStudentModel(request.getIdStudent());
+            UserModel user = userService.getUserByUsername(request.getUsername());
 
-            if (ERole.ROLE_MEDICAL_RECORD_DIGITIZER.equals(student.getUser().getRole().getRole())) {
-                throw new AppException(ResponseMessages.STUDENT_ALREADY_IS_DIGITIZER, HttpStatus.BAD_REQUEST);
+            if (ERole.ROLE_MEDICAL_RECORD_DIGITIZER.equals(user.getRole().getRole())) {
+                throw new AppException(ResponseMessages.USER_ALREADY_IS_DIGITIZER, HttpStatus.BAD_REQUEST);
             }
 
-            validatePreviousDigitizerCanBeCreated(student);
+            validatePreviousDigitizerCanBeCreated(user);
 
             MedicalRecordDigitizerModel entity = medicalRecordDigitizerMapper.toEntity(request);
+            entity.setUser(user);
+            entity.setPreviousRole(user.getRole().getRole().name());
             medicalRecordDigitizerRepository.save(entity);
 
-            userService.changeRole(student.getEnrollment(), ERole.ROLE_MEDICAL_RECORD_DIGITIZER.toString());
+            userService.changeRole(user.getUsername(), ERole.ROLE_MEDICAL_RECORD_DIGITIZER.toString());
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -61,27 +64,15 @@ public class MedicalRecordDigitizerService {
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
-            return medicalRecordDigitizerMapper.toDto(model);
+
+            MedicalRecordDigitizerResponse response = medicalRecordDigitizerMapper.toDto(model);
+            setPersonName(response, model.getUser().getUsername());
+
+            return response;
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZER, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Transactional
-    public void updateDigitizer(MedicalRecordDigitizerRequest request) {
-        try {
-            MedicalRecordDigitizerModel model = medicalRecordDigitizerRepository.findById(request.getIdMedicalRecordDigitizer())
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND, request.getIdMedicalRecordDigitizer()),
-                            HttpStatus.NOT_FOUND));
-            medicalRecordDigitizerMapper.updateEntity(request, model);
-            medicalRecordDigitizerRepository.save(model);
-        } catch (AppException e) {
-            throw e;
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_TO_UPDATE_MEDICAL_RECORD_DIGITIZER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -93,16 +84,17 @@ public class MedicalRecordDigitizerService {
                             String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
 
-            if (Constants.INACTIVE.equals(model.getStatusKey())) {
+            if (Constants.DELETED.equals(model.getStatusKey())) {
                 throw new AppException(ResponseMessages.MEDICAL_RECORD_DIGITIZER_ALREADY_DELETED, HttpStatus.BAD_REQUEST);
             }
 
-            model.setStatusKey(Constants.INACTIVE);
-            model.setEndDate(LocalDate.now());
+            model.setStatusKey(Constants.DELETED);
             medicalRecordDigitizerRepository.save(model);
 
             digitizerPatientService.deleteAllRelationsByDigitizerId(id);
-            userService.changeRole(model.getStudent().getEnrollment(), ERole.ROLE_STUDENT.toString());
+
+            String previousRole = model.getPreviousRole();
+            userService.changeRole(model.getUser().getUsername(), previousRole);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -115,10 +107,14 @@ public class MedicalRecordDigitizerService {
         try {
             Page<MedicalRecordDigitizerModel> models =
                     (keyword == null || keyword.isBlank())
-                            ? medicalRecordDigitizerRepository.findAllMedicalRecordDigitizer(pageable)
-                            : medicalRecordDigitizerRepository.searchByKeyword(keyword, pageable);
+                            ? medicalRecordDigitizerRepository.findAllMedicalRecordDigitizer(Constants.DELETED, pageable)
+                            : medicalRecordDigitizerRepository.searchByKeyword(keyword, Constants.DELETED, pageable);
 
-            return models.map(medicalRecordDigitizerMapper::toDto);
+            return models.map(model -> {
+                MedicalRecordDigitizerResponse response = medicalRecordDigitizerMapper.toDto(model);
+                setPersonName(response, model.getUser().getUsername());
+                return response;
+            });
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZERS, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -132,18 +128,18 @@ public class MedicalRecordDigitizerService {
                             String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
 
-            if (model.getEndDate() != null) {
+            if (model.getStatusKey().equals(Constants.DELETED)) {
                 throw new AppException(ResponseMessages.MEDICAL_RECORD_DIGITIZER_ALREADY_DELETED, HttpStatus.BAD_REQUEST);
             }
 
-            model.setStatusKey(
-                    Constants.ACTIVE.equals(model.getStatusKey()) ? Constants.INACTIVE : Constants.ACTIVE);
+            String previousStatus = model.getStatusKey();
+            model.setStatusKey(Constants.ACTIVE.equals(previousStatus) ? Constants.INACTIVE : Constants.ACTIVE);
             medicalRecordDigitizerRepository.save(model);
 
-            String role = Constants.ACTIVE.equals(model.getStatusKey())
-                    ? ERole.ROLE_MEDICAL_RECORD_DIGITIZER.toString()
-                    : ERole.ROLE_STUDENT.toString();
-            userService.changeRole(model.getStudent().getEnrollment(), role);
+            String role = Constants.ACTIVE.equals(previousStatus)
+                    ? model.getPreviousRole()
+                    : ERole.ROLE_MEDICAL_RECORD_DIGITIZER.toString();
+            userService.changeRole(model.getUser().getUsername(), role);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -151,14 +147,14 @@ public class MedicalRecordDigitizerService {
         }
     }
 
-    private void validatePreviousDigitizerCanBeCreated(StudentModel student) {
+    private void validatePreviousDigitizerCanBeCreated(UserModel user) {
         Optional<MedicalRecordDigitizerModel> lastDigitizerOpt =
-                medicalRecordDigitizerRepository.findTopByStudent_EnrollmentOrderByCreatedAtDesc(student.getEnrollment());
+                medicalRecordDigitizerRepository.findTopByUser_UsernameOrderByCreatedAtDesc(user.getUsername());
 
         if (lastDigitizerOpt.isPresent()) {
             MedicalRecordDigitizerModel lastDigitizer = lastDigitizerOpt.get();
 
-            if (lastDigitizer.getEndDate() == null) {
+            if (lastDigitizer.getStatusKey().equals(Constants.INACTIVE)) {
                 throw new AppException(
                         ResponseMessages.DIGITIZER_ALREADY_EXISTS_NEEDS_REACTIVATION,
                         HttpStatus.BAD_REQUEST
@@ -168,11 +164,11 @@ public class MedicalRecordDigitizerService {
     }
 
     @Transactional(readOnly = true)
-    public MedicalRecordDigitizerModel getMedicalRecordDigitizerModelByStudent(@NotNull String studentEnrollment) {
+    public MedicalRecordDigitizerModel getMedicalRecordDigitizerModelByUsername(@NotNull String username) {
         try {
-            MedicalRecordDigitizerModel model = medicalRecordDigitizerRepository.findTopByStudent_EnrollmentOrderByCreatedAtDesc(studentEnrollment)
+            MedicalRecordDigitizerModel model = medicalRecordDigitizerRepository.findTopByUser_UsernameOrderByCreatedAtDesc(username)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND_FOR_STUDENT, studentEnrollment),
+                            String.format(ResponseMessages.MEDICAL_RECORD_DIGITIZER_NOT_FOUND_FOR_USER, username),
                             HttpStatus.NOT_FOUND));
             if (Constants.INACTIVE.equals(model.getStatusKey())) {
                 throw new AppException(
@@ -185,5 +181,11 @@ public class MedicalRecordDigitizerService {
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZER, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void setPersonName(MedicalRecordDigitizerResponse response, String username) {
+        String curp = userService.getPersonByUsername(username).getCurp();
+        PersonModel person = personService.getPersonModelByCurp(curp);
+        response.setDigitizerName(person.getFullName());
     }
 }

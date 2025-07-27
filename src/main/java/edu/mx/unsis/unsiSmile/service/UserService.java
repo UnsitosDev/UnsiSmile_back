@@ -1,26 +1,13 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.UserMapper;
-import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
-import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
-import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
-import edu.mx.unsis.unsiSmile.repository.IUserRepository;
-import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
-import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
-import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,17 +17,45 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserBaseResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.UserMapper;
+import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
+import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
+import edu.mx.unsis.unsiSmile.mappers.users.AdministratorResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.BaseUserResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.DigitizerResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.ProfessorResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.StudentResponseBuilder;
+import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
+import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
+import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.students.StudentModel;
+import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
+import edu.mx.unsis.unsiSmile.repository.IUserRepository;
+import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
+import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerRepository;
+import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
+import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +75,7 @@ public class UserService {
 
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
     private final ProfessorMapper professorMapper;
+    private final IMedicalRecordDigitizerRepository medicalRecordDigitizerRepository;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -104,7 +120,8 @@ public class UserService {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
             String username = userDetails.getUsername();
 
-            UserModel currentUser = userRepository.findByUsername(username);
+            UserModel currentUser = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             if (currentUser != null) {
                 return userMapper.toDto(currentUser);
@@ -154,10 +171,12 @@ public class UserService {
 
     private ResponseEntity<?> getInformationByUsername(String username) {
         try {
-            UserModel user = userRepository.findByUsername(username);
-            if (user == null) {
-                throw new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username, HttpStatus.NOT_FOUND);
-            }
+            UserModel user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                            HttpStatus.NOT_FOUND));
+
+            // Verificar y manejar el caso de digitizador
+            handleDigitizerCase(user);
 
             return switch (user.getRole().getRole()) {
                 case ERole.ROLE_ADMIN -> ResponseEntity
@@ -165,16 +184,16 @@ public class UserService {
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
                                         HttpStatus.NOT_FOUND))));
-                case ERole.ROLE_STUDENT, ERole.ROLE_MEDICAL_RECORD_DIGITIZER ->
-                        ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(user.getUsername())
-                                .orElseThrow(() -> new AppException(
-                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
-                                        HttpStatus.NOT_FOUND))));
+                case ERole.ROLE_STUDENT ->
+                    ResponseEntity.ok(studentMapper.toDto(studentRepository.findById(user.getUsername())
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                    HttpStatus.NOT_FOUND))));
                 case ERole.ROLE_PROFESSOR, ERole.ROLE_CLINICAL_AREA_SUPERVISOR ->
-                        ResponseEntity.ok(professorMapper.toDto(professorRepository.findById(user.getUsername())
-                                .orElseThrow(() -> new AppException(
-                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
-                                        HttpStatus.NOT_FOUND))));
+                    ResponseEntity.ok(professorMapper.toDto(professorRepository.findById(user.getUsername())
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                    HttpStatus.NOT_FOUND))));
                 default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
             };
         } catch (AppException ex) {
@@ -187,11 +206,9 @@ public class UserService {
     @Transactional
     public void deleteUser(String username) {
         try {
-            UserModel userModel = userRepository.findByUsername(username);
-            if (userModel == null) {
-                throw new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
-                        HttpStatus.NOT_FOUND);
-            }
+            UserModel userModel = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                            HttpStatus.NOT_FOUND));
             userModel.setStatus(false);
             userRepository.save(userModel);
         } catch (Exception ex) {
@@ -202,12 +219,14 @@ public class UserService {
     @Transactional
     public void createOrUpdateProfilePicture(MultipartFile profilePicture) {
         UserResponse currentUser = getCurrentUser();
-        UserModel owner = userRepository.findByUsername(currentUser.getUsername());
+        UserModel owner = userRepository.findByUsername(currentUser.getUsername())
+                .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
         // Validar el tipo de archivo
         String contentType = profilePicture.getContentType();
         if (!ALLOWED_FILE_TYPES.contains(contentType)) {
-            throw new AppException("Tipo de archivo no permitido. Solo se permiten archivos JPEG, PNG y GIF.", HttpStatus.BAD_REQUEST);
+            throw new AppException("Tipo de archivo no permitido. Solo se permiten archivos JPEG, PNG y GIF.",
+                    HttpStatus.BAD_REQUEST);
         }
 
         // Verificar si el usuario ya tiene una foto de perfil
@@ -226,7 +245,8 @@ public class UserService {
         ProfilePictureModel profilePictureModel = new ProfilePictureModel();
         profilePictureModel.setIdProfilePicture(UUID.randomUUID().toString());
         profilePictureModel.setUrl(pictureName);
-        profilePictureModel.setExtentionPicture(fileStorageService.getFileExtension(profilePicture.getOriginalFilename()));
+        profilePictureModel
+                .setExtentionPicture(fileStorageService.getFileExtension(profilePicture.getOriginalFilename()));
 
         owner.setProfilePicture(profilePictureModel);
 
@@ -270,10 +290,8 @@ public class UserService {
     @Transactional
     public void changeRole(String username, String newRole) {
         try {
-            UserModel user = userRepository.findByUsername(username);
-            if (user == null) {
-                throw new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-            }
+            UserModel user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             ERole roleEnum = ERole.valueOf(newRole);
 
@@ -286,6 +304,99 @@ public class UserService {
             throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_CHANGE_ROLE, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public UserModel getUserByUsername(String username) {
+        try {
+            return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public PersonResponse getPersonByUsername(String username) {
+        try {
+            ResponseEntity<?> response = getInformationByUsername(username);
+            Object body = response.getBody();
+
+            return switch (body) {
+                case StudentResponse student -> student.getPerson();
+                case ProfessorResponse professor -> professor.getPerson();
+                case AdministratorResponse admin -> admin.getPerson();
+                case null, default -> throw new AppException(ResponseMessages.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            };
+
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private void handleDigitizerCase(UserModel user) {
+        if (user.getRole().getRole() == ERole.ROLE_MEDICAL_RECORD_DIGITIZER) {
+            MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
+                    .findTopByUser_UsernameOrderByCreatedAtDesc(user.getUsername())
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_USER, user.getUsername()),
+                            HttpStatus.NOT_FOUND));
+
+            // Establecer el rol anterior temporalmente
+            RoleModel previousRole = new RoleModel();
+            previousRole.setRole(ERole.valueOf(digitizer.getPreviousRole()));
+            user.setRole(previousRole);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<UserBaseResponse> getUserBaseByUsername(String username) {
+        try {
+            UserModel userModel = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                            HttpStatus.NOT_FOUND));
+
+            switch (userModel.getRole().getRole()) {
+                case ROLE_ADMIN:
+                    AdministratorModel admin = administratorRepository.findByUser(userModel)
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                                    HttpStatus.NOT_FOUND));
+
+                    return ResponseEntity.ok(
+                            new AdministratorResponseBuilder().build(admin));
+                case ROLE_PROFESSOR:
+                    ProfessorModel professor = professorRepository.findByUser(userModel)
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                                    HttpStatus.NOT_FOUND));
+                    return ResponseEntity.ok(
+                            new ProfessorResponseBuilder().build(professor));
+                case ROLE_STUDENT:
+                    StudentModel student = studentRepository.findByUser(userModel)
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                                    HttpStatus.NOT_FOUND));
+
+                    return ResponseEntity.ok(
+                            new StudentResponseBuilder().build(student));
+                case ROLE_MEDICAL_RECORD_DIGITIZER:
+                    MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
+                            .findByUser(userModel)
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                                    HttpStatus.NOT_FOUND));
+                    return ResponseEntity.ok(
+                            new DigitizerResponseBuilder().build(digitizer));
+                default:
+                    return ResponseEntity.ok(
+                            new BaseUserResponseBuilder().build(userModel));
+            }
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

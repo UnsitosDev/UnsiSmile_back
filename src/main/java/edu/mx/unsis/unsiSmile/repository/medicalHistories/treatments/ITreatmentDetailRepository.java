@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -83,6 +84,16 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "AND t.createdAt BETWEEN ?2 AND ?3 " +
             "GROUP BY t.treatment.name")
     List<Object[]> countGeneralScopeTreatmentsBetweenDates(ReviewStatus status, Timestamp startDate, Timestamp endDate);
+
+    @Query("SELECT td FROM TreatmentDetailModel td " +
+            "WHERE td.patientMedicalRecord.patient.idPatient = :idPatient " +
+            "AND td.patientMedicalRecord.medicalRecordCatalog.idMedicalRecordCatalog = :idMedicalRecordCatalog")
+    List<TreatmentDetailModel> findUsedByPatientAndCatalog(
+            @Param("idPatient") String idPatient,
+            @Param("idMedicalRecordCatalog") Long idMedicalRecordCatalog);
+
+    @Query("SELECT td FROM TreatmentDetailModel td WHERE td.patientMedicalRecord.patient.idPatient = :idPatient")
+    List<TreatmentDetailModel> findByPatientId(@Param("idPatient") String idPatient);
 
     List<TreatmentDetailModel> findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
             List<StudentGroupModel> studentGroups,

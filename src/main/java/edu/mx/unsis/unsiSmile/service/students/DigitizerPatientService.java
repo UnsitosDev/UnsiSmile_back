@@ -4,6 +4,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.DigitizerPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.DigitizerPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -81,11 +82,18 @@ public class DigitizerPatientService {
     @Transactional(readOnly = true)
     public DigitizerPatientResponse getDigitizerPatientById(Long id) {
         try {
-            return digitizerPatientMapper.toDto(
-                    digitizerPatientRepository.findByIdDigitizerPatient(id)
-                            .orElseThrow(() -> new AppException(String.format(ResponseMessages.DIGITIZER_PATIENT_NOT_FOUND, id),
-                                    HttpStatus.NOT_FOUND))
-            );
+            DigitizerPatientModel model = digitizerPatientRepository.findByIdDigitizerPatient(id)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.DIGITIZER_PATIENT_NOT_FOUND, id),
+                            HttpStatus.NOT_FOUND));
+
+            DigitizerPatientResponse response = digitizerPatientMapper.toDto(model);
+
+            String username = model.getDigitizer().getUser().getUsername();
+            PersonResponse person = userService.getPersonByUsername(username);
+            response.setPerson(person);
+
+            return response;
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -94,25 +102,26 @@ public class DigitizerPatientService {
     }
 
     @Transactional(readOnly = true)
-    public Page<DigitizerPatientResponse> getAllDigitizerPatientsByDigitizer(String enrollment, Pageable pageable) {
+    public Page<DigitizerPatientResponse> getAllDigitizerPatientsByDigitizer(String username, Pageable pageable) {
         try {
             UserResponse user = userService.getCurrentUser();
             MedicalRecordDigitizerModel digitizer = digitizerRepository
-                    .findTopByStudent_EnrollmentOrderByCreatedAtDesc(enrollment)
+                    .findTopByUser_UsernameOrderByCreatedAtDesc(username)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_STUDENT, enrollment),
+                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_USER, username),
                             HttpStatus.NOT_FOUND));
 
-            Page<DigitizerPatientModel> results;
-            if(ERole.ROLE_ADMIN.equals(user.getRole().getRole())){
-                results = digitizerPatientRepository.
-                        findByDigitizer_Student_Enrollment(enrollment, pageable);
-            } else {
-                results = digitizerPatientRepository.
-                        findActiveByDigitizer(digitizer, pageable);
-            }
+            PersonResponse person = userService.getPersonByUsername(digitizer.getUser().getUsername());
 
-            return results.map(digitizerPatientMapper::toDto);
+            Page<DigitizerPatientModel> results = ERole.ROLE_ADMIN.equals(user.getRole().getRole())
+                    ? digitizerPatientRepository.findByDigitizer_User_Username(username, pageable)
+                    : digitizerPatientRepository.findActiveByDigitizer(digitizer, pageable);
+
+            return results.map(model -> {
+                DigitizerPatientResponse response = digitizerPatientMapper.toDto(model);
+                response.setPerson(person);
+                return response;
+            });
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

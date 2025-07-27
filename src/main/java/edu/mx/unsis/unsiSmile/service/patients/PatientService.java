@@ -351,7 +351,9 @@ public class PatientService {
         try {
             return patientRepository.findByIdPatient(id)
                     .orElseThrow(
-                            () -> new AppException("Patient not found with ID: " + id, HttpStatus.NOT_FOUND));
+                            () -> new AppException(ResponseMessages.PATIENT_NOT_FOUND, HttpStatus.NOT_FOUND));
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException("Failed to fetch patient by ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
