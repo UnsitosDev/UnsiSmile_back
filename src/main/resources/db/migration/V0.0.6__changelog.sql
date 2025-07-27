@@ -319,7 +319,8 @@ VALUES
     ("Waters de cráneo", "AR-01", 3, 1, false, "Descripción"),
     ("Submento vertex", "AR-01", 3, 1, false, "Descripción"),
     ("Tomografía volumétrica completa", "AR-01", 3, 1, false, "Descripción"),
-    ("Otros (especifique)", "AR-01", 3, 1, false, "Descripción")
+    ("Otros (especifique)", "AR-01", 3, 1, false, "Descripción"),
+    ("Evidencias visuales", "AR-01", 6, 6, true, null)
 ;
 
 -- Mmodelo de estudio y fotografías
@@ -365,7 +366,8 @@ INSERT INTO questions
 VALUES
     ("Tipo de biopsia", "ELB-01", 3, 2, true, "Indique tipo de biopsia"),
     ("Región donde se realizó la biopsia", "ELB-01", 3, 3, true, "Indique región de la biopsia"),
-    ("Laboratorio donde se envía el estudio", "ELB-01", 3, 4, true, "Indique laboratorio de estudio")
+    ("Laboratorio donde se envía el estudio", "ELB-01", 3, 4, true, "Indique laboratorio de estudio"),
+    ("Evidencias visuales", "ELB-01", 6, 6, true, null)
 ;
 
 INSERT INTO questions
