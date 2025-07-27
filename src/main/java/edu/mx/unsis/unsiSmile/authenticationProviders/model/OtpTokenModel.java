@@ -29,9 +29,11 @@ public class OtpTokenModel {
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
+    @Builder.Default
     @Column(name = "is_used", nullable = false)
     private boolean isUsed = false;
 
+    @Builder.Default
     @Column(name = "attempts", nullable = false)
     private byte attempts = 0;
 
@@ -41,6 +43,7 @@ public class OtpTokenModel {
     @Column(name = "validated_at", updatable = false)
     private LocalDateTime validatedAt;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
