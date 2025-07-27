@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,7 @@ public interface IMedicalRecordDigitizerRepository extends JpaRepository<Medical
 
     @Query("SELECT m FROM MedicalRecordDigitizerModel m WHERE m.statusKey != :deleted")
     Page<MedicalRecordDigitizerModel> findAllMedicalRecordDigitizer(@Param("deleted") String deleted, Pageable pageable);
+
+    Optional<MedicalRecordDigitizerModel> findByUser(UserModel user);
+
 }
