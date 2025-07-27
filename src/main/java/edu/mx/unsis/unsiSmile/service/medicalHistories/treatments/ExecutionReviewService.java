@@ -7,6 +7,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewM
 import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
+import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ExecutionReviewService {
     private final IExecutionReviewRepository executionReviewRepository;
+    private final ProfessorClinicalAreaService professorClinicalAreaService;
 
     @Transactional
     public ExecutionReviewModel createExecutionReview(TreatmentStatusRequest request) {
@@ -47,7 +49,11 @@ public class ExecutionReviewService {
                     .orElseThrow(() -> new AppException(
                             String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, id),
                             HttpStatus.NOT_FOUND));
-
+            if (request.getProfessorClinicalAreaId() !=null ) {
+                ProfessorClinicalAreaModel professorClinicalArea =
+                        professorClinicalAreaService.getProfessorClinicalAreaModel(request.getProfessorClinicalAreaId());
+                existing.setProfessorClinicalArea(professorClinicalArea);
+            }
             existing.setComment(request.getComment());
             existing.setStatus(request.getStatus());
 

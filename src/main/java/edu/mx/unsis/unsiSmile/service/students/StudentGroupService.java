@@ -91,7 +91,17 @@ public class StudentGroupService {
 
     @Transactional(readOnly = true)
     public List<StudentGroupModel> getAllStudentGroupsByStudent(StudentModel student) {
-        return studentGroupRepository.findAllByStudent(student);
+        try {
+            List<StudentGroupModel> studentGroups = studentGroupRepository.findAllByStudent(student);
+            if (studentGroups.isEmpty()) {
+                throw new AppException(ResponseMessages.STUDENT_NOT_REGISTERED_IN_ANY_GROUP, HttpStatus.NOT_FOUND);
+            }
+            return studentGroups;
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_STUDENT_GROUPS, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Transactional(readOnly = true)

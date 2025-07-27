@@ -94,4 +94,9 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
 
     @Query("SELECT td FROM TreatmentDetailModel td WHERE td.patientMedicalRecord.patient.idPatient = :idPatient")
     List<TreatmentDetailModel> findByPatientId(@Param("idPatient") String idPatient);
+
+    List<TreatmentDetailModel> findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
+            List<StudentGroupModel> studentGroups,
+            Long idTreatment,
+            ReviewStatus status);
 }

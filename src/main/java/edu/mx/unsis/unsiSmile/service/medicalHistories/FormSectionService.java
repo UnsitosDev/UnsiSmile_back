@@ -21,9 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -141,14 +139,23 @@ public class FormSectionService {
     public List<FormSectionResponse> findAllByMedicalRecord(
             List<MedicalRecordSectionModel> medicalRecordSectionModels, String patientId, Long patientMedicalRecordId) {
         try {
-            Set<String> sectionIds = medicalRecordSectionModels.stream()
-                    .map(mrsm -> mrsm.getFormSectionModel().getIdFormSection())
-                    .collect(Collectors.toSet());
+            Map<String, Long> sectionOrderMap = medicalRecordSectionModels.stream()
+                    .collect(Collectors.toMap(
+                            mrsm -> mrsm.getFormSectionModel().getIdFormSection(),
+                            MedicalRecordSectionModel::getOrder
+                    ));
+
+            Set<String> sectionIds = sectionOrderMap.keySet();
 
             List<FormSectionModel> formSectionModels = formSectionRepository.findAllById(sectionIds);
 
             return formSectionModels.stream()
-                    .map(sectionModel -> buildFormSectionResponseWithStatus(sectionModel, patientId, patientMedicalRecordId))
+                    .map(sectionModel -> buildFormSectionResponseWithStatus(
+                            sectionModel,
+                            patientId,
+                            patientMedicalRecordId,
+                            sectionOrderMap.get(sectionModel.getIdFormSection())))
+                    .sorted(Comparator.comparingLong(FormSectionResponse::getSectionOrder))
                     .collect(Collectors.toList());
         } catch (AppException e) {
             throw e;
@@ -159,8 +166,10 @@ public class FormSectionService {
 
     private FormSectionResponse buildFormSectionResponseWithStatus(FormSectionModel sectionModel,
                                                                    String patientId,
-                                                                   Long patientMedicalRecordId) {
+                                                                   Long patientMedicalRecordId,
+                                                                   Long sectionOrder) {
         FormSectionResponse response = toResponse(sectionModel, patientId, patientMedicalRecordId);
+        response.setSectionOrder(sectionOrder);
 
         ReviewStatusModel status = sectionModel.getRequiresReview()
                 ? reviewStatusService.getStatusByPatientMedicalRecordIdAndSection(patientId, sectionModel.getIdFormSection())

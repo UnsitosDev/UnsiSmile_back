@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface IMedicalRecordSectionRepository extends JpaRepository<MedicalRecordSectionModel, MedicalRecordSectionModelPk> {
-    @Query("SELECT mrs FROM MedicalRecordSectionModel mrs WHERE mrs.medicalRecordCatalogModel.idMedicalRecordCatalog = :medicalRecordId")
+    @Query("SELECT mrs FROM MedicalRecordSectionModel mrs WHERE mrs.medicalRecordCatalogModel.idMedicalRecordCatalog = :medicalRecordId ORDER BY mrs.order")
     List<MedicalRecordSectionModel> findAllByMedicalRecordId(@Param("medicalRecordId") Long medicalRecordId);
 }
