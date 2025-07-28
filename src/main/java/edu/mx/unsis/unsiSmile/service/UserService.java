@@ -1,25 +1,5 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
@@ -37,11 +17,7 @@ import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.mappers.users.AdministratorResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.BaseUserResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.DigitizerResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.ProfessorResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.StudentResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.*;
 import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -56,6 +32,25 @@ import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerReposit
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -175,10 +170,11 @@ public class UserService {
                     .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                             HttpStatus.NOT_FOUND));
 
+            ERole currentRole = user.getRole().getRole();
             // Verificar y manejar el caso de digitizador
-            handleDigitizerCase(user);
+            ERole role = getRoleForSwitch(currentRole, user.getUsername());
 
-            return switch (user.getRole().getRole()) {
+            return switch (role) {
                 case ERole.ROLE_ADMIN -> ResponseEntity
                         .ok(administratorMapper.toDto(administratorRepository.findById(user.getUsername())
                                 .orElseThrow(() -> new AppException(
@@ -337,19 +333,17 @@ public class UserService {
         }
     }
 
-    private void handleDigitizerCase(UserModel user) {
-        if (user.getRole().getRole() == ERole.ROLE_MEDICAL_RECORD_DIGITIZER) {
+    private ERole getRoleForSwitch(ERole currentRole, String username) {
+        if (currentRole == ERole.ROLE_MEDICAL_RECORD_DIGITIZER) {
             MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
-                    .findTopByUser_UsernameOrderByCreatedAtDesc(user.getUsername())
+                    .findTopByUser_UsernameOrderByCreatedAtDesc(username)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_USER, user.getUsername()),
+                            String.format(ResponseMessages.DIGITIZER_NOT_FOUND_FOR_USER, username),
                             HttpStatus.NOT_FOUND));
 
-            // Establecer el rol anterior temporalmente
-            RoleModel previousRole = new RoleModel();
-            previousRole.setRole(ERole.valueOf(digitizer.getPreviousRole()));
-            user.setRole(previousRole);
+            return ERole.valueOf(digitizer.getPreviousRole());
         }
+        return currentRole;
     }
 
     @Transactional(readOnly = true)
