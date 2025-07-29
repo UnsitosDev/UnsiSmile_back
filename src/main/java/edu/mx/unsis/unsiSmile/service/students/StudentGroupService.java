@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -29,15 +30,15 @@ public class StudentGroupService {
     @Transactional
     public void createStudentGroup(@NonNull StudentGroupRequest request) {
         try {
-            if (studentGroupRepository.findByStudentAndGroup(request.getEnrollment(), request.getGroupId()).isPresent()) {
-                return;
-            }
-
             studentRepository.findById(request.getEnrollment())
                     .orElseThrow(() -> new AppException(ResponseMessages.STUDENT_NOT_FOUND, HttpStatus.NOT_FOUND));
 
             groupRepository.findById(request.getGroupId())
                     .orElseThrow(() -> new AppException(ResponseMessages.GROUP_NOT_FOUND, HttpStatus.NOT_FOUND));
+
+            if (studentGroupRepository.findByStudentAndGroup(request.getEnrollment(), request.getGroupId()).isPresent()) {
+                return;
+            }
 
             studentGroupRepository.disableLatestStudentGroup(request.getEnrollment());
 
@@ -113,6 +114,32 @@ public class StudentGroupService {
             throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_STUDENT_GROUP, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentGroupModel> getAllStudentGroupsByGroupIds(Set<Long> groupIds, Pageable pageable, String keyword) {
+        try {
+            Page<StudentGroupModel> studentGroups;
+
+            if (keyword == null || keyword.isEmpty()) {
+                studentGroups = studentGroupRepository.findAllActiveByGroupIds(groupIds, pageable);
+            } else {
+                Integer keywordInt = null;
+                if (keyword.matches("\\d+")) {
+                    keywordInt = Integer.parseInt(keyword);
+                } else if (!keyword.matches("[a-zA-Z]+")) {
+                    throw new AppException(ResponseMessages.INVALID_INPUT, HttpStatus.BAD_REQUEST);
+                }
+
+                studentGroups = studentGroupRepository.findAllByGroupIdsAndSearchInput(groupIds, keyword, keywordInt, pageable);
+            }
+
+            return studentGroups;
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_STUDENTS_IN_GROUPS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
