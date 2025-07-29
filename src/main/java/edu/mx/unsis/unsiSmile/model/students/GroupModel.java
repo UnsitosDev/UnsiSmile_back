@@ -33,7 +33,7 @@ public class GroupModel extends AuditModel {
     private SemesterModel semester;
 
     @Transient
-    public String getGroupName() {
+    public String getFullGroupName() {
         String baseName = semesterNumber + career.getIdCareer();
         return (groupName != null && !groupName.isEmpty())
                 ? baseName + "-" + groupName

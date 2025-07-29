@@ -69,7 +69,7 @@ public class StudentGroupService {
                 Integer keywordInt = null;
                 if (keyword.matches("\\d+")) {
                     keywordInt = Integer.parseInt(keyword);
-                } else if (!keyword.matches("[a-zA-Z]+")) {
+                } else if (!keyword.matches("[a-zA-Z0-9-]+")) {
                     throw new AppException(ResponseMessages.INVALID_INPUT,
                             HttpStatus.BAD_REQUEST);
                 }
@@ -128,7 +128,7 @@ public class StudentGroupService {
                 Integer keywordInt = null;
                 if (keyword.matches("\\d+")) {
                     keywordInt = Integer.parseInt(keyword);
-                } else if (!keyword.matches("[a-zA-Z]+")) {
+                } else if (!keyword.matches("[a-zA-Z0-9-]+")) {
                     throw new AppException(ResponseMessages.INVALID_INPUT, HttpStatus.BAD_REQUEST);
                 }
 

@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel, Long> {
-    @Query("SELECT COUNT(DISTINCT s.student.enrollment) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds")
+    @Query("SELECT COUNT(DISTINCT s.student.enrollment) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds AND s.statusKey = 'A'")
     Long countStudentsByGroupIds(@Param("groupIds") Set<Long> groupIds);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -42,6 +42,8 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "OR sg.student.person.secondLastName LIKE %:keyword% " +
             "OR sg.student.person.phone LIKE %:keyword% " +
             "OR sg.student.person.email LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer) LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer, '-', sg.group.groupName) LIKE %:keyword% " +
             "OR sg.student.person.gender.gender LIKE %:keyword% " +
             "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
             "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
@@ -80,6 +82,8 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "OR sg.student.person.secondLastName LIKE %:keyword% " +
             "OR sg.student.person.phone LIKE %:keyword% " +
             "OR sg.student.person.email LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer) LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer, '-', sg.group.groupName) LIKE %:keyword% " +
             "OR sg.student.person.gender.gender LIKE %:keyword% " +
             "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
             "OR MONTH(sg.student.person.birthDate) = :keywordInt " +

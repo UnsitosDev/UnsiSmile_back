@@ -52,7 +52,7 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
                         TreatmentDetailResponse.StudentResponse.builder()
                                 .id(entity.getStudentGroup().getStudent().getEnrollment())
                                 .name(entity.getStudentGroup().getStudent().getPerson().getFullName())
-                                .group(entity.getStudentGroup().getGroup().getGroupName())
+                                .group(entity.getStudentGroup().getGroup().getFullGroupName())
                                 .idGroup(entity.getStudentGroup().getGroup().getIdGroup())
                                 .build() :
                         null)
