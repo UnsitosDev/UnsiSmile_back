@@ -65,7 +65,8 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
     List<Object[]> countPatientsByNationalityByStudent(@Param("studentId") String studentId,
                                                        @Param("status") String status);
 
-    @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId")
+    @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId AND sp.statusKey = 'A' " +
+            "AND sp.student.statusKey = 'A'")
     Page<StudentPatientModel> findByPatientId(@Param("patientId")  String patientId, Pageable pageable);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +

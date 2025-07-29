@@ -5,7 +5,6 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
@@ -168,18 +167,15 @@ public class StudentPatientService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentResponse> getStudentsByPatient(Pageable pageable, String patientId) {
+    public Page<StudentPatientResponse> getStudentsByPatient(Pageable pageable, String patientId) {
         try {
-            Assert.notNull(patientId, "El campo patientId no puede ser null.");
+            Assert.notNull(patientId, ResponseMessages.PATIENT_ID_CANNOT_BE_NULL);
             if (!patientRepository.existsById(patientId)) {
-                throw new AppException("Paciente no encontrado con Id: " + patientId, HttpStatus.NOT_FOUND);
+                throw new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con id: "+ patientId, HttpStatus.NOT_FOUND);
             }
             Page<StudentPatientModel> studentPatientPage = studentPatientRepository.findByPatientId(patientId, pageable);
 
-            return studentPatientPage.map(studentPatient -> {
-                StudentModel student = studentPatient.getStudent();
-                return studentMapper.toDto(student);
-            });
+            return studentPatientPage.map(studentPatientMapper::toStudentPatient);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

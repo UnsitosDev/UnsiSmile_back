@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,7 +76,7 @@ public class PatientController {
 
     @Operation(summary = "Obtener una lista paginada de estudiantes que atienden a un paciente")
     @GetMapping("/{patientId}/students")
-    public ResponseEntity<Page<StudentResponse>> getStudentsByPatient(
+    public ResponseEntity<Page<StudentPatientResponse>> getStudentsByPatient(
             @PathVariable String patientId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -86,7 +85,7 @@ public class PatientController {
 
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<StudentResponse> studentResponses = studentPatientService.getStudentsByPatient(pageable, patientId);
+        Page<StudentPatientResponse> studentResponses = studentPatientService.getStudentsByPatient(pageable, patientId);
 
         return ResponseEntity.ok(studentResponses);
     }
