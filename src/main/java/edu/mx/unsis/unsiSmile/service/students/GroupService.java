@@ -1,5 +1,6 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.GroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.GroupResponse;
@@ -146,6 +147,8 @@ public class GroupService {
                                 careerModel.get(),
                                 semesterModel.get());
                 if (existingGroup.isPresent()) {
+                    existingGroup.get().setStatusKey(Constants.ACTIVE);
+                    groupRepository.save(existingGroup.get());
                     groupMap.put(groupFormat, existingGroup.get());
                     continue;
                 }

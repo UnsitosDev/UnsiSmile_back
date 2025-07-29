@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GroupRequest {
     private Long id;
-    @NotNull(message = "The field group can't be null")
-    @NotBlank(message = "The field group can't be blank")
+
     private String groupName;
+
     @NotNull(message = "The field semester number can't be null")
     @NotBlank(message = "The field semester number can't be blank")
     private String semesterNumber;

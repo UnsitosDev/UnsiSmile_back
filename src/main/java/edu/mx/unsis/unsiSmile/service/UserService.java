@@ -1,25 +1,5 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
@@ -37,11 +17,7 @@ import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.mappers.users.AdministratorResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.BaseUserResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.DigitizerResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.ProfessorResponseBuilder;
-import edu.mx.unsis.unsiSmile.mappers.users.StudentResponseBuilder;
+import edu.mx.unsis.unsiSmile.mappers.users.*;
 import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
@@ -56,6 +32,25 @@ import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerReposit
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +75,7 @@ public class UserService {
     @Transactional
     public UserModel createUser(RegisterRequest request) {
         try {
-            if (userRepository.findByUsername(request.getUsername()) != null) {
+            if (userRepository.findByUsername(request.getUsername()).isPresent()) {
                 throw new AppException(ResponseMessages.USER_ALREADY_EXISTS + ": " + request.getUsername(),
                         HttpStatus.BAD_REQUEST);
             }
@@ -397,6 +392,16 @@ public class UserService {
             }
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public UserModel getUserModelByUsername(String username) {
+        try {
+            return userRepository.findByUsername(username)
+                    .orElse(null);
+        } catch (AppException e) {
+            throw e;
         }
     }
 }

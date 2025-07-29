@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel, Long> {
-    @Query("SELECT COUNT(s) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds")
+    @Query("SELECT COUNT(DISTINCT s.student.enrollment) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds AND s.statusKey = 'A'")
     Long countStudentsByGroupIds(@Param("groupIds") Set<Long> groupIds);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -30,7 +30,7 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
     void disableLatestStudentGroup(@Param("enrollment") String enrollment);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.student.user.role.role = 'ROLE_STUDENT' " +
-            "AND sg.statusKey = 'A'")
+            "AND sg.statusKey = 'A' GROUP BY sg.student.enrollment")
     Page<StudentGroupModel> findAllActive(Pageable pageable);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -42,12 +42,14 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "OR sg.student.person.secondLastName LIKE %:keyword% " +
             "OR sg.student.person.phone LIKE %:keyword% " +
             "OR sg.student.person.email LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer) LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer, '-', sg.group.groupName) LIKE %:keyword% " +
             "OR sg.student.person.gender.gender LIKE %:keyword% " +
             "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
             "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
             "OR DAY(sg.student.person.birthDate) = :keywordInt)) " +
             "AND sg.student.user.role.role = 'ROLE_STUDENT' " +
-            "AND sg.statusKey = 'A'")
+            "AND sg.statusKey = 'A' GROUP BY sg.student.enrollment")
     Page<StudentGroupModel> findAllBySearchInput(
             @Param("keyword") String keyword,
             @Param("keywordInt") Integer keywordInt,
@@ -60,4 +62,38 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
     Optional<StudentGroupModel> findLatestActiveByStudent(@Param("enrollment") String enrollment);
 
     List<StudentGroupModel> findAllByStudent(StudentModel student);
+
+    @Query("SELECT sg FROM StudentGroupModel sg " +
+            "WHERE sg.group.idGroup IN :groupIds " +
+            "AND sg.student.user.role.role = 'ROLE_STUDENT' " +
+            "AND sg.statusKey = 'A' " +
+            "GROUP BY sg.student.enrollment")
+    Page<StudentGroupModel> findAllActiveByGroupIds(
+            @Param("groupIds") Set<Long> groupIds,
+            Pageable pageable);
+
+    @Query("SELECT sg FROM StudentGroupModel sg " +
+            "WHERE sg.group.idGroup IN :groupIds " +
+            "AND (sg.student.enrollment LIKE %:keyword% " +
+            "OR sg.student.person.curp LIKE %:keyword% " +
+            "OR sg.student.person.firstName LIKE %:keyword% " +
+            "OR sg.student.person.secondName LIKE %:keyword% " +
+            "OR sg.student.person.firstLastName LIKE %:keyword% " +
+            "OR sg.student.person.secondLastName LIKE %:keyword% " +
+            "OR sg.student.person.phone LIKE %:keyword% " +
+            "OR sg.student.person.email LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer) LIKE %:keyword% " +
+            "OR CONCAT(sg.group.semesterNumber, sg.group.career.idCareer, '-', sg.group.groupName) LIKE %:keyword% " +
+            "OR sg.student.person.gender.gender LIKE %:keyword% " +
+            "OR (YEAR(sg.student.person.birthDate) = :keywordInt " +
+            "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
+            "OR DAY(sg.student.person.birthDate) = :keywordInt)) " +
+            "AND sg.student.user.role.role = 'ROLE_STUDENT' " +
+            "AND sg.statusKey = 'A' " +
+            "GROUP BY sg.student.enrollment")
+    Page<StudentGroupModel> findAllByGroupIdsAndSearchInput(
+            @Param("groupIds") Set<Long> groupIds,
+            @Param("keyword") String keyword,
+            @Param("keywordInt") Integer keywordInt,
+            Pageable pageable);
 }

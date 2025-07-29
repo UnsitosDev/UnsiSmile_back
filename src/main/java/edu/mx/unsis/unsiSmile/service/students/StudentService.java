@@ -18,12 +18,13 @@ import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
@@ -42,13 +43,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
     private final IStudentRepository studentRepository;
-    private final IStudentGroupRepository studentGroupRepository;
     private final IGenderRepository genderRepository;
     private final StudentMapper studentMapper;
     private final UserMapper userMapper;
@@ -60,6 +61,7 @@ public class StudentService {
     private final StudentGroupService studentGroupService;
     private final GroupMapper groupMapper;
     private final ValidationUtils validationUtils;
+    private final IProfessorGroupRepository professorGroupRepository;
 
     @Transactional
     public void createStudent(@NonNull StudentRequest request) {
@@ -126,20 +128,42 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentResponse> getAllStudents(Pageable pageable, String keyword) {
         try {
-            Page<StudentGroupModel> allStudentGroups = studentGroupService.getAllStudentsInGroups(pageable, keyword);
+            UserResponse currentUser = userService.getCurrentUser();
 
-            return allStudentGroups.map(studentGroup -> {
+            Page<StudentGroupModel> studentGroupsPage;
+
+            if (currentUser.getRole().getRole().equals(ERole.ROLE_PROFESSOR)) {
+                List<ProfessorGroupModel> professorGroups = professorGroupRepository
+                        .findByProfessorAndGroupStatus(currentUser.getUsername(), Constants.ACTIVE);
+
+                if (professorGroups.isEmpty()) {
+                    return Page.empty(pageable); // Sin grupos, sin estudiantes
+                }
+
+                Set<Long> idsGroups = professorGroups.stream()
+                        .map(professorGroup -> professorGroup.getGroup().getIdGroup())
+                        .collect(Collectors.toSet());
+
+                studentGroupsPage = studentGroupService.getAllStudentGroupsByGroupIds(idsGroups, pageable, keyword);
+
+            } else {
+                studentGroupsPage = studentGroupService.getAllStudentsInGroups(pageable, keyword);
+            }
+
+            return studentGroupsPage.map(studentGroup -> {
                 StudentModel student = studentGroup.getStudent();
-                StudentResponse  studentResponse = studentMapper.toDto(student);
+                StudentResponse studentResponse = studentMapper.toDto(student);
                 studentResponse.setGroup(groupMapper.toDto(studentGroup.getGroup()));
                 return studentResponse;
             });
+
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.FAILED_TO_FETCH_STUDENTS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
 
     @Transactional
     public void updateStudent(@NonNull String enrollment, @NonNull StudentRequest updatedStudentRequest) {
@@ -310,9 +334,10 @@ public class StudentService {
             PersonModel personModel = personService.createPersonEntity(setPersonRequest(studentRow), invalidCurps);
             if (personModel == null) continue;
 
-            UserModel userModel = userService.createUser(
-                    this.setCredentials(enrollment, studentRow.get(4))
-            );
+            UserModel userModel = userService.getUserModelByUsername(enrollment);
+            if (userModel == null) {
+                userModel = userService.createUser(this.setCredentials(enrollment, studentRow.get(4)));
+            }
 
             StudentModel studentModel = StudentModel.builder()
                     .enrollment(enrollment)
