@@ -97,4 +97,10 @@ public class PatientController {
         return ResponseEntity.ok(patientResponse);
     }
 
+    @Operation(summary = "Elimina la asignación de un paciente a un estudiante")
+    @DeleteMapping("/student-patient/{id}")
+    public ResponseEntity<Void> deleteStudentPatient(@PathVariable Long id) {
+        studentPatientService.deleteStudentPatientById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

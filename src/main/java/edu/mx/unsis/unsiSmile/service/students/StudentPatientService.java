@@ -109,7 +109,7 @@ public class StudentPatientService {
             if (keyword != null && !keyword.isEmpty() && pageable != null) {
                 studentPatients = studentPatientRepository.findAllBySearchInput(enrollment, keyword, pageable);
             } else {
-                studentPatients  = studentPatientRepository.findAllByStudentEnrollment(enrollment);
+                studentPatients  = studentPatientRepository.findAllByStudentEnrollmentAndStatusKey(enrollment, Constants.ACTIVE);
             }
 
             return studentPatients.stream()
@@ -140,11 +140,19 @@ public class StudentPatientService {
 
     @Transactional
     public void deleteStudentPatientById(@NonNull Long idStudentPatient) {
-        if (!studentPatientRepository.existsById(idStudentPatient)) {
-            throw new AppException("Student-patient relationship not found with ID: " + idStudentPatient,
-                    HttpStatus.NOT_FOUND);
+        try {
+            StudentPatientModel studentPatientModel = studentPatientRepository.findByIdStudentPatient(idStudentPatient)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.STUDENT_PATIENT_NOT_FOUND, idStudentPatient),
+                            HttpStatus.NOT_FOUND));
+            studentPatientModel.setStatusKey(Constants.INACTIVE);
+            studentPatientRepository.save(studentPatientModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.STUDENT_PATIENT_DELETION_FAILED,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-        studentPatientRepository.deleteById(idStudentPatient);
     }
 
     @Transactional(readOnly = true)
