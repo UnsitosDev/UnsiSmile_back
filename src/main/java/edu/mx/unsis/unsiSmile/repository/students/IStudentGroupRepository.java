@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel, Long> {
-    @Query("SELECT COUNT(s) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds")
+    @Query("SELECT COUNT(s) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds GROUP BY s.student.enrollment")
     Long countStudentsByGroupIds(@Param("groupIds") Set<Long> groupIds);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -30,7 +30,7 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
     void disableLatestStudentGroup(@Param("enrollment") String enrollment);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE sg.student.user.role.role = 'ROLE_STUDENT' " +
-            "AND sg.statusKey = 'A'")
+            "AND sg.statusKey = 'A' GROUP BY sg.student.enrollment")
     Page<StudentGroupModel> findAllActive(Pageable pageable);
 
     @Query("SELECT sg FROM StudentGroupModel sg WHERE " +
@@ -47,7 +47,7 @@ public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel
             "OR MONTH(sg.student.person.birthDate) = :keywordInt " +
             "OR DAY(sg.student.person.birthDate) = :keywordInt)) " +
             "AND sg.student.user.role.role = 'ROLE_STUDENT' " +
-            "AND sg.statusKey = 'A'")
+            "AND sg.statusKey = 'A' GROUP BY sg.student.enrollment")
     Page<StudentGroupModel> findAllBySearchInput(
             @Param("keyword") String keyword,
             @Param("keywordInt") Integer keywordInt,
