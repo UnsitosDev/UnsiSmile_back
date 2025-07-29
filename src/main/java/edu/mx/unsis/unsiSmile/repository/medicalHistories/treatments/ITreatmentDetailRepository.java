@@ -99,4 +99,21 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             List<StudentGroupModel> studentGroups,
             Long idTreatment,
             ReviewStatus status);
+
+    @Query("SELECT t.treatment.name, COUNT(tt.idDetailTooth) " +
+            "FROM TreatmentDetailModel t " +
+            "LEFT JOIN TreatmentDetailToothModel tt ON tt.treatmentDetail.idTreatmentDetail = t.idTreatmentDetail " +
+            "WHERE t.status = ?2 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name = 'Diente' " +
+            "AND t.createdAt BETWEEN ?3 AND ?4 " +
+            "AND t.studentGroup.student.enrollment = ?1 " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countToothScopeTreatmentsBetweenDatesByStudent(String enrollment, ReviewStatus status, Timestamp startDate, Timestamp endDate);
+
+    @Query("SELECT t.treatment.name, COUNT(DISTINCT t.idTreatmentDetail) " +
+            "FROM TreatmentDetailModel t " +
+            "WHERE t.status = ?2 AND t.statusKey = 'A' AND t.treatment.treatmentScope.name <> 'Diente' " +
+            "AND t.createdAt BETWEEN ?3 AND ?4 " +
+            "AND t.studentGroup.student.enrollment = ?1 " +
+            "GROUP BY t.treatment.name")
+    List<Object[]> countGeneralScopeTreatmentsBetweenDatesByStudent(String enrollment, ReviewStatus status, Timestamp startDate, Timestamp endDate);
 }

@@ -1,7 +1,9 @@
 package edu.mx.unsis.unsiSmile.service;
 
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.response.*;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -16,6 +18,7 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
@@ -24,11 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,19 +47,46 @@ public class DashboardService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final IExecutionReviewRepository executionReviewRepository;
+    private final StudentService studentService;
+    private final ValidationUtils validationUtils;
 
     @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboardMetrics() {
+    public StudentDashboardResponse getStudentDashboard(String enrollment, LocalDate startDate, LocalDate endDate) {
         try {
-            String enrollment = getUserName();
-            return getStudentDashboardMetrics(enrollment);
+            UserResponse user = userService.getCurrentUser();
+
+            if (user.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
+                enrollment = user.getUsername();
+                return getStudentDashboardMetrics(enrollment, null, null);
+            }
+
+            if (user.getRole().getRole() != ERole.ROLE_ADMIN) {
+                throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
+            }
+
+            if (enrollment.isBlank()) {
+                throw new AppException(ResponseMessages.NOT_NULL_ENROLLMENT, HttpStatus.BAD_REQUEST);
+            }
+
+            studentService.getStudentByEnrollment(enrollment);
+
+            Optional<Pair<Timestamp, Timestamp>> dateRange = validationUtils.resolveDateRange(startDate, endDate);
+            if (dateRange.isPresent()) {
+                Timestamp start = dateRange.get().getLeft();
+                Timestamp end = dateRange.get().getRight();
+                return getStudentDashboardMetrics(enrollment, start, end);
+            } else {
+                return getStudentDashboardMetrics(enrollment, null, null);
+            }
+
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
+    private StudentDashboardResponse getStudentDashboardMetrics(String enrollment, Timestamp startDate, Timestamp endDate) {
         try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
@@ -74,7 +102,7 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS));
 
-            TreatmentCountResponse treatments = getTreatmentCountResponse(null, null);
+            TreatmentCountResponse treatments = getTreatmentCountResponseByStudent(enrollment, startDate, endDate);
             builder.treatments(treatments);
 
             return builder.build();
@@ -254,5 +282,24 @@ public class DashboardService {
             result.merge((String) row[0], (Long) row[1], Long::sum);
         }
         return result;
+    }
+
+    private TreatmentCountResponse getTreatmentCountResponseByStudent(String enrollment, Timestamp startDate, Timestamp endDate) {
+        List<Object[]> toothScope;
+        List<Object[]> generalScope;
+
+        if (startDate != null && endDate != null) {
+            toothScope = treatmentDetailRepository.countToothScopeTreatmentsBetweenDatesByStudent(
+                    enrollment, ReviewStatus.FINISHED, startDate, endDate
+            );
+            generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsBetweenDatesByStudent(
+                    enrollment, ReviewStatus.FINISHED, startDate, endDate
+            );
+        } else {
+            toothScope = treatmentDetailRepository.countToothScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED);
+            generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED);
+        }
+        Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+        return mapToTreatmentCountResponse(treatmentCounts);
     }
 }

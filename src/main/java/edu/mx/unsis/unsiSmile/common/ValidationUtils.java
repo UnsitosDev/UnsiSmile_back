@@ -47,6 +47,10 @@ public class ValidationUtils {
             throw new AppException(ResponseMessages.END_DATE_CANNOT_BE_AFTER_TODAY, HttpStatus.BAD_REQUEST);
         }
 
+        if (startDate == null && endDate != null) {
+            throw new AppException(ResponseMessages.START_DATE_REQUIRED_WHEN_END_DATE_PROVIDED, HttpStatus.BAD_REQUEST);
+        }
+
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
             throw new AppException(ResponseMessages.END_DATE_MUST_BE_GREATER_THAN_START_DATE, HttpStatus.BAD_REQUEST) ;
         }
