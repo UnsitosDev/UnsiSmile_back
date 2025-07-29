@@ -1,5 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
+import edu.mx.unsis.unsiSmile.common.Constants;
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
@@ -12,7 +14,6 @@ import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentPatientModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
-import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,30 +33,44 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StudentPatientService {
 
-    private final IStudentRepository studentRepository;
     private final IPatientRepository patientRepository;
     private final IStudentPatientRepository studentPatientRepository;
     private final StudentPatientMapper studentPatientMapper;
     private final StudentMapper studentMapper;
+    private final StudentService studentService;
 
     @Transactional
     public void createStudentPatient(@NonNull StudentPatientRequest studentPatientRequest) {
         try {
-            Assert.notNull(studentPatientRequest, "StudentPatientRequest cannot be null");
+            Assert.notNull(studentPatientRequest, ResponseMessages.REQUEST_CANNOT_BE_NULL);
 
-            studentRepository.findByEnrollmentAndStatusKey(studentPatientRequest.getStudentEnrollment(), "A")
-                    .orElseThrow(() -> new AppException("Student not found with enrollment: "
-                            + studentPatientRequest.getStudentEnrollment(), HttpStatus.NOT_FOUND));
+            studentService.getStudentByEnrollment(studentPatientRequest.getStudentEnrollment());
 
             patientRepository.findById(studentPatientRequest.getPatientId())
-                    .orElseThrow(() -> new AppException("Patient not found with id: "
-                            + studentPatientRequest.getPatientId(), HttpStatus.NOT_FOUND));
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.PATIENT_NOT_FOUND + " con id: " + studentPatientRequest.getPatientId(),
+                            HttpStatus.NOT_FOUND));
+
+            Optional<StudentPatientModel> exists = studentPatientRepository
+                    .findByStudent_EnrollmentAndPatient_IdPatientAndStatusKey(
+                            studentPatientRequest.getStudentEnrollment(),
+                            studentPatientRequest.getPatientId(),
+                            Constants.ACTIVE
+                    );
+
+            if (exists.isPresent()) {
+                throw new AppException(
+                        ResponseMessages.STUDENT_PATIENT_RELATIONSHIP_EXISTS,
+                        HttpStatus.CONFLICT);
+            }
 
             StudentPatientModel studentPatientModel = studentPatientMapper.toEntity(studentPatientRequest);
             studentPatientRepository.save(studentPatientModel);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException("Failed to create student-patient relationship", HttpStatus.INTERNAL_SERVER_ERROR,
-                    ex);
+            throw new AppException(ResponseMessages.STUDENT_PATIENT_CREATION_FAILED,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

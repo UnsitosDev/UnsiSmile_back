@@ -47,21 +47,21 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
     List<StudentPatientModel> findAllBySearchInput(String enrollment, String keyword, Pageable pageable);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
-            "sp.student.statusKey = :status")
+            "sp.statusKey = :status")
     Long countPatientsForStudent(@Param("studentId") String studentId, @Param("status") String status);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
-            "sp.student.statusKey = :status AND sp.patient.hasDisability = true")
+            "sp.statusKey = :status AND sp.patient.hasDisability = true")
     Long countPatientsWithDisabilityByStudent(@Param("studentId") String studentId, @Param("status") String status);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp WHERE sp.student.enrollment = :studentId AND " +
-            "sp.student.statusKey = :status AND sp.patient.createdAt >= :lastMonth")
+            "sp.statusKey = :status AND sp.patient.createdAt >= :lastMonth")
     Long countPatientsRegisteredSinceByStudent(@Param("studentId") String studentId,
                                                @Param("lastMonth") Timestamp lastMonth,
                                                @Param("status") String status);
 
     @Query("SELECT sp.patient.nationality.nationality, COUNT(sp) FROM StudentPatientModel sp WHERE " +
-            "sp.student.enrollment = :studentId AND sp.student.statusKey = :status GROUP BY sp.patient.nationality")
+            "sp.student.enrollment = :studentId AND sp.statusKey = :status GROUP BY sp.patient.nationality")
     List<Object[]> countPatientsByNationalityByStudent(@Param("studentId") String studentId,
                                                        @Param("status") String status);
 
@@ -70,19 +70,21 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
             "WHERE sp.student.enrollment = :studentId " +
-            "AND sp.student.statusKey = :status " +
+            "AND sp.statusKey = :status " +
             "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) < 18")
     Long countPatientsUnder18ByStudent(@Param("studentId") String studentId, @Param("status") String status);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
             "WHERE sp.student.enrollment = :studentId " +
-            "AND sp.student.statusKey = :status " +
+            "AND sp.statusKey = :status " +
             "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) BETWEEN 18 AND 60")
     Long countPatientsBetween18And60ByStudent(@Param("studentId") String studentId, @Param("status") String status);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +
             "WHERE sp.student.enrollment = :studentId " +
-            "AND sp.student.statusKey = :status " +
+            "AND sp.statusKey = :status " +
             "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', sp.patient.person.birthDate) > 60")
     Long countPatientsOver60ByStudent(@Param("studentId") String studentId, @Param("status") String status);
+
+    Optional<StudentPatientModel> findByStudent_EnrollmentAndPatient_IdPatientAndStatusKey(String enrollment, String idPatient, String statusKey);
 }
