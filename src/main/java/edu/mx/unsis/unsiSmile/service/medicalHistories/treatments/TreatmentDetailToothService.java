@@ -224,6 +224,18 @@ public class TreatmentDetailToothService {
                         .orElseThrow(() -> new AppException(
                                 String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_NOT_FOUND, toothId),
                                 HttpStatus.NOT_FOUND));
+                ExecutionReviewModel status = model.getStatus();
+                if (status != null){
+                    if(status.getStatus().equals(ReviewStatus.FINISHED)) {
+                        throw new AppException(
+                                String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_ALREADY_FINISHED, toothId),
+                                HttpStatus.BAD_REQUEST);
+                    } else if (status.getStatus().equals(ReviewStatus.IN_REVIEW)) {
+                        throw new AppException(
+                                String.format(ResponseMessages.TREATMENT_DETAIL_TOOTH_ALREADY_IN_REVIEW, toothId),
+                                HttpStatus.BAD_REQUEST);
+                    }
+                }
                 model.setStatus(executionReview);
                 model.setEndDate(LocalDateTime.now());
                 treatmentDetailToothRepository.save(model);

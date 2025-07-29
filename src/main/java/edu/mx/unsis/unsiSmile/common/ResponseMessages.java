@@ -485,6 +485,8 @@ public class ResponseMessages {
     public static final String TREATMENT_DETAIL_TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s en del tratamiento";
     public static final String INVALID_ACTION_FOR_UPDATING_TOOTH_STATUS = "Acción inválida para actualizar el estado del diente..";
     public static final String TREATMENT_DETAIL_TOOTH_REQUIRED = "Para tratamientos de alcance tipo diente, debes enviar los dientes.";
+    public static final String TREATMENT_DETAIL_TOOTH_ALREADY_FINISHED = "El diente con ID: %s ya se encuentra en estado finalizado.";
+    public static final String TREATMENT_DETAIL_TOOTH_ALREADY_IN_REVIEW = "El diente con ID: %s ya se encuentra en revisión.";
 
     // TreatmentDetailTooth
     public static final String TOOTH_NOT_FOUND = "No se encontró el diente con ID: %s";
