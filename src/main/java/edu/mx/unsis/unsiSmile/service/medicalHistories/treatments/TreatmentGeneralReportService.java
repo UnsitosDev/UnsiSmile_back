@@ -2,11 +2,11 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
-import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.TreatmentCountResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.service.DashboardService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,19 +28,30 @@ public class TreatmentGeneralReportService {
     private final DashboardService dashboardService;
     private final JasperReportService jasperReportService;
     private final ValidationUtils validationUtils;
+    private final StudentService studentService;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<byte[]> generateGeneralTreatmentReport(LocalDate startDate, LocalDate endDate) {
+    public ResponseEntity<byte[]> generateGeneralTreatmentReport(String enrollment, LocalDate startDate, LocalDate endDate) {
         try {
+            boolean isStudent = enrollment != null && !enrollment.isBlank();
+            if (isStudent) {
+                studentService.getStudentByEnrollment(enrollment);
+            }
+
             Optional<Pair<Timestamp, Timestamp>> dateRange = validationUtils.resolveDateRange(startDate, endDate);
             TreatmentCountResponse treatmentCount;
 
             if (dateRange.isPresent()) {
                 Timestamp start = dateRange.get().getLeft();
                 Timestamp end = dateRange.get().getRight();
-                treatmentCount = dashboardService.getTreatmentCountResponse(start, end);
+
+                treatmentCount =  isStudent ?
+                        dashboardService.getTreatmentCountResponseByStudent(enrollment, start, end) :
+                        dashboardService.getTreatmentCountResponse(start, end);
             } else {
-                treatmentCount = dashboardService.getTreatmentCountResponse(null, null);
+                treatmentCount =  isStudent ?
+                        dashboardService.getTreatmentCountResponseByStudent(enrollment, null, null) :
+                        dashboardService.getTreatmentCountResponse(null, null);
             }
 
             // Preparamos los datos para el informe

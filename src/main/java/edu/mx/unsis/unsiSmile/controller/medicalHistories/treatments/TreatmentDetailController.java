@@ -165,9 +165,10 @@ public class TreatmentDetailController {
         return treatmentReportService.generateTreatmentReportByStudent(idStudent, idTreatment);
     }
 
-    @Operation(summary = "Genera un reporte general PDF de todos los tratamientos realizados")
+    @Operation(summary = "Genera un reporte general en PDF de todos los tratamientos realizados (histórico o en un rango de fechas), opcional por alumno.")
     @GetMapping("/reports/general")
     public ResponseEntity<byte[]> getGeneralTreatmentReport(
+            @RequestParam(required = false) String enrollment,
             @RequestParam(required = false)
             @Parameter(description = "Format dd-mm-yyyy")
             @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
@@ -175,7 +176,7 @@ public class TreatmentDetailController {
             @Parameter(description = "Format dd-mm-yyyy")
             @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate
     ) {
-        return treatmentGeneralReportService.generateGeneralTreatmentReport(startDate, endDate);
+        return treatmentGeneralReportService.generateGeneralTreatmentReport(enrollment, startDate, endDate);
     }
 
     @Operation(summary = "Obtiene los tratamientos de todos los pacientes asignados a un alumno para reportes.")

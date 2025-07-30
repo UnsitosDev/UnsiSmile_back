@@ -1,9 +1,7 @@
 package edu.mx.unsis.unsiSmile.service;
 
-import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.response.*;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
@@ -18,7 +16,6 @@ import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
@@ -27,9 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,38 +46,12 @@ public class DashboardService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final IExecutionReviewRepository executionReviewRepository;
-    private final StudentService studentService;
-    private final ValidationUtils validationUtils;
 
     @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboard(String enrollment, LocalDate startDate, LocalDate endDate) {
+    public StudentDashboardResponse getStudentDashboard() {
         try {
-            UserResponse user = userService.getCurrentUser();
-
-            if (user.getRole().getRole().equals(ERole.ROLE_STUDENT)) {
-                enrollment = user.getUsername();
-                return getStudentDashboardMetrics(enrollment, null, null);
-            }
-
-            if (user.getRole().getRole() != ERole.ROLE_ADMIN) {
-                throw new AppException(ResponseMessages.UNAUTHORIZED, HttpStatus.FORBIDDEN);
-            }
-
-            if (enrollment.isBlank()) {
-                throw new AppException(ResponseMessages.NOT_NULL_ENROLLMENT, HttpStatus.BAD_REQUEST);
-            }
-
-            studentService.getStudentByEnrollment(enrollment);
-
-            Optional<Pair<Timestamp, Timestamp>> dateRange = validationUtils.resolveDateRange(startDate, endDate);
-            if (dateRange.isPresent()) {
-                Timestamp start = dateRange.get().getLeft();
-                Timestamp end = dateRange.get().getRight();
-                return getStudentDashboardMetrics(enrollment, start, end);
-            } else {
-                return getStudentDashboardMetrics(enrollment, null, null);
-            }
-
+            String username = getUserName();
+            return getStudentDashboardMetrics(username);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
@@ -86,7 +59,7 @@ public class DashboardService {
         }
     }
     
-    private StudentDashboardResponse getStudentDashboardMetrics(String enrollment, Timestamp startDate, Timestamp endDate) {
+    private StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
         try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
@@ -102,7 +75,7 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS));
 
-            TreatmentCountResponse treatments = getTreatmentCountResponseByStudent(enrollment, startDate, endDate);
+            TreatmentCountResponse treatments = getTreatmentCountResponseByStudent(enrollment, null, null);
             builder.treatments(treatments);
 
             return builder.build();
@@ -284,7 +257,7 @@ public class DashboardService {
         return result;
     }
 
-    private TreatmentCountResponse getTreatmentCountResponseByStudent(String enrollment, Timestamp startDate, Timestamp endDate) {
+    public TreatmentCountResponse getTreatmentCountResponseByStudent(String enrollment, Timestamp startDate, Timestamp endDate) {
         List<Object[]> toothScope;
         List<Object[]> generalScope;
 
