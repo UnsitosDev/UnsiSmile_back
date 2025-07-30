@@ -617,7 +617,7 @@ public class ResponseMessages {
     public static final String NO_MEDICAL_RECORDS_FOUND_FOR_PATIENT = "No se encontraron historias clínicas para el paciente con ID: %s.";
     public static final String FAILED_TO_SEARCH_MEDICAL_RECORDS = "Error al buscar las historias clínicas del paciente con ID: %s.";
 
-    public static final String STUDENT_PATIENT_RELATIONSHIP_EXISTS = "El estudiante ya tiene asignado dicho paciente";
+    public static final String STUDENT_PATIENT_RELATIONSHIP_EXISTS = "El estudiante ya está asignado a este paciente.";
     public static final String STUDENT_PATIENT_CREATION_FAILED = "Error al asignar el paciente al estudiante";
     public static final String STUDENT_PATIENT_NOT_FOUND = "No se encontró la relación estudiante-paciente con ID: %s";
     public static final String STUDENT_PATIENT_DELETION_FAILED = "Error al eliminar la relación estudiante-paciente";
