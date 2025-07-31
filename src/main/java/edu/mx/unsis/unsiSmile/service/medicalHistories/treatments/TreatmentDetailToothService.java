@@ -102,6 +102,27 @@ public class TreatmentDetailToothService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<TreatmentDetailToothResponse> getTreatmentDetailTeethByReview(Long treatmentDetailId, Long executionReviewId) {
+        try {
+            verifyTreatmentDetailExists(treatmentDetailId);
+
+            // Solo obtener los dientes que pertenecen a ese ExecutionReview
+            List<TreatmentDetailToothModel> models = treatmentDetailToothRepository
+                    .findByTreatmentDetail_IdTreatmentDetailAndStatus_IdExecutionReview(
+                            treatmentDetailId, executionReviewId
+                    );
+
+            return treatmentDetailToothMapper.toDtos(models);
+
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAIL_TEETH,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
     @Transactional
     public void updateTreatmentDetailTeeth(Long treatmentDetailId, TreatmentDetailToothRequest request) {
         try {

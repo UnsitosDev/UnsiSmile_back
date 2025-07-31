@@ -467,7 +467,7 @@ public class TreatmentDetailService {
                 TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithReviewerProfessor(executionReviewModel);
 
                 if(isToothTreatment(executionReviewModel.getTreatmentDetail())) {
-                    addTeethList(response);
+                    addTeethList(response, executionReviewModel);
                 }
 
                 return response;
@@ -793,6 +793,16 @@ public class TreatmentDetailService {
                 treatmentDetailToothService.getTreatmentDetailTeethByTreatmentDetail(
                         response.getIdTreatmentDetail()));
 
+    }
+
+    private void addTeethList(TreatmentDetailResponse response, ExecutionReviewModel executionReviewModel) {
+        response.setTeeth(
+                treatmentDetailToothService.getTreatmentDetailTeethByReview(
+                        response.getIdTreatmentDetail(),
+                        executionReviewModel.getIdExecutionReview()
+                )
+        );
+        response.setStatus(executionReviewModel.getStatus().toString());
     }
 
     private void addNewStatus(TreatmentDetailResponse response){
