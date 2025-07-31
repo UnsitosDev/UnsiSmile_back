@@ -11,7 +11,8 @@ import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
 
 @Component
-public class OdontogramSimpleMapper implements BaseMapper<OdontogramSimpleResponse, OdontogramRequest, OdontogramModel> {
+public class OdontogramSimpleMapper
+                implements BaseMapper<OdontogramSimpleResponse, OdontogramRequest, OdontogramModel> {
 
         @Override
         public OdontogramModel toEntity(OdontogramRequest dto) {
@@ -23,8 +24,8 @@ public class OdontogramSimpleMapper implements BaseMapper<OdontogramSimpleRespon
         public OdontogramSimpleResponse toDto(OdontogramModel entity) {
                 return OdontogramSimpleResponse.builder()
                                 .idOdontogram(entity.getIdOdontogram())
-                                .idPatientMedicalRecord(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
-                                .creationDate(entity.getCreatedAt() != null ? entity.getCreatedAt().toLocalDateTime().toLocalDate() : null)
+                                .idPatient(entity.getPatient().getIdPatient())
+                                .creationDate(entity.getCreatedAt().toLocalDateTime().toLocalDate())
                                 .build();
         }
 

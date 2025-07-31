@@ -26,18 +26,17 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
 
     @Query("SELECT tfca FROM ToothfaceConditionsAssignmentModel tfca WHERE tfca.odontogram.idOdontogram = :odontogramId")
     List<ToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByOdontogramId(Long odontogramId);
-
-    // obtener todos los odontogramas por ID de detalle de historia clinica
-    @Query("SELECT o FROM OdontogramModel o WHERE o.patientMedicalRecord.idPatientMedicalRecord = :patientMedicalRecordId")
-    List<OdontogramModel> findAllByMedicalRecordId(@Param("patientMedicalRecordId") Long patientMedicalRecordId);
+       
+    //obtener todos los odontogramas por id de paciente
+    @Query("SELECT o FROM OdontogramModel o " +
+           "WHERE o.patient.idPatient = :patientId " +
+           "ORDER BY o.createdAt DESC")
+    List<OdontogramModel> findAllOdontogramsByPatientIdOrderByCreatedAtDesc(@Param("patientId") String patientId);
     
-    // Obtener último odontograma por historia clinica  ordenado por fecha de creación
-    @Query("SELECT o FROM OdontogramModel o WHERE o.patientMedicalRecord.idPatientMedicalRecord = :patientMedicalRecordId ORDER BY o.createdAt DESC")
-    Optional<OdontogramModel> findLastOdontogramByMedicalRecordId(@Param("patientMedicalRecordId") Long patientMedicalRecordId);
-    
-
-    // obtener el ultimo odontograma por fecha de creación
-    @Query("SELECT o FROM OdontogramModel o ORDER BY o.createdAt DESC")
-    Optional<OdontogramModel> findLastOdontogram();   
+    // Obtener el último odontograma por ID de paciente
+    @Query("SELECT o FROM OdontogramModel o " +
+           "WHERE o.patient.idPatient = :patientId " +
+           "ORDER BY o.createdAt DESC")
+    Optional<OdontogramModel> findLastOdontogramByPatientId(@Param("patientId") String patientId);
 
 }

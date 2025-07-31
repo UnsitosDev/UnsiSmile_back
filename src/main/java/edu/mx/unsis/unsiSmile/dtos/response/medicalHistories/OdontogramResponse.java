@@ -16,5 +16,5 @@ public class OdontogramResponse {
     private List<ToothResponse> adultArcade;
     private List<ToothResponse> childArcade;
     private String observations;
-    private Long idPatientMedicalRecord;
+    private String patientId;
 }
