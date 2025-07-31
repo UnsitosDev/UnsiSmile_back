@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram;
 
 import java.util.List;
 
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,7 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,9 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "odontograms", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "fk_patient", "fk_form_section" })
-})
+@Table(name = "odontograms")
 public class OdontogramModel extends AuditModel {
 
     @Id
@@ -41,8 +38,8 @@ public class OdontogramModel extends AuditModel {
     private String observations;
 
     @ManyToOne
-    @JoinColumn(name = "fk_patient_medical_record", referencedColumnName = "id_patient_medical_record")
-    private PatientMedicalRecordModel patientMedicalRecord;
+    @JoinColumn(name = "fk_patient", referencedColumnName = "id_patient")
+    private PatientModel patient;
 
     @OneToMany(mappedBy = "odontogram", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<ToothConditionAssignmentModel> toothConditionAssignments;

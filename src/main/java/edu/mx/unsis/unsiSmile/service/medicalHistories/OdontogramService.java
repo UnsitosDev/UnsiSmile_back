@@ -80,18 +80,6 @@ public class OdontogramService {
     }
 
     @Transactional
-    public void deleteOdontogram(@NonNull Long id) {
-        try {
-            if (!odontogramRepository.existsById(id)) {
-                throw new AppException("Odontogram not found with ID: " + id, HttpStatus.NOT_FOUND);
-            }
-            odontogramRepository.deleteById(id);
-        } catch (Exception ex) {
-            throw new AppException("Failed to delete odontogram", HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional
     public void saveOdontogram(OdontogramRequest odontogramDTO) {
         try {
             OdontogramModel odontogram = OdontogramMapper.toOdontogramModel(odontogramDTO);
@@ -116,40 +104,45 @@ public class OdontogramService {
 
     }
 
-    public OdontogramResponse getOdontogramDetails(Long patientMedicalRecordId) {
 
-        OdontogramModel odontogramModel = odontogramRepository.findLastOdontogramByMedicalRecordId(patientMedicalRecordId)
-                .orElseThrow(() -> new AppException("No odontogram found for treatment ID: " + patientMedicalRecordId,
-                        HttpStatus.NOT_FOUND));
-
-        Long odontogramId = odontogramModel.getIdOdontogram();
-
-        // Obtener todas las asignaciones de condiciones de dientes
-        List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
-                .findToothConditionAssignmentsByOdontogramId(odontogramId);
-
-        // Obtener todas las condiciones de caras de dientes
-        List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
-                .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
-
-        OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
-                toothFaceConditions);
-        odontogramResponse.setIdOdontogram(odontogramId);
-        odontogramResponse.setObservations(odontogramModel.getObservations());
-
-        return odontogramResponse;
-
-    }
-
-    public List<OdontogramSimpleResponse> getOdontogramsByPatientMedicalRecordId(Long patientMedicalRecordId) {
+    public List<OdontogramSimpleResponse> getOdontogramsByPatientId(String patientId) {
         try {
             List<OdontogramModel> odontograms = odontogramRepository
-                    .findAllByMedicalRecordId(patientMedicalRecordId);
+                    .findAllOdontogramsByPatientIdOrderByCreatedAtDesc(patientId);
             return odontograms.stream()
                     .map(odontogramSimpleMapper::toDto)
                     .collect(Collectors.toList());
         } catch (Exception ex) {
-            throw new AppException("Failed to fetch odontograms by treatment ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+            throw new AppException("Failed to fetch odontograms by patient ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    public OdontogramResponse getlasOdontogramByPatientId(String patientId){
+        try {
+            OdontogramModel odontogramModel = odontogramRepository
+                    .findLastOdontogramByPatientId(patientId)
+                    .orElseThrow(() -> new AppException("No odontogram found for patient ID: " + patientId,
+                            HttpStatus.NOT_FOUND));
+
+            Long odontogramId = odontogramModel.getIdOdontogram();
+
+            // Obtener todas las asignaciones de condiciones de dientes
+            List<ToothConditionAssignmentModel> toothConditionAssignments = odontogramRepository
+                    .findToothConditionAssignmentsByOdontogramId(odontogramId);
+
+            // Obtener todas las condiciones de caras de dientes
+            List<ToothfaceConditionsAssignmentModel> toothFaceConditions = odontogramRepository
+                    .findToothFaceConditionsAssignmentByOdontogramId(odontogramId);
+
+            OdontogramResponse odontogramResponse = odontogramMapper.mapConditionsAssignments(toothConditionAssignments,
+                    toothFaceConditions);
+            odontogramResponse.setIdOdontogram(odontogramId);
+            odontogramResponse.setObservations(odontogramModel.getObservations());
+
+            return odontogramResponse;
+
+        } catch (Exception ex) {
+            throw new AppException("Failed to fetch last odontogram by patient ID", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

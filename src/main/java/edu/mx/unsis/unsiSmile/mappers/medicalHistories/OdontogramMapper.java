@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
@@ -27,6 +26,7 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {
@@ -44,7 +44,7 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
                                 .adultArcade(Collections.emptyList())
                                 .childArcade(Collections.emptyList())
                                 .observations(entity.getObservations())
-                                .idPatientMedicalRecord(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
+                                .patientId(entity.getPatient().getIdPatient())
                                 .build();
         }
 
@@ -64,9 +64,9 @@ public class OdontogramMapper implements BaseMapper<OdontogramResponse, Odontogr
         public static OdontogramModel toOdontogramModel(OdontogramRequest dto) {
                 OdontogramModel odontogramModel = OdontogramModel.builder()
                                 .observations(dto.getObservations())
-                                .patientMedicalRecord(PatientMedicalRecordModel.builder()
-                                                .idPatientMedicalRecord(dto.getIdPatientMedicalRecord())
-                                                .build())
+                               .patient(PatientModel.builder()
+                                        .idPatient(dto.getIdPatient())
+                                        .build())
                                 .build();
 
                 // Mapeo de ToothConditionAssignments con verificación de nulos

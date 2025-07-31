@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OdontogramSimpleResponse {
     private Long idOdontogram;
-    private Long idPatientMedicalRecord;
+    private String idPatient;
     private LocalDate creationDate;
 }

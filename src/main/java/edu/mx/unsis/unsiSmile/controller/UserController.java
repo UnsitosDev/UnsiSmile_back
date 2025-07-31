@@ -49,7 +49,7 @@ public class UserController {
 
     @Operation(summary = "Obtiene información de usuario por username")
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserBaseResponse> getUserByUsername(@PathVariable String username) {
+    public UserBaseResponse getUserByUsername(@PathVariable String username) {
         return userService.getUserBaseByUsername(username);
     }
 }

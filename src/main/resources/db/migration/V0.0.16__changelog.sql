@@ -3,13 +3,13 @@ CREATE TABLE
     odontograms (
         id_odontogram BIGINT AUTO_INCREMENT PRIMARY KEY,
         observations TEXT DEFAULT NULL,
-        fk_patient_medical_record BIGINT NOT NULL,
+        fk_patient CHAR(36) NOT NULL,
         created_at DATETIME (6) DEFAULT NULL,
         created_by VARCHAR(255) DEFAULT NULL,
         status_key VARCHAR(255) DEFAULT NULL,
         updated_at DATETIME (6) DEFAULT NULL,
         updated_by VARCHAR(255) DEFAULT NULL,
-        CONSTRAINT FK_odontograms_patient_medical_records FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records (id_patient_medical_record)
+        CONSTRAINT FK_odontograms_patients FOREIGN KEY (fk_patient) REFERENCES patients (id_patient)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 

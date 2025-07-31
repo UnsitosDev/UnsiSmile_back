@@ -348,7 +348,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<UserBaseResponse> getUserBaseByUsername(String username) {
+    public UserBaseResponse getUserBaseByUsername(String username) {
         try {
             UserModel userModel = userRepository.findByUsername(username)
                     .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
@@ -361,34 +361,29 @@ public class UserService {
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
 
-                    return ResponseEntity.ok(
-                            new AdministratorResponseBuilder().build(admin));
+                    return new AdministratorResponseBuilder().build(admin);
                 case ROLE_PROFESSOR:
                     ProfessorModel professor = professorRepository.findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-                    return ResponseEntity.ok(
-                            new ProfessorResponseBuilder().build(professor));
+                    return new ProfessorResponseBuilder().build(professor);
                 case ROLE_STUDENT:
                     StudentModel student = studentRepository.findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
 
-                    return ResponseEntity.ok(
-                            new StudentResponseBuilder().build(student));
+                    return new StudentResponseBuilder().build(student);
                 case ROLE_MEDICAL_RECORD_DIGITIZER:
                     MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
                             .findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-                    return ResponseEntity.ok(
-                            new DigitizerResponseBuilder().build(digitizer));
+                    return new DigitizerResponseBuilder().build(digitizer);
                 default:
-                    return ResponseEntity.ok(
-                            new BaseUserResponseBuilder().build(userModel));
+                    return new BaseUserResponseBuilder().build(userModel);
             }
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
