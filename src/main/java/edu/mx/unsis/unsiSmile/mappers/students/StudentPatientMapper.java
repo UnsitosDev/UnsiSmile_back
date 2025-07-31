@@ -1,19 +1,18 @@
 package edu.mx.unsis.unsiSmile.mappers.students;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentPatientModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class StudentPatientMapper implements BaseMapper<StudentPatientResponse, StudentPatientRequest, StudentPatientModel> {
@@ -68,6 +67,13 @@ public class StudentPatientMapper implements BaseMapper<StudentPatientResponse, 
                 .idStudentPatient(entity.getIdStudentPatient())
                 .patientId(entity.getPatient().getIdPatient())
                 .student(studentRes)
+                .build();
+    }
+
+    public StudentPatientResponse toStudentPatient(StudentPatientModel entity) {
+        return StudentPatientResponse.builder()
+                .idStudentPatient(entity.getIdStudentPatient())
+                .student(studentMapper.toDto(entity.getStudent()))
                 .build();
     }
 }

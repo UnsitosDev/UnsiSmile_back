@@ -24,7 +24,7 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
 
     Optional<StudentPatientModel> findByStudent(StudentModel student);
 
-    List<StudentPatientModel> findAllByStudentEnrollment(String studentId);
+    List<StudentPatientModel> findAllByStudentEnrollmentAndStatusKey(String studentId, String statusKey);
 
     @Query("SELECT sp FROM StudentPatientModel sp where sp.patient.idPatient IN :patientsId AND" +
             " sp.statusKey='A' AND sp.student.statusKey = 'A'")
@@ -65,7 +65,8 @@ public interface IStudentPatientRepository extends JpaRepository<StudentPatientM
     List<Object[]> countPatientsByNationalityByStudent(@Param("studentId") String studentId,
                                                        @Param("status") String status);
 
-    @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId")
+    @Query("SELECT sp FROM StudentPatientModel sp WHERE sp.patient.idPatient = :patientId AND sp.statusKey = 'A' " +
+            "AND sp.student.statusKey = 'A'")
     Page<StudentPatientModel> findByPatientId(@Param("patientId")  String patientId, Pageable pageable);
 
     @Query("SELECT COUNT(sp) FROM StudentPatientModel sp " +

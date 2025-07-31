@@ -5,7 +5,6 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
@@ -109,7 +108,7 @@ public class StudentPatientService {
             if (keyword != null && !keyword.isEmpty() && pageable != null) {
                 studentPatients = studentPatientRepository.findAllBySearchInput(enrollment, keyword, pageable);
             } else {
-                studentPatients  = studentPatientRepository.findAllByStudentEnrollment(enrollment);
+                studentPatients  = studentPatientRepository.findAllByStudentEnrollmentAndStatusKey(enrollment, Constants.ACTIVE);
             }
 
             return studentPatients.stream()
@@ -140,11 +139,19 @@ public class StudentPatientService {
 
     @Transactional
     public void deleteStudentPatientById(@NonNull Long idStudentPatient) {
-        if (!studentPatientRepository.existsById(idStudentPatient)) {
-            throw new AppException("Student-patient relationship not found with ID: " + idStudentPatient,
-                    HttpStatus.NOT_FOUND);
+        try {
+            StudentPatientModel studentPatientModel = studentPatientRepository.findByIdStudentPatient(idStudentPatient)
+                    .orElseThrow(() -> new AppException(
+                            String.format(ResponseMessages.STUDENT_PATIENT_NOT_FOUND, idStudentPatient),
+                            HttpStatus.NOT_FOUND));
+            studentPatientModel.setStatusKey(Constants.INACTIVE);
+            studentPatientRepository.save(studentPatientModel);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.STUDENT_PATIENT_DELETION_FAILED,
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-        studentPatientRepository.deleteById(idStudentPatient);
     }
 
     @Transactional(readOnly = true)
@@ -160,18 +167,15 @@ public class StudentPatientService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentResponse> getStudentsByPatient(Pageable pageable, String patientId) {
+    public Page<StudentPatientResponse> getStudentsByPatient(Pageable pageable, String patientId) {
         try {
-            Assert.notNull(patientId, "El campo patientId no puede ser null.");
+            Assert.notNull(patientId, ResponseMessages.PATIENT_ID_CANNOT_BE_NULL);
             if (!patientRepository.existsById(patientId)) {
-                throw new AppException("Paciente no encontrado con Id: " + patientId, HttpStatus.NOT_FOUND);
+                throw new AppException(ResponseMessages.PATIENT_NOT_FOUND + " con id: "+ patientId, HttpStatus.NOT_FOUND);
             }
             Page<StudentPatientModel> studentPatientPage = studentPatientRepository.findByPatientId(patientId, pageable);
 
-            return studentPatientPage.map(studentPatient -> {
-                StudentModel student = studentPatient.getStudent();
-                return studentMapper.toDto(student);
-            });
+            return studentPatientPage.map(studentPatientMapper::toStudentPatient);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

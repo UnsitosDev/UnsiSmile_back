@@ -48,17 +48,18 @@ public class DashboardService {
     private final IExecutionReviewRepository executionReviewRepository;
 
     @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboardMetrics() {
+    public StudentDashboardResponse getStudentDashboard() {
         try {
-            String enrollment = getUserName();
-            return getStudentDashboardMetrics(enrollment);
+            String username = getUserName();
+            return getStudentDashboardMetrics(username);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception e) {
             throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    @Transactional(readOnly = true)
-    public StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
+    private StudentDashboardResponse getStudentDashboardMetrics(String enrollment) {
         try {
             Timestamp lastMonthTimestamp = Timestamp.valueOf(LocalDateTime.now().minusMonths(1));
 
@@ -74,7 +75,7 @@ public class DashboardService {
                     .inReviewTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_REVIEW))
                     .progressingTreatments(treatmentDetailRepository.countByStudentAndStatus(enrollment, ReviewStatus.IN_PROGRESS));
 
-            TreatmentCountResponse treatments = getTreatmentCountResponse(null, null);
+            TreatmentCountResponse treatments = getTreatmentCountResponseByStudent(enrollment, null, null);
             builder.treatments(treatments);
 
             return builder.build();
@@ -254,5 +255,24 @@ public class DashboardService {
             result.merge((String) row[0], (Long) row[1], Long::sum);
         }
         return result;
+    }
+
+    public TreatmentCountResponse getTreatmentCountResponseByStudent(String enrollment, Timestamp startDate, Timestamp endDate) {
+        List<Object[]> toothScope;
+        List<Object[]> generalScope;
+
+        if (startDate != null && endDate != null) {
+            toothScope = treatmentDetailRepository.countToothScopeTreatmentsBetweenDatesByStudent(
+                    enrollment, ReviewStatus.FINISHED, startDate, endDate
+            );
+            generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsBetweenDatesByStudent(
+                    enrollment, ReviewStatus.FINISHED, startDate, endDate
+            );
+        } else {
+            toothScope = treatmentDetailRepository.countToothScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED);
+            generalScope = treatmentDetailRepository.countGeneralScopeTreatmentsByStudent(enrollment, ReviewStatus.FINISHED);
+        }
+        Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
+        return mapToTreatmentCountResponse(treatmentCounts);
     }
 }

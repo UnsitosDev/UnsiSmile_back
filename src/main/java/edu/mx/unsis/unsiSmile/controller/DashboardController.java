@@ -21,7 +21,7 @@ public class DashboardController {
 
     @GetMapping("/students")
     public ResponseEntity<StudentDashboardResponse> getStudentDashboard() {
-        StudentDashboardResponse dashboard = dashboardService.getStudentDashboardMetrics();
+        StudentDashboardResponse dashboard = dashboardService.getStudentDashboard();
         return ResponseEntity.ok(dashboard);
     }
 
