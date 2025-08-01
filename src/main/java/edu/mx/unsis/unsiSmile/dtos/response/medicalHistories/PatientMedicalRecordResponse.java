@@ -18,4 +18,6 @@ public class PatientMedicalRecordResponse {
     private Long patientMedicalRecordId = 0L;
 
     private String patientId;
+
+    private String patientName;
 }

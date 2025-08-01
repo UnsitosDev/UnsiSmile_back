@@ -867,6 +867,8 @@ public class TreatmentDetailService {
 
     @Transactional
     public TreatmentDetailResponse toTreatmentDetailResponse(TreatmentDetailModel model) {
-            return mapTreatmentDetailToDto(model);
+            TreatmentDetailResponse response = mapTreatmentDetailToDto(model);
+            response.setPatient(null);
+            return response;
     }
 }
