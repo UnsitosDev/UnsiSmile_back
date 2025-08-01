@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

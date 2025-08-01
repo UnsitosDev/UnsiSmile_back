@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalrecords.treatments;
 
-import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;

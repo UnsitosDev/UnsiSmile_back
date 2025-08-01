@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.medicalrecords.treatments;
 
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;

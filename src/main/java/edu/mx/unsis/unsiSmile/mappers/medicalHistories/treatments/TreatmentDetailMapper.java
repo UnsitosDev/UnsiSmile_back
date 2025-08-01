@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.AuthorizedTreatmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;

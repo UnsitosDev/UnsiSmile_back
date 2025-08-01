@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords;
+package edu.mx.unsis.unsiSmile.model.enums;
 
 import lombok.Getter;
 
