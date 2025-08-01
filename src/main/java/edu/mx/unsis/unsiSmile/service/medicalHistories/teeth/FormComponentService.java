@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormCompon
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.components.FormComponentMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IFormComponentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.components.IFormComponentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

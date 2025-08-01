@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.mappers.forms.answers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.answers.IAnswerRepository;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordService;
 import io.jsonwebtoken.lang.Assert;

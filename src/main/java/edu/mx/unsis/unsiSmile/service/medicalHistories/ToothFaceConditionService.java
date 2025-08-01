@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.teeth.ToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.components.FormComponentToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothFaceConditionRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.teeth.IToothFaceConditionRepository;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.teeth.FormComponentToothFaceConditionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

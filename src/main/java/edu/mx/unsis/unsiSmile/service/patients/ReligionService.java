@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.ReligionRespon
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.demographics.ReligionMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.demographics.IReligionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

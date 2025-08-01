@@ -22,7 +22,7 @@ import edu.mx.unsis.unsiSmile.mappers.users.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
-import edu.mx.unsis.unsiSmile.repository.IUserRepository;
+import edu.mx.unsis.unsiSmile.repository.users.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;

@@ -19,9 +19,9 @@ import edu.mx.unsis.unsiSmile.mappers.medicalrecords.odontograms.OdontogramSimpl
 import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothfaceConditionsAssignmentModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IOdontogramRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IToothConditionAssignmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

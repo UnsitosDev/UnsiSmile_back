@@ -9,9 +9,9 @@ import edu.mx.unsis.unsiSmile.mappers.medicalrecords.dentalprophylaxis.SOHIMappe
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIToothCodeModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.ISOHIRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.ISOHITootCodeRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.ISOHIRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.ISOHITootCodeRepository;
+import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

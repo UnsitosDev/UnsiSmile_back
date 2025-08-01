@@ -1,8 +1,0 @@
-package edu.mx.unsis.unsiSmile.repository.medicalHistories;
-
-import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothfaceConditionsAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothFaceConditionAssignmentId;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface IFluorosisToothfaceConditionsAssignmentRepository extends JpaRepository<FluorosisToothfaceConditionsAssignmentModel, FluorosisToothFaceConditionAssignmentId> {
-}

@@ -11,9 +11,9 @@ import edu.mx.unsis.unsiSmile.mappers.medicalrecords.dentalprophylaxis.DentalPro
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.DentalProphylaxisModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.ProphylaxisToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.ProphylaxisToothfaceConditionsAssignmentModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IDentalProphylaxisRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IProphylaxisToothConditionAssignmentRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IProphylaxisToothfaceConditionsAssignmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.IDentalProphylaxisRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.IProphylaxisToothConditionAssignmentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.IProphylaxisToothfaceConditionsAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;

@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.OccupationResp
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.demographics.OccupationMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IOccupationRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.demographics.IOccupationRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;

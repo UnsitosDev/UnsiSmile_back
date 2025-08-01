@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.MaritalStatusR
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.demographics.MaritalStatusMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.demographics.IMaritalStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

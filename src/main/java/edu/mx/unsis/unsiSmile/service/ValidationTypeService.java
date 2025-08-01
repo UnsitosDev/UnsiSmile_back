@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationTypeRespon
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.questions.ValidationTypeMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationTypeModel;
-import edu.mx.unsis.unsiSmile.repository.IValidationTypeRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.questions.IValidationTypeRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

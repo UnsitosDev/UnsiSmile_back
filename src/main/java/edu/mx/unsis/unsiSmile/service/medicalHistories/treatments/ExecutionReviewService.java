@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IExecutionReviewRepository;
+import edu.mx.unsis.unsiSmile.repository.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

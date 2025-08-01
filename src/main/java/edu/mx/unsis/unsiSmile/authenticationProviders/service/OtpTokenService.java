@@ -9,7 +9,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.EmailRequest;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
-import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
+import edu.mx.unsis.unsiSmile.repository.people.IPersonRepository;
 import edu.mx.unsis.unsiSmile.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

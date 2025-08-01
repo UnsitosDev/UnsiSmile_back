@@ -8,7 +8,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.questions.ValidationMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationModel;
-import edu.mx.unsis.unsiSmile.repository.IValidationRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.questions.IValidationRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

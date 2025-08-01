@@ -10,7 +10,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.digitizers.MedicalRecordDigitizerMapper;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
-import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerRepository;
+import edu.mx.unsis.unsiSmile.repository.digitizers.IMedicalRecordDigitizerRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.validation.constraints.NotNull;

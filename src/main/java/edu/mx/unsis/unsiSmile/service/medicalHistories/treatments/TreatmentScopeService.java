@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentScopeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.treatments.TreatmentScopeMapper;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentScopeModel;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentScopeRepository;
+import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentScopeRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

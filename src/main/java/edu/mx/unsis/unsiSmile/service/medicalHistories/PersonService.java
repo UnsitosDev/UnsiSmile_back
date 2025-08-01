@@ -17,7 +17,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.people.PersonMapper;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
-import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
+import edu.mx.unsis.unsiSmile.repository.people.IPersonRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

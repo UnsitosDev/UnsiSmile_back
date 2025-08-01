@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModelPk;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordSectionRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.sections.IMedicalRecordSectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

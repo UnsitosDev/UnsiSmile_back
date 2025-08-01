@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.EthnicGroupRes
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.demographics.EthnicGroupMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
-import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.demographics.IEthnicGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

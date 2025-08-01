@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.questions.QuestionMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
-import edu.mx.unsis.unsiSmile.repository.IQuestionRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.questions.IQuestionRepository;
 import io.jsonwebtoken.lang.Assert;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;

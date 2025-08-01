@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.answers.AnswerTypeMapper;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
-import edu.mx.unsis.unsiSmile.repository.IAnswerTypeRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.answers.IAnswerTypeRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
