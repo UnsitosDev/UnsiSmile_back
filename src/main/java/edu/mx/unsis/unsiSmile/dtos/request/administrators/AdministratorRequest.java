@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.administrators;
 
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

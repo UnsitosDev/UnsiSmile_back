@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DeanIndexToothCodeRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FluorosisRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.DeanIndexToothCodeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.FluorosisRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FluorosisResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.DeanIndexService;

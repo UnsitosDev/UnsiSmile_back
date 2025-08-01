@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentService;
 import io.swagger.v3.oas.annotations.Operation;

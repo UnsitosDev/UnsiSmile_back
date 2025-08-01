@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
 import jakarta.validation.Valid;

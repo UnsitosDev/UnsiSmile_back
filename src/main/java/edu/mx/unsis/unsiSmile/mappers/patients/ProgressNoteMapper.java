@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientRes;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;

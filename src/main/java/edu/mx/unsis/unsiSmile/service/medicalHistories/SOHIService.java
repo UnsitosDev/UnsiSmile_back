@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumToothId;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.EnumToothId;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.SOHIMapper;

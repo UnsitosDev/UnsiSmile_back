@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DentalProphylaxisRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.DentalProphylaxisRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DentalProphylaxisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.DentalProphylaxisService;

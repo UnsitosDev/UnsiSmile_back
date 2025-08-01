@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;

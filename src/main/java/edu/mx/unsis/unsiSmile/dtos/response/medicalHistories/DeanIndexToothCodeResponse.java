@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumDeanIndexToothId;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.EnumDeanIndexToothId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

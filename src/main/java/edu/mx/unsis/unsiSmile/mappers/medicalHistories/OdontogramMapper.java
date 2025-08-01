@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FaceRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothFaceConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.FaceRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothFaceConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;

@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.FormSectionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;

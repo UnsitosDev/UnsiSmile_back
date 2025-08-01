@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;

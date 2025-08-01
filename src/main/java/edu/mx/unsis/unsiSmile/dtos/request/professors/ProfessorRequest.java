@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.request.professors;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.CareerRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

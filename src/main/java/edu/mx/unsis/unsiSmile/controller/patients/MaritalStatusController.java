@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.MaritalStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.MaritalStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.MaritalStatusResponse;
 import edu.mx.unsis.unsiSmile.service.patients.MaritalStatusService;
 import io.swagger.v3.oas.annotations.Operation;

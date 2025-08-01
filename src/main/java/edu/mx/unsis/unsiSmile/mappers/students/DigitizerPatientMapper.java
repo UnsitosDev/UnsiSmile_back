@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.students;
 
-import edu.mx.unsis.unsiSmile.dtos.request.students.DigitizerPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.digitizers.DigitizerPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.DigitizerPatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;

@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller;
 
-import edu.mx.unsis.unsiSmile.dtos.request.ValidationTypeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.ValidationTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationTypeResponse;
 import edu.mx.unsis.unsiSmile.service.ValidationTypeService;
 import io.swagger.v3.oas.annotations.Operation;

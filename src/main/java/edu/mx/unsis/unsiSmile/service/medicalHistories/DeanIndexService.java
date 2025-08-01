@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DeanIndexToothCodeRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumDeanIndexToothId;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.DeanIndexToothCodeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.EnumDeanIndexToothId;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.DeanIndexMapper;

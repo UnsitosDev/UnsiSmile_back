@@ -2,10 +2,10 @@ package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
-import edu.mx.unsis.unsiSmile.dtos.request.patients.CapturePatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.digitizers.CapturePatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.students.DigitizerPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.digitizers.DigitizerPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;

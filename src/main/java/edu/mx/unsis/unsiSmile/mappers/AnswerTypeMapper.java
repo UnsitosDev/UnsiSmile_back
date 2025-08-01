@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
 
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerTypeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerTypeResponse;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
 import org.springframework.stereotype.Component;

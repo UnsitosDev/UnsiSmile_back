@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
 import edu.mx.unsis.unsiSmile.common.AppConstants;
-import edu.mx.unsis.unsiSmile.dtos.request.FileRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.files.FileRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;

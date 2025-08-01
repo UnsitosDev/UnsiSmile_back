@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.GenderResponse;
 import edu.mx.unsis.unsiSmile.service.GenderService;
 import jakarta.validation.Valid;

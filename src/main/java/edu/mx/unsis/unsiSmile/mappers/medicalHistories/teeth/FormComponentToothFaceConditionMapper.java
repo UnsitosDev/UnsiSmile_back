@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories.teeth;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.teeth.FormComponentToothFaceConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormComponentToothFaceConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothFaceConditionMapper;

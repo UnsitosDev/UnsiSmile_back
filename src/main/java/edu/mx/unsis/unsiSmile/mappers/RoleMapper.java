@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
-import edu.mx.unsis.unsiSmile.dtos.request.RoleRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.users.RoleRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.RoleResponse;
 import lombok.AllArgsConstructor;
 

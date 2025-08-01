@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.service.patients.ReligionService;
 import io.swagger.v3.oas.annotations.Operation;

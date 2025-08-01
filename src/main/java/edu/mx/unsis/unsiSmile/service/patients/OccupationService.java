@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.patients.OccupationRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.OccupationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.OccupationMapper;

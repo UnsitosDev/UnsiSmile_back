@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;

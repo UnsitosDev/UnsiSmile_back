@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DentalProphylaxisRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.DentalProphylaxisRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DentalProphylaxisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FaceResponse;

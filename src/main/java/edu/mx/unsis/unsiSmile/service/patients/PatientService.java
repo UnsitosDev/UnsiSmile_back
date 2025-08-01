@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
-import edu.mx.unsis.unsiSmile.dtos.request.UserRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;

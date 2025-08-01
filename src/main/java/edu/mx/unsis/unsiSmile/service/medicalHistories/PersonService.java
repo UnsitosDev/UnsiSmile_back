@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.GenderRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.GenderResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.GenderMapper;

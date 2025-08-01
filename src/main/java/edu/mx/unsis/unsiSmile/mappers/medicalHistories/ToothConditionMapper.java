@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothConditionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;

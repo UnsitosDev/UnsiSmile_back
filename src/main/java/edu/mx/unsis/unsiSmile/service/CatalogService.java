@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.dtos.request.CatalogRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;

@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller;
 
-import edu.mx.unsis.unsiSmile.dtos.request.CatalogRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogResponse;
 import edu.mx.unsis.unsiSmile.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;

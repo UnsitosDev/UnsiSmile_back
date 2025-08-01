@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerUpdateRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;

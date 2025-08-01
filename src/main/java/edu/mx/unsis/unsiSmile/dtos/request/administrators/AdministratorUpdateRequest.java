@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.administrators;
 
-import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;

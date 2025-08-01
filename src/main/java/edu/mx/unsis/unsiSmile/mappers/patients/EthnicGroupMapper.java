@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.EthnicGroupRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;

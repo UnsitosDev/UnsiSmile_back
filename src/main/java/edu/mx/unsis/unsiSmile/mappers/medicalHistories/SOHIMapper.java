@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIModel;

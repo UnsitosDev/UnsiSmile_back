@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;

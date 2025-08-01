@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.OccupationRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.OccupationResponse;
 import edu.mx.unsis.unsiSmile.service.patients.OccupationService;
 import io.swagger.v3.oas.annotations.Operation;

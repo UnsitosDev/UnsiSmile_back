@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.ReligionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ReligionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;

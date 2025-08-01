@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentDetailRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentDetailToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;

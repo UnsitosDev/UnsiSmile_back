@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.students;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.students.DigitizerPatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.digitizers.DigitizerPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.DigitizerPatientResponse;

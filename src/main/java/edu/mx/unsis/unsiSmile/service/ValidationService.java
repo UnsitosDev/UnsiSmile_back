@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.dtos.request.ValidationRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.ValidationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;

@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
-import edu.mx.unsis.unsiSmile.dtos.request.QuestionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.QuestionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.*;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.QuestionMapper;

@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller;
 
-import edu.mx.unsis.unsiSmile.dtos.request.AnswerTypeRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerTypeResponse;
 import edu.mx.unsis.unsiSmile.service.AnswerTypeService;
 import io.swagger.v3.oas.annotations.Operation;

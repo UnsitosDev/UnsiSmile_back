@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ReviewStatusRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
