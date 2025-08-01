@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothConditionMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalrecords.teeth.ToothConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothConditionRepository;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.teeth.FormComponentToothConditionService;

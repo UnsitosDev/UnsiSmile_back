@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.MaritalStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.MaritalStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.MaritalStatusMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.demographics.MaritalStatusMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IMaritalStatusRepository;
 import lombok.RequiredArgsConstructor;

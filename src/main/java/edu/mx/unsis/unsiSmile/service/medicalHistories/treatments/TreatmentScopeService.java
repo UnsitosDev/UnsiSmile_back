@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentScopeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentScopeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentScopeMapper;
+import edu.mx.unsis.unsiSmile.mappers.treatments.TreatmentScopeMapper;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentScopeModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentScopeRepository;
 import io.jsonwebtoken.lang.Assert;

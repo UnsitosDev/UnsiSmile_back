@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.ValidationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.ValidationMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.questions.ValidationMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationModel;
 import edu.mx.unsis.unsiSmile.repository.IValidationRepository;

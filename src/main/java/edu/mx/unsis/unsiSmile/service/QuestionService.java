@@ -8,7 +8,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.QuestionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.QuestionMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.questions.QuestionMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
 import edu.mx.unsis.unsiSmile.repository.IQuestionRepository;

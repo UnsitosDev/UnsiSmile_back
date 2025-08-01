@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.catalogs.CatalogOptionMapper;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;

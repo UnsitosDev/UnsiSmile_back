@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 import edu.mx.unsis.unsiSmile.dtos.request.people.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.people.GenderResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.GenderMapper;
+import edu.mx.unsis.unsiSmile.mappers.people.GenderMapper;
 import edu.mx.unsis.unsiSmile.model.people.GenderModel;
 import edu.mx.unsis.unsiSmile.repository.IGenderRepository;
 import lombok.RequiredArgsConstructor;

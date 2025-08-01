@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.AnswerTypeMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.answers.AnswerTypeMapper;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerTypeRepository;
 import io.jsonwebtoken.lang.Assert;

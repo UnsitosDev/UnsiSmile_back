@@ -14,7 +14,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
+import edu.mx.unsis.unsiSmile.dtos.response.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;

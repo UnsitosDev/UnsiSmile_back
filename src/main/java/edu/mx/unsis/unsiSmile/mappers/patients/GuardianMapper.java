@@ -3,8 +3,8 @@ package edu.mx.unsis.unsiSmile.mappers.patients;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
-import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.catalogs.CatalogOptionMapper;
+import edu.mx.unsis.unsiSmile.mappers.people.PersonMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

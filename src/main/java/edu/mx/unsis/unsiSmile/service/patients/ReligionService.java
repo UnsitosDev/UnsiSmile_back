@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.ReligionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.ReligionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.ReligionMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.demographics.ReligionMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IReligionRepository;
 import lombok.RequiredArgsConstructor;

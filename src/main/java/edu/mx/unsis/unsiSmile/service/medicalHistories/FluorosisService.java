@@ -7,7 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.FluorosisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.FluorosisMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalrecords.fluorosis.FluorosisMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothfaceConditionsAssignmentModel;

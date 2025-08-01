@@ -7,7 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.answers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;

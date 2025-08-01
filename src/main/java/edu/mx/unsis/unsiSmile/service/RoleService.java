@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.dtos.response.users.RoleResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.RoleMapper;
+import edu.mx.unsis.unsiSmile.mappers.users.RoleMapper;
 import edu.mx.unsis.unsiSmile.repository.IRoleRepository;
 import lombok.RequiredArgsConstructor;
 

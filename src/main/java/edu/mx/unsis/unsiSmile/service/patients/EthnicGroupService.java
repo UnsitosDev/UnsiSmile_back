@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.EthnicGroupMapper;
+import edu.mx.unsis.unsiSmile.mappers.patients.demographics.EthnicGroupMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IEthnicGroupRepository;
 import lombok.RequiredArgsConstructor;

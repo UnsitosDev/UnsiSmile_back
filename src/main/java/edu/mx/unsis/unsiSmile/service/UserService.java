@@ -13,7 +13,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserBaseResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.UserMapper;
+import edu.mx.unsis.unsiSmile.mappers.users.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;

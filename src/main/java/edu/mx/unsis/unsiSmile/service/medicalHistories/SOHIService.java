@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.Enum
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.dentalprophylaxis.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.SOHIMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalrecords.dentalprophylaxis.SOHIMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIToothCodeModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;

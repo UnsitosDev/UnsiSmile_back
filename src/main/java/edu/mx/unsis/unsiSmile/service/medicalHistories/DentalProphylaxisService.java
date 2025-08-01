@@ -7,7 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.dentalprophylaxis.Den
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.medicalHistories.DentalProphylaxisMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalrecords.dentalprophylaxis.DentalProphylaxisMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.DentalProphylaxisModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.ProphylaxisToothConditionAssignmentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.ProphylaxisToothfaceConditionsAssignmentModel;

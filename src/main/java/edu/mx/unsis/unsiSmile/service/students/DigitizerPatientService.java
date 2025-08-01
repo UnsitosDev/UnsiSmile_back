@@ -8,7 +8,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.digitizers.DigitizerPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.students.DigitizerPatientMapper;
+import edu.mx.unsis.unsiSmile.mappers.digitizers.DigitizerPatientMapper;
 import edu.mx.unsis.unsiSmile.model.digitizers.DigitizerPatientModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
