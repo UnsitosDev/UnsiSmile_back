@@ -3,10 +3,6 @@ package edu.mx.unsis.unsiSmile.mappers.addresses;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.HousingResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.StreetResponse;
-import edu.mx.unsis.unsiSmile.model.HousingModel;
-import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

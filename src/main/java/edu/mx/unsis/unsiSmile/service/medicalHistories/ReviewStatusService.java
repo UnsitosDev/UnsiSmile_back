@@ -9,10 +9,10 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionRespon
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatusModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;

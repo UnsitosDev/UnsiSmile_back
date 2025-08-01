@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentScopeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentScopeMapper;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentScopeModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentScopeModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentScopeRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;

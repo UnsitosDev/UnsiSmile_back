@@ -14,7 +14,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.HousingRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.HousingResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.HousingMapper;
-import edu.mx.unsis.unsiSmile.model.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.IHousingRepository;
 import lombok.RequiredArgsConstructor;
 

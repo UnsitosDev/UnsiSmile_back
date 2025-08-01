@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;

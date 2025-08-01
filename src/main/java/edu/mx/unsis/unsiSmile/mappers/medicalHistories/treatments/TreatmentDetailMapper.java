@@ -4,10 +4,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.AuthorizedTreatmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.ExecutionReviewModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentModel;
+import edu.mx.unsis.unsiSmile.model.treatments.AuthorizedTreatmentModel;
+import edu.mx.unsis.unsiSmile.model.treatments.ExecutionReviewModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

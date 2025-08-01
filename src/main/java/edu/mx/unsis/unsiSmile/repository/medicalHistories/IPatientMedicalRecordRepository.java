@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

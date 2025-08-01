@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 

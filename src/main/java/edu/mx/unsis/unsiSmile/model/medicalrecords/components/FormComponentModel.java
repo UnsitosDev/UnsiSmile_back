@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords.teeth;
+package edu.mx.unsis.unsiSmile.model.medicalrecords.components;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;

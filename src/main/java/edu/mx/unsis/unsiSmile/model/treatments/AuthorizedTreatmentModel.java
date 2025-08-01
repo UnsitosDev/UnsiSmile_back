@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords.treatments;
+package edu.mx.unsis.unsiSmile.model.treatments;
 
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;

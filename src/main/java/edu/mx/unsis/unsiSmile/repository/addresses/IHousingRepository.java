@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
 
 @Repository
 public interface IHousingRepository extends JpaRepository<HousingModel, String> {

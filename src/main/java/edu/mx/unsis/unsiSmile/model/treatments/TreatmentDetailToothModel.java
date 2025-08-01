@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords.treatments;
+package edu.mx.unsis.unsiSmile.model.treatments;
 
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;

@@ -16,7 +16,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
-import edu.mx.unsis.unsiSmile.model.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
 import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;

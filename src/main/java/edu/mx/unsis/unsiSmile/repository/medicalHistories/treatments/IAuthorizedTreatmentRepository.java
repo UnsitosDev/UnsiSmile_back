@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.AuthorizedTreatmentModel;
+import edu.mx.unsis.unsiSmile.model.treatments.AuthorizedTreatmentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

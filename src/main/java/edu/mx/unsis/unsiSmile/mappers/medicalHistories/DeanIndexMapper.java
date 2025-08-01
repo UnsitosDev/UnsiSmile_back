@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.DeanIndexToothCodeRe
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.DeanIndexModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

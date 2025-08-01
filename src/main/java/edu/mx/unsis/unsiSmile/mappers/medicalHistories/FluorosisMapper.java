@@ -10,7 +10,7 @@ import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

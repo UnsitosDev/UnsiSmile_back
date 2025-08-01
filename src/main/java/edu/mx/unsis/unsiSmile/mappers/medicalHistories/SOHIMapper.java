@@ -3,8 +3,8 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothCodeResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.SOHIModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;

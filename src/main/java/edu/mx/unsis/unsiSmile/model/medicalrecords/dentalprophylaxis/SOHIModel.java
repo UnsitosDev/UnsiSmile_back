@@ -1,6 +1,6 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords;
+package edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis;
 
-import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;

@@ -5,8 +5,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponent
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentToothfaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentToothfaceConditionModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

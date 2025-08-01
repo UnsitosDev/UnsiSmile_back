@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewSectionRespon
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;

@@ -7,7 +7,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;
 import edu.mx.unsis.unsiSmile.model.AnswerModel;
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.files.GeneralFileModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;

@@ -1,6 +1,5 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram;
+package edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis;
 
-import edu.mx.unsis.unsiSmile.model.medicalrecords.DentalProphylaxisModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;

@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.model.addresses;
 
-import edu.mx.unsis.unsiSmile.model.HousingModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
