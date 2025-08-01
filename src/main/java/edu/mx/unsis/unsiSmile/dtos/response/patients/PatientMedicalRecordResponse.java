@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.dtos.response.patients;
+package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PatientMedicalRecordResponse {
     private Long id;
+
     private String medicalRecordName;
 
     @Builder.Default
     private Long patientMedicalRecordId = 0L;
+
     private String patientId;
+
+    private String patientName;
 }

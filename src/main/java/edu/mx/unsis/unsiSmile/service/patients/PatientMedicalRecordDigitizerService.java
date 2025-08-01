@@ -105,6 +105,7 @@ public class PatientMedicalRecordDigitizerService {
                                         .medicalRecordName(medicalRecord.getMedicalRecordCatalog().getMedicalRecordName())
                                         .patientMedicalRecordId(medicalRecord.getIdPatientMedicalRecord())
                                         .patientId(medicalRecord.getPatient().getIdPatient())
+                                        .patientName(medicalRecord.getPatient().getPerson().getFullName())
                                         .build()
                         )
                         .appointmentDate(medicalRecord.getAppointmentDate().toLocalDate())
