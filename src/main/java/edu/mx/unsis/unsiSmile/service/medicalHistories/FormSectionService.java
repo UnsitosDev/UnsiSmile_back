@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.ReviewStatusMapper;
 import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.QuestionService;

@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
-import edu.mx.unsis.unsiSmile.model.utils.MedicalRecordSectionModelPk;
+import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordSectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

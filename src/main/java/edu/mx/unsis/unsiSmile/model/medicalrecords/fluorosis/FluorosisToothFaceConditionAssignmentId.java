@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.utils;
+package edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

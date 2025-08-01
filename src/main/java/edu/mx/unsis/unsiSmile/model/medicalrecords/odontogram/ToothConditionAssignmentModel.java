@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import edu.mx.unsis.unsiSmile.model.utils.ToothConditionAssignmentId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;

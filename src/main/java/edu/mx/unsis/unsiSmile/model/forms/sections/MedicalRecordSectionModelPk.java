@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.utils;
+package edu.mx.unsis.unsiSmile.model.forms.sections;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

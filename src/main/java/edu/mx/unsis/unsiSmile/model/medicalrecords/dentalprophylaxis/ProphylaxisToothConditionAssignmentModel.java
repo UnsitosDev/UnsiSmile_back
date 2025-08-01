@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import edu.mx.unsis.unsiSmile.model.utils.ProphylaxisToothConditionAssignmentId;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import edu.mx.unsis.unsiSmile.model.utils.FluorosisToothConditionAssignmentId;
 import jakarta.persistence.*;
 import lombok.*;
 

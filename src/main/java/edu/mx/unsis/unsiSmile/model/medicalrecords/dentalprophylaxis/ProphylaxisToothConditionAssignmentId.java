@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.utils;
+package edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FluorosisToothConditionAssignmentId implements Serializable {
+public class ProphylaxisToothConditionAssignmentId implements Serializable {
     private String tooth;
     private Long toothCondition;
-    private Long fluorosis;
+    private Long dentalProphylaxis;
 }

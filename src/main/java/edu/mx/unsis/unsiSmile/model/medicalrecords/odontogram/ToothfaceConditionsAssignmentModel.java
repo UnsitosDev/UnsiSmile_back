@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import edu.mx.unsis.unsiSmile.model.utils.ToothFaceConditionAssignmentId;
 import jakarta.persistence.*;
 import lombok.*;
 

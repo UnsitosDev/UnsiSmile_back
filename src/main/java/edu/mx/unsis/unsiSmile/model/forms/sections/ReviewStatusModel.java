@@ -1,6 +1,5 @@
-package edu.mx.unsis.unsiSmile.model.medicalrecords;
+package edu.mx.unsis.unsiSmile.model.forms.sections;
 
-import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
