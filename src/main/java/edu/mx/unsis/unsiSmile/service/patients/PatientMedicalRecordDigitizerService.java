@@ -3,7 +3,6 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.MedicalRecordListResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
@@ -92,31 +91,43 @@ public class PatientMedicalRecordDigitizerService {
 
 
     @Transactional(readOnly = true)
-    public Page<MedicalRecordListResponse> findPatientMedicalRecords(String idPatient, Pageable pageable) {
+    public MedicalRecordListResponse findPatientMedicalRecords(String idPatient, Pageable pageable) {
         try {
+            PatientModel patientModel = patientService.getPatientModel(idPatient);
+
             Page<PatientMedicalRecordModel> patientMedicalRecords = patientMedicalRecordRepository
                     .findByPatient_IdPatient(idPatient, pageable);
 
-            return patientMedicalRecords.map(medicalRecord -> {
-                MedicalRecordListResponse response = MedicalRecordListResponse.builder()
-                        .patientMedicalRecord(
-                                PatientMedicalRecordResponse.builder()
-                                        .id(medicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
-                                        .medicalRecordName(medicalRecord.getMedicalRecordCatalog().getMedicalRecordName())
-                                        .patientMedicalRecordId(medicalRecord.getIdPatientMedicalRecord())
-                                        .patientId(medicalRecord.getPatient().getIdPatient())
-                                        .patientName(medicalRecord.getPatient().getPerson().getFullName())
-                                        .build()
-                        )
+            // Armar la página de MedicalRecordResponse
+            Page<MedicalRecordListResponse.MedicalRecordResponse> medicalRecordsPage = patientMedicalRecords.map(medicalRecord -> {
+                MedicalRecordListResponse.MedicalRecordResponse recordResponse = MedicalRecordListResponse.MedicalRecordResponse.builder()
+                        .id(medicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
+                        .medicalRecordName(medicalRecord.getMedicalRecordCatalog().getMedicalRecordName())
+                        .patientMedicalRecordId(medicalRecord.getIdPatientMedicalRecord())
                         .appointmentDate(medicalRecord.getAppointmentDate().toLocalDate())
                         .build();
 
-                // Buscar tratamiento asociado si es necesario
-                Optional<TreatmentDetailModel> treatment = treatmentDetailRepository.findByPatientMedicalRecord_IdPatientMedicalRecord(medicalRecord.getIdPatientMedicalRecord());
-                treatment.ifPresent(treatmentDetailModel -> response.setTreatmentDetail(treatmentDetailService.toTreatmentDetailResponse(treatmentDetailModel)));
+                Optional<TreatmentDetailModel> treatment = treatmentDetailRepository
+                        .findByPatientMedicalRecord_IdPatientMedicalRecord(medicalRecord.getIdPatientMedicalRecord());
 
-                return response;
+                treatment.ifPresent(treatmentDetailModel ->
+                        recordResponse.setTreatmentDetail(treatmentDetailService.toTreatmentDetailResponse(treatmentDetailModel))
+                );
+
+                return recordResponse;
             });
+
+            MedicalRecordListResponse.PatientResponse patient = MedicalRecordListResponse.PatientResponse.builder()
+                    .id(patientModel.getIdPatient())
+                    .name(patientModel.getPerson().getFullName())
+                    .medicalRecordNumber(patientModel.getMedicalRecordNumber())
+                    .build();
+
+            // Armar el DTO completo
+            return MedicalRecordListResponse.builder()
+                    .patient(patient)
+                    .page(medicalRecordsPage)
+                    .build();
 
         } catch (AppException ex) {
             throw ex;

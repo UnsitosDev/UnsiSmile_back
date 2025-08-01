@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -117,7 +116,7 @@ public class MedicalRecordCatalogController {
 
     @Operation(summary = "Obtiene un historial paginado de las historias clínicas capturadas junto a los tratamientos")
     @GetMapping("/patient-medical-records/patients/{idPatient}")
-    public ResponseEntity<Page<MedicalRecordListResponse>> findPatientMedicalRecords(
+    public ResponseEntity<MedicalRecordListResponse> findPatientMedicalRecords(
             @PathVariable String idPatient,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -128,7 +127,7 @@ public class MedicalRecordCatalogController {
         Sort sort = asc ? Sort.by(order).ascending() : Sort.by(order).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<MedicalRecordListResponse> response = patientMedicalRecordDigitizerService
+        MedicalRecordListResponse response = patientMedicalRecordDigitizerService
                 .findPatientMedicalRecords(idPatient, pageable);
 
         return ResponseEntity.ok(response);
