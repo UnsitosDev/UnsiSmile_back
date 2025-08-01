@@ -1,9 +1,9 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentDetailResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentDetailToothResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;

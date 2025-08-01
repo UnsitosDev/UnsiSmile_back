@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.teeth;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormComponentToothConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentToothConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormComponentToothConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.teeth.FormComponentToothConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;

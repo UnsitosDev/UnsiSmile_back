@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;

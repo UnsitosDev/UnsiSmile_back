@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ToothConditionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

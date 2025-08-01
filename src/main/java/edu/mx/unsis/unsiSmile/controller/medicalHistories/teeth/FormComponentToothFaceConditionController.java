@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories.teeth;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormComponentToothFaceConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentToothFaceConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormComponentToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.teeth.FormComponentToothFaceConditionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.dtos.request.users.RoleRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.RoleResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.RoleResponse;
 import lombok.AllArgsConstructor;
 
 @Component

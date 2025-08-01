@@ -1,6 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.response.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.*;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import lombok.AllArgsConstructor;

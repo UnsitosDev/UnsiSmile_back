@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.EthnicGroupRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.EthnicGroupResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.EthnicGroupResponse;
 import edu.mx.unsis.unsiSmile.service.patients.EthnicGroupService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

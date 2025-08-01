@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.common.ValidationUtils;
-import edu.mx.unsis.unsiSmile.dtos.response.TreatmentCountResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentCountResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.service.DashboardService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;

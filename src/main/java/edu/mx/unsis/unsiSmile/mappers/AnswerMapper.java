@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.AnswerResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerResponse;
 import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;

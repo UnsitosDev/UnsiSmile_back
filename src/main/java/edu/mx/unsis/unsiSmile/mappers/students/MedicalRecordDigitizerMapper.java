@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.mappers.students;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.digitizers.MedicalRecordDigitizerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.digitizers.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import lombok.AllArgsConstructor;

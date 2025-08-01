@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.ProgressNoteRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;

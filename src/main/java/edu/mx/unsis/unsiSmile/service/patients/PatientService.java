@@ -7,7 +7,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;

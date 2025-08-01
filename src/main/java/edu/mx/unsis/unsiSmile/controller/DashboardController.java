@@ -1,9 +1,9 @@
 package edu.mx.unsis.unsiSmile.controller;
 
-import edu.mx.unsis.unsiSmile.dtos.response.AdminDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.ClinicalSupervisorDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.ProfessorDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.AdminDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ClinicalSupervisorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ProfessorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.StudentDashboardResponse;
 import edu.mx.unsis.unsiSmile.service.DashboardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

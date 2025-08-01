@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.files;
 
-import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.files.GeneralFileService;
 import io.swagger.v3.oas.annotations.Operation;

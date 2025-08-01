@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogOptionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
 import org.springframework.stereotype.Component;

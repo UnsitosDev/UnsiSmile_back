@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.model.people.GenderModel;
 import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 

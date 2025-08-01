@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import lombok.AllArgsConstructor;
 
 @Component

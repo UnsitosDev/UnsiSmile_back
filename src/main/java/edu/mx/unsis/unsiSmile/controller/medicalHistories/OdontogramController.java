@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.OdontogramService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

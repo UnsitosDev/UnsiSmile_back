@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogDigitizerService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordDigitizerService;
 import io.swagger.v3.oas.annotations.Operation;

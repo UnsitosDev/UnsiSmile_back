@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.files;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.mappers.FileMapper;

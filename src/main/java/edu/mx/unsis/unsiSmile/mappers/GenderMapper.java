@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.people.GenderRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.GenderResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.GenderResponse;
 import edu.mx.unsis.unsiSmile.model.people.GenderModel;
 
 @Component

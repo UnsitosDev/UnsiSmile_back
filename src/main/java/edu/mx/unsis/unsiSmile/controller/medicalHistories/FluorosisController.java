@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.DeanIndexToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.FluorosisRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.FluorosisResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.DeanIndexToothCodeResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.FluorosisResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.DeanIndexService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.FluorosisService;
 import io.swagger.v3.oas.annotations.Operation;

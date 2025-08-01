@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentMapper;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentModel;

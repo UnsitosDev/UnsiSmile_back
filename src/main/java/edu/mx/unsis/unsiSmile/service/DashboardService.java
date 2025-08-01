@@ -2,7 +2,12 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.*;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.AdminDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ClinicalSupervisorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ProfessorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.dashboards.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentCountResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;

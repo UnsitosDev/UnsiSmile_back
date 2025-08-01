@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.ValidationTypeRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.ValidationTypeResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.ValidationTypeMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationTypeModel;

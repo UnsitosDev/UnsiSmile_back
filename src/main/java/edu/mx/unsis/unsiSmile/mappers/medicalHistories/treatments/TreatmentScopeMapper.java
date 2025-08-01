@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentScopeRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentScopeResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentScopeResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentScopeModel;
 import org.springframework.stereotype.Component;

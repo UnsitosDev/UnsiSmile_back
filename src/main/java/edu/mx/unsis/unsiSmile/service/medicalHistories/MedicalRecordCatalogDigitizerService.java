@@ -1,9 +1,9 @@
 package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.FormSectionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;

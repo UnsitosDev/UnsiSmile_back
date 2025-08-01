@@ -1,10 +1,10 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.MedicalRecordCatalogRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordListResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.MedicalRecordListResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordRes;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.enums.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogService;

@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.digitizers.CapturePatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.digitizers.DigitizerPatientRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;

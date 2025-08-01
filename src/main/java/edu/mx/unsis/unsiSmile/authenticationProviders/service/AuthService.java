@@ -24,7 +24,7 @@ import edu.mx.unsis.unsiSmile.authenticationProviders.repositories.UserRepositor
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.ApiResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;

@@ -6,7 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 
 @Service

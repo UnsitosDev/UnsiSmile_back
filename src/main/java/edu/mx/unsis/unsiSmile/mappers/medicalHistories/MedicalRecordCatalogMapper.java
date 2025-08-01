@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.MedicalRecordCatalogRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import org.springframework.stereotype.Component;

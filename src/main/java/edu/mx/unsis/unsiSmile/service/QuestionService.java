@@ -2,7 +2,11 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.QuestionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.*;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerTypeResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.QuestionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.QuestionMapper;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;

@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.ValidationRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.ValidationResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.ValidationResponse;
 import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
 import edu.mx.unsis.unsiSmile.service.QuestionValidationService;
 import edu.mx.unsis.unsiSmile.service.ValidationService;

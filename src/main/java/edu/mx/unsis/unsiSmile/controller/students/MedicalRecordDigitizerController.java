@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller.students;
 
 import edu.mx.unsis.unsiSmile.dtos.request.digitizers.MedicalRecordDigitizerRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.digitizers.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.service.students.MedicalRecordDigitizerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.questions.QuestionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.QuestionResponse;
 import edu.mx.unsis.unsiSmile.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

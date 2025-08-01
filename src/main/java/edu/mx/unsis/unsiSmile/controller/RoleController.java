@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.mx.unsis.unsiSmile.dtos.response.RoleResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.RoleResponse;
 import edu.mx.unsis.unsiSmile.service.RoleService;
 import lombok.RequiredArgsConstructor;
 

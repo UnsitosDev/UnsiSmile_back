@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentDetailRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentDetailToothRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;

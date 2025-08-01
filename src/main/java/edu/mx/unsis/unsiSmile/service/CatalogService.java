@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.CatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.CatalogMapper;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;

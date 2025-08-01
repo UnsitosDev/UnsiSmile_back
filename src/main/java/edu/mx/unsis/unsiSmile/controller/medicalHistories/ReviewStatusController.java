@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.ReviewStatusRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.ReviewStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

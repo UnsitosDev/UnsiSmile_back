@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.students.StudentRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;

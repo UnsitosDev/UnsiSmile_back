@@ -14,7 +14,7 @@ import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorUpdateRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
