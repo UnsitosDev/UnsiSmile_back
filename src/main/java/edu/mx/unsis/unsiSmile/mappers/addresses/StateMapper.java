@@ -1,14 +1,13 @@
 package edu.mx.unsis.unsiSmile.mappers.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.StateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class StateMapper implements BaseMapper<StateResponse, StateRequest, StateModel> {

@@ -1,19 +1,19 @@
 package edu.mx.unsis.unsiSmile.mappers.users;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
 public class UserMapper implements BaseMapper<UserResponse, UserRequest, UserModel> {
+
     private final RoleMapper roleMapper;
 
     @Override
@@ -61,6 +61,4 @@ public class UserMapper implements BaseMapper<UserResponse, UserRequest, UserMod
          * entity.setUsername(request.getUsername());
          */
     }
-
-    
 }

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class ValidationTypeMapper implements BaseMapper<ValidationTypeResponse, ValidationTypeRequest, ValidationTypeModel> {
+
     @Override
     public ValidationTypeModel toEntity(ValidationTypeRequest dto) {
         return ValidationTypeModel.builder()

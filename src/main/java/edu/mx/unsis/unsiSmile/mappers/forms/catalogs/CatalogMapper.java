@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CatalogMapper implements BaseMapper<CatalogResponse, CatalogRequest, CatalogModel> {
+
     @Override
     public CatalogModel toEntity(CatalogRequest dto) {
         return CatalogModel.builder()

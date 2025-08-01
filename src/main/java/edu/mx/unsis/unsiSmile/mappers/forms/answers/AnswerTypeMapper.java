@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class AnswerTypeMapper implements BaseMapper<AnswerTypeResponse, AnswerTypeRequest, AnswerTypeModel> {
+
     @Override
     public AnswerTypeModel toEntity(AnswerTypeRequest dto) {
         return AnswerTypeModel.builder()

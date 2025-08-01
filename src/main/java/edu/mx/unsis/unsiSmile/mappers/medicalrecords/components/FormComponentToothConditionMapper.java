@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class FormComponentToothConditionMapper implements BaseMapper<FormComponentToothConditionResponse, FormComponentToothConditionRequest, FormComponentToothConditionModel> {
+
     private final FormComponentMapper formComponentMapper;
     private final ToothConditionMapper toothConditionMapper;
 

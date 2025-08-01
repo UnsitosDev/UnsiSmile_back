@@ -1,14 +1,13 @@
 package edu.mx.unsis.unsiSmile.mappers.patients.demographics;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.NationalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.NationalityResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.NationalityModel;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class NationalityMapper implements BaseMapper<NationalityResponse, NationalityRequest, NationalityModel> {

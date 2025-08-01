@@ -71,5 +71,4 @@ public class AnswerMapper implements BaseMapper<AnswerResponse, AnswerRequest, A
                 .isFile(true)
                 .build();
     }
-
 }

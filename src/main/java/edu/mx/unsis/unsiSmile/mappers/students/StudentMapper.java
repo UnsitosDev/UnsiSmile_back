@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class StudentMapper implements BaseMapper<StudentResponse, StudentRequest, StudentModel> {
+
     private final UserMapper userMapper;
     private final PersonMapper personMapper;
 

@@ -1,22 +1,13 @@
 package edu.mx.unsis.unsiSmile.mappers.medicalrecords.odontograms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
+import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.FaceRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothFaceConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.FaceResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
@@ -27,6 +18,10 @@ import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class OdontogramMapper implements BaseMapper<OdontogramResponse, OdontogramRequest, OdontogramModel> {

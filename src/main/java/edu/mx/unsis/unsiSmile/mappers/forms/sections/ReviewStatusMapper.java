@@ -4,10 +4,10 @@ import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.ReviewStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.ReviewSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.ReviewStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import org.springframework.stereotype.Component;
 

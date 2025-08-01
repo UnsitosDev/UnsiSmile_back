@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class ValidationMapper implements BaseMapper<ValidationResponse, ValidationRequest, ValidationModel> {
+
     @Override
     public ValidationModel toEntity(ValidationRequest dto) {
         return ValidationModel.builder()

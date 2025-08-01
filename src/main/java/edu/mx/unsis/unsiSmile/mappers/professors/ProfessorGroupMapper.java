@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class ProfessorGroupMapper implements BaseMapper<ProfessorGroupResponse, ProfessorGroupRequest, ProfessorGroupModel> {
-    private final GroupMapper groupMapper;
 
+    private final GroupMapper groupMapper;
 
     @Override
     public ProfessorGroupModel toEntity(ProfessorGroupRequest dto) {

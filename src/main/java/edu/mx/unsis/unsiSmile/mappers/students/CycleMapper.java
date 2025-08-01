@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.CycleRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.CycleResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.students.CycleModel;
-
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CycleMapper implements BaseMapper<CycleResponse, CycleRequest, CycleModel>{
+
     @Override
     public CycleModel toEntity(CycleRequest dto) {
         return CycleModel.builder()

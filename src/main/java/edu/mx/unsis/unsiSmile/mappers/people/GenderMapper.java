@@ -1,14 +1,13 @@
 package edu.mx.unsis.unsiSmile.mappers.people;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.people.GenderRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.people.GenderResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.people.GenderModel;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class GenderMapper implements BaseMapper<GenderResponse, GenderRequest, GenderModel> {

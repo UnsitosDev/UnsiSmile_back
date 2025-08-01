@@ -1,15 +1,14 @@
 package edu.mx.unsis.unsiSmile.mappers.users;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.dtos.request.users.RoleRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.users.RoleResponse;
+import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor

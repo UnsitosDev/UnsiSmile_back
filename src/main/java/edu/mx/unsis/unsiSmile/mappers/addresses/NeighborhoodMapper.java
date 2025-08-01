@@ -1,17 +1,14 @@
 package edu.mx.unsis.unsiSmile.mappers.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.LocalityResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.LocalityModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.NeighborhoodRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.NeighborhoodResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.NeighborhoodModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class NeighborhoodMapper implements BaseMapper<NeighborhoodResponse, NeighborhoodRequest, NeighborhoodModel> {

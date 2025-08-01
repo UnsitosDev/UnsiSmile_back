@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Component
 public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse, TreatmentDetailRequest, TreatmentDetailModel> {
+
     private final TreatmentMapper treatmentMapper;
 
     @Override

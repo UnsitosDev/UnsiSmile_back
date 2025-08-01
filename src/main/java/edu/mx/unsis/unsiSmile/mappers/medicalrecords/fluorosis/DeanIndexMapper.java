@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class DeanIndexMapper implements BaseMapper<DeanIndexToothCodeResponse, DeanIndexToothCodeRequest, DeanIndexModel> {
+
     @Override
     public DeanIndexModel toEntity(DeanIndexToothCodeRequest dto) {
         return DeanIndexModel.builder()

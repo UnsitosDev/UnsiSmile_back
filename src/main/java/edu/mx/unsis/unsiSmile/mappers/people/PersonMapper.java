@@ -1,16 +1,15 @@
 package edu.mx.unsis.unsiSmile.mappers.people;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.model.people.GenderModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
-import edu.mx.unsis.unsiSmile.model.people.GenderModel;
-import edu.mx.unsis.unsiSmile.model.people.PersonModel;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, PersonModel> {
@@ -91,5 +90,4 @@ public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, P
                 (request.getEmail() != null && !request.getEmail().isBlank()) ? request.getEmail() : entity.getEmail());
         entity.setGender(request.getGender() != null ? genderMapper.toEntity(request.getGender()) : entity.getGender());
     }
-
 }

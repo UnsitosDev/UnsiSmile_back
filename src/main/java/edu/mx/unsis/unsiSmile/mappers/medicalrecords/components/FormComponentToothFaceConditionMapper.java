@@ -4,9 +4,9 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormCompone
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormComponentToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.teeth.ToothFaceConditionMapper;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentToothfaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @AllArgsConstructor
 public class FormComponentToothFaceConditionMapper implements BaseMapper<FormComponentToothFaceConditionResponse, FormComponentToothFaceConditionRequest, FormComponentToothfaceConditionModel> {
+
     private final FormComponentMapper formComponentMapper;
     private final ToothFaceConditionMapper toothFaceConditionMapper;
 

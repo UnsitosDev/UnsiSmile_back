@@ -4,10 +4,9 @@ import edu.mx.unsis.unsiSmile.dtos.request.digitizers.DigitizerPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.digitizers.DigitizerPatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.DigitizerPatientModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,6 @@ public class DigitizerPatientMapper implements BaseMapper<DigitizerPatientRespon
 
     private final PatientMapper patientMapper;
     private final MedicalRecordDigitizerMapper digitizerMapper;
-    private final StudentMapper studentMapper;
 
     @Override
     public DigitizerPatientModel toEntity(DigitizerPatientRequest dto) {
