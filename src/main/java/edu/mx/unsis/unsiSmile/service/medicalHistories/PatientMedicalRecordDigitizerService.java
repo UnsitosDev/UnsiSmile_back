@@ -2,6 +2,8 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordListResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
@@ -9,14 +11,18 @@ import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailM
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +33,7 @@ public class PatientMedicalRecordDigitizerService {
     private final MedicalRecordCatalogService medicalRecordCatalogService;
     private final PatientService patientService;
     private final ITreatmentDetailRepository treatmentDetailRepository;
+    private final TreatmentDetailService treatmentDetailService;
 
     @Transactional
     public MedicalRecordCatalogResponse save(String idPatient, Long idMedicalRecordCatalog) {
@@ -80,5 +87,39 @@ public class PatientMedicalRecordDigitizerService {
         return availableRecords.stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<MedicalRecordListResponse> findPatientMedicalRecords(String idPatient, Pageable pageable) {
+        try {
+            Page<PatientMedicalRecordModel> patientMedicalRecords = patientMedicalRecordRepository
+                    .findByPatient_IdPatient(idPatient, pageable);
+
+            return patientMedicalRecords.map(medicalRecord -> {
+                MedicalRecordListResponse response = MedicalRecordListResponse.builder()
+                        .patientMedicalRecord(
+                                PatientMedicalRecordResponse.builder()
+                                        .id(medicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
+                                        .medicalRecordName(medicalRecord.getMedicalRecordCatalog().getMedicalRecordName())
+                                        .patientMedicalRecordId(medicalRecord.getIdPatientMedicalRecord())
+                                        .patientId(medicalRecord.getPatient().getIdPatient())
+                                        .build()
+                        )
+                        .appointmentDate(medicalRecord.getAppointmentDate().toLocalDate())
+                        .build();
+
+                // Buscar tratamiento asociado si es necesario
+                Optional<TreatmentDetailModel> treatment = treatmentDetailRepository.findByPatientMedicalRecord_IdPatientMedicalRecord(medicalRecord.getIdPatientMedicalRecord());
+                treatment.ifPresent(treatmentDetailModel -> response.setTreatmentDetail(treatmentDetailService.toTreatmentDetailResponse(treatmentDetailModel)));
+
+                return response;
+            });
+
+        } catch (AppException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new AppException(ResponseMessages.FAILED_TO_FETCH_PATIENT_MEDICAL_RECORDS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 }

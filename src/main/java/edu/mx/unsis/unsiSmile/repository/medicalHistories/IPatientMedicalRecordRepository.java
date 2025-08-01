@@ -1,6 +1,8 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,7 @@ public interface IPatientMedicalRecordRepository extends JpaRepository<PatientMe
     List<PatientMedicalRecordModel> findAvailableByPatientAndCatalogExcludingIds(
             @Param("idPatient") String idPatient,
             @Param("idMedicalRecordCatalog") Long idMedicalRecordCatalog,
-            @Param("usedIds") List<Long> usedIds);}
+            @Param("usedIds") List<Long> usedIds);
+
+    Page<PatientMedicalRecordModel> findByPatient_IdPatient(String idPatient, Pageable pageable);
+}

@@ -864,4 +864,9 @@ public class TreatmentDetailService {
                     HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
+
+    @Transactional
+    public TreatmentDetailResponse toTreatmentDetailResponse(TreatmentDetailModel model) {
+            return mapTreatmentDetailToDto(model);
+    }
 }
