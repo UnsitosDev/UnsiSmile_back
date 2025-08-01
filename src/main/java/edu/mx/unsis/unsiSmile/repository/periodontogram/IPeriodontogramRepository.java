@@ -1,12 +1,11 @@
 package edu.mx.unsis.unsiSmile.repository.periodontogram;
 
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
+import java.util.Optional;
 
 public interface IPeriodontogramRepository extends JpaRepository<PeriodontogramModel, Long> {
 

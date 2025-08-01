@@ -1,17 +1,14 @@
 package edu.mx.unsis.unsiSmile.mappers.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.StateResponse;
-import edu.mx.unsis.unsiSmile.model.addresses.StateModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.MunicipalityRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.addresses.MunicipalityResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.addresses.MunicipalityModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MunicipalityMapper implements BaseMapper<MunicipalityResponse, MunicipalityRequest, MunicipalityModel> {

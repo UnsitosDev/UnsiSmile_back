@@ -1,7 +1,5 @@
 package edu.mx.unsis.unsiSmile.dtos.request.students;
 
-import java.time.LocalDate;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,11 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SemesterRequest {
+
     private Long idSemester;
 
     @NotNull(message = "The field startDate can't be null")

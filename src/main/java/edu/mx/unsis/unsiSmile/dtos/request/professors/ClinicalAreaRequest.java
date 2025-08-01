@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClinicalAreaRequest {
+
     private Long idClinicalArea;
 
     @NotNull(message = "The clinical area field cannot be null")

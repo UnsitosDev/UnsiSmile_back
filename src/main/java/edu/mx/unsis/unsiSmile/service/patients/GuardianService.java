@@ -1,8 +1,15 @@
 package edu.mx.unsis.unsiSmile.service.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
+import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
+import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
+import edu.mx.unsis.unsiSmile.repository.people.IPersonRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -10,16 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.patients.GuardianMapper;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
-import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
-import edu.mx.unsis.unsiSmile.repository.IPersonRepository;
-import edu.mx.unsis.unsiSmile.repository.patients.IGuardianRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

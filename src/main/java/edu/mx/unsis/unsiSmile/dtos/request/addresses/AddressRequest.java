@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AddressRequest {
+
     private Long idAddress;
 
     @NotBlank(message = ResponseMessages.STREET_NUMBER_BLANK)

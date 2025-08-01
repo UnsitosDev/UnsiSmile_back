@@ -11,7 +11,6 @@ import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import edu.mx.unsis.unsiSmile.repository.students.ICareerRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IGroupRepository;
-import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,7 +29,6 @@ public class GroupService {
     private final GroupMapper groupMapper;
     private final ICareerRepository careerRepository;
     private final SemesterService semesterService;
-    private final ISemesterRepository semesterRepository;
 
     @Transactional
     public void createGroup(@NonNull GroupRequest request) {

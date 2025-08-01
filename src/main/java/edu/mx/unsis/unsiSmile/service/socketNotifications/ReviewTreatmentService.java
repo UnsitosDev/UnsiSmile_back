@@ -1,9 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.socketNotifications;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
@@ -50,6 +49,4 @@ public class ReviewTreatmentService extends NotificationService {
         }
 
     }
-    
-
 }

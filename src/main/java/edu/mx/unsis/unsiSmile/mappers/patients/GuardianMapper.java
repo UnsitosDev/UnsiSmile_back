@@ -1,21 +1,21 @@
 package edu.mx.unsis.unsiSmile.mappers.patients;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.mx.unsis.unsiSmile.mappers.CatalogOptionMapper;
-import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.dtos.request.patients.GuardianRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.GuardianResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.catalogs.CatalogOptionMapper;
+import edu.mx.unsis.unsiSmile.mappers.people.PersonMapper;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
 public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequest, GuardianModel> {
+
     private final CatalogOptionMapper catalogOptionMapper;
     private final PersonMapper personMapper;
 
@@ -52,5 +52,4 @@ public class GuardianMapper implements BaseMapper<GuardianResponse, GuardianRequ
                 catalogOptionMapper.toEntity(request.getParentalStatus()) : entity.getParentalStatus());
         entity.setDoctorName(request.getDoctorName() != null ? request.getDoctorName() : entity.getDoctorName());
     }
-
 }

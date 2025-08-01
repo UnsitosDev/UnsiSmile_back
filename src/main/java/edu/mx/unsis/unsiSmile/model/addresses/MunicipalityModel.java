@@ -1,11 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.addresses;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,5 +24,4 @@ public class MunicipalityModel {
     @ManyToOne
     @JoinColumn(name = "fk_state", referencedColumnName = "id_state", nullable = false)
     private StateModel state;
-
 }

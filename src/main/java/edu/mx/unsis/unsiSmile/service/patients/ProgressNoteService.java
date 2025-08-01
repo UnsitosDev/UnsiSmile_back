@@ -3,33 +3,30 @@ package edu.mx.unsis.unsiSmile.service.patients;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.common.ValidationUtils;
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteFileResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteFileMapper;
 import edu.mx.unsis.unsiSmile.mappers.patients.ProgressNoteMapper;
-import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteFileModel;
 import edu.mx.unsis.unsiSmile.model.patients.ProgressNoteModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
-import edu.mx.unsis.unsiSmile.repository.ICatalogOptionRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteFileRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;
 import edu.mx.unsis.unsiSmile.service.reports.ProgressNoteReportParameters;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -52,6 +50,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProgressNoteService {
+
     private final IProgressNoteRepository progressNoteRepository;
     private final IProgressNoteFileRepository progressNoteFileRepository;
     private final IPatientRepository patientRepository;

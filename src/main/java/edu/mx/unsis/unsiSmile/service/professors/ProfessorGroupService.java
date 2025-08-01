@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ProfessorGroupService {
+
     private final IProfessorGroupRepository professorGroupRepository;
     private final ProfessorGroupMapper professorGroupMapper;
 

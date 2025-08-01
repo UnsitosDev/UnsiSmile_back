@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ClinicalAreaService {
+
     private final IClinicalAreaRepository clinicalAreaRepository;
     private final ClinicalAreaMapper clinicalAreaMapper;
     private final ProfessorClinicalAreaService professorClinicalAreaService;

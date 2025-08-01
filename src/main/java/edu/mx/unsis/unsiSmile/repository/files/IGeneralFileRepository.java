@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface IGeneralFileRepository extends JpaRepository<GeneralFileModel, String> {
+
     List<GeneralFileModel> findAllByStatusKey(String statusKey);
 }

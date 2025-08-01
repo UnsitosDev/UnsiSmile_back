@@ -194,5 +194,4 @@ public class LocalityService {
             throw new AppException(ResponseMessages.LOCALITY_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }

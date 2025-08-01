@@ -1,15 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.students;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.students.SemesterRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.SemesterResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -18,6 +8,15 @@ import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

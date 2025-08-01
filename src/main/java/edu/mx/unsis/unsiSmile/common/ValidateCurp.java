@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.common;
 
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;

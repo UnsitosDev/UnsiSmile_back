@@ -3,13 +3,14 @@ package edu.mx.unsis.unsiSmile.mappers.users;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserBaseResponse;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
-import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserBaseMapperImpl implements UserBaseMapper {
+
     @Override
     public UserBaseResponse toDto(UserModel userModel) {
         return UserBaseResponse.builder()

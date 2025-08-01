@@ -1,14 +1,14 @@
 package edu.mx.unsis.unsiSmile.service.socketNotifications;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @Log4j2
 @AllArgsConstructor
 public abstract class NotificationService {
-      private final SimpMessagingTemplate messagingTemplate;
+
+    private final SimpMessagingTemplate messagingTemplate;
 
     /**
      * Envía un mensaje al tópico de WebSocket especificado.

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface IAdministratorRepository extends JpaRepository<AdministratorModel, String> {
+
     Optional<AdministratorModel> findByUser(UserModel user);
 
     @Query("SELECT a FROM AdministratorModel a WHERE " +

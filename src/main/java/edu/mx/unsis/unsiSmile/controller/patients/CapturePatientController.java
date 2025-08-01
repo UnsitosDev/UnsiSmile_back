@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.request.patients.CapturePatientRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.digitizers.CapturePatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.service.patients.CapturePatientService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -19,8 +19,7 @@ public class CareerModel  extends AuditModel {
     @Id
     @Column(name = "id_career", nullable = false, unique = true)
     private String idCareer;
+
     @Column(name = "career", nullable = false, unique = true)
     private String career;
-
 }
-

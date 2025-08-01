@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.service.files;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.files.GeneralFileModel;
 import edu.mx.unsis.unsiSmile.repository.files.IGeneralFileRepository;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GeneralFileService {
+
     private final FileService fileService;
     private final IGeneralFileRepository generalFileRepository;
 

@@ -26,5 +26,6 @@ public class EmailRequest {
     private String subject;
 
     private String textBody;
+
     private String htmlBody;
 }

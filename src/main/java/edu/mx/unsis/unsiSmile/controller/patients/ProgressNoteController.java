@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.controller.patients;
 
-import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ProgressNoteRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.patients.ProgressNoteRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.ProgressNoteResponse;
 import edu.mx.unsis.unsiSmile.service.patients.ProgressNoteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("/unsismile/api/v1/progress-notes")
 @RequiredArgsConstructor
 public class ProgressNoteController {
+
     private final ProgressNoteService progressNoteService;
 
     @Operation(summary = "Obtener una lista paginada de notas de evolución de un paciente")

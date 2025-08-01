@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class HousingRequest {
+
     @NotBlank(message = ResponseMessages.ID_HOUSING_BLANK)
     @Size(min = 2, max = 2, message = ResponseMessages.ID_HOUSING_SIZE)
     private String idHousing;

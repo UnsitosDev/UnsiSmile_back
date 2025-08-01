@@ -1,9 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository.patients;
 
-import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
-import edu.mx.unsis.unsiSmile.model.patients.*;
+import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.*;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

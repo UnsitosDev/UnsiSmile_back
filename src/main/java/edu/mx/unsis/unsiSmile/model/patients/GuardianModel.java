@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,5 +30,4 @@ public class GuardianModel extends AuditModel {
 
     @Column(name = "doctor_name", length = 100)
     private String doctorName;
-
 }

@@ -178,5 +178,4 @@ public class StreetService {
             throw new AppException(ResponseMessages.STREET_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }

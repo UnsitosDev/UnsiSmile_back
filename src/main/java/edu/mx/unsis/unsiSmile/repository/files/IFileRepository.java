@@ -1,13 +1,12 @@
 package edu.mx.unsis.unsiSmile.repository.files;
 
-import java.util.List;
-
+import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.files.FileModel;
+import java.util.List;
 
 @Repository
 public interface IFileRepository extends JpaRepository<FileModel, String> {

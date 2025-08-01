@@ -4,10 +4,11 @@ import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.PatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
-import edu.mx.unsis.unsiSmile.model.patients.*;
+import edu.mx.unsis.unsiSmile.mappers.patients.demographics.*;
+import edu.mx.unsis.unsiSmile.mappers.people.PersonMapper;
+import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

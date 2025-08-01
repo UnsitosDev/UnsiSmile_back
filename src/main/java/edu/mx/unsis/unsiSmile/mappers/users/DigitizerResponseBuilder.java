@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.mappers.users;
 
 import edu.mx.unsis.unsiSmile.dtos.response.users.DigitizerUserResponse;
-import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

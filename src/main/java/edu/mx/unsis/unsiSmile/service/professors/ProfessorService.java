@@ -9,13 +9,13 @@ import edu.mx.unsis.unsiSmile.dtos.request.professors.ProfessorRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.professors.ProfessorResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.CareerModel;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
-import edu.mx.unsis.unsiSmile.service.UserService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import edu.mx.unsis.unsiSmile.service.people.PersonService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProfessorService {
+
     private final IProfessorRepository professorRepository;
     private final UserService userService;
     private final ProfessorMapper professorMapper;

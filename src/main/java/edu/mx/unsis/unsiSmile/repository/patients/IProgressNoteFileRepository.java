@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IProgressNoteFileRepository extends JpaRepository<ProgressNoteFileModel, String> {
+
     List<ProgressNoteFileModel> findByProgressNote(ProgressNoteModel progressNote);
 }

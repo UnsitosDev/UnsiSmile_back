@@ -173,5 +173,4 @@ public class MunicipalityService {
             throw new AppException(ResponseMessages.MUNICIPALITY_CREATE_FAILED, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
 }

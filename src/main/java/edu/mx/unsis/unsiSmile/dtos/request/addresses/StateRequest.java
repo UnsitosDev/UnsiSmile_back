@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StateRequest {
+
     @NotBlank(message = ResponseMessages.STATE_ID_BLANK)
     @Size(min = 2, max = 2, message = ResponseMessages.STATE_ID_SIZE)
     private String idState;

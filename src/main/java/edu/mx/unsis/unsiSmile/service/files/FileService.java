@@ -2,18 +2,18 @@ package edu.mx.unsis.unsiSmile.service.files;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.AnswerMapper;
-import edu.mx.unsis.unsiSmile.mappers.FileMapper;
-import edu.mx.unsis.unsiSmile.model.AnswerModel;
-import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
+import edu.mx.unsis.unsiSmile.mappers.files.FileMapper;
+import edu.mx.unsis.unsiSmile.mappers.forms.answers.AnswerMapper;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
 import edu.mx.unsis.unsiSmile.model.files.GeneralFileModel;
-import edu.mx.unsis.unsiSmile.repository.IAnswerRepository;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.repository.files.IFileRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IGeneralFileRepository;
-import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
+import edu.mx.unsis.unsiSmile.repository.forms.answers.IAnswerRepository;
+import edu.mx.unsis.unsiSmile.repository.patients.IPatientMedicalRecordRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FileService {
+
     private final IFileRepository fileRepository;
     private final FileMapper fileMapper;
     private final IAnswerRepository answerRepository;

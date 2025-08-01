@@ -1,11 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository.patients;
 
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
+import java.util.Optional;
 
 @Repository
 public interface IGuardianRepository extends JpaRepository<GuardianModel, Long> {

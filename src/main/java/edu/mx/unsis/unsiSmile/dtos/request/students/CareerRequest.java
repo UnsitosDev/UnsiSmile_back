@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CareerRequest {
+
     @NotNull(message = ResponseMessages.NOT_NULL_ID_CAREER)
     @NotBlank(message = ResponseMessages.NOT_BLANK_ID_CAREER)
     private String idCareer;

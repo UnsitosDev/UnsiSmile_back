@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 @AllArgsConstructor
 public class ProgressNoteFileMapper {
+
     public ProgressNoteFileResponse toDto(ProgressNoteFileModel entity, Timestamp creationDate) {
         return ProgressNoteFileResponse.builder()
                 .idProgressNoteFile(entity.getIdProgressNoteFile())

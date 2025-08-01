@@ -1,16 +1,16 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.students.SemesterModel;
+import java.util.Optional;
 
 @Repository
 public interface ISemesterRepository extends JpaRepository<SemesterModel, Long> {
+
     @Query("SELECT s FROM SemesterModel s WHERE s.statusKey = 'A'")
     Optional<SemesterModel> findActiveSemester();
 

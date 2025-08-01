@@ -1,10 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.response.periodontograms;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter

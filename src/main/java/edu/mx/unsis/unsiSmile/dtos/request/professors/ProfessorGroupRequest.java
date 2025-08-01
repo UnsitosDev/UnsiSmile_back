@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfessorGroupRequest {
+
     Long idProfessorGroup;
 
     @NotNull(message = "The idProfessor field cannot be null")

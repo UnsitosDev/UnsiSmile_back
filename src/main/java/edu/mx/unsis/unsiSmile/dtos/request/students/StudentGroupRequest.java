@@ -11,8 +11,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentGroupRequest {
+
     @NotNull(message = "The field enrollment cannot be null.")
     private String enrollment;
+
     @NotNull(message = "The field groupId cannot be null.")
     private Long groupId;
 }

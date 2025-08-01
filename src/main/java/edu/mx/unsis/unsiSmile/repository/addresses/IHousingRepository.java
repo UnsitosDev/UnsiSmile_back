@@ -1,14 +1,13 @@
 package edu.mx.unsis.unsiSmile.repository.addresses;
 
-import java.util.List;
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.HousingModel;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IHousingRepository extends JpaRepository<HousingModel, String> {
@@ -19,5 +18,4 @@ public interface IHousingRepository extends JpaRepository<HousingModel, String> 
 
     @Query("SELECT h FROM HousingModel h WHERE h.category LIKE %:category%")
     List<HousingModel> findByCategoryContaining(@Param("category") String category);
-
 }

@@ -1,26 +1,25 @@
 package edu.mx.unsis.unsiSmile.service.addresses;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
+import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
+import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
+import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IHousingRepository;
 import edu.mx.unsis.unsiSmile.repository.addresses.IStreetRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.AddressResponse;
-import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
-import edu.mx.unsis.unsiSmile.model.HousingModel;
-import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
-import edu.mx.unsis.unsiSmile.repository.addresses.IAddressRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

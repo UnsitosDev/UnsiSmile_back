@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LocalityRequest {
+
     private Long idLocality;
 
     @NotBlank(message = ResponseMessages.LOCALITY_NAME_BLANK)

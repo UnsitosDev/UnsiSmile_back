@@ -6,7 +6,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.StudentPatientRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.PatientStudentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.StudentPatientResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentPatientMapper;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
@@ -35,7 +34,6 @@ public class StudentPatientService {
     private final IPatientRepository patientRepository;
     private final IStudentPatientRepository studentPatientRepository;
     private final StudentPatientMapper studentPatientMapper;
-    private final StudentMapper studentMapper;
     private final StudentService studentService;
 
     @Transactional
