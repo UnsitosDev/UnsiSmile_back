@@ -2,9 +2,9 @@ package edu.mx.unsis.unsiSmile.service.medicalrecords.fluorosis;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.FluorosisRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.FluorosisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.FaceResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.FluorosisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.fluorosis.FluorosisMapper;

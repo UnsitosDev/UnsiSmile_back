@@ -1,34 +1,33 @@
 package edu.mx.unsis.unsiSmile.service.administrators;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.dtos.RegisterRequest;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.ERole;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorUpdateRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
+import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.people.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.users.UserMapper;
-import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
-import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
-import edu.mx.unsis.unsiSmile.repository.users.IUserRepository;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
-import edu.mx.unsis.unsiSmile.service.users.UserService;
+import edu.mx.unsis.unsiSmile.repository.users.IUserRepository;
 import edu.mx.unsis.unsiSmile.service.people.PersonService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;

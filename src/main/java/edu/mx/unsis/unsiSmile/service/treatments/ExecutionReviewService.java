@@ -3,9 +3,9 @@ package edu.mx.unsis.unsiSmile.service.treatments;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentStatusRequest;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
+import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.treatments.ExecutionReviewModel;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.repository.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.service.professors.ProfessorClinicalAreaService;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 @Slf4j
 public class ExecutionReviewService {
+
     private final IExecutionReviewRepository executionReviewRepository;
     private final ProfessorClinicalAreaService professorClinicalAreaService;
 

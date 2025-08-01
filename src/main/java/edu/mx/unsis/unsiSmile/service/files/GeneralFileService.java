@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GeneralFileService {
+
     private final FileService fileService;
     private final IGeneralFileRepository generalFileRepository;
 

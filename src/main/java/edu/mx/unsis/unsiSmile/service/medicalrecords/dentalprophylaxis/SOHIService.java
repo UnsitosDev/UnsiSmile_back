@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SOHIService {
+
     private final ISOHIRepository sohiRepository;
     private final ISOHITootCodeRepository sohiTootCodeRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;

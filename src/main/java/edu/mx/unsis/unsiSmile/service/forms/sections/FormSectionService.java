@@ -3,15 +3,14 @@ package edu.mx.unsis.unsiSmile.service.forms.sections;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.FormSectionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.questions.QuestionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.sections.FormSectionMapper;
-import edu.mx.unsis.unsiSmile.mappers.forms.sections.ReviewStatusMapper;
 import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
-import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.repository.forms.sections.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.forms.questions.QuestionService;
@@ -33,7 +32,6 @@ public class FormSectionService {
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
     private final ReviewStatusService reviewStatusService;
-    private final ReviewStatusMapper reviewStatusMapper;
 
     @Transactional
     public void save(FormSectionRequest request) {

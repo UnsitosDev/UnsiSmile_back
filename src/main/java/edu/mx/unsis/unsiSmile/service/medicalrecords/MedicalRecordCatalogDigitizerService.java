@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.service.medicalrecords;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.catalogs.MedicalRecordCatalogMapper;
@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MedicalRecordCatalogDigitizerService {
+
     private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;

@@ -2,14 +2,14 @@ package edu.mx.unsis.unsiSmile.service.medicalrecords.components;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormComponentToothConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormComponentToothConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.components.FormComponentToothConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentToothConditionModel;
-import edu.mx.unsis.unsiSmile.repository.medicalrecords.components.IFormComponentToothConditionRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.components.IFormComponentRepository;
+import edu.mx.unsis.unsiSmile.repository.medicalrecords.components.IFormComponentToothConditionRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FormComponentToothConditionService {
+
     private final FormComponentToothConditionMapper formComponentToothConditionMapper;
     private final IFormComponentToothConditionRepository formComponentToothConditionRepository;
     private final IFormComponentRepository formComponentRepository;

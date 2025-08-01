@@ -1,15 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.medicalrecords.odontograms;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramSimpleResponse;
@@ -23,6 +13,15 @@ import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IOdontogramR
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms.IToothFaceConditionAssignmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

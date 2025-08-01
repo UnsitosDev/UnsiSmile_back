@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AnswerTypeService {
+
     private final IAnswerTypeRepository answerTypeRepository;
     private final AnswerTypeMapper answerTypeMapper;
 

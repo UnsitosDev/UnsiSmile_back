@@ -8,11 +8,11 @@ import edu.mx.unsis.unsiSmile.dtos.request.digitizers.MedicalRecordDigitizerRequ
 import edu.mx.unsis.unsiSmile.dtos.response.digitizers.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.digitizers.MedicalRecordDigitizerMapper;
-import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.repository.digitizers.IMedicalRecordDigitizerRepository;
-import edu.mx.unsis.unsiSmile.service.users.UserService;
 import edu.mx.unsis.unsiSmile.service.people.PersonService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

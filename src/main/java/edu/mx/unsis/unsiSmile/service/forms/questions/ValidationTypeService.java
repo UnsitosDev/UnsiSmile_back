@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ValidationTypeService {
+
     private final IValidationTypeRepository validationTypeRepository;
     private final ValidationTypeMapper validationTypeMapper;
 

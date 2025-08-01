@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DeanIndexService {
+
     private final IDeanIndexRepository deanIndexRepository;
     private final IDeanIndexToothCodeRepository deanIndexTootCodeRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;

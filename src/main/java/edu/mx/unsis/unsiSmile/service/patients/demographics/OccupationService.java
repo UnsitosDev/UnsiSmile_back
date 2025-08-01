@@ -8,19 +8,18 @@ import edu.mx.unsis.unsiSmile.mappers.patients.demographics.OccupationMapper;
 import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
 import edu.mx.unsis.unsiSmile.repository.patients.demographics.IOccupationRepository;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

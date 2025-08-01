@@ -1,12 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.periodontogram;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-
 import edu.mx.unsis.unsiSmile.dtos.request.periodontogram.PeriodontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.periodontogram.SurfaceEvaluationRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.periodontogram.SurfaceMeasurementRequest;
@@ -24,6 +17,12 @@ import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceMeasurementModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.ToothEvaluationModel;
 import edu.mx.unsis.unsiSmile.repository.periodontogram.IPeriodontogramRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

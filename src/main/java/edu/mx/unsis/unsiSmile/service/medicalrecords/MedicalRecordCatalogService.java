@@ -3,15 +3,15 @@ package edu.mx.unsis.unsiSmile.service.medicalrecords;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.MedicalRecordCatalogRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.catalogs.MedicalRecordCatalogMapper;
+import edu.mx.unsis.unsiSmile.model.enums.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.model.enums.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.repository.forms.catalogs.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.forms.sections.FormSectionService;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class MedicalRecordCatalogService {
+
     private final IMedicalRecordCatalogRepository medicalRecordCatalogRepository;
     private final MedicalRecordCatalogMapper medicalRecordCatalogMapper;
     private final MedicalRecordSectionService medicalRecordSectionService;

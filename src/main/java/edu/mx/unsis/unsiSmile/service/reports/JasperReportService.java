@@ -1,12 +1,13 @@
 package edu.mx.unsis.unsiSmile.service.reports;
 
+import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import edu.mx.unsis.unsiSmile.common.ResponseMessages;
+
 import java.io.InputStream;
 import java.util.Map;
 

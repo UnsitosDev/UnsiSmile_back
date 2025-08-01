@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.service.medicalrecords.dentalprophylaxis;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.DentalProphylaxisRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.dentalprophylaxis.DentalProphylaxisResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.FaceResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -187,6 +187,4 @@ public class DentalProphylaxisService {
             );
         });
     }
-
-
 }

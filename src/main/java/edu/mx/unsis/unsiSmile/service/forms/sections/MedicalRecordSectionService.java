@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.service.forms.sections;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.forms.sections.IMedicalRecordSectionRepository;

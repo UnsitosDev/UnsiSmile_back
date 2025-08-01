@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ValidationService {
+
     private final IValidationRepository validationRepository;
     private final ValidationMapper validationMapper;
     private final ValidationTypeService validationTypeService;

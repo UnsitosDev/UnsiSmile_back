@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.service.medicalrecords.components;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.components.FormComponentToothFaceConditionRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.components.FormComponentToothFaceConditionResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.components.FormComponentToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.components.FormComponentModel;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FormComponentToothFaceConditionService {
+
     private final FormComponentToothFaceConditionMapper formComponentToothFaceConditionMapper;
     private final IFormComponentToothfaceConditionRepository formComponentToothFaceConditionRepository;
     private final IFormComponentRepository formComponentRepository;
@@ -124,4 +125,3 @@ public class FormComponentToothFaceConditionService {
         }
     }
 }
-

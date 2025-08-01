@@ -4,7 +4,6 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothFaceConditi
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalrecords.teeth.ToothFaceConditionMapper;
-import edu.mx.unsis.unsiSmile.mappers.medicalrecords.components.FormComponentToothFaceConditionMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothFaceConditionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.teeth.IToothFaceConditionRepository;
 import edu.mx.unsis.unsiSmile.service.medicalrecords.components.FormComponentToothFaceConditionService;
@@ -24,7 +23,6 @@ public class ToothFaceConditionService {
 
     private final IToothFaceConditionRepository toothFaceConditionRepository;
     private final ToothFaceConditionMapper toothFaceConditionMapper;
-    private final FormComponentToothFaceConditionMapper formComponentToothFaceConditionMapper;
     private final FormComponentToothFaceConditionService formComponentToothFaceConditionService;
 
     @Transactional

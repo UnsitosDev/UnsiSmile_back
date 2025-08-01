@@ -2,7 +2,6 @@ package edu.mx.unsis.unsiSmile.service.forms.catalogs;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.common.ValidationUtils;
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -11,7 +10,6 @@ import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
 import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
 import edu.mx.unsis.unsiSmile.repository.forms.catalogs.ICatalogOptionRepository;
 import edu.mx.unsis.unsiSmile.repository.forms.catalogs.ICatalogRepository;
-import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,11 +23,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CatalogOptionService {
+
     private final ICatalogOptionRepository catalogOptionRepository;
     private final ICatalogRepository catalogRepository;
-    private final IProfessorRepository professorRepository;
     private final CatalogOptionMapper catalogOptionMapper;
-    private final ValidationUtils validationUtils;
 
     @Transactional
     public void save(CatalogOptionRequest request) {

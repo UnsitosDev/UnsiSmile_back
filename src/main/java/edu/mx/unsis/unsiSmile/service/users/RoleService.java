@@ -1,17 +1,16 @@
 package edu.mx.unsis.unsiSmile.service.users;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.RoleModel;
 import edu.mx.unsis.unsiSmile.dtos.response.users.RoleResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.users.RoleMapper;
 import edu.mx.unsis.unsiSmile.repository.users.IRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +18,6 @@ public class RoleService {
 
     private final IRoleRepository roleRepository;
     private final RoleMapper roleMapper;
-
-
 
     @Transactional(readOnly = true)
     public RoleResponse getRoleById(Long id) {
@@ -42,6 +39,4 @@ public class RoleService {
             throw new AppException("Failed to fetch roles", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
-
-    
 }

@@ -28,6 +28,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProfessorClinicalAreaService {
+
     private final IProfessorClinicalAreaRepository professorClinicalAreaRepository;
     private final ProfessorClinicalAreaMapper professorClinicalAreaMapper;
     private final UserService userService;
