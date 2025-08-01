@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import edu.mx.unsis.unsiSmile.service.people.PersonService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 

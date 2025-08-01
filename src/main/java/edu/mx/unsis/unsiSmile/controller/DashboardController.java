@@ -1,10 +1,10 @@
 package edu.mx.unsis.unsiSmile.controller;
 
-import edu.mx.unsis.unsiSmile.dtos.response.dashboards.AdminDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ClinicalSupervisorDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.dashboards.ProfessorDashboardResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.dashboards.StudentDashboardResponse;
-import edu.mx.unsis.unsiSmile.service.DashboardService;
+import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.AdminDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.ClinicalSupervisorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.ProfessorDashboardResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.StudentDashboardResponse;
+import edu.mx.unsis.unsiSmile.service.users.DashboardService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

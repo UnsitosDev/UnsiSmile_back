@@ -22,7 +22,7 @@ import edu.mx.unsis.unsiSmile.repository.patients.IProgressNoteRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorClinicalAreaRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
-import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import edu.mx.unsis.unsiSmile.service.files.FileService;
 import edu.mx.unsis.unsiSmile.service.files.FileStorageService;
 import edu.mx.unsis.unsiSmile.service.reports.JasperReportService;

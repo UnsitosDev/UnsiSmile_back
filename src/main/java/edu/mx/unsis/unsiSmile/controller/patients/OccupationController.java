@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.demographics.OccupationResponse;
-import edu.mx.unsis.unsiSmile.service.patients.OccupationService;
+import edu.mx.unsis.unsiSmile.service.patients.demographics.OccupationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;

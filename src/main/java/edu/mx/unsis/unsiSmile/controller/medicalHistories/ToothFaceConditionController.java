@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.teeth.ToothFaceConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.teeth.ToothFaceConditionResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.ToothFaceConditionService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.teeth.ToothFaceConditionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

@@ -4,8 +4,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.DeanIndexToo
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.FluorosisRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.FluorosisResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.DeanIndexService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.FluorosisService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.fluorosis.DeanIndexService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.fluorosis.FluorosisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

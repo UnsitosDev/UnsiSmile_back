@@ -21,11 +21,12 @@ import edu.mx.unsis.unsiSmile.repository.patients.demographics.IEthnicGroupRepos
 import edu.mx.unsis.unsiSmile.repository.patients.demographics.IMaritalStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.demographics.INationalityRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.demographics.IReligionRepository;
-import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
-import edu.mx.unsis.unsiSmile.service.students.DigitizerPatientService;
-import edu.mx.unsis.unsiSmile.service.students.MedicalRecordDigitizerService;
+import edu.mx.unsis.unsiSmile.service.patients.demographics.OccupationService;
+import edu.mx.unsis.unsiSmile.service.people.PersonService;
+import edu.mx.unsis.unsiSmile.service.digitizers.DigitizerPatientService;
+import edu.mx.unsis.unsiSmile.service.digitizers.MedicalRecordDigitizerService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.sections.FormSectionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.sections.FormSectionResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.FormSectionService;
+import edu.mx.unsis.unsiSmile.service.forms.sections.FormSectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

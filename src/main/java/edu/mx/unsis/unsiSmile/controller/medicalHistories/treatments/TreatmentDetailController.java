@@ -6,9 +6,9 @@ import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentStatusUpdateReque
 import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentGeneralReportService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;
+import edu.mx.unsis.unsiSmile.service.treatments.TreatmentDetailService;
+import edu.mx.unsis.unsiSmile.service.treatments.TreatmentGeneralReportService;
+import edu.mx.unsis.unsiSmile.service.reports.TreatmentReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

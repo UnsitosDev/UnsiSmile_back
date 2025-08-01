@@ -27,9 +27,10 @@ import edu.mx.unsis.unsiSmile.repository.patients.demographics.INationalityRepos
 import edu.mx.unsis.unsiSmile.repository.patients.demographics.IReligionRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.*;
-import edu.mx.unsis.unsiSmile.service.UserService;
+import edu.mx.unsis.unsiSmile.service.users.UserService;
 import edu.mx.unsis.unsiSmile.service.addresses.AddressService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;
+import edu.mx.unsis.unsiSmile.service.patients.demographics.OccupationService;
+import edu.mx.unsis.unsiSmile.service.people.PersonService;
 import edu.mx.unsis.unsiSmile.service.students.StudentPatientService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import jakarta.validation.Valid;

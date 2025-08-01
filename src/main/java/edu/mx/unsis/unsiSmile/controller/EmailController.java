@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.EmailRequest;
-import edu.mx.unsis.unsiSmile.service.EmailService;
+import edu.mx.unsis.unsiSmile.service.emails.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

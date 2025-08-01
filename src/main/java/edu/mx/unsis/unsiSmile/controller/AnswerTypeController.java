@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.answers.AnswerTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.answers.AnswerTypeResponse;
-import edu.mx.unsis.unsiSmile.service.AnswerTypeService;
+import edu.mx.unsis.unsiSmile.service.forms.answers.AnswerTypeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

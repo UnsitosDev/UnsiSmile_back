@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.forms.catalogs.CatalogOptionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
-import edu.mx.unsis.unsiSmile.service.CatalogOptionService;
+import edu.mx.unsis.unsiSmile.service.forms.catalogs.CatalogOptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories.treatments;
 
 import edu.mx.unsis.unsiSmile.dtos.request.treatments.TreatmentScopeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.treatments.TreatmentScopeResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentScopeService;
+import edu.mx.unsis.unsiSmile.service.treatments.TreatmentScopeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

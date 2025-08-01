@@ -4,8 +4,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.Dent
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.dentalprophylaxis.ToothCodeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.dentalprophylaxis.DentalProphylaxisResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.dentalprophylaxis.ToothCodeResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.DentalProphylaxisService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.SOHIService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.dentalprophylaxis.DentalProphylaxisService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.dentalprophylaxis.SOHIService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

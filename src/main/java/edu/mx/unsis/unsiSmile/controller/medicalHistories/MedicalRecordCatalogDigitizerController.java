@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.controller.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogDigitizerService;
-import edu.mx.unsis.unsiSmile.service.medicalHistories.PatientMedicalRecordDigitizerService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.MedicalRecordCatalogDigitizerService;
+import edu.mx.unsis.unsiSmile.service.patients.PatientMedicalRecordDigitizerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
