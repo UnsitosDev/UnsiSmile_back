@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @Validated
 public class EmailController {
+
     private final EmailService emailService;
 
     @Operation(summary = "Envía un correo")

@@ -1,23 +1,15 @@
 package edu.mx.unsis.unsiSmile.controller.periodontogram;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.mx.unsis.unsiSmile.dtos.request.periodontogram.PeriodontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.PeriodontogramResponse;
 import edu.mx.unsis.unsiSmile.service.periodontogram.PeriodontogramService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("unsismile/api/v1/medical-records/periodontograms")

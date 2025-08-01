@@ -71,5 +71,4 @@ public class TreatmentController {
         treatmentService.deleteTreatmentById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

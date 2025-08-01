@@ -5,10 +5,10 @@ import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.MedicalRecordCatalogR
 import edu.mx.unsis.unsiSmile.dtos.response.patients.MedicalRecordListResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientMedicalRecordResponse;
-import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.enums.EMedicalRecords;
-import edu.mx.unsis.unsiSmile.service.medicalrecords.MedicalRecordCatalogService;
+import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.service.forms.sections.MedicalRecordSectionService;
+import edu.mx.unsis.unsiSmile.service.medicalrecords.MedicalRecordCatalogService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientMedicalRecordDigitizerService;
 import edu.mx.unsis.unsiSmile.service.patients.PatientMedicalRecordService;
 import io.swagger.v3.oas.annotations.Operation;

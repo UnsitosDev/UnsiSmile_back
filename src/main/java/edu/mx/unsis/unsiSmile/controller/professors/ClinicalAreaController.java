@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/unsismile/api/v1/clinical-areas")
 @RequiredArgsConstructor
 public class ClinicalAreaController {
+
     private final ClinicalAreaService clinicalAreaService;
 
     @Operation(summary = "Crea una nueva área clínica")

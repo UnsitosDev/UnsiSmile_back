@@ -1,22 +1,16 @@
 package edu.mx.unsis.unsiSmile.controller.medicalrecords.odontograms;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.odontograms.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.service.medicalrecords.odontograms.OdontogramService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Odontogram Controller", description = "Endpoints for managing odontograms")
 @RestController
@@ -52,6 +46,4 @@ public class OdontogramController {
         OdontogramResponse lastOdontogram = odontogramService.getlasOdontogramByPatientId(patientId);
         return ResponseEntity.ok(lastOdontogram);
     }
-
-
 }

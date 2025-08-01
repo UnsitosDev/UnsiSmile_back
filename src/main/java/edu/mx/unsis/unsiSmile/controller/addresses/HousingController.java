@@ -1,16 +1,15 @@
 package edu.mx.unsis.unsiSmile.controller.addresses;
 
-import java.util.List;
-
+import edu.mx.unsis.unsiSmile.dtos.request.addresses.HousingRequest;
+import edu.mx.unsis.unsiSmile.dtos.response.addresses.HousingResponse;
+import edu.mx.unsis.unsiSmile.service.addresses.HousingService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import edu.mx.unsis.unsiSmile.dtos.request.addresses.HousingRequest;
-import edu.mx.unsis.unsiSmile.dtos.response.addresses.HousingResponse;
-import edu.mx.unsis.unsiSmile.service.addresses.HousingService;
-import jakarta.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/housing")
@@ -60,5 +59,4 @@ public class HousingController {
         housingService.deleteHousingById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

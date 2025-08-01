@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/unsismile/api/v1/dashboards")
 @AllArgsConstructor
 public class DashboardController {
+
     private final DashboardService dashboardService;
 
     @GetMapping("/students")

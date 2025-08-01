@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping("/unsismile/api/v1/progress-notes")
 @RequiredArgsConstructor
 public class ProgressNoteController {
+
     private final ProgressNoteService progressNoteService;
 
     @Operation(summary = "Obtener una lista paginada de notas de evolución de un paciente")
