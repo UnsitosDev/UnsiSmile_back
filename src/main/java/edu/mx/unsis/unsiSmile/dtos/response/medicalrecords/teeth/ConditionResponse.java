@@ -13,5 +13,4 @@ public class ConditionResponse {
     private Long idCondition;
     private String condition;
     private String description;
-
 }

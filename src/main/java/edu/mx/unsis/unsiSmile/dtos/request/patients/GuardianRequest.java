@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class GuardianRequest {
+
     private Long idGuardian;
 
     @NotNull(message = ResponseMessages.PARENTAL_STATUS_CANNOT_BE_NULL)

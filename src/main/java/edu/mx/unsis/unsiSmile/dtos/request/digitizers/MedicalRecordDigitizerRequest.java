@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MedicalRecordDigitizerRequest {
+
     private Long idMedicalRecordDigitizer;
 
     @NotBlank(message = ResponseMessages.NOT_BLANK_USERNAME)

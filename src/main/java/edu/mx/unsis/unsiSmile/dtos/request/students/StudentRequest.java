@@ -16,9 +16,11 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentRequest extends StudentReq{
+
     @NotNull(message = ResponseMessages.NOT_NULL_PERSON)
     @Valid
     private PersonRequest person;
+
     @NotNull(message = ResponseMessages.NOT_NULL_GROUP)
     @Valid
     private GroupRequest group;

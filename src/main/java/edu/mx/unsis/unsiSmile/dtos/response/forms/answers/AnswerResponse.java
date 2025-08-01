@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.dtos.response.forms.answers;
 
-import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.files.FileResponse;
+import edu.mx.unsis.unsiSmile.dtos.response.forms.catalogs.CatalogOptionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,18 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class AnswerResponse {
-
     private Long idAnswer;
-
     private Boolean answerBoolean;
-
     private BigDecimal answerNumeric;
-
     private String answerText;
-
     private LocalDate answerDate;
-
     private CatalogOptionResponse answerCatalogOption;
-
     private List<FileResponse> files;
 }

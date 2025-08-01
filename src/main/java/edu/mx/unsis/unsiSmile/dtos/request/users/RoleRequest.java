@@ -13,9 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleRequest {
+
     private Long idRole;
+
     @NotBlank(message = "The Role field cannot be null")
     @NotBlank(message = "The Role field cannot be blank")
     private ERole role;
 }
-

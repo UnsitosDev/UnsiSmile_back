@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CatalogOptionResponse {
-
     private Long idCatalogOption;
-
     private String optionName;
 }

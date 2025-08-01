@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MaritalStatusRequest {
+
     private Long idMaritalStatus;
 
     @NotBlank(message = ResponseMessages.NOT_BLANK_MARITAL_STATUS_DESCRIPTION)

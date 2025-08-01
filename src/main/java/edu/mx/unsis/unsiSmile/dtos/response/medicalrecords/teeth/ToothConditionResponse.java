@@ -13,4 +13,3 @@ public class ToothConditionResponse {
     private Long idToothCondition;
     private String description;
 }
-

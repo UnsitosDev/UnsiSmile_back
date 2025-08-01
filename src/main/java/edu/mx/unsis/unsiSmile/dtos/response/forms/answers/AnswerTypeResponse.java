@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AnswerTypeResponse {
-
     private Long idAnswerType;
-
     private String description;
 }

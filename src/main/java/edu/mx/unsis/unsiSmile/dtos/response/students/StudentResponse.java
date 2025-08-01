@@ -19,4 +19,3 @@ public class StudentResponse {
     private GroupResponse group;
     private String studentStatus;
 }
-

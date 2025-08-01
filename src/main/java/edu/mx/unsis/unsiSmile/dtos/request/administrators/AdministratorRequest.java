@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdministratorRequest {
+
     @NotBlank(message = "The employee number field cannot be blank")
     @NotNull(message = "The employee number field cannot be null")
     private String employeeNumber;

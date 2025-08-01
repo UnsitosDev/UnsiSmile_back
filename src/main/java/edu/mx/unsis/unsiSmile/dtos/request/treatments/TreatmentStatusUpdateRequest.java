@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TreatmentStatusUpdateRequest {
+
     @NotNull(message = ResponseMessages.STATUS_NULL)
     private ReviewStatus status;
 

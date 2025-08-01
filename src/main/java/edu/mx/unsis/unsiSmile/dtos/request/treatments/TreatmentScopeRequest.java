@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TreatmentScopeRequest {
+
     private Long idScopeTreatment;
 
     @NotNull(message = ResponseMessages.NOT_NULL_TREATMENT_SCOPE)

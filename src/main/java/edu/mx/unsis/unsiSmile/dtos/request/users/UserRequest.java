@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequest {
+
     private String idUser;
     //@NotBlank(message = "The Username field cannot be null")
     //@NotBlank(message = "The Username field cannot be blank")

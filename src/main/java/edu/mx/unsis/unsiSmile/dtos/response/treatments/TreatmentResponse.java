@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TreatmentResponse {
-
     private Long idTreatment;
     private String name;
     private TreatmentScopeResponse treatmentScope;

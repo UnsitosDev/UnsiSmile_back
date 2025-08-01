@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FormComponentToothFaceConditionResponse {
     private Long id;
-
     private FormComponentResponse formComponent;
-
     private ToothFaceConditionResponse toothFaceCondition;
 }

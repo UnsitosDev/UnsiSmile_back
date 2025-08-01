@@ -1,12 +1,12 @@
 package edu.mx.unsis.unsiSmile.dtos.request.patients;
 
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
-import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.addresses.AddressRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.EthnicGroupRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.MaritalStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.OccupationRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.demographics.ReligionRequest;
+import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

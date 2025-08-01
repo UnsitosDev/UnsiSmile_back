@@ -1,11 +1,11 @@
 package edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.odontograms;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor

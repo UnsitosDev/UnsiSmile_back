@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TreatmentDetailToothResponse {
-
     private Long idDetailTooth;
     private String idTooth;
     private LocalDate endDate;

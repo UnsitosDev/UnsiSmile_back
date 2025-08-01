@@ -12,10 +12,7 @@ import lombok.NoArgsConstructor;
 public class FileResponse {
 
     private String idFile;
-
     private String fileName;
-
     private String filePath;
-
     private String fileType;
 }

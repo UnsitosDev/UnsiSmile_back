@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ValidationTypeResponse {
-
     private Long idValidationType;
-
     private String validationCode;
 }

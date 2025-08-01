@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MunicipalityRequest {
+
     @NotBlank(message = ResponseMessages.MUNICIPALITY_ID_BLANK)
     @Size(min = 4, max = 4, message = ResponseMessages.MUNICIPALITY_ID_SIZE)
     private String idMunicipality;

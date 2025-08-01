@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GenderRequest {
+
     @NotNull(message = ResponseMessages.NOT_NULL_ID_GENDER_FIELD)
     private Long idGender;
+
     @NotNull(message = ResponseMessages.NOT_NULL_GENDER_FIELD)
     @NotBlank(message = ResponseMessages.NOT_BLANK_GENDER_FIELD)
     private String gender;

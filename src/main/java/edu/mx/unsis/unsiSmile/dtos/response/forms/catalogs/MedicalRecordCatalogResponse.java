@@ -15,14 +15,9 @@ import java.util.List;
 @Builder
 public class MedicalRecordCatalogResponse {
     private Long idPatientMedicalRecord;
-
     private Long idMedicalRecordCatalog;
-
     private String medicalRecordName;
-
     private Long medicalRecordNumber;
-
     private LocalDateTime appointmentDate;
-
     List<FormSectionResponse> formSections;
 }

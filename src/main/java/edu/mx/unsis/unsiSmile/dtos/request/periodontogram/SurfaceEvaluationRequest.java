@@ -1,12 +1,8 @@
 package edu.mx.unsis.unsiSmile.dtos.request.periodontogram;
 
-import java.util.List;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class SurfaceEvaluationRequest {
+
     private SurfaceType surface;
     private List<SurfaceMeasurementRequest> surfaceMeasurements;
 }

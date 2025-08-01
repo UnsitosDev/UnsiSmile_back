@@ -16,4 +16,3 @@ public class ProfessorUserResponse extends UserBaseResponse {
     private String idProfessor;
     private CareerResponse career;
 }
-

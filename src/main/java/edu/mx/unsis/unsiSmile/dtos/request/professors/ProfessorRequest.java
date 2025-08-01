@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfessorRequest {
+
     @NotNull(message = ResponseMessages.EMPLOYEE_NUMBER_NULL)
     @Pattern(regexp = "\\d{4,6}", message = ResponseMessages.EMPLOYEE_NUMBER_INVALID)
     private String employeeNumber;

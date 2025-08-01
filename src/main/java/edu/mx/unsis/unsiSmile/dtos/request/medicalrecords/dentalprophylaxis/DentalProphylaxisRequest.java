@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class DentalProphylaxisRequest {
+
     @NotNull(message = ResponseMessages.REQUEST_CANNOT_BE_NULL)
     private List<ToothRequest> theetProphylaxis;
 

@@ -11,11 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PatientMedicalRecordResponse {
     private Long id;
-
     private String medicalRecordName;
 
     @Builder.Default
     private Long patientMedicalRecordId = 0L;
-
     private String patientId;
 }

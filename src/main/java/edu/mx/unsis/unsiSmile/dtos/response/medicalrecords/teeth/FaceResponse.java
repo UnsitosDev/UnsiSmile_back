@@ -14,5 +14,4 @@ import java.util.List;
 public class FaceResponse {
     private String idFace;
     private List<ConditionResponse> conditions;
-
 }

@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class ToothConditionAssignmentRequest {
+
     private Long toothConditionId;
     private String toothId;
     private LocalDate creationDate;
-
 }

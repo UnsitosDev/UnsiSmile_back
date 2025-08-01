@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class StreetRequest {
+
     private Long idStreet;
 
     @NotBlank(message = ResponseMessages.STREET_NAME_BLANK)

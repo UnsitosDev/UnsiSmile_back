@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentReq {
+
     @NotBlank(message = ResponseMessages.NOT_NULL_ENROLLMENT)
     @NotNull(message = ResponseMessages.NOT_NULL_ENROLLMENT)
     @Pattern(regexp = "\\d{10}", message = ResponseMessages.ENROLLMENT_INVALID)

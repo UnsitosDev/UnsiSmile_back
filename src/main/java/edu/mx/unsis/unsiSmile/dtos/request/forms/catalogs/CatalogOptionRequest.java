@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CatalogOptionRequest {
+
     private Long idCatalogOption;
 
     @NotNull(message = "The Option Name cannot be null.")

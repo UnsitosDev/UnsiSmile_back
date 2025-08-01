@@ -12,10 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CatalogResponse {
-
     private Long idCatalog;
-
     private String catalogName;
-
     private List<CatalogOptionResponse> catalogOptions;
 }

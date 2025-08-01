@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class EthnicGroupRequest {
+
     private Long idEthnicGroup;
 
     @NotBlank(message = ResponseMessages.NOT_BLANK_ETHNIC_GROUP_DESCRIPTION)
