@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.AnswerTypeRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.AnswerTypeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.AnswerTypeMapper;
-import edu.mx.unsis.unsiSmile.model.AnswerTypeModel;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
 import edu.mx.unsis.unsiSmile.repository.IAnswerTypeRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;

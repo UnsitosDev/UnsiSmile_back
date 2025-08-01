@@ -1,8 +1,12 @@
 package edu.mx.unsis.unsiSmile.repository.patients;
 
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.patients.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

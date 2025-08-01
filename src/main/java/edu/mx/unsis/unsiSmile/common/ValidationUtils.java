@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.common;
 
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.HttpStatus;

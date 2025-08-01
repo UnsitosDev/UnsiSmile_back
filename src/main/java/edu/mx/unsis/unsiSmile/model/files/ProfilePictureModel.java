@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.files;
 
 import java.util.UUID;
 

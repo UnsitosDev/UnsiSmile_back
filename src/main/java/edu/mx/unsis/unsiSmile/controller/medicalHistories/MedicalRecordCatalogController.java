@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalo
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordListResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordRes;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
-import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.enums.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordCatalogService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.MedicalRecordSectionService;

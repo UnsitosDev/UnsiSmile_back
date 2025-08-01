@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.dtos.request.students.MedicalRecordDigitizerRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import edu.mx.unsis.unsiSmile.dtos.request.PersonRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.PersonResponse;
-import edu.mx.unsis.unsiSmile.model.GenderModel;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.GenderModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 
 @Component
 public class PersonMapper implements BaseMapper<PersonResponse, PersonRequest, PersonModel> {

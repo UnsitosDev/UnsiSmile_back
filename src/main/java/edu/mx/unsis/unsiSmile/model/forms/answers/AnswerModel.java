@@ -1,5 +1,7 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.forms.answers;
 
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;

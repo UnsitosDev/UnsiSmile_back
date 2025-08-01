@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository;
 
-import edu.mx.unsis.unsiSmile.model.GenderModel;
+import edu.mx.unsis.unsiSmile.model.people.GenderModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.people;
 
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;

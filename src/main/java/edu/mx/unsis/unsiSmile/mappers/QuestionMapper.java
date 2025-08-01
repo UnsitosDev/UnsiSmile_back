@@ -2,10 +2,10 @@ package edu.mx.unsis.unsiSmile.mappers;
 
 import edu.mx.unsis.unsiSmile.dtos.request.QuestionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.QuestionResponse;
-import edu.mx.unsis.unsiSmile.model.AnswerTypeModel;
-import edu.mx.unsis.unsiSmile.model.CatalogModel;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

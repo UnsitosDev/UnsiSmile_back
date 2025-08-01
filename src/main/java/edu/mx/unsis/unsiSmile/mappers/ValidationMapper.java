@@ -2,8 +2,8 @@ package edu.mx.unsis.unsiSmile.mappers;
 
 import edu.mx.unsis.unsiSmile.dtos.request.ValidationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationResponse;
-import edu.mx.unsis.unsiSmile.model.ValidationModel;
-import edu.mx.unsis.unsiSmile.model.ValidationTypeModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationTypeModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

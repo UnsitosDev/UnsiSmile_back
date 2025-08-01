@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.patients.ReligionModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
 
 @Repository
 public interface IReligionRepository extends JpaRepository<ReligionModel, Long> {

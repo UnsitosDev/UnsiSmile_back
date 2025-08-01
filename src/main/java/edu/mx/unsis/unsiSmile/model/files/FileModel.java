@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.files;
 
-import edu.mx.unsis.unsiSmile.model.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

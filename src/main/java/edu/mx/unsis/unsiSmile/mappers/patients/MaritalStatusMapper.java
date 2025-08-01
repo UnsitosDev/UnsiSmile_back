@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.patients.MaritalStatusRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.patients.MaritalStatusResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.patients.MaritalStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
 
 @Component
 public class MaritalStatusMapper implements BaseMapper<MaritalStatusResponse, MaritalStatusRequest, MaritalStatusModel> {

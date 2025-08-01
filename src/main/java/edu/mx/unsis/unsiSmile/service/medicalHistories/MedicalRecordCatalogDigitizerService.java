@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.MedicalRecordCatalo
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.PatientMedicalRecordResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMapper;
-import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;

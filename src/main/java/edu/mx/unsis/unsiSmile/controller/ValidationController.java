@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.controller;
 
 import edu.mx.unsis.unsiSmile.dtos.request.ValidationRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.ValidationResponse;
-import edu.mx.unsis.unsiSmile.model.QuestionValidationModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
 import edu.mx.unsis.unsiSmile.service.QuestionValidationService;
 import edu.mx.unsis.unsiSmile.service.ValidationService;
 import io.swagger.v3.oas.annotations.Operation;

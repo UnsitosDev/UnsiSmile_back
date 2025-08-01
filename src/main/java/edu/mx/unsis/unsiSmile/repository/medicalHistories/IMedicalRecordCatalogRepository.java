@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

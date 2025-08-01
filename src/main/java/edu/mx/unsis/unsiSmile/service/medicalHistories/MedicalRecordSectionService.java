@@ -2,9 +2,9 @@ package edu.mx.unsis.unsiSmile.service.medicalHistories;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
-import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
-import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.utils.MedicalRecordSectionModelPk;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordSectionRepository;
 import lombok.RequiredArgsConstructor;

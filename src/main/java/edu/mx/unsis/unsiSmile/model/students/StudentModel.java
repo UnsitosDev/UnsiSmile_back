@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.students;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

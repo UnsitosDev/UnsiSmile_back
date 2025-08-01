@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository;
 
-import edu.mx.unsis.unsiSmile.model.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

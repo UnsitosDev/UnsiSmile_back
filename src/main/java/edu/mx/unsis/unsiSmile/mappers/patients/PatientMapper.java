@@ -6,8 +6,12 @@ import edu.mx.unsis.unsiSmile.dtos.response.patients.PatientResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.addresses.AddressMapper;
-import edu.mx.unsis.unsiSmile.model.addresses.NationalityModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.NationalityModel;
 import edu.mx.unsis.unsiSmile.model.patients.*;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

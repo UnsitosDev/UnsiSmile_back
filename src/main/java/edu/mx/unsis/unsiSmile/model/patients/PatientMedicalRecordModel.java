@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;

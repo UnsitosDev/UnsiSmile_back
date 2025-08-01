@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.model.periodontograms;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.CascadeType;

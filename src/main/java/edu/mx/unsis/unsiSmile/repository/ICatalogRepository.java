@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository;
 
-import edu.mx.unsis.unsiSmile.model.CatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

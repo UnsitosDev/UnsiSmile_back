@@ -16,7 +16,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceEvaluationRes
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.SurfaceMeasurementResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.periodontograms.ToothEvaluationResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.FormSectionModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.PeriodontogramModel;
 import edu.mx.unsis.unsiSmile.model.periodontograms.SurfaceEvaluationModel;

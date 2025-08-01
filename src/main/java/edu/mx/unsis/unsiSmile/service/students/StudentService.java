@@ -17,7 +17,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.GroupMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.GroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;

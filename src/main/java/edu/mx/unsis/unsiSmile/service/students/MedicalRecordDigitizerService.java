@@ -8,8 +8,8 @@ import edu.mx.unsis.unsiSmile.dtos.request.students.MedicalRecordDigitizerReques
 import edu.mx.unsis.unsiSmile.dtos.response.students.MedicalRecordDigitizerResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.students.MedicalRecordDigitizerMapper;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
-import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.repository.students.IMedicalRecordDigitizerRepository;
 import edu.mx.unsis.unsiSmile.service.UserService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.PersonService;

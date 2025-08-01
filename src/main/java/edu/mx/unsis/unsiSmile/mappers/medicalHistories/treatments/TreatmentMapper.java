@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.*;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentScopeModel;
 import edu.mx.unsis.unsiSmile.model.treatments.TreatmentModel;
 import lombok.AllArgsConstructor;

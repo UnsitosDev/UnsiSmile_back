@@ -1,17 +1,16 @@
 package edu.mx.unsis.unsiSmile.mappers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-
 import edu.mx.unsis.unsiSmile.common.AppConstants;
 import edu.mx.unsis.unsiSmile.dtos.request.FileRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.FileResponse;
-import edu.mx.unsis.unsiSmile.model.AnswerModel;
 import edu.mx.unsis.unsiSmile.model.files.FileModel;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

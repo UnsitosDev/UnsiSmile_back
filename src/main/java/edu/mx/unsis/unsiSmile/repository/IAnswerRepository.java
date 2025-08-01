@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository;
 
-import edu.mx.unsis.unsiSmile.model.AnswerModel;
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,13 +19,13 @@ public interface IAnswerRepository extends JpaRepository<AnswerModel, Long> {
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion IN :questionIds AND " +
             "a.patientModel.idPatient = :patientId")
     List<AnswerModel> findAllByPatientIdAndQuestionIds(@Param("questionIds") Set<Long> questionIds,
-                                                        @Param("patientId") String patientId);
+                                                       @Param("patientId") String patientId);
 
     @Query("SELECT a FROM AnswerModel a WHERE a.questionModel.idQuestion  IN :questionIds AND " +
             "a.patientModel.idPatient = :patientId AND a.patientMedicalRecordModel.idPatientMedicalRecord = :patientMedicalRecordId")
     List<AnswerModel> findAllByPatientMedicalRecordIdAndPatientIdAndQuestionIds(@Param("questionIds") Set<Long> questionIds,
-                                                        @Param("patientId") String patientId,
-                                                        @Param("patientMedicalRecordId") Long patientMedicalRecordId);
+                                                                                @Param("patientId") String patientId,
+                                                                                @Param("patientMedicalRecordId") Long patientMedicalRecordId);
 
     Optional<AnswerModel> findByQuestionModelIdQuestionAndPatientModel_IdPatient(Long id, String idPatient);
 

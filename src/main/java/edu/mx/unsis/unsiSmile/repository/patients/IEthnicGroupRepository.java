@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.patients;
 
-import edu.mx.unsis.unsiSmile.model.patients.EthnicGroupModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

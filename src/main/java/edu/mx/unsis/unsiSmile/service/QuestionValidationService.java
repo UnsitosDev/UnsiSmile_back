@@ -2,9 +2,9 @@ package edu.mx.unsis.unsiSmile.service;
 
 import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.QuestionModel;
-import edu.mx.unsis.unsiSmile.model.QuestionValidationModel;
-import edu.mx.unsis.unsiSmile.model.ValidationModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.QuestionValidationModel;
+import edu.mx.unsis.unsiSmile.model.forms.questions.ValidationModel;
 import edu.mx.unsis.unsiSmile.repository.IQuestionValidationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

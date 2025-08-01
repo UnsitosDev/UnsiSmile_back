@@ -1,6 +1,5 @@
 package edu.mx.unsis.unsiSmile.service.administrators;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,7 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.PersonMapper;
 import edu.mx.unsis.unsiSmile.mappers.UserMapper;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
 import edu.mx.unsis.unsiSmile.repository.IUserRepository;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;

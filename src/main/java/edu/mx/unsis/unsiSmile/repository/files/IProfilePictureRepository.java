@@ -2,7 +2,7 @@ package edu.mx.unsis.unsiSmile.repository.files;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.mx.unsis.unsiSmile.model.ProfilePictureModel;
+import edu.mx.unsis.unsiSmile.model.files.ProfilePictureModel;
 
 public interface IProfilePictureRepository extends JpaRepository<ProfilePictureModel, String> {
 

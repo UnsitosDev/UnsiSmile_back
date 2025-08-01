@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.repository.students;
 
-import edu.mx.unsis.unsiSmile.model.students.DigitizerPatientModel;
-import edu.mx.unsis.unsiSmile.model.students.MedicalRecordDigitizerModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.DigitizerPatientModel;
+import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

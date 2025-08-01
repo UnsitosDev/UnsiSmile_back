@@ -1,7 +1,7 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import edu.mx.unsis.unsiSmile.model.CatalogOptionModel;
-import edu.mx.unsis.unsiSmile.model.PersonModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogOptionModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,5 +1,6 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.forms.sections;
 
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import edu.mx.unsis.unsiSmile.model.utils.MedicalRecordSectionModelPk;
 import jakarta.persistence.*;

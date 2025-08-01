@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
 
 @Repository
 public interface IOccupationRepository extends JpaRepository<OccupationModel, Long> {

@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.model.students;
+package edu.mx.unsis.unsiSmile.model.digitizers;
 
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;

@@ -6,7 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.CatalogOptionResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.CatalogResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.CatalogMapper;
-import edu.mx.unsis.unsiSmile.model.CatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
 import edu.mx.unsis.unsiSmile.repository.ICatalogRepository;
 import io.jsonwebtoken.lang.Assert;
 import lombok.RequiredArgsConstructor;

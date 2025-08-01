@@ -1,5 +1,8 @@
-package edu.mx.unsis.unsiSmile.model;
+package edu.mx.unsis.unsiSmile.model.forms.questions;
 
+import edu.mx.unsis.unsiSmile.model.forms.answers.AnswerTypeModel;
+import edu.mx.unsis.unsiSmile.model.forms.catalogs.CatalogModel;
+import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
