@@ -116,4 +116,15 @@ public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetai
             "AND t.studentGroup.student.enrollment = ?1 " +
             "GROUP BY t.treatment.name")
     List<Object[]> countGeneralScopeTreatmentsBetweenDatesByStudent(String enrollment, ReviewStatus status, Timestamp startDate, Timestamp endDate);
+
+    @Query("SELECT td FROM TreatmentDetailModel td " +
+            "JOIN TreatmentDetailToothModel tt ON tt.treatmentDetail.idTreatmentDetail = td.idTreatmentDetail " +
+            "WHERE td.studentGroup IN :studentGroups " +
+            "AND td.idTreatmentDetail = :treatmentDetailId " +
+            "AND tt.status.status = :status " +
+            "ORDER BY td.createdAt DESC")
+    List<TreatmentDetailModel> findByStudentGroupsAndTreatmentDetailIdAndToothStatus(
+            @Param("studentGroups") List<StudentGroupModel> studentGroups,
+            @Param("treatmentDetailId") Long treatmentDetailId,
+            @Param("status") ReviewStatus status);
 }

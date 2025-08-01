@@ -8,17 +8,14 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.UserResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
-import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailMapper;
+import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.AuthorizedTreatmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.*;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
@@ -39,7 +36,6 @@ import edu.mx.unsis.unsiSmile.service.students.StudentGroupService;
 import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -78,6 +74,7 @@ public class TreatmentDetailService {
     private final ExecutionReviewService executionReviewService;
     private final IExecutionReviewRepository executionReviewRepository;
     private final StudentService studentService;
+    private final TreatmentDetailToothMapper treatmentDetailToothMapper;
 
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
@@ -593,33 +590,48 @@ public class TreatmentDetailService {
     }
 
     private List<TreatmentDetailResponse> toDtoList(TreatmentDetailModel treatmentDetailModel) {
-        TreatmentDetailResponse response;
-
         try {
-            response = mapTreatmentDetailToDto(treatmentDetailModel);
-
-            // Si es tratamiento dental, crear lista por diente
-            if (isToothTreatment(treatmentDetailModel)) {
-                List<TreatmentDetailToothResponse> teeth = treatmentDetailToothService
-                        .getTreatmentDetailTeethByTreatmentDetail(
-                                treatmentDetailModel.getIdTreatmentDetail());
-
-                return teeth.stream()
-                        .map(tooth -> {
-                            TreatmentDetailResponse copy = new TreatmentDetailResponse();
-                            BeanUtils.copyProperties(response, copy);
-                            copy.setTeeth(List.of(tooth));
-                            copy.setStatus(tooth.getStatus() != null ? tooth.getStatus() : ReviewStatus.IN_PROGRESS.toString());
-                            return copy;
-                        })
-                        .collect(Collectors.toList());
-            } else {
+            // Si no es tratamiento dental, mapeo normal
+            if (!isToothTreatment(treatmentDetailModel)) {
+                TreatmentDetailResponse response = mapTreatmentDetailToDto(treatmentDetailModel);
                 response.setTeeth(null);
                 return Collections.singletonList(response);
             }
 
+            // Cargar dientes asociados al tratamiento
+            List<TreatmentDetailToothModel> teeth = treatmentDetailToothService
+                    .getTreatmentDetailTeethModelByTreatmentDetail(treatmentDetailModel.getIdTreatmentDetail());
+
+            return teeth.stream().map(tooth -> {
+                // Crear respuesta base con profesor aprobador (siempre obligatorio)
+                TreatmentDetailResponse copy = authorizedTreatmentRepository
+                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
+                                treatmentDetailModel.getIdTreatmentDetail())
+                        .map(treatmentDetailMapper::toDtoWithAuthorizingProfessor)
+                        .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
+
+                // Asignar profesor revisor si el diente tiene ejecución
+                if (tooth.getStatus() != null) {
+                    executionReviewRepository.findById(tooth.getStatus().getIdExecutionReview())
+                            .ifPresent(executionReview ->
+                                    treatmentDetailMapper.setReviewerProfessor(copy, executionReview)
+                            );
+                }
+
+                // Asignar el diente individual al response
+                copy.setTeeth(List.of(treatmentDetailToothMapper.toDto(tooth)));
+
+                // Asignar el estado directamente desde el diente
+                copy.setStatus(tooth.getStatus() != null
+                        ? tooth.getStatus().getStatus().toString()
+                        : ReviewStatus.IN_PROGRESS.toString());
+
+                return copy;
+            }).collect(Collectors.toList());
+
         } catch (Exception e) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS, HttpStatus.INTERNAL_SERVER_ERROR, e);
+            throw new AppException(ResponseMessages.FAILED_FETCH_TREATMENT_DETAILS,
+                    HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 
@@ -658,21 +670,33 @@ public class TreatmentDetailService {
         );
         TreatmentDetailResponse response;
         if (authorizationStatuses.contains(treatmentDetailModel.getStatus())) {
+            // Fase de autorización: solo asignar aprobador
             response = authorizedTreatmentRepository
                     .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
                             treatmentDetailModel.getIdTreatmentDetail())
                     .map(treatmentDetailMapper::toDtoWithAuthorizingProfessor)
                     .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
         } else {
+            // Agregar revisor (si existe)
             response = executionReviewRepository
                     .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(
                             treatmentDetailModel.getIdTreatmentDetail())
                     .map(treatmentDetailMapper::toDtoWithReviewerProfessor)
                     .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
+
+            // Agregar aprobador (si existe)
+            authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
+                            treatmentDetailModel.getIdTreatmentDetail())
+                    .ifPresent(authorizedTreatment ->
+                            treatmentDetailMapper.setAuthorizingProfessor(response, authorizedTreatment)
+                    );
         }
-        if(isToothTreatment(treatmentDetailModel)) {
+
+        // Dientes y nuevos estatus (si aplica)
+        if (isToothTreatment(treatmentDetailModel)) {
             addTeethList(response);
-            if (!authorizationStatuses.contains(treatmentDetailModel.getStatus())){
+            if (!authorizationStatuses.contains(treatmentDetailModel.getStatus())) {
                 addNewStatus(response);
             }
         }
@@ -818,10 +842,17 @@ public class TreatmentDetailService {
         try {
             StudentModel studentModel = studentService.getStudentModel(idStudent);
             List<StudentGroupModel> studentGroups = studentGroupService.getAllStudentGroupsByStudent(studentModel);
+            TreatmentModel treatment = treatmentService.getTreatmentModelById(idTreatment);
 
-            List<TreatmentDetailModel> treatmentModels = treatmentDetailRepository
-                    .findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
-                            studentGroups, idTreatment, ReviewStatus.FINISHED);
+            List<TreatmentDetailModel> treatmentModels;
+            if(treatment.getTreatmentScope().getName().equals(Constants.TOOTH)) {
+                treatmentModels = treatmentDetailRepository.findByStudentGroupsAndTreatmentDetailIdAndToothStatus(
+                        studentGroups, idTreatment, ReviewStatus.FINISHED);
+            } else {
+                treatmentModels = treatmentDetailRepository
+                        .findByStudentGroupInAndTreatment_IdTreatmentAndStatusOrderByIdTreatmentDetailDesc(
+                                studentGroups, idTreatment, ReviewStatus.FINISHED);
+            }
 
             return treatmentModels.stream()
                     .map(this::mapTreatmentDetailToDto)

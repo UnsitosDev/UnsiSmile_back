@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,13 +15,13 @@ import java.util.List;
 public class TreatmentDetailResponse {
 
     private Long idTreatmentDetail;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String status;
-    private String comments;
 
     private PatientResponse patient;
-    private ProfessorResponse professor;
+    private ProfessorResponse approvalProfessor;
+    private ProfessorResponse reviewProfessor;
     private StudentResponse student;
 
     private TreatmentResponse treatment;
@@ -45,6 +45,7 @@ public class TreatmentDetailResponse {
     public static class ProfessorResponse {
         private Long idProfessorClinicalArea;
         private String professorName;
+        private String comments;
     }
 
     @Data

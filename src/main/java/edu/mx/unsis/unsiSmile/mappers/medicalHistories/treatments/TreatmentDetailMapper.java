@@ -38,8 +38,8 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     public TreatmentDetailResponse toDto(TreatmentDetailModel entity) {
         return TreatmentDetailResponse.builder()
                 .idTreatmentDetail(entity.getIdTreatmentDetail())
-                .startDate(entity.getStartDate())
-                .endDate(entity.getEndDate())
+                .startDate(entity.getStartDate().toLocalDate())
+                .endDate(entity.getEndDate().toLocalDate())
                 .status(String.valueOf(entity.getStatus()))
                 .treatment(treatmentMapper.toDto(entity.getTreatment()))
                 .patient(TreatmentDetailResponse.PatientResponse.builder()
@@ -74,11 +74,11 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     public TreatmentDetailResponse toDtoWithAuthorizingProfessor(AuthorizedTreatmentModel model) {
         TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
 
-        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+        response.setApprovalProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
                 .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
                 .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .comments(model.getComment())
                 .build());
-        response.setComments(model.getComment());
 
         return response;
     }
@@ -86,12 +86,28 @@ public class TreatmentDetailMapper implements BaseMapper<TreatmentDetailResponse
     public TreatmentDetailResponse toDtoWithReviewerProfessor(ExecutionReviewModel model) {
         TreatmentDetailResponse response = toDto(model.getTreatmentDetail());
 
-        response.setProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+        response.setReviewProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
                 .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
                 .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .comments(model.getComment())
                 .build());
-        response.setComments(model.getComment());
 
         return response;
+    }
+
+    public void setAuthorizingProfessor(TreatmentDetailResponse response, AuthorizedTreatmentModel model) {
+        response.setApprovalProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .comments(model.getComment())
+                .build());
+    }
+
+    public void setReviewerProfessor(TreatmentDetailResponse response, ExecutionReviewModel model) {
+        response.setReviewProfessor(TreatmentDetailResponse.ProfessorResponse.builder()
+                .idProfessorClinicalArea(model.getProfessorClinicalArea().getIdProfessorClinicalArea())
+                .professorName(model.getProfessorClinicalArea().getProfessor().getPerson().getFullName())
+                .comments(model.getComment())
+                .build());
     }
 }
