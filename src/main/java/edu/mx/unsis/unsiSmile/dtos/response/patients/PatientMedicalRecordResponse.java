@@ -1,4 +1,4 @@
-package edu.mx.unsis.unsiSmile.dtos.response.medicalHistories;
+package edu.mx.unsis.unsiSmile.dtos.response.patients;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
