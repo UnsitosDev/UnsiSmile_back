@@ -16,6 +16,7 @@ import lombok.*;
 @Table(name = "toothface_conditions_assignments")
 @IdClass(ToothFaceConditionAssignmentId.class)
 public class ToothfaceConditionsAssignmentModel extends AuditModel {
+
     @Id
     @ManyToOne
     @JoinColumn(name = "tooth_face_id")

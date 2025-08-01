@@ -13,6 +13,7 @@ import lombok.*;
 @Entity
 @Table(name = "sohi_tooth_code")
 public class SOHIToothCodeModel extends AuditModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tooth_code")

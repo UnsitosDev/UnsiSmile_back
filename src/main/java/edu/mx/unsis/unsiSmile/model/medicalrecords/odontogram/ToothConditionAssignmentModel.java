@@ -3,17 +3,8 @@ package edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Setter
@@ -39,5 +30,4 @@ public class ToothConditionAssignmentModel extends AuditModel {
     @ManyToOne
     @JoinColumn(name = "odontogram_id", nullable = false)
     private OdontogramModel odontogram;
-
 }

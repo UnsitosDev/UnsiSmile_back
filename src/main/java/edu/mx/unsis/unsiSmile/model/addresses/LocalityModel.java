@@ -28,5 +28,4 @@ public class LocalityModel {
     @ManyToOne
     @JoinColumn(name = "fk_municipality", referencedColumnName = "id_municipality", nullable = false)
     private MunicipalityModel municipality;
-
 }

@@ -22,5 +22,4 @@ public class HousingModel extends AuditModel {
 
     @Column(name = "category", columnDefinition = "TEXT")
     private String category;
-
 }

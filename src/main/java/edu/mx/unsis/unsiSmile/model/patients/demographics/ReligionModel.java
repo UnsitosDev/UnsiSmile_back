@@ -22,5 +22,4 @@ public class ReligionModel extends AuditModel {
 
     @Column(name = "religion", length = 100, unique = true)
     private String religion;
-
 }

@@ -12,7 +12,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class ProphylaxisToothConditionAssignmentId implements Serializable {
+
     private String tooth;
+
     private Long toothCondition;
+
     private Long dentalProphylaxis;
 }

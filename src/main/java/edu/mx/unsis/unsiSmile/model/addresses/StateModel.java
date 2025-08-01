@@ -23,5 +23,4 @@ public class StateModel {
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
-
 }

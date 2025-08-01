@@ -30,5 +30,4 @@ public class GuardianModel extends AuditModel {
 
     @Column(name = "doctor_name", length = 100)
     private String doctorName;
-
 }

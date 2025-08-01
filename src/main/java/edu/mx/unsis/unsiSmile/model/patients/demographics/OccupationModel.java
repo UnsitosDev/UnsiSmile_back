@@ -20,5 +20,4 @@ public class OccupationModel extends AuditModel {
 
     @Column(name = "occupation", length = 100, unique = true)
     private String occupation;
-
 }

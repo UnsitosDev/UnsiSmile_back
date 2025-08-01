@@ -23,5 +23,4 @@ public class NationalityModel {
 
     @Column(name = "nationality", length = 100, unique = true)
     private String nationality;
-
 }

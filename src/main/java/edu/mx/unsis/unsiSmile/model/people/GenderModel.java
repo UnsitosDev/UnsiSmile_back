@@ -20,6 +20,4 @@ public class GenderModel extends AuditModel {
 
     @Column(name = "gender", unique = true, length = 100)
     private String gender;
-
 }
-

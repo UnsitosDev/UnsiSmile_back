@@ -1,22 +1,14 @@
 package edu.mx.unsis.unsiSmile.model.patients;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
-import edu.mx.unsis.unsiSmile.model.patients.demographics.EthnicGroupModel;
-import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
-import edu.mx.unsis.unsiSmile.model.patients.demographics.OccupationModel;
-import edu.mx.unsis.unsiSmile.model.patients.demographics.ReligionModel;
-import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.patients.demographics.NationalityModel;
+import edu.mx.unsis.unsiSmile.model.patients.demographics.*;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter

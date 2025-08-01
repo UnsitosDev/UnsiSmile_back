@@ -1,6 +1,9 @@
 package edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -9,7 +12,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class ToothConditionAssignmentId implements Serializable {
+
     private String tooth;
+
     private Long toothCondition;
+
     private Long odontogram;
 }

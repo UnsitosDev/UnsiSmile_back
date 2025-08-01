@@ -15,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "sohi")
 public class SOHIModel extends AuditModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sohi")

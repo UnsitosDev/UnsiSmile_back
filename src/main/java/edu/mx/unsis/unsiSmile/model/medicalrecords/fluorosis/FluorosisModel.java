@@ -15,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "fluorosis")
 public class FluorosisModel extends AuditModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_fluorosis")

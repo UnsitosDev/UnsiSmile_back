@@ -12,8 +12,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 public class FluorosisToothFaceConditionAssignmentId implements Serializable {
+
     private String toothFace;
+
     private Long toothFaceCondition;
+
     private String tooth;
+
     private Long fluorosis;
 }

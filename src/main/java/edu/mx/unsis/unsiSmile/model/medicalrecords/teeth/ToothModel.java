@@ -25,5 +25,4 @@ public class ToothModel extends AuditModel {
 
     @Column(name = "description", nullable = false)
     private String description;
-
 }
