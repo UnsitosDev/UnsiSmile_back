@@ -1,10 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository.treatments;
 
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
+import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Repository
 public interface ITreatmentDetailRepository extends JpaRepository<TreatmentDetailModel, Long> {
+
     Page<TreatmentDetailModel> findByPatientMedicalRecord_Patient_IdPatient(String patientId, Pageable pageable);
 
     @Query("SELECT COUNT(t) FROM TreatmentDetailModel t WHERE t.professor.idProfessor = ?1 AND t.status = ?2 AND t.statusKey = 'A'")

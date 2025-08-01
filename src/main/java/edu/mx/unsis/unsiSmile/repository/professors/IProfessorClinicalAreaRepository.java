@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface IProfessorClinicalAreaRepository extends JpaRepository<ProfessorClinicalAreaModel, Long> {
+
     @Query("SELECT p FROM ProfessorClinicalAreaModel p " +
        "WHERE (p.professor.person.firstName LIKE %:keyword% " +
        "OR p.professor.person.secondName LIKE %:keyword% " +

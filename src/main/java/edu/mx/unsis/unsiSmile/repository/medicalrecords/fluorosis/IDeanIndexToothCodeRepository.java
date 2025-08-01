@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IDeanIndexToothCodeRepository extends JpaRepository<DeanIndexToothCodeModel, Long> {
+
     List<DeanIndexToothCodeModel> findByDeanIndex(DeanIndexModel deanIndex);
 }

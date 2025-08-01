@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface IMedicalRecordCatalogRepository extends JpaRepository<MedicalRecordCatalogModel, Long> {
+
     @Query(value = "SELECT mrc.id_medical_record_catalog as id, mrc.medical_record_name, " +
             "pmr.id_patient_medical_record, pmr.fk_patient as patientId " +
             "FROM medical_record_catalogs mrc " +

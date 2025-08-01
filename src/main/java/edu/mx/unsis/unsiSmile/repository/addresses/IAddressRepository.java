@@ -1,16 +1,15 @@
 package edu.mx.unsis.unsiSmile.repository.addresses;
 
-import java.util.List;
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
+import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
+import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.addresses.HousingModel;
-import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.addresses.StreetModel;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IAddressRepository extends JpaRepository<AddressModel, Long> {
@@ -36,5 +35,4 @@ public interface IAddressRepository extends JpaRepository<AddressModel, Long> {
             @Param("housingId") String housingId,
             @Param("streetId") Long streetId
     );
-
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ICatalogRepository extends JpaRepository<CatalogModel, Long> {
+
     @Query("SELECT c.idCatalog FROM CatalogModel c WHERE c.catalogName = :catalogName")
     Optional<Long> findIdByCatalogName(@Param("catalogName") String catalogName);
 }

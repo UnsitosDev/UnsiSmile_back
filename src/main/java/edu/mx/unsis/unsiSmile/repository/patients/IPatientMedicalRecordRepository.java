@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface IPatientMedicalRecordRepository extends JpaRepository<PatientMedicalRecordModel, Long> {
+
     PatientMedicalRecordModel findFirstByPatient_IdPatientAndMedicalRecordCatalog_MedicalRecordNameOrderByCreatedAtDesc(
             String patientId, String medicalRecordName);
 

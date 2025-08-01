@@ -1,19 +1,19 @@
 package edu.mx.unsis.unsiSmile.repository.medicalrecords.odontograms;
 
-import java.util.List;
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothfaceConditionsAssignmentModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothfaceConditionsAssignmentModel;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {
+
     // Consulta para obtener las asignaciones de condiciones dentales y de caras del diente de un odontograma específico
     @Query("SELECT o, tca, tfc FROM OdontogramModel o " +
             "LEFT JOIN o.toothConditionAssignments tca " +
@@ -38,5 +38,4 @@ public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Lo
            "WHERE o.patient.idPatient = :patientId " +
            "ORDER BY o.createdAt DESC")
     Optional<OdontogramModel> findLastOdontogramByPatientId(@Param("patientId") String patientId);
-
 }

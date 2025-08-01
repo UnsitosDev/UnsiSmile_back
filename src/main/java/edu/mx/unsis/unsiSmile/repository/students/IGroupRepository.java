@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IGroupRepository extends JpaRepository<GroupModel, Long> {
+
     @Modifying
     @Query("UPDATE GroupModel s SET s.statusKey = 'I'")
     void disableAllGroups();

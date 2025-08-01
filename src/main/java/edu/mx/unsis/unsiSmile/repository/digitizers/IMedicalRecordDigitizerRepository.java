@@ -26,5 +26,4 @@ public interface IMedicalRecordDigitizerRepository extends JpaRepository<Medical
     Page<MedicalRecordDigitizerModel> findAllMedicalRecordDigitizer(@Param("deleted") String deleted, Pageable pageable);
 
     Optional<MedicalRecordDigitizerModel> findByUser(UserModel user);
-
 }

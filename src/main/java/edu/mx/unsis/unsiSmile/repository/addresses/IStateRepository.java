@@ -19,5 +19,4 @@ public interface IStateRepository extends JpaRepository<StateModel, String> {
 
     @Query("SELECT s FROM StateModel s WHERE s.name LIKE :search%")
     Page<StateModel> findByNameContaining(@Param("search") String search, Pageable pageable);
-
 }

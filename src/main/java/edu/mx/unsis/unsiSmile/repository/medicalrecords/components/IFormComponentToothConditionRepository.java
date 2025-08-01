@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface IFormComponentToothConditionRepository extends JpaRepository<FormComponentToothConditionModel, Long> {
+
     List<FormComponentToothConditionModel> findByFormComponent(FormComponentModel formComponent);
 }

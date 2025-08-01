@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface IQuestionValidationRepository extends JpaRepository<QuestionValidationModel, Long> {
+
     @Query("SELECT qv FROM QuestionValidationModel qv WHERE qv.questionModel.idQuestion = :questionId")
     List<QuestionValidationModel> findAllByQuestionId(@Param("questionId") Long questionId);
 }

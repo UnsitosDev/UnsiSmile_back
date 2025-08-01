@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IProfessorGroupRepository extends JpaRepository<ProfessorGroupModel, Long> {
+
     @Query("SELECT p FROM ProfessorGroupModel p " +
             "WHERE (p.professor.person.firstName LIKE %:keyword% " +
             "OR p.professor.person.secondName LIKE %:keyword% " +

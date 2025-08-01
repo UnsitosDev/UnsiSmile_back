@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IStudentGroupRepository extends JpaRepository<StudentGroupModel, Long> {
+
     @Query("SELECT COUNT(DISTINCT s.student.enrollment) FROM StudentGroupModel s WHERE s.group.idGroup IN :groupIds AND s.statusKey = 'A'")
     Long countStudentsByGroupIds(@Param("groupIds") Set<Long> groupIds);
 

@@ -8,7 +8,10 @@ import java.util.List;
 
 @Repository
 public interface ITreatmentRepository extends JpaRepository<TreatmentModel, Long> {
+
     List<TreatmentModel> findByTreatmentScope_IdTreatmentScope(Long treatmentScopeId);
+
     List<TreatmentModel> findByMedicalRecordCatalog_IdMedicalRecordCatalog(Long catalogId);
+
     boolean existsByName(String name);
 }

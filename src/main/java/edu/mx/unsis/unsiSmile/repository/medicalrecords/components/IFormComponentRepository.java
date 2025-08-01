@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface IFormComponentRepository extends JpaRepository<FormComponentModel, Long> {
+
     Optional<FormComponentModel> findByDescription(String description);
 }

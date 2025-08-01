@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface IExecutionReviewRepository extends JpaRepository<ExecutionReviewModel, Long> {
+
     Page<ExecutionReviewModel> findByProfessorClinicalArea_Professor_idProfessorAndStatus(
             String professorId, ReviewStatus status, Pageable pageable);
 

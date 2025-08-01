@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ISOHITootCodeRepository extends JpaRepository<SOHIToothCodeModel, Long> {
+
     List<SOHIToothCodeModel> findBySohi(SOHIModel idSohi);
 }

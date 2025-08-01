@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface IAuthorizedTreatmentRepository extends JpaRepository<AuthorizedTreatmentModel, Long> {
+
     Page<AuthorizedTreatmentModel> findByProfessorClinicalArea_Professor_idProfessorAndStatus(
             String professorId, ReviewStatus status, Pageable pageable);
 

@@ -1,12 +1,11 @@
 package edu.mx.unsis.unsiSmile.repository.people;
 
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import edu.mx.unsis.unsiSmile.model.people.PersonModel;
+import java.util.Optional;
 
 public interface IPersonRepository extends JpaRepository<PersonModel, String> {
 

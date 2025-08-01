@@ -1,11 +1,10 @@
 package edu.mx.unsis.unsiSmile.repository.patients.demographics;
 
-import java.util.Optional;
-
+import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.patients.demographics.MaritalStatusModel;
+import java.util.Optional;
 
 @Repository
 public interface IMaritalStatusRepository extends JpaRepository<MaritalStatusModel, Long> {
@@ -13,5 +12,4 @@ public interface IMaritalStatusRepository extends JpaRepository<MaritalStatusMod
     Optional<MaritalStatusModel> findByIdMaritalStatus(Long idMaritalStatus);
 
     Optional<MaritalStatusModel> findByMaritalStatus(String maritalStatus);
-
 }

@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface IDeanIndexRepository extends JpaRepository<DeanIndexModel, Long> {
+
     Optional<DeanIndexModel> findByTreatmentDetail_IdTreatmentDetail(Long idTreatmentDetail);
 }
