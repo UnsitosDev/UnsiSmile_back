@@ -117,7 +117,7 @@ public class TreatmentReportService {
                     item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
                     item.put("patientClinicalHistoryId", treatment.getPatient() != null && treatment.getPatient().getMedicalRecordNumber() != null
                             ? String.valueOf(treatment.getPatient().getMedicalRecordNumber()) : "");
-                    item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getProfessorName() : "");
+                    item.put("professorName", treatment.getReviewProfessor() != null ? treatment.getReviewProfessor().getProfessorName() : "");
                     dataList.add(item);
                 }
             } else {
@@ -129,7 +129,7 @@ public class TreatmentReportService {
                 item.put("patientName", treatment.getPatient() != null ? treatment.getPatient().getName() : "");
                 item.put("patientClinicalHistoryId", treatment.getPatient() != null && treatment.getPatient().getMedicalRecordNumber() != null
                         ? String.valueOf(treatment.getPatient().getMedicalRecordNumber()) : "");
-                item.put("professorName", treatment.getProfessor() != null ? treatment.getProfessor().getProfessorName() : "");
+                item.put("professorName", treatment.getReviewProfessor() != null ? treatment.getReviewProfessor().getProfessorName() : "");
                 dataList.add(item);
             }
         }
