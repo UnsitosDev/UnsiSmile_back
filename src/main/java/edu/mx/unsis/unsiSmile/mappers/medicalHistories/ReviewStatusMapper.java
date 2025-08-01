@@ -6,8 +6,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ReviewStatusRespons
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatusModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorClinicalAreaModel;
 import org.springframework.stereotype.Component;
 

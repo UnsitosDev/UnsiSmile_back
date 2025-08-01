@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.OdontogramRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
 
 @Component
 public class OdontogramSimpleMapper

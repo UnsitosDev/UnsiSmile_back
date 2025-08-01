@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothfaceConditionsAssignmentModel;
 
 @Repository
 public interface IOdontogramRepository extends JpaRepository<OdontogramModel, Long> {

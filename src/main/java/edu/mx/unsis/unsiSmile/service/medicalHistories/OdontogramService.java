@@ -16,9 +16,9 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.OdontogramSimpleRes
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramMapper;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.OdontogramSimpleMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.OdontogramModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.OdontogramModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ToothfaceConditionsAssignmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IOdontogramRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothConditionAssignmentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IToothFaceConditionAssignmentRepository;

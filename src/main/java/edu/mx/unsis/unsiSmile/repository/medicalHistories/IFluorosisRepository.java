@@ -1,13 +1,12 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.FluorosisModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.FluorosisToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.FluorosisToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.FluorosisToothfaceConditionsAssignmentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

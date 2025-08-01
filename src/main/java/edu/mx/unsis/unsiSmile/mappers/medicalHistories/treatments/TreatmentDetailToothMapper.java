@@ -3,8 +3,8 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentDetailToothRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailToothModel;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

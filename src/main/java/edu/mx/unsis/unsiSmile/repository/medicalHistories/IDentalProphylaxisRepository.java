@@ -1,8 +1,8 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.DentalProphylaxisModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisToothConditionAssignmentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.odontogram.ProphylaxisToothfaceConditionsAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.DentalProphylaxisModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ProphylaxisToothConditionAssignmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.odontogram.ProphylaxisToothfaceConditionsAssignmentModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

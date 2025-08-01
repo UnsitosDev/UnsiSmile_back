@@ -6,9 +6,9 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.EnumDeanIndexToothId
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.DeanIndexMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.DeanIndexModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.fluorosis.DeanIndexToothCodeModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.DeanIndexModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.DeanIndexToothCodeModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IDeanIndexRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IDeanIndexToothCodeRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;

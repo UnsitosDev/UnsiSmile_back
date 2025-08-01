@@ -7,11 +7,11 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailToothResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentDetailToothMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.ExecutionReviewModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentDetailToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.ExecutionReviewModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentDetailToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IToothRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentDetailToothRepository;

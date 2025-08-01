@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.treatments.TreatmentMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.ITreatmentRepository;
 import lombok.RequiredArgsConstructor;

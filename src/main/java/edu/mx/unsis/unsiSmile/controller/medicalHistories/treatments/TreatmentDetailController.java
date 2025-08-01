@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.Treatment
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.treatments.TreatmentStatusUpdateRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.treatments.TreatmentDetailResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.students.TreatmentReportResponse;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentDetailService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentGeneralReportService;
 import edu.mx.unsis.unsiSmile.service.medicalHistories.treatments.TreatmentReportService;

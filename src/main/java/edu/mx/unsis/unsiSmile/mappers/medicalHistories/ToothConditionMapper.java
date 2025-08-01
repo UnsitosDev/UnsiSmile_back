@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.ToothConditionRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothConditionResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.ToothConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothConditionModel;
 
 @Component
 public class ToothConditionMapper implements BaseMapper<ToothConditionResponse, ToothConditionRequest, ToothConditionModel> {

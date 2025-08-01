@@ -17,7 +17,7 @@ import edu.mx.unsis.unsiSmile.mappers.patients.PatientMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentRes;
 import edu.mx.unsis.unsiSmile.model.PersonModel;
 import edu.mx.unsis.unsiSmile.model.addresses.AddressModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.patients.GuardianModel;
 import edu.mx.unsis.unsiSmile.model.patients.OccupationModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientModel;

@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.response.*;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.ReviewStatus;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments.IAuthorizedTreatmentRepository;

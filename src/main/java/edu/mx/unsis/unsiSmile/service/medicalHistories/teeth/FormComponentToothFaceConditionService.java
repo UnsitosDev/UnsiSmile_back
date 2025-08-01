@@ -6,8 +6,8 @@ import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.ToothFaceConditionR
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentToothFaceConditionResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.teeth.FormComponentToothFaceConditionMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.FormComponentModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.FormComponentToothfaceConditionModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentToothfaceConditionModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IFormComponentRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IFormComponentToothfaceConditionRepository;
 import lombok.NonNull;

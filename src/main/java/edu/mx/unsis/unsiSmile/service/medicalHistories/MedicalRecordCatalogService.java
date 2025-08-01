@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.mappers.medicalHistories.MedicalRecordCatalogMappe
 import edu.mx.unsis.unsiSmile.model.MedicalRecordCatalogModel;
 import edu.mx.unsis.unsiSmile.model.MedicalRecordSectionModel;
 import edu.mx.unsis.unsiSmile.model.PatientMedicalRecordModel;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.EMedicalRecords;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.EMedicalRecords;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IMedicalRecordCatalogRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.IPatientMedicalRecordRepository;
 import edu.mx.unsis.unsiSmile.service.patients.PatientService;

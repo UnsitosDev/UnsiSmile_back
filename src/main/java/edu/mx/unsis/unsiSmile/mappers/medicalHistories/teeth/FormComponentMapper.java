@@ -3,7 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.medicalHistories.teeth;
 import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.teeth.FormComponentRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.FormComponentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

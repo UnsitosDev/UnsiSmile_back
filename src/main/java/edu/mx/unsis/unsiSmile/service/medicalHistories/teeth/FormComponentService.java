@@ -5,7 +5,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalHistories.teeth.FormComponentR
 import edu.mx.unsis.unsiSmile.dtos.response.medicalHistories.teeth.FormComponentResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.medicalHistories.teeth.FormComponentMapper;
-import edu.mx.unsis.unsiSmile.model.medicalHistories.teeth.FormComponentModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.FormComponentModel;
 import edu.mx.unsis.unsiSmile.repository.medicalHistories.teeth.IFormComponentRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

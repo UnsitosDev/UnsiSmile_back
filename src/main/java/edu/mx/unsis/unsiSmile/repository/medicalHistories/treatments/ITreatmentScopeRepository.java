@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.repository.medicalHistories.treatments;
 
-import edu.mx.unsis.unsiSmile.model.medicalHistories.treatments.TreatmentScopeModel;
+import edu.mx.unsis.unsiSmile.model.medicalrecords.treatments.TreatmentScopeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
