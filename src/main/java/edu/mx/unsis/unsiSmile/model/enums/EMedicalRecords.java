@@ -7,12 +7,13 @@ public enum EMedicalRecords {
         GENERAL(1, "General"),
         PROTESIS_BUCAL(2, "Prótesis bucal"),
         PERIODONCIA(3, "Periodoncia"),
-        OPERATORIA_DENTAL(4, "Operatoria dental"),
+        OPERATORIA_DENTAL_PREVIO(4, "Operatoria dental previo"),
         CIRUGIA_BUCAL(5, "Cirugía bucal"),
         ODONTOLOGIA_PREVENTIVA(6, "Odontología preventiva y salud pública"),
         ENDODONCIA(7, "Endodoncia"),
         PULPOTOMIA(8, "Pulpotomía"),
-        PULPECTOMIA(9, "Pulpectomía");
+        PULPECTOMIA(9, "Pulpectomía"),
+        OPERATORIA_DENTAL(10, "Operatoria dental");
 
         private final int id;
         private final String description;
