@@ -17,6 +17,7 @@ public class TreatmentDetailResponse {
     private Long idTreatmentDetail;
     private LocalDate startDate;
     private LocalDate endDate;
+    private Long idStatus;
     private String status;
 
     private PatientResponse patient;

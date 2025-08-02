@@ -479,6 +479,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
     public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha de inicio no puede ser mayor a la fecha de fin.";
     public static final String TREATMENT_DETAIL_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD = "No se encontró el detalle del tratamiento para la historia clinica del paciente con ID: %s";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS_TO_APPROVE = "El estado del tratamiento no es válido. Solo se permiten los estados: APPROVED y NOT_APPROVED";
 
     public static final String START_DATE_REQUIRED_WHEN_END_DATE_PROVIDED = "La fecha de inicio es obligatoria cuando se proporciona una fecha de fin.";
     public static final String START_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de inicio no puede ser posterior a la fecha de hoy.";
@@ -583,7 +584,10 @@ public class ResponseMessages {
     public static final String ERROR_UPDATING_TREATMENT_EXECUTION_STATUS = "Error al actualizar un registro de status del tratamiento con ID: %s.";
     public static final String FAILED_FETCH_TREATMENT_EXECUTION_STATUS = "Error al obtener un registro de status del tratamiento con ID: %s.";
     public static final String INVALID_TREATMENT_STATE_TRANSITION = "No es posible cambiar el estado del tratamiento desde su estado actual.";
-
+    public static final String EXECUTION_REVIEW_DOES_NOT_BELONG_TO_TREATMENT = "La revisión de ejecución no pertenece al tratamiento proporcionado.";
+    public static final String EXECUTION_STATUS_NOT_FOUND_BY_TREATMENT = "Registro de status no encontrado para el tratamiento con ID: %s";
+    public static final String NOT_NULL_FIELD_MESSAGE = "El campo ID no puede ser nulo";
+    public static final String POSITIVE_ID_MESSAGE = "El ID debe ser un número positivo";
     // Medical record digitizer
     public static final String ERROR_CREATING_MEDICAL_RECORD_DIGITIZER = "Error al asignar al estudiante el rol capturador de expedientes clínicos.";
     public static final String FAILED_TO_FETCH_MEDICAL_RECORD_DIGITIZER = "Error al obtener al capturador de expedientes clínicos.";
