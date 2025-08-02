@@ -386,31 +386,37 @@ public class TreatmentDetailService {
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            ReviewStatus currentStatus = treatment.getStatus();
+            boolean isToothTreatment = isToothTreatment(treatment);
 
-            if (currentStatus != ReviewStatus.IN_REVIEW) {
+            ExecutionReviewModel executionReviewModel = isToothTreatment ?
+                    executionReviewService.getExecutionReviewModelById(request.getIdExecutionReview()) :
+                    executionReviewService.getExecutionReviewModelByTreatmentDetailId(treatmentDetailId);
+            if(!ReviewStatus.IN_REVIEW.equals(executionReviewModel.getStatus())) {
                 throw new AppException(ResponseMessages.INVALID_TREATMENT_STATE_TRANSITION, HttpStatus.BAD_REQUEST);
+            }
+
+            if(!treatmentDetailId.equals(executionReviewModel.getTreatmentDetail().getIdTreatmentDetail())) {
+                throw new AppException(ResponseMessages.EXECUTION_REVIEW_DOES_NOT_BELONG_TO_TREATMENT, HttpStatus.BAD_REQUEST);
             }
 
             validateExecutionStatus(request.getStatus());
 
-            treatment = getValidTreatment(treatmentDetailId, currentStatus);
             treatment.setStatus(request.getStatus());
 
-            TreatmentStatusRequest executionRequest = buildExecutionStatusRequest(treatmentDetailId, request);
-            executionReviewService.updateExecutionReview(treatment.getIdTreatmentDetail(), executionRequest);
+            TreatmentStatusRequest executionRequest = buildExecutionStatusRequest(executionReviewModel, request);
+            executionReviewService.updateExecutionReviewStatus(executionReviewModel, executionRequest);
 
-            sendNotifications(treatment);
-
-            if (!isToothTreatment(treatment) && request.getStatus() == ReviewStatus.FINISHED) {
+            if (!isToothTreatment && request.getStatus() == ReviewStatus.FINISHED) {
                 treatment.setEndDate(LocalDateTime.now().toLocalDate().atStartOfDay());
             }
-            else if (isToothTreatment(treatment) && request.getStatus() == ReviewStatus.FINISHED) {
+            else if (isToothTreatment && request.getStatus() == ReviewStatus.FINISHED) {
                 boolean canSendToReview = treatmentDetailToothService.canSendToReviewBasedOnTeeth(treatment.getIdTreatmentDetail());
                 if (!canSendToReview) {
                     treatment.setEndDate(LocalDateTime.now().toLocalDate().atStartOfDay());
                 }
             }
+
+            sendNotifications(treatment);
 
             TreatmentDetailModel saved = treatmentDetailRepository.save(treatment);
             return mapTreatmentDetailToDto(saved);
@@ -462,7 +468,7 @@ public class TreatmentDetailService {
 
             return reviews.map(executionReviewModel -> {
                 TreatmentDetailResponse response = treatmentDetailMapper.toDtoWithReviewerProfessor(executionReviewModel);
-
+                response.setIdStatus(executionReviewModel.getIdExecutionReview());
                 if(isToothTreatment(executionReviewModel.getTreatmentDetail())) {
                     addTeethList(response, executionReviewModel);
                 }
@@ -799,9 +805,9 @@ public class TreatmentDetailService {
         }
     }
 
-    private TreatmentStatusRequest buildExecutionStatusRequest(Long treatmentDetailId, TreatmentStatusUpdateRequest request) {
+    private TreatmentStatusRequest buildExecutionStatusRequest(ExecutionReviewModel executionReviewModel, TreatmentStatusUpdateRequest request) {
         return TreatmentStatusRequest.builder()
-                .treatmentDetailId(treatmentDetailId)
+                .treatmentDetailId(executionReviewModel.getTreatmentDetail().getIdTreatmentDetail())
                 .comment(request.getComments())
                 .status(request.getStatus())
                 .professorClinicalAreaId(null)

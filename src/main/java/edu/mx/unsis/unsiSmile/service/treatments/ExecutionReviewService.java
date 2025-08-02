@@ -70,6 +70,20 @@ public class ExecutionReviewService {
         }
     }
 
+    @Transactional
+    public void updateExecutionReviewStatus(ExecutionReviewModel model, TreatmentStatusRequest request) {
+        try {
+            model.setComment(request.getComment());
+            model.setStatus(request.getStatus());
+
+            executionReviewRepository.save(model);
+        } catch (Exception ex) {
+            log.warn(String.format(ResponseMessages.ERROR_UPDATING_TREATMENT_EXECUTION_STATUS, request.getTreatmentDetailId()));
+            throw new AppException(String.format(ResponseMessages.ERROR_UPDATING_TREATMENT_EXECUTION_STATUS, request.getTreatmentDetailId()),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Transactional(readOnly = true)
     public ExecutionReviewModel getExecutionReviewModelById(Long id) {
         try {
@@ -93,10 +107,10 @@ public class ExecutionReviewService {
         try {
             return executionReviewRepository.findTopByTreatmentDetail_IdTreatmentDetailOrderByIdExecutionReviewDesc(treatmentDetailId)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, treatmentDetailId),
+                            String.format(ResponseMessages.EXECUTION_STATUS_NOT_FOUND_BY_TREATMENT, treatmentDetailId),
                             HttpStatus.NOT_FOUND));
         } catch (AppException e) {
-            log.warn(String.format(ResponseMessages.TREATMENT_EXECUTION_STATUS_NOT_FOUND, treatmentDetailId));
+            log.warn(String.format(ResponseMessages.EXECUTION_STATUS_NOT_FOUND_BY_TREATMENT, treatmentDetailId));
             throw e;
         } catch (Exception ex) {
             log.error(String.format(ResponseMessages.FAILED_FETCH_TREATMENT_EXECUTION_STATUS, treatmentDetailId),

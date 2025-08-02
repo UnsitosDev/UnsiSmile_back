@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/unsismile/api/v1/treatment-details")
 @RequiredArgsConstructor
+@Validated
 public class TreatmentDetailController {
 
     private final TreatmentDetailService treatmentDetailService;
@@ -118,7 +120,7 @@ public class TreatmentDetailController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<TreatmentDetailResponse> statusTreatment(
             @PathVariable Long id,
-            @RequestBody TreatmentStatusUpdateRequest request) {
+            @Valid @RequestBody TreatmentStatusUpdateRequest request) {
 
         TreatmentDetailResponse response = treatmentDetailService.updateTreatmentStatus(id, request);
         return ResponseEntity.ok(response);
