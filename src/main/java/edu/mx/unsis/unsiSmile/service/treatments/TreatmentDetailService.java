@@ -731,6 +731,7 @@ public class TreatmentDetailService {
                 if(isToothTreatment(authorizedTreatmentModel.getTreatmentDetail())) {
                     addTeethList(response);
                 }
+                response.setIdStatus(authorizedTreatmentModel.getIdAuthorizedTreatment());
 
                 return response;
             });
