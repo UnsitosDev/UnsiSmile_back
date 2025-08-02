@@ -45,10 +45,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -608,29 +605,35 @@ public class TreatmentDetailService {
             List<TreatmentDetailToothModel> teeth = treatmentDetailToothService
                     .getTreatmentDetailTeethModelByTreatmentDetail(treatmentDetailModel.getIdTreatmentDetail());
 
+            // Obtener la autorización más reciente del tratamiento (una sola vez)
+            Optional<AuthorizedTreatmentModel> optionalAuth = authorizedTreatmentRepository
+                    .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
+                            treatmentDetailModel.getIdTreatmentDetail());
+
+            ReviewStatus authStatus = optionalAuth.map(AuthorizedTreatmentModel::getStatus).orElse(null);
+
             return teeth.stream().map(tooth -> {
-                // Crear respuesta base con profesor aprobador (siempre obligatorio)
-                TreatmentDetailResponse copy = authorizedTreatmentRepository
-                        .findTopByTreatmentDetail_IdTreatmentDetailOrderByIdAuthorizedTreatmentDesc(
-                                treatmentDetailModel.getIdTreatmentDetail())
-                        .map(treatmentDetailMapper::toDtoWithAuthorizingProfessor)
+                // Crear DTO con profesor autorizador si existe
+                TreatmentDetailResponse copy = optionalAuth
+                        .map(auth -> treatmentDetailMapper.toDtoWithAuthorizingProfessor(optionalAuth.get()))
                         .orElseGet(() -> treatmentDetailMapper.toDto(treatmentDetailModel));
 
-                // Asignar profesor revisor si el diente tiene ejecución
+                // Asignar profesor revisor si hay ejecución
                 if (tooth.getStatus() != null) {
                     executionReviewRepository.findById(tooth.getStatus().getIdExecutionReview())
                             .ifPresent(executionReview ->
                                     treatmentDetailMapper.setReviewerProfessor(copy, executionReview)
                             );
+                    copy.setStatus(tooth.getStatus().getStatus().name());
                 }
 
-                // Asignar el diente individual al response
+                // Asignar el diente individual
                 copy.setTeeth(List.of(treatmentDetailToothMapper.toDto(tooth)));
 
                 // Asignar el estado directamente desde el diente
-                copy.setStatus(tooth.getStatus() != null
-                        ? tooth.getStatus().getStatus().toString()
-                        : ReviewStatus.IN_PROGRESS.toString());
+                if ((ReviewStatus.APPROVED.equals(authStatus) && tooth.getStatus() == null)) {
+                    copy.setStatus(ReviewStatus.IN_PROGRESS.name());
+                }
 
                 return copy;
             }).collect(Collectors.toList());
@@ -746,11 +749,11 @@ public class TreatmentDetailService {
                     .orElseThrow(() -> new AppException(
                             ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, HttpStatus.NOT_FOUND));
 
-            ReviewStatus currentStatus = treatment.getStatus();
+            ReviewStatus newStatus = request.getStatus();
 
-            if (currentStatus != ReviewStatus.AWAITING_APPROVAL &&
-                    currentStatus != ReviewStatus.NOT_APPROVED) {
-                throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
+            if (newStatus != ReviewStatus.APPROVED &&
+                    newStatus != ReviewStatus.NOT_APPROVED) {
+                throw new AppException(ResponseMessages.INVALID_TREATMENT_DETAIL_STATUS_TO_APPROVE, HttpStatus.BAD_REQUEST);
             }
 
             AuthorizedTreatmentModel auth = authorizedTreatmentService
@@ -772,7 +775,7 @@ public class TreatmentDetailService {
             auth.setAuthorizedAt(LocalDateTime.now());
             authorizedTreatmentRepository.save(auth);
 
-            if (request.getStatus() == ReviewStatus.APPROVED) {
+            if (newStatus == ReviewStatus.APPROVED) {
                 treatment.setStatus(ReviewStatus.IN_PROGRESS);
 
                 TreatmentStatusRequest executionRequest = TreatmentStatusRequest.builder()

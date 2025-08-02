@@ -479,6 +479,7 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_TREATMENT_REPORT = "Error al obtener el reporte del tratamiento";
     public static final String END_DATE_MUST_BE_GREATER_THAN_START_DATE = "La fecha de inicio no puede ser mayor a la fecha de fin.";
     public static final String TREATMENT_DETAIL_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD = "No se encontró el detalle del tratamiento para la historia clinica del paciente con ID: %s";
+    public static final String INVALID_TREATMENT_DETAIL_STATUS_TO_APPROVE = "El estado del tratamiento no es válido. Solo se permiten los estados: APPROVED y NOT_APPROVED";
 
     public static final String START_DATE_REQUIRED_WHEN_END_DATE_PROVIDED = "La fecha de inicio es obligatoria cuando se proporciona una fecha de fin.";
     public static final String START_DATE_CANNOT_BE_AFTER_TODAY = "La fecha de inicio no puede ser posterior a la fecha de hoy.";
