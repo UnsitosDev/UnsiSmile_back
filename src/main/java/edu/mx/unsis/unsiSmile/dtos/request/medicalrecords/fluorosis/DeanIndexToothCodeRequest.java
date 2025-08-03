@@ -12,9 +12,9 @@ import java.util.List;
 @Builder
 public class DeanIndexToothCodeRequest {
 
-    @NotNull(message = ResponseMessages.NOT_NULL_TREATMENT_ID)
-    @Positive(message = ResponseMessages.POSITIVE_TREATMENT_ID)
-    private Long idTreatment;
+    @NotNull(message = ResponseMessages.NOT_NULL_PATIENT_MEDICAL_RECORD_ID)
+    @Positive(message = ResponseMessages.POSITIVE_ID_MESSAGE)
+    private Long idPatientMedicalRecord;
 
     @NotEmpty(message = ResponseMessages.NOT_EMPTY_TEETH_LIST)
     @Size(max = 6, message = ResponseMessages.TEETH_LIST_SIZE)

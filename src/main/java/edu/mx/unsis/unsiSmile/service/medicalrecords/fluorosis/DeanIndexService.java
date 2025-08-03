@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.DeanIndexToothCodeM
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.fluorosis.IDeanIndexRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.fluorosis.IDeanIndexToothCodeRepository;
-import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.service.patients.PatientMedicalRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class DeanIndexService {
 
     private final IDeanIndexRepository deanIndexRepository;
     private final IDeanIndexToothCodeRepository deanIndexTootCodeRepository;
-    private final ITreatmentDetailRepository treatmentDetailRepository;
+    private final PatientMedicalRecordService patientMedicalRecordService;
     private final DeanIndexMapper deanIndexMapper;
 
     @Transactional
@@ -37,10 +37,7 @@ public class DeanIndexService {
                 throw new AppException(ResponseMessages.REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
             }
 
-            treatmentDetailRepository.findById(request.getIdTreatment())
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, request.getIdTreatment()),
-                            HttpStatus.NOT_FOUND));
+            patientMedicalRecordService.findById(request.getIdPatientMedicalRecord());
 
             DeanIndexModel deanIndex = deanIndexMapper.toEntity(request);
             DeanIndexModel savedSohi = deanIndexRepository.save(deanIndex);
@@ -71,15 +68,15 @@ public class DeanIndexService {
     }
 
     @Transactional(readOnly = true)
-    public DeanIndexToothCodeResponse getByTreatmentId(Long idTreatment) {
+    public DeanIndexToothCodeResponse getByPatientMedicalRecordId(Long idPatientMedicalRecord) {
         try {
-            if (idTreatment == null || idTreatment <= 0) {
+            if (idPatientMedicalRecord == null || idPatientMedicalRecord <= 0) {
                 throw new AppException(ResponseMessages.INVALID_PATIENT_MEDICAL_RECORD_ID, HttpStatus.BAD_REQUEST);
             }
 
-            DeanIndexModel deanIndex = deanIndexRepository.findByTreatmentDetail_IdTreatmentDetail(idTreatment)
+            DeanIndexModel deanIndex = deanIndexRepository.findByPatientMedicalRecord_IdPatientMedicalRecord(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.DEAN_INDEX_NOT_FOUND_FOR_TREATMENT, idTreatment),
+                            String.format(ResponseMessages.DEAN_INDEX_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD, idPatientMedicalRecord),
                             HttpStatus.NOT_FOUND));
 
             List<DeanIndexToothCodeResponse.DeanIndexToothCodeResp> teeth = deanIndexTootCodeRepository.findByDeanIndex(deanIndex)
@@ -93,7 +90,7 @@ public class DeanIndexService {
 
             return DeanIndexToothCodeResponse.builder()
                     .id(deanIndex.getIdDeanIndex())
-                    .idTreatment(deanIndex.getTreatmentDetail().getIdTreatmentDetail())
+                    .idPatientMedicalRecord(deanIndex.getPatientMedicalRecord().getIdPatientMedicalRecord())
                     .teeth(teeth)
                     .build();
         } catch (AppException e) {

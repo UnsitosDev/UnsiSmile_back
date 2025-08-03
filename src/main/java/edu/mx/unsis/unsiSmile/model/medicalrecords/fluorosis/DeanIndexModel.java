@@ -1,6 +1,6 @@
 package edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis;
 
-import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +22,8 @@ public class DeanIndexModel extends AuditModel {
     private Long idDeanIndex;
 
     @OneToOne
-    @JoinColumn(name = "fk_treatment_detail", referencedColumnName = "id_treatment_detail", nullable = false)
-    private TreatmentDetailModel treatmentDetail;
+    @JoinColumn(name = "fk_patient_medical_record", referencedColumnName = "id_patient_medical_record")
+    private PatientMedicalRecordModel patientMedicalRecord;
 
     @OneToMany(mappedBy = "deanIndex", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<DeanIndexToothCodeModel> toothCodes;

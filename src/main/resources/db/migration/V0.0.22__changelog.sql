@@ -1,12 +1,12 @@
 CREATE TABLE dean_index (
                       id_dean_index BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
-                      fk_treatment_detail BIGINT(20) NOT NULL,
+                      fk_patient_medical_record BIGINT(20) NOT NULL,
                       created_at DATETIME(6) DEFAULT NULL,
                       created_by VARCHAR(255) DEFAULT NULL,
                       status_key VARCHAR(255) DEFAULT NULL,
                       updated_at DATETIME(6) DEFAULT NULL,
                       updated_by VARCHAR(255) DEFAULT NULL,
-                      FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details (id_treatment_detail)
+                      FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records(id_patient_medical_record)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE dean_index_tooth_code (

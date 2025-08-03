@@ -21,8 +21,8 @@ public interface IFluorosisRepository extends JpaRepository<FluorosisModel, Long
     @Query("SELECT ftfca FROM FluorosisToothfaceConditionsAssignmentModel ftfca WHERE ftfca.fluorosis.idFluorosis = :fluorosisId")
     List<FluorosisToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByFluorosisId(Long fluorosisId);
 
-    Optional<FluorosisModel> findByTreatmentDetail_IdTreatmentDetail(Long idTreatment);
+    Optional<FluorosisModel> findByPatientMedicalRecord_IdPatientMedicalRecord(Long patientMedicalRecordId);
 
-    @Query("SELECT f FROM FluorosisModel f WHERE f.treatmentDetail.patientMedicalRecord.patient.idPatient = :patientId ORDER BY f.createdAt DESC")
+    @Query("SELECT f FROM FluorosisModel f WHERE f.patientMedicalRecord.patient.idPatient = :patientId ORDER BY f.createdAt DESC")
     Page<FluorosisModel> findByPatientId(String patientId, Pageable pageable);
 }
