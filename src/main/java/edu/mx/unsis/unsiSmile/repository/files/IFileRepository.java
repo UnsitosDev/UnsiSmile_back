@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface IFileRepository extends JpaRepository<FileModel, String> {
 
-    @Query("SELECT f FROM FileModel f WHERE f.answer.idAnswer = :answerId")
+    @Query("SELECT f FROM FileModel f WHERE f.answer.idAnswer = :answerId ORDER BY f.createdAt DESC")
     List<FileModel> findAllByAnswerId(@Param("answerId") Long answerId);
 }
