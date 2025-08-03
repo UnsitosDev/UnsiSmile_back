@@ -4,7 +4,7 @@ import edu.mx.unsis.unsiSmile.dtos.request.medicalrecords.fluorosis.DeanIndexToo
 import edu.mx.unsis.unsiSmile.dtos.response.medicalrecords.fluorosis.DeanIndexToothCodeResponse;
 import edu.mx.unsis.unsiSmile.mappers.BaseMapper;
 import edu.mx.unsis.unsiSmile.model.medicalrecords.fluorosis.DeanIndexModel;
-import edu.mx.unsis.unsiSmile.model.treatments.TreatmentDetailModel;
+import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -17,8 +17,8 @@ public class DeanIndexMapper implements BaseMapper<DeanIndexToothCodeResponse, D
     @Override
     public DeanIndexModel toEntity(DeanIndexToothCodeRequest dto) {
         return DeanIndexModel.builder()
-                .treatmentDetail(TreatmentDetailModel.builder()
-                        .idTreatmentDetail(dto.getIdTreatment())
+                .patientMedicalRecord(PatientMedicalRecordModel.builder()
+                        .idPatientMedicalRecord(dto.getIdPatientMedicalRecord())
                         .build())
                 .build();
     }
@@ -27,7 +27,7 @@ public class DeanIndexMapper implements BaseMapper<DeanIndexToothCodeResponse, D
     public DeanIndexToothCodeResponse toDto(DeanIndexModel entity) {
         return DeanIndexToothCodeResponse.builder()
                 .id(entity.getIdDeanIndex())
-                .idTreatment(entity.getTreatmentDetail().getIdTreatmentDetail())
+                .idPatientMedicalRecord(entity.getPatientMedicalRecord().getIdPatientMedicalRecord())
                 .teeth(Collections.emptyList())
                 .build();
     }

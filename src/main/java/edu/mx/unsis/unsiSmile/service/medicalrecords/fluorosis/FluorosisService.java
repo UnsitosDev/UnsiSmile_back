@@ -87,10 +87,12 @@ public class FluorosisService {
     }
 
     @Transactional(readOnly = true)
-    public FluorosisResponse getFluorosisByTreatmentId(Long idTreatment) {
+    public FluorosisResponse getFluorosisByPatientMedicalRecordId(Long idPatientMedicalRecord) {
         try {
-            FluorosisModel fluorosisModel = fluorosisRepository.findByTreatmentDetail_IdTreatmentDetail(idTreatment)
-                    .orElseThrow(() -> new AppException(ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + idTreatment, HttpStatus.NOT_FOUND));
+            FluorosisModel fluorosisModel = fluorosisRepository.findByPatientMedicalRecord_IdPatientMedicalRecord(idPatientMedicalRecord)
+                    .orElseThrow(() -> new AppException(
+                            ResponseMessages.FLUOROSIS_NOT_FOUND_BY_SECTION + idPatientMedicalRecord,
+                            HttpStatus.NOT_FOUND));
 
             Long fluorosisId = fluorosisModel.getIdFluorosis();
 
@@ -104,7 +106,7 @@ public class FluorosisService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_FLUOROSIS_BY_SECTION, idTreatment),
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_FLUOROSIS_BY_SECTION, idPatientMedicalRecord),
                     HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }

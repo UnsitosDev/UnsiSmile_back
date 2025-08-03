@@ -50,10 +50,10 @@ public class FluorosisController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Obtener un registro de fluorosis por id del tratamiento")
-    @GetMapping("/treatments/{idTreatment}")
-    public ResponseEntity<FluorosisResponse> getFluorosisByTreatmentId(@PathVariable Long idTreatment) {
-        FluorosisResponse fluorosisResponse = fluorosisService.getFluorosisByTreatmentId(idTreatment);
+    @Operation(summary = "Obtener un registro de fluorosis por id de la historia clínica del paciente")
+    @GetMapping("/medical-records/{idPatientMedicalRecord}")
+    public ResponseEntity<FluorosisResponse> getFluorosisByPatientMedicalRecordId(@PathVariable Long idPatientMedicalRecord) {
+        FluorosisResponse fluorosisResponse = fluorosisService.getFluorosisByPatientMedicalRecordId(idPatientMedicalRecord);
         return ResponseEntity.ok(fluorosisResponse);
     }
 
@@ -81,10 +81,10 @@ public class FluorosisController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Obtiene un registro de índice de dean por ID de tratamiento.")
-    @GetMapping("/dean-index/treatment/{id}")
-    public ResponseEntity<DeanIndexToothCodeResponse> getByTreatmentId(@PathVariable("id") Long idTreatment) {
-        DeanIndexToothCodeResponse response = deanIndexService.getByTreatmentId(idTreatment);
+    @Operation(summary = "Obtiene un registro de índice de dean por ID de la historia clínica del paciente.")
+    @GetMapping("/dean-index/medical-records/{idPatientMedicalRecord}")
+    public ResponseEntity<DeanIndexToothCodeResponse> getByPatientMedicalRecordId(@PathVariable("idPatientMedicalRecord") Long idPatientMedicalRecord) {
+        DeanIndexToothCodeResponse response = deanIndexService.getByPatientMedicalRecordId(idPatientMedicalRecord);
         return ResponseEntity.ok(response);
     }
 }

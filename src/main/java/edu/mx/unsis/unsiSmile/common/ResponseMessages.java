@@ -340,7 +340,7 @@ public class ResponseMessages {
     public static final String NOT_NULL_CODE_VALUE = "El valor del código no puede ser nulo";
     public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
     public static final String MAX_CODE_VALUE = "El valor máximo permitido es 4";
-    public static final String INVALID_PATIENT_MEDICAL_RECORD_ID = "El ID del tratamiento no es válido";
+    public static final String INVALID_PATIENT_MEDICAL_RECORD_ID = "El ID de ls hidtoria clínica del paciente no es válido";
 
     //SOHI SERVICE
     public static final String ERROR_CREATING_SOHI = "Error al crear el índice de higiene oral simplificado";
@@ -533,7 +533,7 @@ public class ResponseMessages {
     //Dean index
     public static final String ERROR_CREATING_DEAN_INDEX = "Error al crear el índice de dean";
     public static final String ERROR_FETCHING_DEAN_INDEX = "Error al obtener el índice de dean";
-    public static final String DEAN_INDEX_NOT_FOUND_FOR_TREATMENT = "Índice de dean no encontrado para el tratamiento con ID: %s";
+    public static final String DEAN_INDEX_NOT_FOUND_FOR_PATIENT_MEDICAL_RECORD = "Índice de dean no encontrado para la historia clínica con ID: %s";
 
     // Emails
     public static final String EMAIL_SEND_ERROR = "Error al enviar el correo";
