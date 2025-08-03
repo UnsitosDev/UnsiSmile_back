@@ -14,15 +14,18 @@ import edu.mx.unsis.unsiSmile.dtos.response.users.UserBaseResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.administrators.AdministratorMapper;
+import edu.mx.unsis.unsiSmile.mappers.administrators.MedicalAdministratorMapper;
 import edu.mx.unsis.unsiSmile.mappers.professors.ProfessorMapper;
 import edu.mx.unsis.unsiSmile.mappers.students.StudentMapper;
 import edu.mx.unsis.unsiSmile.mappers.users.*;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
+import edu.mx.unsis.unsiSmile.model.administrators.MedicalAdministratorModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.model.files.ProfilePictureModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.repository.administrators.IAdministratorRepository;
+import edu.mx.unsis.unsiSmile.repository.administrators.IMedicalAdministratorRepository;
 import edu.mx.unsis.unsiSmile.repository.digitizers.IMedicalRecordDigitizerRepository;
 import edu.mx.unsis.unsiSmile.repository.files.IProfilePictureRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -70,6 +73,8 @@ public class UserService {
     private static final List<String> ALLOWED_FILE_TYPES = Arrays.asList("image/jpeg", "image/png", "image/jpg");
     private final ProfessorMapper professorMapper;
     private final IMedicalRecordDigitizerRepository medicalRecordDigitizerRepository;
+    private final MedicalAdministratorMapper medicalAdministratorMapper;
+    private final IMedicalAdministratorRepository medicalAdministratorRepository;
 
     @Transactional
     public UserModel createUser(RegisterRequest request) {
@@ -176,6 +181,11 @@ public class UserService {
             return switch (role) {
                 case ERole.ROLE_ADMIN -> ResponseEntity
                         .ok(administratorMapper.toDto(administratorRepository.findById(user.getUsername())
+                                .orElseThrow(() -> new AppException(
+                                        ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
+                                        HttpStatus.NOT_FOUND))));
+                case ERole.ROLE_MEDICAL_ADMIN -> ResponseEntity
+                        .ok(medicalAdministratorMapper.toDto(medicalAdministratorRepository.findById(user.getUsername())
                                 .orElseThrow(() -> new AppException(
                                         ResponseMessages.USER_NOT_FOUND + " with enrollment: " + user.getUsername(),
                                         HttpStatus.NOT_FOUND))));
@@ -352,37 +362,45 @@ public class UserService {
                     .orElseThrow(() -> new AppException(ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                             HttpStatus.NOT_FOUND));
 
-            switch (userModel.getRole().getRole()) {
-                case ROLE_ADMIN:
+            return switch (userModel.getRole().getRole()) {
+                case ROLE_ADMIN -> {
                     AdministratorModel admin = administratorRepository.findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-
-                    return new AdministratorResponseBuilder().build(admin);
-                case ROLE_PROFESSOR:
+                    yield new AdministratorResponseBuilder().build(admin);
+                }
+                case ROLE_MEDICAL_ADMIN -> {
+                    MedicalAdministratorModel medicalAdmin = medicalAdministratorRepository.findByUser(userModel)
+                            .orElseThrow(() -> new AppException(
+                                    ResponseMessages.USER_NOT_FOUND + " with username: " + username,
+                                    HttpStatus.NOT_FOUND));
+                    yield new MedicalAdministratorResponseBuilder().build(medicalAdmin);
+                }
+                case ROLE_PROFESSOR -> {
                     ProfessorModel professor = professorRepository.findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-                    return new ProfessorResponseBuilder().build(professor);
-                case ROLE_STUDENT:
+                    yield new ProfessorResponseBuilder().build(professor);
+                }
+                case ROLE_STUDENT -> {
                     StudentModel student = studentRepository.findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-
-                    return new StudentResponseBuilder().build(student);
-                case ROLE_MEDICAL_RECORD_DIGITIZER:
+                    yield new StudentResponseBuilder().build(student);
+                }
+                case ROLE_MEDICAL_RECORD_DIGITIZER -> {
                     MedicalRecordDigitizerModel digitizer = medicalRecordDigitizerRepository
                             .findByUser(userModel)
                             .orElseThrow(() -> new AppException(
                                     ResponseMessages.USER_NOT_FOUND + " with username: " + username,
                                     HttpStatus.NOT_FOUND));
-                    return new DigitizerResponseBuilder().build(digitizer);
-                default:
-                    return new BaseUserResponseBuilder().build(userModel);
-            }
+                    yield new DigitizerResponseBuilder().build(digitizer);
+                }
+                default -> new BaseUserResponseBuilder().build(userModel);
+            };
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }

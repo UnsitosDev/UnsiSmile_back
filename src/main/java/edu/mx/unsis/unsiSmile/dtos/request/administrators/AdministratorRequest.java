@@ -1,7 +1,6 @@
 package edu.mx.unsis.unsiSmile.dtos.request.administrators;
 
 import edu.mx.unsis.unsiSmile.dtos.request.people.PersonRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,4 @@ public class AdministratorRequest {
 
     @NotNull(message = "The person field cannot be null")
     private PersonRequest person;
-
-    private UserRequest user;
 }

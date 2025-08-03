@@ -153,11 +153,16 @@ public class AdministratorService {
     @Transactional
     public void deleteAdministratorByEmployeeNumber(@NonNull String employeeNumber) {
         try {
-            if (!administratorRepository.existsById(employeeNumber)) {
-                throw new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
-                        HttpStatus.NOT_FOUND);
-            }
-            administratorRepository.deleteById(employeeNumber);
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
+                    .orElseThrow(() -> new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
+                            HttpStatus.NOT_FOUND));
+            administratorModel.setStatusKey(Constants.DELETED);
+
+            UserModel userModel = administratorModel.getUser();
+            userModel.setStatus(!userModel.isStatus());
+
+            userRepository.save(userModel);
+            administratorRepository.save(administratorModel);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {

@@ -258,7 +258,6 @@ public class ResponseMessages {
 
     // public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no
     // encontrado con el número de empleado: ";
-    public static final String ERROR_CREATING_ADMINISTRATOR = "Error al crear el administrador.";
     public static final String ERROR_UPDATING_ADMINISTRATOR = "Error al actualizar el administrador.";
     public static final String FAILED_CREATE_ADMINISTRATOR = "Error al crear el administrador";
     public static final String ADMINISTRATOR_NOT_FOUND = "Administrador no encontrado con número de empleado: %s";
@@ -267,6 +266,8 @@ public class ResponseMessages {
     public static final String FAILED_FETCH_ADMINISTRATORS = "Error al obtener la lista de administradores";
     public static final String FAILED_DELETE_ADMINISTRATOR = "Error al eliminar el administrador";
     public static final String FAILED_UPDATE_ADMINISTRATOR_STATUS = "Error al actualizar el estado del administrador";
+    public static final String ERROR_ADMINISTRATOR_DELETED = "El administrador fue eliminado";
+    public static final String ERROR_ADMINISTRATOR_INACTIVE = "El administrador se encuentra inactivo.";
 
     public static final String EMPLOYEE_NUMBER_NULL = "El campo número de empleado no puede estar vacío";
     public static final String EMPLOYEE_NUMBER_INVALID = "El número de empleado debe contener solo dígitos y tener entre 4 y 6 caracteres";
