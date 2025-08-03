@@ -17,5 +17,5 @@ public class FileResponse {
     private String fileName;
     private String filePath;
     private String fileType;
-    private LocalDateTime createdAt;
+    private LocalDateTime creationDate;
 }
