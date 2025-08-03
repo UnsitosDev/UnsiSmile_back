@@ -11,7 +11,7 @@ import edu.mx.unsis.unsiSmile.model.medicalrecords.dentalprophylaxis.SOHIToothCo
 import edu.mx.unsis.unsiSmile.model.medicalrecords.teeth.ToothModel;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.ISOHIRepository;
 import edu.mx.unsis.unsiSmile.repository.medicalrecords.dentalprophylaxis.ISOHITootCodeRepository;
-import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.service.patients.PatientMedicalRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class SOHIService {
 
     private final ISOHIRepository sohiRepository;
     private final ISOHITootCodeRepository sohiTootCodeRepository;
-    private final ITreatmentDetailRepository treatmentDetailRepository;
+    private final PatientMedicalRecordService patientMedicalRecordService;
     private final SOHIMapper sohiMapper;
 
     @Transactional
@@ -37,10 +37,7 @@ public class SOHIService {
                 throw new AppException(ResponseMessages.REQUEST_CANNOT_BE_NULL, HttpStatus.BAD_REQUEST);
             }
 
-            treatmentDetailRepository.findById(request.getIdTreatment())
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, request.getIdTreatment()),
-                            HttpStatus.NOT_FOUND));
+            patientMedicalRecordService.findById(request.getIdPatientMedicalRecord());
 
             SOHIModel sohi = sohiMapper.toEntity(request);
             SOHIModel savedSohi = sohiRepository.save(sohi);
@@ -71,15 +68,15 @@ public class SOHIService {
     }
 
     @Transactional(readOnly = true)
-    public ToothCodeResponse getByTreatmentId(Long idTreatment) {
+    public ToothCodeResponse getByPatientMedicalRecordId(Long idPatientMedicalRecord) {
         try {
-            if (idTreatment == null || idTreatment <= 0) {
-                throw new AppException(ResponseMessages.INVALID_TREATMENT_ID, HttpStatus.BAD_REQUEST);
+            if (idPatientMedicalRecord == null || idPatientMedicalRecord <= 0) {
+                throw new AppException(ResponseMessages.INVALID_PATIENT_MEDICAL_RECORD_ID, HttpStatus.BAD_REQUEST);
             }
 
-            SOHIModel sohi = sohiRepository.findByTreatmentDetail_IdTreatmentDetail(idTreatment)
+            SOHIModel sohi = sohiRepository.findByPatientMedicalRecord_IdPatientMedicalRecord(idPatientMedicalRecord)
                     .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.SOHI_NOT_FOUND_FOR_TREATMENT, idTreatment),
+                            String.format(ResponseMessages.SOHI_NOT_FOUND_FOR_MEDICAL_RECORD, idPatientMedicalRecord),
                             HttpStatus.NOT_FOUND));
 
             List<ToothCodeResponse.ToothResp> teeth = sohiTootCodeRepository.findBySohi(sohi)
@@ -93,7 +90,7 @@ public class SOHIService {
 
             return ToothCodeResponse.builder()
                     .id(sohi.getIdSohi())
-                    .idTreatment(sohi.getTreatmentDetail().getIdTreatmentDetail())
+                    .idPatientMedicalRecord(sohi.getPatientMedicalRecord().getIdPatientMedicalRecord())
                     .teeth(teeth)
                     .build();
         } catch (AppException e) {

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ToothCodeResponse {
     private Long id;
-    private Long idTreatment;
+    private Long idPatientMedicalRecord;
     private List<ToothResp> teeth;
 
     @Data

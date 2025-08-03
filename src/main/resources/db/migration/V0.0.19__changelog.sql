@@ -11,14 +11,14 @@ values ("Marcado");
 -- Profilaxis dental
 CREATE TABLE dental_prophylaxis (
     id_dental_prophylaxis BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fk_treatment_detail BIGINT(20) NOT NULL,
+    fk_patient_medical_record BIGINT(20) NOT NULL,
     percentage DECIMAL(5, 2) NOT NULL,
     created_at DATETIME(6) DEFAULT NULL,
     created_by VARCHAR(255) DEFAULT NULL,
     status_key VARCHAR(255) DEFAULT NULL,
     updated_at DATETIME(6) DEFAULT NULL,
     updated_by VARCHAR(255) DEFAULT NULL,
-    FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details (id_treatment_detail)
+    FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records(id_patient_medical_record)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE prophylaxis_tooth_condition_assignments (
@@ -82,13 +82,13 @@ VALUES
 
 CREATE TABLE sohi (
                       id_sohi BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
-                      fk_treatment_detail BIGINT(20) NOT NULL,
+                      fk_patient_medical_record BIGINT(20) NOT NULL,
                       created_at DATETIME(6) DEFAULT NULL,
                       created_by VARCHAR(255) DEFAULT NULL,
                       status_key VARCHAR(255) DEFAULT NULL,
                       updated_at DATETIME(6) DEFAULT NULL,
                       updated_by VARCHAR(255) DEFAULT NULL,
-                      FOREIGN KEY (fk_treatment_detail) REFERENCES treatment_details (id_treatment_detail)
+                      FOREIGN KEY (fk_patient_medical_record) REFERENCES patient_medical_records(id_patient_medical_record)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE sohi_tooth_code (

@@ -21,9 +21,9 @@ public interface IDentalProphylaxisRepository extends JpaRepository<DentalProphy
     @Query("SELECT ptfca FROM ProphylaxisToothfaceConditionsAssignmentModel ptfca WHERE ptfca.dentalProphylaxis.idDentalProphylaxis = :prophylaxisId")
     List<ProphylaxisToothfaceConditionsAssignmentModel> findToothFaceConditionsAssignmentByProphylaxisId(Long prophylaxisId);
 
-    @Query("SELECT dp FROM DentalProphylaxisModel dp WHERE dp.treatmentDetail.idTreatmentDetail = :treatmentId ORDER BY dp.createdAt DESC")
-    Page<DentalProphylaxisModel> findByTreatmentId(@Param("treatmentId") Long treatmentId, Pageable pageable);
+    @Query("SELECT dp FROM DentalProphylaxisModel dp WHERE dp.patientMedicalRecord.idPatientMedicalRecord = :patientMedicalRecordId ORDER BY dp.createdAt DESC")
+    Page<DentalProphylaxisModel> findByPatientMedicalRecordId(@Param("patientMedicalRecordId") Long patientMedicalRecordId, Pageable pageable);
 
-    @Query("SELECT dp FROM DentalProphylaxisModel dp WHERE dp.treatmentDetail.patientMedicalRecord.patient.idPatient = :patientId ORDER BY dp.createdAt DESC")
+    @Query("SELECT dp FROM DentalProphylaxisModel dp WHERE dp.patientMedicalRecord.patient.idPatient = :patientId ORDER BY dp.createdAt DESC")
     Page<DentalProphylaxisModel> findByPatientId(String patientId, Pageable pageable);
 }

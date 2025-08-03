@@ -74,7 +74,7 @@ public class DeanIndexService {
     public DeanIndexToothCodeResponse getByTreatmentId(Long idTreatment) {
         try {
             if (idTreatment == null || idTreatment <= 0) {
-                throw new AppException(ResponseMessages.INVALID_TREATMENT_ID, HttpStatus.BAD_REQUEST);
+                throw new AppException(ResponseMessages.INVALID_PATIENT_MEDICAL_RECORD_ID, HttpStatus.BAD_REQUEST);
             }
 
             DeanIndexModel deanIndex = deanIndexRepository.findByTreatmentDetail_IdTreatmentDetail(idTreatment)
