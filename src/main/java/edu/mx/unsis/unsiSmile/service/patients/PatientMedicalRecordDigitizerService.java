@@ -101,7 +101,7 @@ public class PatientMedicalRecordDigitizerService {
             // Armar la página de MedicalRecordResponse
             Page<MedicalRecordListResponse.MedicalRecordResponse> medicalRecordsPage = patientMedicalRecords.map(medicalRecord -> {
                 MedicalRecordListResponse.MedicalRecordResponse recordResponse = MedicalRecordListResponse.MedicalRecordResponse.builder()
-                        .id(medicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
+                        .idMedicalRecord(medicalRecord.getMedicalRecordCatalog().getIdMedicalRecordCatalog())
                         .medicalRecordName(medicalRecord.getMedicalRecordCatalog().getMedicalRecordName())
                         .patientMedicalRecordId(medicalRecord.getIdPatientMedicalRecord())
                         .appointmentDate(medicalRecord.getAppointmentDate().toLocalDate())

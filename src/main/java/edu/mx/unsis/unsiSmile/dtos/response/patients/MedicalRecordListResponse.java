@@ -32,7 +32,7 @@ public class MedicalRecordListResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MedicalRecordResponse {
-        private Long id;
+        private Long idMedicalRecord;
         private String medicalRecordName;
         @Builder.Default
         private Long patientMedicalRecordId = 0L;
