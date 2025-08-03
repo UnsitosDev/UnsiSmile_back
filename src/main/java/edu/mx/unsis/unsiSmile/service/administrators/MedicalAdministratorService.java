@@ -62,7 +62,8 @@ public class MedicalAdministratorService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_CREATE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);        }
+            throw new AppException(ResponseMessages.FAILED_CREATE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 
     @Transactional(readOnly = true)
