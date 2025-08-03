@@ -38,6 +38,7 @@ public class FileMapper implements BaseMapper<FileResponse, FileRequest, FileMod
                 .fileName(entity.getFileName())
                 .filePath(appConstants.getDownloadFilesUrl() + entity.getIdFile())
                 .fileType(entity.getFileType())
+                .createdAt(entity.getCreatedAt().toLocalDateTime())
                 .build();
     }
 
