@@ -47,10 +47,10 @@ public class DentalProphylaxisController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Obtener una lista paginada de profilaxis dental por tratamiento")
-    @GetMapping("/treatments/{idTreatment}")
-    public ResponseEntity<Page<DentalProphylaxisResponse>> getAllByTreatmentId(
-            @PathVariable Long idTreatment,
+    @Operation(summary = "Obtener una lista paginada de profilaxis dental por historia clínica del paciente.")
+    @GetMapping("/medical-records/{idPatientMedicalRecord}")
+    public ResponseEntity<Page<DentalProphylaxisResponse>> getAllByPatientMedicalRecordId(
+            @PathVariable Long idPatientMedicalRecord,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "false") boolean asc) {
@@ -59,7 +59,7 @@ public class DentalProphylaxisController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<DentalProphylaxisResponse> result = dentalProphylaxisService
-                .getDentalProphylaxisByTreatmentId(idTreatment, pageable);
+                .getDentalProphylaxisByPatientMedicalRecordId(idPatientMedicalRecord, pageable);
 
         return ResponseEntity.ok(result);
     }
@@ -88,10 +88,10 @@ public class DentalProphylaxisController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Obtiene un registro de índice de higiene oral simplificado por ID de tratamiento.")
-    @GetMapping("/sohi/treatment/{id}")
-    public ResponseEntity<ToothCodeResponse> getByTreatmentId(@PathVariable("id") Long idTreatment) {
-        ToothCodeResponse response = sohiService.getByTreatmentId(idTreatment);
+    @Operation(summary = "Obtiene un registro de índice de higiene oral simplificado por ID de la historia clínica del paciente.")
+    @GetMapping("/sohi/medical-records/{idPatientMedicalRecord}")
+    public ResponseEntity<ToothCodeResponse> getByPatientMedicalRecordId(@PathVariable("idPatientMedicalRecord") Long idPatientMedicalRecord) {
+        ToothCodeResponse response = sohiService.getByPatientMedicalRecordId(idPatientMedicalRecord);
         return ResponseEntity.ok(response);
     }
 }

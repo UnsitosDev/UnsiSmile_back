@@ -314,7 +314,7 @@ public class ResponseMessages {
     public static final String MEDICAL_RECORD_ID_CANNOT_BE_ZERO = "El ID de la historia clínica no puede ser cero";
     public static final String MEDICAL_RECORD_NOT_FOUND = "No se encontró historia clínica del tipo %s para el paciente con ID %s";
     public static final String ERROR_FETCHING_MEDICAL_RECORD = "Error al obtener la historia clínica por tipo y paciente";
-
+    public static final String NOT_NULL_PATIENT_MEDICAL_RECORD_ID = "El ID del paciente - historia clínica no puede ser nulo";
 
     public static final String CLINICAL_HISTORY_SENT_TO_REVIEW = "La historia clínica ha sido enviada a revisión";
     public static final String ERROR_PROCESSING_STATUS = "Error al procesar el estado de la historia clínica";
@@ -340,13 +340,13 @@ public class ResponseMessages {
     public static final String NOT_NULL_CODE_VALUE = "El valor del código no puede ser nulo";
     public static final String MIN_CODE_VALUE = "El valor mínimo permitido es 0";
     public static final String MAX_CODE_VALUE = "El valor máximo permitido es 4";
-    public static final String INVALID_TREATMENT_ID = "El ID del tratamiento no es válido";
+    public static final String INVALID_PATIENT_MEDICAL_RECORD_ID = "El ID del tratamiento no es válido";
 
     //SOHI SERVICE
     public static final String ERROR_CREATING_SOHI = "Error al crear el índice de higiene oral simplificado";
     public static final String ERROR_FETCHING_SOHI = "Error al obtener el índice de higiene oral simplificado";
     public static final String SOHI_NOT_FOUND = "Índice de higiene oral simplificado no encontrado con ID: %s";
-    public static final String SOHI_NOT_FOUND_FOR_TREATMENT = "Índice de higiene oral simplificado no encontrado para el tratamiento con ID: %s";
+    public static final String SOHI_NOT_FOUND_FOR_MEDICAL_RECORD = "Índice de higiene oral simplificado no encontrado para la historia clínica del paciente con ID: %s";
 
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS = "Error al obtener la profilaxis dental";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND = "No se encontró la profilaxis dental con ID: ";
@@ -354,7 +354,7 @@ public class ResponseMessages {
     public static final String DUPLICATE_ENTRY = "Entrada duplicada";
     public static final String DENTAL_PROPHYLAXIS_NOT_FOUND_BY_TREATMENT = "No se encontró la profilaxis dental con el ID de tratamiento: %s";
     public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT = "Error al obtener la profilaxis dental por ID de paciente";
-    public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_TREATMENT = "Error al obtener la profilaxis dental por ID de tratamiento: %s";
+    public static final String FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT_MEDICAL_RECORD = "Error al obtener la profilaxis dental por ID de la historia clínica del paciente: %s";
 
 
     public static final String INVALID_STATUS = "Estatus no válido: ";

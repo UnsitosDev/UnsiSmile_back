@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ISOHIRepository extends JpaRepository<SOHIModel, Long> {
 
-    Optional<SOHIModel> findByTreatmentDetail_IdTreatmentDetail(Long idTreatmentDetail);
+    Optional<SOHIModel> findByPatientMedicalRecord_IdPatientMedicalRecord(Long patientMedicalRecordId);
 }

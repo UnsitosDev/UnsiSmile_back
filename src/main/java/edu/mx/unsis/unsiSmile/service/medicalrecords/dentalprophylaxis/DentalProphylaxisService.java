@@ -89,16 +89,16 @@ public class DentalProphylaxisService {
     }
 
     @Transactional
-    public Page<DentalProphylaxisResponse> getDentalProphylaxisByTreatmentId(Long idTreatment, Pageable pageable) {
+    public Page<DentalProphylaxisResponse> getDentalProphylaxisByPatientMedicalRecordId(Long idPatientMedicalRecord, Pageable pageable) {
         try {
             Page<DentalProphylaxisModel> dentalProphylaxisPage =
-                    dentalProphylaxisRepository.findByTreatmentId(idTreatment, pageable);
+                    dentalProphylaxisRepository.findByPatientMedicalRecordId(idPatientMedicalRecord, pageable);
 
             return mapToDentalProphylaxisResponsePage(dentalProphylaxisPage);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_TREATMENT, idTreatment),
+            throw new AppException(String.format(ResponseMessages.FAILED_FETCH_DENTAL_PROPHYLAXIS_BY_PATIENT_MEDICAL_RECORD, idPatientMedicalRecord),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
