@@ -5,8 +5,8 @@ INSERT INTO
 VALUES
     ("PD-01", "Profilaxis Dental", false), -- tiene hijos
     ("F-01", "Fluorosis", false),
-    ("BSFF-01", "Barniz o selladores de fosetas y fisuras", true),
-    ("O-01", "Observaciones", true);-- tiene hijos
+    ("BSFF-01", "Barniz o selladores de fosetas y fisuras", false),
+    ("O-01", "Observaciones", false);-- tiene hijos
 
 
 INSERT INTO
