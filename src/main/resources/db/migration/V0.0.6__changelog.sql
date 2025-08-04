@@ -5,12 +5,13 @@ VALUES
     ("General"),
     ("Prótesis bucal"),
     ("Periodoncia"),
-    ("Operatoria dental"),
+    ("Operatoria dental previo"),
     ("Cirugía bucal"),
     ("Odontología preventiva y salud pública"),
     ("Endodoncia"),
     ("Pulpotomía"),
-    ("Pulpectomía");
+    ("Pulpectomía"),
+    ("Operatoria dental");
 
 -- secciones padre
 INSERT INTO form_sections

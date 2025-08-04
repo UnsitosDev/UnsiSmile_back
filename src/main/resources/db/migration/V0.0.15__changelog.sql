@@ -113,7 +113,7 @@ INSERT INTO treatment_scopes (name) VALUES
 -- Poblado de treatments
 INSERT INTO treatments (name, fk_treatment_scope, fk_medical_record_catalog) VALUES
 -- Operatoria dental
-('Resinas', 1, 4),  -- Órgano dentario, HC Operatoria dental
+('Resinas', 1, 10),  -- Órgano dentario, HC Operatoria dental
 
 -- Preventiva
 ('Profilaxis', 4, 6),          -- General, HC Preventiva

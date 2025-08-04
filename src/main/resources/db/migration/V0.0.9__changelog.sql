@@ -1,4 +1,4 @@
--- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
+-- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA ANTERIOR DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
     form_sections (id_form_section, form_name, requires_review)
 VALUES
@@ -37,4 +37,28 @@ values
     ("Diagnóstico", "ECBA-01",8, 3, true),
     ("Estudio de laboratorio y gabinete", "ECBA-01",8, 4, true),
     ("Indicaciones de interconsulta médica u odontológica", "ECBA-01",8, 5, true),
-    ("Evidencias visuales", "E-01", 6, 6, true);
+    ("Evidencias visuales", "E-01", 6, 6, true),
+    ("Carta de consentimiento informado para operatoria dental", "CCIOD-01", 7, 1, true);
+
+-- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
+INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("OD-01", "Operatoria dental", false);
+
+INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (10, "OD-01", 1);
+
+INSERT INTO questions (question_text, fk_form_section, fk_answer_type, question_order, required) VALUES ("Evidencias visuales", "OD-01", 6, 1, true);
+
+
+-- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE PULPOTOMÍA *-*-*-*-*-*-*-*-*-
+INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("P-02", "Pulpotomía", false);
+
+INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (8, "P-02", 1);
+
+INSERT INTO questions (question_text, fk_form_section, fk_answer_type, question_order, required) VALUES ("Evidencias visuales", "P-02", 6, 1, true);
+
+
+-- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE PULPECTOMÍA *-*-*-*-*-*-*-*-*-
+INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("P-03", "Pulpectomía", false);
+
+INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (9, "P-03", 1);
+
+INSERT INTO questions (question_text, fk_form_section, fk_answer_type, question_order, required) VALUES ("Evidencias visuales", "P-03", 6, 1, true);
