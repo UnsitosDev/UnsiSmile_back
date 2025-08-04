@@ -15,31 +15,31 @@ VALUES
 
 -- secciones padre
 INSERT INTO form_sections
-(id_form_section, form_name, requires_review)
+(id_form_section, form_name)
 VALUES
-    ("SV-01", "Signos vitales", false),
-    ("EF-01", "Exámen facial", false),
-    ("AH-01", "Antecedentes heredofamiliares", false),
-    ("APP-01", "Antecedentes personales no patológicos", false),
-    ("APP-02", "Antecedentes personales patológicos", false),
-    ("MBI-01", "Medición de bolsas inicial", false),
-    ("EC-01", "Exámen clínico", false),
-    ("AF-01", "Análisis funcional", false),
-    ("PP-01", "Postura del paciente", false),
-    ("EB-01", "Exámen bucal", false),
-    ("AR-01", "Análisis radiográfico", false),
-    ("MEF-01", "Modelos de estudio de fotografías", false),
-    ("ELB-01", "Estudio de laboratorio/biopsia", false),
-    ("IM-01", "Interconsulta médica", false),
-    ("CI-01", "Consentimiento informado", false),
-    ("NE-01", "Nota de evolución", false)
+    ("SV-01", "Signos vitales"),
+    ("EF-01", "Exámen facial"),
+    ("AH-01", "Antecedentes heredofamiliares"),
+    ("APP-01", "Antecedentes personales no patológicos"),
+    ("APP-02", "Antecedentes personales patológicos"),
+    ("MBI-01", "Medición de bolsas inicial"),
+    ("EC-01", "Exámen clínico"),
+    ("AF-01", "Análisis funcional"),
+    ("PP-01", "Postura del paciente"),
+    ("EB-01", "Exámen bucal"),
+    ("AR-01", "Análisis radiográfico"),
+    ("MEF-01", "Modelos de estudio de fotografías"),
+    ("ELB-01", "Estudio de laboratorio/biopsia"),
+    ("IM-01", "Interconsulta médica"),
+    ("CI-01", "Consentimiento informado"),
+    ("NE-01", "Nota de evolución")
 ;
 
 -- secciones hijas
 INSERT INTO form_sections
-(id_form_section, form_name, fk_parent_section, requires_review)
+(id_form_section, form_name, fk_parent_section)
 VALUES
-    ("CA-01", "Clasificación de angle", "EB-01", false)
+    ("CA-01", "Clasificación de angle", "EB-01")
 ;
 
 -- insert para las secciones de historia clínica general

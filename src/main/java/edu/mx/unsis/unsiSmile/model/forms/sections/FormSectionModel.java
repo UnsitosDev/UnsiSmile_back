@@ -20,10 +20,6 @@ public class FormSectionModel extends AuditModel {
     @Column(name = "form_name", nullable = false, length = 100)
     private String formName;
 
-    @Builder.Default
-    @Column(name = "requires_review")
-    private Boolean requiresReview = false;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_parent_section", referencedColumnName = "id_form_section")
     private FormSectionModel parentSection;

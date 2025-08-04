@@ -17,7 +17,6 @@ public class FormSectionMapper implements BaseMapper<FormSectionResponse, FormSe
     public FormSectionModel toEntity(FormSectionRequest dto) {
         return FormSectionModel.builder()
                 .formName(dto.getFormName())
-                .requiresReview(dto.getRequiresReview())
                 .parentSection(FormSectionModel.builder()
                         .idFormSection(dto.getIdParentSection())
                         .build())
@@ -29,7 +28,6 @@ public class FormSectionMapper implements BaseMapper<FormSectionResponse, FormSe
         return FormSectionResponse.builder()
                 .idFormSection(entity.getIdFormSection())
                 .formName(entity.getFormName())
-                .requiresReview(entity.getRequiresReview())
                 .subSections(Collections.emptyList())
                 .questions(Collections.emptyList())
                 .build();

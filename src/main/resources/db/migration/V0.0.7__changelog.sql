@@ -2,30 +2,30 @@
 -- ("BOOLEAN") 1, ("NUMERIC") 2, ("SHORT_TEXT") 3, ("CATALOG") 4, ("MULTIVALUED") 5, ("PHOTO") 6, ("FILE") 7, ("LONG_TEXT") 8, ("DATE") 9
 -- Secciones padre:
 INSERT INTO
-    form_sections (id_form_section, form_name, requires_review)
+    form_sections (id_form_section, form_name)
 VALUES
-    ("SV-02", "Signos vitales", false),
-    ("I-01", "Interrogatorio", false),
-    ("EP-01", "Examen parodontal", false),
-    ("ECB-01", "Exploración de la cavidad bucal", false),
-    ("EDP-01", "Exámen de dientes pilares", false),
-    ("ERDP-01", "Exámen radiográfico de dientes pilares", false), -- tiene hijos
-    ("EOD-01", "Exámen de organo dentario", false), -- tiene hijos
-    ("OPB-01", "Odontograma prótesis bucal", false),
-    ("PT-01", "Plan de tratamiento", false),
-    ("R-01", "Recibo", false),
-    ("AT-01", "Autorización de tratamiento", false),
-    ("EPPF-01", "Evaluación de prótesis parcial fija", false),
-    ("CCIPB-01", "Carta de consentimiento informado para prótesis bucal", false);
+    ("SV-02", "Signos vitales"),
+    ("I-01", "Interrogatorio"),
+    ("EP-01", "Examen parodontal"),
+    ("ECB-01", "Exploración de la cavidad bucal"),
+    ("EDP-01", "Exámen de dientes pilares"),
+    ("ERDP-01", "Exámen radiográfico de dientes pilares"), -- tiene hijos
+    ("EOD-01", "Exámen de organo dentario"), -- tiene hijos
+    ("OPB-01", "Odontograma prótesis bucal"),
+    ("PT-01", "Plan de tratamiento"),
+    ("R-01", "Recibo"),
+    ("AT-01", "Autorización de tratamiento"),
+    ("EPPF-01", "Evaluación de prótesis parcial fija"),
+    ("CCIPB-01", "Carta de consentimiento informado para prótesis bucal");
 
 INSERT INTO
-    form_sections (id_form_section, form_name, fk_parent_section, requires_review) -- 6 y 7
+    form_sections (id_form_section, form_name, fk_parent_section) -- 6 y 7
 VALUES
-    ("CP-01", "Cámara pulpar", "ERDP-01", false),
-    ("ZA-01", "Zona apical", "ERDP-01", false),
-    ("CR-01", "Conducto radicular", "ERDP-01", false),
-    ("NC-01", "Número de conductos", "EOD-01", false),
-    ("PCR-01", "Proporción corona-raíz", "EOD-01", false);
+    ("CP-01", "Cámara pulpar", "ERDP-01"),
+    ("ZA-01", "Zona apical", "ERDP-01"),
+    ("CR-01", "Conducto radicular", "ERDP-01"),
+    ("NC-01", "Número de conductos", "EOD-01"),
+    ("PCR-01", "Proporción corona-raíz", "EOD-01");
 
 INSERT INTO
     medical_record_sections (
@@ -187,11 +187,11 @@ VALUES
         14,
         false
     ),
-    (   
-        "¿Usa usted marca paso cardiaco?", 
+    (
+        "¿Usa usted marca paso cardiaco?",
         "I-01",
-        5, 
-        15, 
+        5,
+        15,
         false
     );
 

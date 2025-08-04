@@ -14,7 +14,6 @@ CREATE TABLE form_sections (
                                id_form_section VARCHAR(100) NOT NULL,
                                form_name VARCHAR(100) NOT NULL,
                                fk_parent_section VARCHAR(100) DEFAULT NULL,
-                               requires_review TINYINT(1) DEFAULT NULL,
                                created_at DATETIME(6) DEFAULT NULL,
                                created_by VARCHAR(255) DEFAULT NULL,
                                status_key VARCHAR(255) DEFAULT NULL,
