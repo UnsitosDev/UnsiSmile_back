@@ -1,11 +1,11 @@
 -- *-*-*-*-*-*-*-*-* (3) HISTORIA CLÍNICA DE PERIODONCIA *-*-*-*-*-*-*-*-*-
 
 INSERT INTO
-    form_sections (id_form_section, form_name, requires_review)
+    form_sections (id_form_section, form_name)
 VALUES
-    ("HEP-01", "Hoja de evaluación de periodoncia", false),
-    ("P-01", "Periodontograma", false),
-    ("CCIP-01", "Carta de concentimiento informado para periodoncia", false)
+    ("HEP-01", "Hoja de evaluación de periodoncia"),
+    ("P-01", "Periodontograma"),
+    ("CCIP-01", "Carta de concentimiento informado para periodoncia")
 ;
 
 INSERT INTO

@@ -15,7 +15,6 @@ public class FormSectionResponse {
     private String idFormSection;
     private String formName;
     private Boolean isAnswered;
-    private Boolean requiresReview;
     private List<FormSectionResponse> subSections;
     private List<QuestionResponse> questions;
     private Long sectionOrder;

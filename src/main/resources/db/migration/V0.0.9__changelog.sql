@@ -1,10 +1,10 @@
 -- *-*-*-*-*-*-*-*-* HISTORIA CLÍNICA ANTERIOR DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
 INSERT INTO
-    form_sections (id_form_section, form_name, requires_review)
+    form_sections (id_form_section, form_name)
 VALUES
-    ("ECBA-01", "Exploración de la cavidad bucal y anexos", false),
-    ("E-01", "Evidencias", false),
-    ("CCIOD-01", "Carta de consentimiento informado para operatoria dental", false);
+    ("ECBA-01", "Exploración de la cavidad bucal y anexos"),
+    ("E-01", "Evidencias"),
+    ("CCIOD-01", "Carta de consentimiento informado para operatoria dental");
 
 INSERT INTO
     medical_record_sections (
@@ -41,7 +41,7 @@ values
     ("Carta de consentimiento informado para operatoria dental", "CCIOD-01", 7, 1, true);
 
 -- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE OPERATORIA DENTAL *-*-*-*-*-*-*-*-*-
-INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("OD-01", "Operatoria dental", false);
+INSERT INTO form_sections (id_form_section, form_name) VALUES ("OD-01", "Operatoria dental");
 
 INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (10, "OD-01", 1);
 
@@ -49,7 +49,7 @@ INSERT INTO questions (question_text, fk_form_section, fk_answer_type, question_
 
 
 -- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE PULPOTOMÍA *-*-*-*-*-*-*-*-*-
-INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("P-02", "Pulpotomía", false);
+INSERT INTO form_sections (id_form_section, form_name) VALUES ("P-02", "Pulpotomía");
 
 INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (8, "P-02", 1);
 
@@ -57,7 +57,7 @@ INSERT INTO questions (question_text, fk_form_section, fk_answer_type, question_
 
 
 -- *-*-*-*-*-*-*-*-* NUEVA HISTORIA CLÍNICA DE PULPECTOMÍA *-*-*-*-*-*-*-*-*-
-INSERT INTO form_sections (id_form_section, form_name, requires_review) VALUES ("P-03", "Pulpectomía", false);
+INSERT INTO form_sections (id_form_section, form_name) VALUES ("P-03", "Pulpectomía");
 
 INSERT INTO medical_record_sections (fk_medical_record_catalog, fk_form_section, section_order) VALUES (9, "P-03", 1);
 
