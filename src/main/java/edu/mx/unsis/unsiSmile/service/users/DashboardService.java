@@ -11,7 +11,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.StudentDashboardRes
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
-import edu.mx.unsis.unsiSmile.repository.forms.sections.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -47,7 +46,6 @@ public class DashboardService {
     private final IStudentGroupRepository studentGroupRepository;
     private final IProfessorRepository professorRepository;
     private final UserService userService;
-    private final IReviewStatusRepository reviewStatusRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final IExecutionReviewRepository executionReviewRepository;
@@ -197,15 +195,6 @@ public class DashboardService {
                     )
                     .treatmentsCompleted(
                             executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.FINISHED, Constants.ACTIVE)
-                    )
-                    .medicalRecordsInReview(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
-                    )
-                    .medicalRecordsRejected(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
-                    )
-                    .medicalRecordsAccepted(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
                     )
                     .build();
         } catch (DataAccessException e) {

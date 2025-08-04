@@ -20,7 +20,6 @@ import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.treatments.*;
-import edu.mx.unsis.unsiSmile.repository.forms.sections.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
@@ -55,7 +54,6 @@ public class TreatmentDetailService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
-    private final IReviewStatusRepository reviewStatusRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientMedicalRecordService patientMedicalRecordService;
     private final TreatmentService treatmentService;
@@ -262,7 +260,7 @@ public class TreatmentDetailService {
                 return new PageImpl<>(Collections.emptyList(), pageable, 0);
             }
 
-            return new PageImpl<>(Collections.singletonList(treatments.get(0)), pageable, 1);
+            return new PageImpl<>(Collections.singletonList(treatments.getFirst()), pageable, 1);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -293,7 +291,7 @@ public class TreatmentDetailService {
     @Transactional
     public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId, TreatmentDetailToothRequest toothRequest) {
         try {
-            TreatmentDetailModel treatment = getValidTreatment(id, null);
+            TreatmentDetailModel treatment = getValidTreatment(id);
             boolean isTooth = isToothTreatment(treatment);
 
             // Validar estado general del tratamiento
@@ -311,17 +309,6 @@ public class TreatmentDetailService {
             // Lanzar error si no cumple con ninguna de las condiciones válidas
             if (!validGeneralStatus && !(isTooth && hasToothInValidStatus)) {
                 throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
-            }
-
-            // Validar si hay otra sección en revisión
-            boolean isSectionInReview = reviewStatusRepository
-                    .existsByPatientMedicalRecord_IdPatientMedicalRecordAndStatus(
-                            treatment.getPatientMedicalRecord().getIdPatientMedicalRecord(),
-                            ReviewStatus.IN_REVIEW);
-
-            if (isSectionInReview) {
-                throw new AppException(ResponseMessages.ERROR_SECTIONS_IN_REVIEW,
-                        HttpStatus.BAD_REQUEST);
             }
 
             // Obtener profesor y actualizar estado del tratamiento
@@ -436,18 +423,11 @@ public class TreatmentDetailService {
                 treatmentDetailMapper.toDto(treatment));
     }
 
-    private TreatmentDetailModel getValidTreatment(Long id, ReviewStatus requiredCurrentStatus) {
-        TreatmentDetailModel treatment = treatmentDetailRepository.findById(id)
+    private TreatmentDetailModel getValidTreatment(Long id) {
+        return treatmentDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(
                         String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                         HttpStatus.NOT_FOUND));
-
-        if (requiredCurrentStatus != null && !treatment.getStatus().equals(requiredCurrentStatus)) {
-            throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS_REVIEW,
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        return treatment;
     }
 
     @Transactional(readOnly = true)
