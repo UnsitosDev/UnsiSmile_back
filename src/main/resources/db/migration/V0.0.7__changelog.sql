@@ -14,7 +14,7 @@ VALUES
     ("OPB-01", "Odontograma prótesis bucal", false),
     ("PT-01", "Plan de tratamiento", false),
     ("R-01", "Recibo", false),
-    ("AT-01", "Autorización de tratamiento", true),
+    ("AT-01", "Autorización de tratamiento", false),
     ("EPPF-01", "Evaluación de prótesis parcial fija", false),
     ("CCIPB-01", "Carta de consentimiento informado para prótesis bucal", false);
 

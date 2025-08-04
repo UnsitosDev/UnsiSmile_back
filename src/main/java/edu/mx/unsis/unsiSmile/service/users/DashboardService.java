@@ -11,7 +11,6 @@ import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.StudentDashboardRes
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.model.enums.ReviewStatus;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorGroupModel;
-import edu.mx.unsis.unsiSmile.repository.forms.sections.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorGroupRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
@@ -21,6 +20,7 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.IAuthorizedTreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
@@ -47,10 +47,10 @@ public class DashboardService {
     private final IStudentGroupRepository studentGroupRepository;
     private final IProfessorRepository professorRepository;
     private final UserService userService;
-    private final IReviewStatusRepository reviewStatusRepository;
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final IExecutionReviewRepository executionReviewRepository;
+    private final StudentService studentService;
 
     @Transactional(readOnly = true)
     public StudentDashboardResponse getStudentDashboard() {
@@ -198,15 +198,6 @@ public class DashboardService {
                     .treatmentsCompleted(
                             executionReviewRepository.countByStatusAndProfessor(employeeNumber, ReviewStatus.FINISHED, Constants.ACTIVE)
                     )
-                    .medicalRecordsInReview(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.IN_REVIEW, Constants.ACTIVE)
-                    )
-                    .medicalRecordsRejected(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.REJECTED, Constants.ACTIVE)
-                    )
-                    .medicalRecordsAccepted(
-                            reviewStatusRepository.countByStatus(employeeNumber, ReviewStatus.APPROVED, Constants.ACTIVE)
-                    )
                     .build();
         } catch (DataAccessException e) {
             throw new AppException(ResponseMessages.ERROR_CLINICAL_SUPERVISOR_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -279,5 +270,17 @@ public class DashboardService {
         }
         Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
         return mapToTreatmentCountResponse(treatmentCounts);
+    }
+
+    @Transactional(readOnly = true)
+    public StudentDashboardResponse getStudentMetrics(String enrollment) {
+        try {
+            studentService.getStudentByEnrollment(enrollment);
+            return getStudentDashboardMetrics(enrollment);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

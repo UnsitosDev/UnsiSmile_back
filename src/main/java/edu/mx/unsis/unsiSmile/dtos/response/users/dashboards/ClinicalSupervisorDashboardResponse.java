@@ -20,8 +20,4 @@ public class ClinicalSupervisorDashboardResponse {
     private Long treatmentsRejected;
 
     private Long treatmentsCompleted;
-
-    private Long medicalRecordsInReview;
-    private Long medicalRecordsRejected;
-    private Long medicalRecordsAccepted;
 }

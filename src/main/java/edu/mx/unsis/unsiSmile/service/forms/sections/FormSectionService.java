@@ -9,7 +9,6 @@ import edu.mx.unsis.unsiSmile.exceptions.AppException;
 import edu.mx.unsis.unsiSmile.mappers.forms.sections.FormSectionMapper;
 import edu.mx.unsis.unsiSmile.model.forms.sections.FormSectionModel;
 import edu.mx.unsis.unsiSmile.model.forms.sections.MedicalRecordSectionModel;
-import edu.mx.unsis.unsiSmile.model.forms.sections.ReviewStatusModel;
 import edu.mx.unsis.unsiSmile.model.patients.PatientMedicalRecordModel;
 import edu.mx.unsis.unsiSmile.repository.forms.sections.IFormSectionRepository;
 import edu.mx.unsis.unsiSmile.repository.patients.IPatientMedicalRecordRepository;
@@ -31,7 +30,6 @@ public class FormSectionService {
     private final IPatientMedicalRecordRepository patientMedicalRecordRepository;
     private final FormSectionMapper formSectionMapper;
     private final QuestionService questionService;
-    private final ReviewStatusService reviewStatusService;
 
     @Transactional
     public void save(FormSectionRequest request) {
@@ -54,10 +52,7 @@ public class FormSectionService {
             FormSectionModel formSectionModel = findFormSectionById(id);
             PatientMedicalRecordModel patientMedicalRecordModel = findPatientMedicalRecordById(idPatientMedicalRecord);
 
-            FormSectionResponse response = buildFormSectionResponse(formSectionModel, patientMedicalRecordModel);
-            setStatusInResponse(response, formSectionModel, idPatientMedicalRecord, id);
-
-            return response;
+            return buildFormSectionResponse(formSectionModel, patientMedicalRecordModel);
         } catch (AppException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -86,15 +81,6 @@ public class FormSectionService {
         return this.toResponse(formSectionModel,
                 patientMedicalRecordModel.getPatient().getIdPatient(),
                 patientMedicalRecordModel.getIdPatientMedicalRecord());
-    }
-
-    private void setStatusInResponse(FormSectionResponse response, FormSectionModel formSectionModel,
-                                     Long idPatientMedicalRecord, String idFormSection) {
-        ReviewStatusModel status = formSectionModel.getRequiresReview()
-                ? reviewStatusService.getStatusModelByPatientMedicalRecordId(idPatientMedicalRecord, idFormSection)
-                : null;
-
-        response.setReviewStatus(reviewStatusService.buildStatusResponse(status, formSectionModel.getRequiresReview()));
     }
 
     @Transactional(readOnly = true)
@@ -169,15 +155,9 @@ public class FormSectionService {
         FormSectionResponse response = toResponse(sectionModel, patientId, patientMedicalRecordId);
         response.setSectionOrder(sectionOrder);
 
-        ReviewStatusModel status = sectionModel.getRequiresReview()
-                ? reviewStatusService.getStatusByPatientMedicalRecordIdAndSection(patientId, sectionModel.getIdFormSection())
-                : null;
-
-        response.setReviewStatus(reviewStatusService.buildStatusResponse(status, sectionModel.getRequiresReview()));
         return response;
     }
 
-    @Transactional(readOnly = true)
     public FormSectionResponse toResponse(FormSectionModel sectionModel, String patientId, Long patientMedicalRecordId) {
         FormSectionResponse formSectionResponse = formSectionMapper.toDto(sectionModel);
         List<QuestionResponse> questions = questionService.findAllBySection(sectionModel.getIdFormSection(),

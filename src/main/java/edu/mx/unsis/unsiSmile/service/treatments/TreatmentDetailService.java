@@ -20,7 +20,6 @@ import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentGroupModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
 import edu.mx.unsis.unsiSmile.model.treatments.*;
-import edu.mx.unsis.unsiSmile.repository.forms.sections.IReviewStatusRepository;
 import edu.mx.unsis.unsiSmile.repository.professors.IProfessorRepository;
 import edu.mx.unsis.unsiSmile.repository.students.ISemesterRepository;
 import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
@@ -55,7 +54,6 @@ public class TreatmentDetailService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IStudentRepository studentRepository;
     private final IProfessorRepository professorRepository;
-    private final IReviewStatusRepository reviewStatusRepository;
     private final TreatmentDetailMapper treatmentDetailMapper;
     private final PatientMedicalRecordService patientMedicalRecordService;
     private final TreatmentService treatmentService;
@@ -76,7 +74,7 @@ public class TreatmentDetailService {
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
         try {
-            validateRequestDependencies(request);
+            ProfessorClinicalAreaModel professorClinicalAreaModel = validateRequestDependencies(request);
 
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
 
@@ -87,7 +85,8 @@ public class TreatmentDetailService {
                         HttpStatus.BAD_REQUEST);
             }
 
-            TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse);
+            TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse,
+                    professorClinicalAreaModel.getProfessor());
 
             if (scope.equals(Constants.TOOTH)) {
                 TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
@@ -104,6 +103,9 @@ public class TreatmentDetailService {
                 addTeethList(response);
             }
 
+            // Enviar notificación
+            this.sendNotifications(savedModel);
+
             return response;
         } catch (AppException e) {
             throw e;
@@ -113,17 +115,17 @@ public class TreatmentDetailService {
         }
     }
 
-    private void validateRequestDependencies(TreatmentDetailRequest request) {
+    private ProfessorClinicalAreaModel validateRequestDependencies(TreatmentDetailRequest request) {
         if (request.getStartDate().isAfter(request.getEndDate())) {
             throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE,
                     HttpStatus.BAD_REQUEST);
         }
         patientService.getPatientById(request.getPatientId());
-        professorClinicalAreaService.getProfessorClinicalAreaById(request.getProfessorClinicalAreaId());
+        return professorClinicalAreaService.getProfessorClinicalAreaModel(request.getProfessorClinicalAreaId());
     }
 
     private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request,
-                                                     TreatmentResponse treatmentResponse) {
+                                                     TreatmentResponse treatmentResponse, ProfessorModel professor) {
         PatientMedicalRecordModel medicalRecord = patientMedicalRecordService.save(
                 request.getPatientId(),
                 treatmentResponse.getMedicalRecordCatalogId());
@@ -134,6 +136,7 @@ public class TreatmentDetailService {
         TreatmentDetailModel model = treatmentDetailMapper.toEntity(request);
         model.setPatientMedicalRecord(medicalRecord);
         model.setStudentGroup(studentGroup);
+        model.setProfessor(professor);
 
         return treatmentDetailRepository.save(model);
     }
@@ -187,7 +190,7 @@ public class TreatmentDetailService {
 
             TreatmentModel newTreatment = treatmentService.getTreatmentModelById(request.getTreatmentId());
 
-            validateRequestDependencies(request);
+            ProfessorClinicalAreaModel professorClinicalAreaModel = validateRequestDependencies(request);
             treatmentDetailMapper.updateEntity(request, existing);
             existing.setTreatment(newTreatment);
             AuthorizedTreatmentModel authorizedTreatmentModel;
@@ -197,7 +200,7 @@ public class TreatmentDetailService {
             } else {
                 authorizedTreatmentModel = updateAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
             }
-
+            existing.setProfessor(professorClinicalAreaModel.getProfessor());
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
             // Lógica para el manejo de dientes
@@ -209,6 +212,9 @@ public class TreatmentDetailService {
             if(isToothTreatment(saved)) {
                 addTeethList(response);
             }
+
+            // Enviar notificación
+            this.sendNotifications(saved);
 
             return response;
         } catch (AppException e) {
@@ -262,7 +268,7 @@ public class TreatmentDetailService {
                 return new PageImpl<>(Collections.emptyList(), pageable, 0);
             }
 
-            return new PageImpl<>(Collections.singletonList(treatments.get(0)), pageable, 1);
+            return new PageImpl<>(Collections.singletonList(treatments.getFirst()), pageable, 1);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -293,7 +299,7 @@ public class TreatmentDetailService {
     @Transactional
     public TreatmentDetailResponse sendToReview(Long id, Long professorClinicalAreaId, TreatmentDetailToothRequest toothRequest) {
         try {
-            TreatmentDetailModel treatment = getValidTreatment(id, null);
+            TreatmentDetailModel treatment = getValidTreatment(id);
             boolean isTooth = isToothTreatment(treatment);
 
             // Validar estado general del tratamiento
@@ -311,17 +317,6 @@ public class TreatmentDetailService {
             // Lanzar error si no cumple con ninguna de las condiciones válidas
             if (!validGeneralStatus && !(isTooth && hasToothInValidStatus)) {
                 throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS, HttpStatus.BAD_REQUEST);
-            }
-
-            // Validar si hay otra sección en revisión
-            boolean isSectionInReview = reviewStatusRepository
-                    .existsByPatientMedicalRecord_IdPatientMedicalRecordAndStatus(
-                            treatment.getPatientMedicalRecord().getIdPatientMedicalRecord(),
-                            ReviewStatus.IN_REVIEW);
-
-            if (isSectionInReview) {
-                throw new AppException(ResponseMessages.ERROR_SECTIONS_IN_REVIEW,
-                        HttpStatus.BAD_REQUEST);
             }
 
             // Obtener profesor y actualizar estado del tratamiento
@@ -436,18 +431,11 @@ public class TreatmentDetailService {
                 treatmentDetailMapper.toDto(treatment));
     }
 
-    private TreatmentDetailModel getValidTreatment(Long id, ReviewStatus requiredCurrentStatus) {
-        TreatmentDetailModel treatment = treatmentDetailRepository.findById(id)
+    private TreatmentDetailModel getValidTreatment(Long id) {
+        return treatmentDetailRepository.findById(id)
                 .orElseThrow(() -> new AppException(
                         String.format(ResponseMessages.TREATMENT_DETAIL_NOT_FOUND, id),
                         HttpStatus.NOT_FOUND));
-
-        if (requiredCurrentStatus != null && !treatment.getStatus().equals(requiredCurrentStatus)) {
-            throw new AppException(ResponseMessages.ERROR_TREATMENT_DETAIL_STATUS_REVIEW,
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        return treatment;
     }
 
     @Transactional(readOnly = true)
@@ -790,6 +778,9 @@ public class TreatmentDetailService {
             } else {
                 treatment.setStatus(ReviewStatus.NOT_APPROVED);
             }
+
+            //Notificar al estudiante y profesor
+            this.sendNotifications(treatment);
 
             treatmentDetailRepository.save(treatment);
             return treatmentDetailMapper.toDtoWithAuthorizingProfessor(auth);
