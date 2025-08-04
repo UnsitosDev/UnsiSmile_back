@@ -5,10 +5,12 @@ import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.ClinicalSupervisorD
 import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.ProfessorDashboardResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.users.dashboards.StudentDashboardResponse;
 import edu.mx.unsis.unsiSmile.service.users.DashboardService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +43,15 @@ public class DashboardController {
     @GetMapping("/clinical-supervisors")
     public ResponseEntity<ClinicalSupervisorDashboardResponse> getClinicalSupervisorDashboard() {
         ClinicalSupervisorDashboardResponse dashboard = dashboardService.getClinicalSupervisorDashboardMetrics();
+        return ResponseEntity.ok(dashboard);
+    }
+
+    @Operation(summary = "Obtener métricas del estudiante por matrícula")
+    @GetMapping("/students/{enrollment}")
+    public ResponseEntity<StudentDashboardResponse> getStudentMetrics(
+            @PathVariable String enrollment
+    ) {
+        StudentDashboardResponse dashboard = dashboardService.getStudentMetrics(enrollment);
         return ResponseEntity.ok(dashboard);
     }
 }

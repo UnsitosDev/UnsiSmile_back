@@ -74,7 +74,7 @@ public class TreatmentDetailService {
     @Transactional
     public TreatmentDetailResponse createTreatmentDetail(@NonNull TreatmentDetailRequest request) {
         try {
-            validateRequestDependencies(request);
+            ProfessorClinicalAreaModel professorClinicalAreaModel = validateRequestDependencies(request);
 
             TreatmentResponse treatmentResponse = treatmentService.getTreatmentById(request.getTreatmentId());
 
@@ -85,7 +85,8 @@ public class TreatmentDetailService {
                         HttpStatus.BAD_REQUEST);
             }
 
-            TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse);
+            TreatmentDetailModel savedModel = saveTreatmentDetail(request, treatmentResponse,
+                    professorClinicalAreaModel.getProfessor());
 
             if (scope.equals(Constants.TOOTH)) {
                 TreatmentDetailToothRequest toothRequest = request.getTreatmentDetailToothRequest();
@@ -102,6 +103,9 @@ public class TreatmentDetailService {
                 addTeethList(response);
             }
 
+            // Enviar notificación
+            this.sendNotifications(savedModel);
+
             return response;
         } catch (AppException e) {
             throw e;
@@ -111,17 +115,17 @@ public class TreatmentDetailService {
         }
     }
 
-    private void validateRequestDependencies(TreatmentDetailRequest request) {
+    private ProfessorClinicalAreaModel validateRequestDependencies(TreatmentDetailRequest request) {
         if (request.getStartDate().isAfter(request.getEndDate())) {
             throw new AppException(ResponseMessages.TREATMENT_DETAIL_START_DATE_MUST_BE_LESS_THAN_END_DATE,
                     HttpStatus.BAD_REQUEST);
         }
         patientService.getPatientById(request.getPatientId());
-        professorClinicalAreaService.getProfessorClinicalAreaById(request.getProfessorClinicalAreaId());
+        return professorClinicalAreaService.getProfessorClinicalAreaModel(request.getProfessorClinicalAreaId());
     }
 
     private TreatmentDetailModel saveTreatmentDetail(TreatmentDetailRequest request,
-                                                     TreatmentResponse treatmentResponse) {
+                                                     TreatmentResponse treatmentResponse, ProfessorModel professor) {
         PatientMedicalRecordModel medicalRecord = patientMedicalRecordService.save(
                 request.getPatientId(),
                 treatmentResponse.getMedicalRecordCatalogId());
@@ -132,6 +136,7 @@ public class TreatmentDetailService {
         TreatmentDetailModel model = treatmentDetailMapper.toEntity(request);
         model.setPatientMedicalRecord(medicalRecord);
         model.setStudentGroup(studentGroup);
+        model.setProfessor(professor);
 
         return treatmentDetailRepository.save(model);
     }
@@ -185,7 +190,7 @@ public class TreatmentDetailService {
 
             TreatmentModel newTreatment = treatmentService.getTreatmentModelById(request.getTreatmentId());
 
-            validateRequestDependencies(request);
+            ProfessorClinicalAreaModel professorClinicalAreaModel = validateRequestDependencies(request);
             treatmentDetailMapper.updateEntity(request, existing);
             existing.setTreatment(newTreatment);
             AuthorizedTreatmentModel authorizedTreatmentModel;
@@ -195,7 +200,7 @@ public class TreatmentDetailService {
             } else {
                 authorizedTreatmentModel = updateAuthorizationTreatment(existing.getIdTreatmentDetail(), request.getProfessorClinicalAreaId());
             }
-
+            existing.setProfessor(professorClinicalAreaModel.getProfessor());
             TreatmentDetailModel saved = treatmentDetailRepository.save(existing);
 
             // Lógica para el manejo de dientes
@@ -207,6 +212,9 @@ public class TreatmentDetailService {
             if(isToothTreatment(saved)) {
                 addTeethList(response);
             }
+
+            // Enviar notificación
+            this.sendNotifications(saved);
 
             return response;
         } catch (AppException e) {

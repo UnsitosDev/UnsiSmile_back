@@ -20,6 +20,7 @@ import edu.mx.unsis.unsiSmile.repository.students.IStudentRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.IAuthorizedTreatmentRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.IExecutionReviewRepository;
 import edu.mx.unsis.unsiSmile.repository.treatments.ITreatmentDetailRepository;
+import edu.mx.unsis.unsiSmile.service.students.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.dao.DataAccessException;
@@ -49,6 +50,7 @@ public class DashboardService {
     private final ITreatmentDetailRepository treatmentDetailRepository;
     private final IAuthorizedTreatmentRepository authorizedTreatmentRepository;
     private final IExecutionReviewRepository executionReviewRepository;
+    private final StudentService studentService;
 
     @Transactional(readOnly = true)
     public StudentDashboardResponse getStudentDashboard() {
@@ -268,5 +270,17 @@ public class DashboardService {
         }
         Map<String, Long> treatmentCounts = mergeTreatmentCounts(toothScope, generalScope);
         return mapToTreatmentCountResponse(treatmentCounts);
+    }
+
+    @Transactional(readOnly = true)
+    public StudentDashboardResponse getStudentMetrics(String enrollment) {
+        try {
+            studentService.getStudentByEnrollment(enrollment);
+            return getStudentDashboardMetrics(enrollment);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ResponseMessages.ERROR_STUDENT_DASHBOARD, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
