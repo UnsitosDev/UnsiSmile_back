@@ -73,7 +73,7 @@ NOTA DE EVOLUCIÓN]]></text>
 				</textElement>
 				<text><![CDATA[ Fecha nacimiento:________________]]></text>
 			</staticText>
-			<textField>
+			<textField pattern="dd/MM/yyyy">
 				<reportElement x="125" y="23" width="118" height="20" uuid="100b671d-ad20-484c-acf4-55fff43f1d38"/>
 				<textElement>
 					<font size="11"/>
