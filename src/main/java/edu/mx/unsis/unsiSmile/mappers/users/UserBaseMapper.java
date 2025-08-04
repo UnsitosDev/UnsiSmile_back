@@ -3,6 +3,7 @@ package edu.mx.unsis.unsiSmile.mappers.users;
 import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
 import edu.mx.unsis.unsiSmile.dtos.response.users.UserBaseResponse;
 import edu.mx.unsis.unsiSmile.model.administrators.AdministratorModel;
+import edu.mx.unsis.unsiSmile.model.administrators.MedicalAdministratorModel;
 import edu.mx.unsis.unsiSmile.model.digitizers.MedicalRecordDigitizerModel;
 import edu.mx.unsis.unsiSmile.model.professors.ProfessorModel;
 import edu.mx.unsis.unsiSmile.model.students.StudentModel;
@@ -15,4 +16,5 @@ public interface UserBaseMapper {
     UserBaseResponse toDto(ProfessorModel professor);
     UserBaseResponse toDto(StudentModel student);
     UserBaseResponse toDto(MedicalRecordDigitizerModel digitizer);
+    UserBaseResponse toDto(MedicalAdministratorModel medicalAdministrator);
 }

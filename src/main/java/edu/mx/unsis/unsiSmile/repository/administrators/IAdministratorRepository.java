@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,7 +27,11 @@ public interface IAdministratorRepository extends JpaRepository<AdministratorMod
             "OR a.person.phone LIKE %:keyword% " +
             "OR a.person.email LIKE %:keyword% " +
             "OR a.person.gender.gender LIKE %:keyword%) " +
-            "AND a.statusKey = 'A'")
+            "AND a.statusKey IN :statusKeys")
     Page<AdministratorModel> findByKeyword(
-            @Param("keyword") String keyword, Pageable pageable);
+            @Param("keyword") String keyword,
+            @Param("statusKeys") List<String> statusKeys,
+            Pageable pageable);
+
+    Page<AdministratorModel> findByStatusKeyIn(List<String> statusKeys, Pageable pageable);
 }

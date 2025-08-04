@@ -6,6 +6,7 @@ import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse
 import edu.mx.unsis.unsiSmile.service.administrators.AdministratorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,18 +14,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/unsismile/api/v1/administrators")
 @RequiredArgsConstructor
+@Validated
 public class AdministratorController {
 
     private final AdministratorService administratorService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AdministratorResponse createAdministrator(@RequestBody AdministratorRequest request) {
+    public AdministratorResponse createAdministrator(@Valid @RequestBody AdministratorRequest request) {
         return administratorService.createAdministrator(request);
     }
 

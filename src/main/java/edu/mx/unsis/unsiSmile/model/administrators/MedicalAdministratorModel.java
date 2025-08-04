@@ -1,0 +1,29 @@
+package edu.mx.unsis.unsiSmile.model.administrators;
+
+import edu.mx.unsis.unsiSmile.authenticationProviders.model.UserModel;
+import edu.mx.unsis.unsiSmile.model.people.PersonModel;
+import edu.mx.unsis.unsiSmile.model.utils.AuditModel;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "medical_administrators")
+public class MedicalAdministratorModel extends AuditModel {
+
+    @Id
+    @Column(name = "employee_number", length = 15, nullable = false, unique = true)
+    private String employeeNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_person",nullable = false)
+    private PersonModel person;
+
+    @OneToOne
+    @JoinColumn(name = "fk_user",  nullable = false)
+    private UserModel user;
+}

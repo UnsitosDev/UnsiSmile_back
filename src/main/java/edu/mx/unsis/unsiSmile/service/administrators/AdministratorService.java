@@ -7,7 +7,6 @@ import edu.mx.unsis.unsiSmile.common.Constants;
 import edu.mx.unsis.unsiSmile.common.ResponseMessages;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorRequest;
 import edu.mx.unsis.unsiSmile.dtos.request.administrators.AdministratorUpdateRequest;
-import edu.mx.unsis.unsiSmile.dtos.request.users.UserRequest;
 import edu.mx.unsis.unsiSmile.dtos.response.administrators.AdministratorResponse;
 import edu.mx.unsis.unsiSmile.dtos.response.people.PersonResponse;
 import edu.mx.unsis.unsiSmile.exceptions.AppException;
@@ -62,8 +61,11 @@ public class AdministratorService {
             AdministratorModel savedAdministrator = administratorRepository.save(administratorModel);
 
             return administratorMapper.toDto(savedAdministrator);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_CREATE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);        }
+            throw new AppException(ResponseMessages.FAILED_CREATE_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -80,29 +82,15 @@ public class AdministratorService {
     }
 
     @Transactional(readOnly = true)
-    public AdministratorResponse getAdministratorByUser(@NonNull UserRequest userRequest) {
-        try {
-            UserModel userModel = userMapper.toEntity(userRequest);
-
-            AdministratorModel administratorModel = administratorRepository.findByUser(userModel)
-                    .orElseThrow(() -> new AppException(
-                            String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND_FOR_USER, userRequest),
-                            HttpStatus.NOT_FOUND));
-            return administratorMapper.toDto(administratorModel);
-        } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_FETCH_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
-        }
-    }
-
-    @Transactional(readOnly = true)
     public Page<AdministratorResponse> getAllAdministrators(Pageable pageable, String keyword) {
         try {
+            List<String> validStatuses = List.of(Constants.ACTIVE, Constants.INACTIVE);
             Page<AdministratorModel> administrators;
 
             if (keyword != null && !keyword.isEmpty()) {
-                administrators = administratorRepository.findByKeyword(keyword, pageable);
+                administrators = administratorRepository.findByKeyword(keyword, validStatuses, pageable);
             } else {
-                administrators = administratorRepository.findAll(pageable);
+                administrators = administratorRepository.findByStatusKeyIn(validStatuses, pageable);
             }
 
             return administrators.map(administratorMapper::toDto);
@@ -123,6 +111,8 @@ public class AdministratorService {
             administratorRepository.save(updatedAdministrator);
 
             return administratorMapper.toDto(updatedAdministrator);
+        } catch (AppException e) {
+            throw e;
         } catch (Exception ex) {
             throw new AppException(ResponseMessages.ERROR_UPDATING_ADMINISTRATOR, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
@@ -153,11 +143,16 @@ public class AdministratorService {
     @Transactional
     public void deleteAdministratorByEmployeeNumber(@NonNull String employeeNumber) {
         try {
-            if (!administratorRepository.existsById(employeeNumber)) {
-                throw new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
-                        HttpStatus.NOT_FOUND);
-            }
-            administratorRepository.deleteById(employeeNumber);
+            AdministratorModel administratorModel = administratorRepository.findById(employeeNumber)
+                    .orElseThrow(() -> new AppException(String.format(ResponseMessages.ADMINISTRATOR_NOT_FOUND, employeeNumber),
+                            HttpStatus.NOT_FOUND));
+            administratorModel.setStatusKey(Constants.DELETED);
+
+            UserModel userModel = administratorModel.getUser();
+            userModel.setStatus(!userModel.isStatus());
+
+            userRepository.save(userModel);
+            administratorRepository.save(administratorModel);
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
@@ -191,7 +186,7 @@ public class AdministratorService {
         } catch (AppException e) {
             throw e;
         } catch (Exception ex) {
-            throw new AppException(ResponseMessages.FAILED_UPDATE_ADMINISTRATOR_STATUS, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException(ResponseMessages.FAILED_UPDATE_ADMINISTRATOR_STATUS, HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }
