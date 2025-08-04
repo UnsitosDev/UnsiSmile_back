@@ -779,6 +779,9 @@ public class TreatmentDetailService {
                 treatment.setStatus(ReviewStatus.NOT_APPROVED);
             }
 
+            //Notificar al estudiante y profesor
+            this.sendNotifications(treatment);
+
             treatmentDetailRepository.save(treatment);
             return treatmentDetailMapper.toDtoWithAuthorizingProfessor(auth);
         } catch (AppException e) {
