@@ -11,10 +11,14 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/unsis_smile?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=America/Mexico_City&useLegacyDatetimeCode=false
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_PASSWORD: 
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
-      JWT_SECRET: JSqfAVUtqCf6esHIUJSjNR1g637M7jrz9ggxVUPYziCtA2uHCSb39T3hN1UWlPnLt5Ll/Isu7btUV90/e411VuvMWd4kjC8bxmnhLaEjWzNa5y1MtKgeGfZfUdq3vU9LxrmnAjgcz5iDignW7y3nuXvppK9eSjg5AbUvxO+fNRqPlb93Zmf2EqHvxX89RGmxoWtPYCkvIh8tL+YSLucZH/IiyQIexMP0QzATRWdapmg9vXNerHxmipbzPU6LYWNbU4s4vxgSFDO65iz2Lstq9OAyA1hvzdrWArzRndoZWG9UW+EVhbQfwfsB/T4MNHzdrVZzK2kbSNr/UdTgjM3lIA==
+      JWT_SECRET: 
+      CORS_ALLOWED_ORIGINS: http://localhost:8081
+      CORS_ALLOWED_METHODS: GET,POST,PUT,PATCH,DELETE,OPTIONS
+      MAX_MEDICAL_RECORD_NUMBER: 3 # Número de inicio de expediente médico
+
 
       FILES_URI: http://localhost:8082/unsismile/api/v1/files/file/
 
@@ -33,7 +37,7 @@ services:
     image: mariadb:10.5
     container_name: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: 
       MYSQL_DATABASE: unsis_smile
     ports:
       - "3306:3306" # Base de datos
