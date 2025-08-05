@@ -3,8 +3,10 @@ package edu.mx.unsis.unsiSmile.config;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import java.util.Collections;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -20,24 +22,37 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${CORS_ALLOWED_ORIGINS}")
+    private String allowedOrigins;
+    @Value("${CORS_ALLOWED_METHODS}")
+    private String allowedMethods;
+
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:8081", "https://unsismile.unsis.edu.mx", "http://132.18.41.181:8081",
-                "https://132.18.41.181:8081"));
+
+        // Configurar orígenes permitidos desde variables de entorno
+        String[] origins = allowedOrigins.split(",");
+        config.setAllowedOrigins(Arrays.asList(origins));
+
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
-                HttpHeaders.ACCEPT));
-        config.setAllowedMethods(Arrays.asList(
-                HttpMethod.GET.name(),
-                HttpMethod.POST.name(),
-                HttpMethod.PUT.name(),
-                HttpMethod.PATCH.name(),
-                HttpMethod.DELETE.name()));
+                HttpHeaders.ACCEPT,
+                "X-Requested-With"));
+
+        String [] methods = allowedMethods.split(",");        
+        config.setAllowedMethods(Arrays.asList(methods));
+
+        config.setExposedHeaders(Arrays.asList(
+                HttpHeaders.AUTHORIZATION,
+                HttpHeaders.CONTENT_DISPOSITION,
+                "X-Total-Count"));
+
         config.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
