@@ -33,6 +33,7 @@ services:
     environment:
       # ... otras variables de entorno
       - CORS_ALLOWED_ORIGINS=http://localhost:8081,https://unsismile.unsis.edu.mx
+      - CORS_ALLOWED_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
 ```
 
 #### Configuración para desarrollo local
@@ -42,16 +43,19 @@ Si estás ejecutando la aplicación localmente sin Docker, puedes configurar la 
 ##### En Linux/macOS:
 ```bash
 export CORS_ALLOWED_ORIGINS="http://localhost:8081,https://unsismile.unsis.edu.mx"
+export CORS_ALLOWED_METHODS="GET,POST,PUT,PATCH,DELETE,OPTIONS"
 ```
 
 ##### En Windows (CMD):
 ```cmd
 set CORS_ALLOWED_ORIGINS=http://localhost:8081,https://unsismile.unsis.edu.mx
+set CORS_ALLOWED_METHODS=GET,POST,PUT,PATCH,DELETE,OPTIONS
 ```
 
-#### Orígenes por defecto
+#### Valores por defecto
 
-Si la variable `CORS_ALLOWED_ORIGINS` no está definida, la aplicación no permitirá ningún origen por defecto. Asegúrate de configurar al menos un origen válido.
+- `CORS_ALLOWED_ORIGINS`: Si no está definida, la aplicación no permitirá ningún origen por defecto. Asegúrate de configurar al menos un origen válido.
+- `CORS_ALLOWED_METHODS`: Por defecto se utilizan los métodos más comunes: GET, POST, PUT, PATCH, DELETE, OPTIONS
 
 #### Reinicio necesario
 
@@ -103,7 +107,7 @@ tail -f error.log
 
 ### Notas Adicionales
 
-- Para crear usuarios use el scrip poblados_usuarios.sql del repositorio de base de datos.
+- Para crear usuarios use el script poblados_usuarios.sql del repositorio de base de datos.
 - Para entorno de desarrollo se recomienda usar `docker-compose.dev.yml` donde solo tiene la base de datos y configurar el application.properties localmente.
 - Asegúrate de tener los puertos `8082` y `3306` disponibles en tu máquina.
 - Puedes detener los servicios en cualquier momento con:
