@@ -40,10 +40,6 @@ openssl rand -base64 256
 Sigue estos pasos para levantar el proyecto correctamente:
 
 1. Clona el repositorio:
-        ```sh
-        git clone https://github.com/tu_usuario/UnsiSmile_back.git
-        cd UnsiSmile_back
-        ```
 
 2. Crea y configura el archivo `docker-compose.yml` con las variables de entorno mencionadas anteriormente.
 
@@ -78,7 +74,7 @@ tail -f error.log
 ```
 
 ### Notas Adicionales
-
+- Para crear usuarios use el scrip poblados_usuarios.sql del repositorio de base de datos.
 - Asegúrate de tener los puertos `8082` y `3306` disponibles en tu máquina.
 - Puedes detener los servicios en cualquier momento con:
         ```sh
